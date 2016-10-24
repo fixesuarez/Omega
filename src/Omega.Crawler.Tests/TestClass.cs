@@ -115,9 +115,11 @@ namespace Omega.Crawler.Tests
         }
 
         [Test]
-        public void TestRemove()
+        public async Task Test_When_Deezer_Song_Has_No_Spotify_Equivalent()
         {
+            DeezerToSpotify ds = new DeezerToSpotify();
 
+            await ds.Search("testouilleddsds","","");
         }
 
         public List<UserInfoAndStuff> InsertUser()

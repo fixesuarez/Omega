@@ -9,6 +9,13 @@ namespace Omega.Crawler
 {
     public class DeezerToSpotify
     {
+        /// <summary>
+        /// Find a track on Spotify with title, artist ans album
+        /// </summary>
+        /// <param name="title"></param>title
+        /// <param name="artist"></param>
+        /// <param name="album"></param>
+        /// <returns></returns>
         public async Task<string> Search(string title, string artist, string album)
         {
             StringBuilder builder = new StringBuilder("https://api.spotify.com/v1/search?q=");
