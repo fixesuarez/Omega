@@ -1,0 +1,9 @@
+D:\intech\S5\PI\C#\Omega-S5\Omega\Omega.DataManager.Tests\bin\Debug\Omega.DataManager.Tests.dll
+D:\intech\S5\PI\C#\Omega-S5\Omega\Omega.DataManager.Tests\bin\Debug\Omega.DataManager.Tests.pdb
+D:\intech\S5\PI\C#\Omega-S5\Omega\Omega.DataManager.Tests\obj\Debug\Omega.DataManager.Tests.dll
+D:\intech\S5\PI\C#\Omega-S5\Omega\Omega.DataManager.Tests\obj\Debug\Omega.DataManager.Tests.pdb
+D:\intech\S5\PI\C#\OmegaGit\src\Omega.DataManager.Tests\bin\Debug\Omega.DataManager.Tests.dll
+D:\intech\S5\PI\C#\OmegaGit\src\Omega.DataManager.Tests\bin\Debug\Omega.DataManager.Tests.pdb
+D:\intech\S5\PI\C#\OmegaGit\src\Omega.DataManager.Tests\obj\Debug\Omega.DataManager.Tests.csprojResolveAssemblyReference.cache
+D:\intech\S5\PI\C#\OmegaGit\src\Omega.DataManager.Tests\obj\Debug\Omega.DataManager.Tests.dll
+D:\intech\S5\PI\C#\OmegaGit\src\Omega.DataManager.Tests\obj\Debug\Omega.DataManager.Tests.pdb
