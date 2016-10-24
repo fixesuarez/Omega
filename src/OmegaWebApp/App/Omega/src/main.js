@@ -1,9 +1,24 @@
+import 'babel-polyfill'
+import $ from 'jquery'
+import 'bootstrap/dist/js/bootstrap'
 import Vue from 'vue'
-import App from './App'
+import store from './vuex/store'
+import VueRouter from 'vue-router'
 
+import Login from './components/Login.vue'
+
+Vue.use(VueRouter)
+
+
+const router = new VueRouter({
+  routes: [
+    { path: '/login', component: Login },
+  ]
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  template: '<App/>',
-  components: { App }
+  router,
+  store,
+  render: h => h(App)
 })
