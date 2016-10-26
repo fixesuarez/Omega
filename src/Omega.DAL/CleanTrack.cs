@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 
-namespace Omega.DataManager
+namespace Omega.DAL
 {
     public class CleanTrack : TableEntity
     {
