@@ -2,7 +2,6 @@
 /// <reference path="../omega_front/src/main.js" />
 /// <reference path="../omega_front/src/vuex/actions.js" />
 /// <reference path="../omega_front/src/vuex/getters.js" />
-/// <reference path="../omega_front/src/vuex/modules/sample-module.js" />
 /// <reference path="../omega_front/src/vuex/mutation-types.js" />
 /// <reference path="../omega_front/src/vuex/store.js" />
 /// <reference path="../omega_front/webpack.config.js" />
