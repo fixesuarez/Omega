@@ -1,4 +1,4 @@
-﻿namespace Omega.DAL
+﻿namespace Omega.DataManager
 {
     public class MetaDonnees
     {

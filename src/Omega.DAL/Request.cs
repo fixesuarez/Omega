@@ -2,7 +2,7 @@
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Threading.Tasks;
 
-namespace Omega.DAL
+namespace Omega.DataManager
 {
     public class Requests
     {

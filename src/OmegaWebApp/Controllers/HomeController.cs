@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace OmegaWebApp.Controllers
 {
@@ -29,12 +28,6 @@ namespace OmegaWebApp.Controllers
         }
 
         public IActionResult Error()
-        {
-            return View();
-        }
-
-        [Authorize( ActiveAuthenticationSchemes = CookieAuthentication.AuthenticationScheme )]
-        public IActionResult VerySecure()
         {
             return View();
         }

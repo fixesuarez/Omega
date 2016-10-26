@@ -1,7 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace Omega.DAL
+namespace Omega.DataManager
 {
     public class DatabaseCreator
     {
