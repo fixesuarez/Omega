@@ -93,12 +93,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Omega.DataManager\Omega.DataManager.csproj">
-      <Project>{3820A7FC-F982-48A4-97FB-CE0D3D73227B}</Project>
-      <Name>Omega.DataManager</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
