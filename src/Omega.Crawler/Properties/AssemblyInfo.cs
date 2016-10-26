@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Omega.Crawler.Tests")]
+[assembly: AssemblyProduct("Omega.Crawler")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5c77526c-e81a-47b4-85e3-918b8fd00630")]
+[assembly: Guid("9af4fe56-dc0e-4cd9-a65b-12f3af2f4812")]

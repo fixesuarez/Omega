@@ -3,7 +3,6 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Omega.DataManager;
 
 namespace Omega.Crawler
 {
