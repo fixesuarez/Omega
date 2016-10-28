@@ -2,10 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as actions from './actions'
 import * as getters from './getters'
-import app from './modules/app'
-import classes from './modules/playlists'
-import students from './modules/groups'
-import teachers from './modules/events'
+import playlists from './modules/playlists'
+import groups from './modules/groups'
+import events from './modules/events'
 
 Vue.use(Vuex)
 
@@ -15,7 +14,7 @@ export default new Vuex.Store({
   actions,
   getters,
   modules: {
-      sampleModule
+
   },
   strict: debug
 })
