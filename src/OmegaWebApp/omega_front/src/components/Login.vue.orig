@@ -2,6 +2,10 @@
 
   <div id="app">
     <h1>{{ msg }}</h1>
+<<<<<<< HEAD
+=======
+vzge
+>>>>>>> 9d0af1e551f951706ad52c268de3581dbc98ebec
   </div>
 </template>
 
