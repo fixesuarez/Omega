@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"] {
+    float: left;
+}
+
+@font-face {
+    font-family: 'beat';
+    src:url('../assets/beat.otf');
+}
+
+html, body{
+  height:100%;
+  margin: 0px;
+}
+
+body {
+  min-height: 100%;
+}
+
+.leftContent {
+  width: 250px; 
+  min-height: 100vh;
+  background-color: #171717;
+  float: left;
+  color: #e7e7e7;
+  font-family: 'beat';
+}
+
+.redLine {
+  width: 2px;
+  min-height: 100vh;
+  float: left;
+  background-color: #de002b;
+  box-shadow: 1px 0px 8px 1px black;
+}
+
+.logo {
+  margin-top: 35px; 
+}
+
+#imgLogo {
+  width: 100px;
+  height: 100px;
+  display: block;
+  margin: auto;
+}
+
+.profile {
+  margin: auto;
+  margin-top: 30px;
+  text-align: center;
+  font-size: 12px;
+}
+
+#imgProfile {
+  width: 30px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+#redText {
+  color: #de002b;
+}
+
+.playlistTab {
+  width: 100%;
+}
+
+nav{
+	display:inline-block;
+  text-align: center;
+	background-color:#171717;
+  margin-top: 30px;
+}
+
+nav a{
+	display:inline-block;
+	padding: 15px;
+  color: #e7e7e7;
+	font-size:16px;
+	text-decoration:none !important;
+  width: 250px;
+	background-color:transparent;
+}
+
+nav.playlistsTab .playlistsTab,
+nav.evenementsTab .evenementsTab,
+nav.groupesTab .groupesTab,
+nav.ambiancesTab .ambiancesTab{
+	background-color:#de002b;
+}
+
+.players {
+  margin-top: 30px;
+  opacity: 1;
+}
