@@ -1,5 +1,4 @@
 ﻿using Omega.DAL;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Omega.Crawler
@@ -12,10 +11,9 @@ namespace Omega.Crawler
             {
                 MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(trackId);
                 await Task.Delay(500);
-                //Thread.Sleep(1000);
                 Track track = await c.GetGetATrack().GetTrackSpotify(trackId);
                 string deezerId = await c.SpotifyToDeezer().GetDeezerId(track.Title, track.Artist);
-                c.GetRequests().AddSongCleanTrack(meta, track.Artist, deezerId, trackId, track.Title, source, track.AlbumName, track.Popularity);
+                c.GetRequests().AddSongCleanTrack(meta, track.Artist, deezerId, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
             }
             else if (source == "d")
             {
@@ -24,10 +22,9 @@ namespace Omega.Crawler
                 if (spotifyId != "")
                 {
                     MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(spotifyId);
-                    //Thread.Sleep(1000);
                     await Task.Delay(500);
                     Track track = await c.GetGetATrack().GetTrackSpotify(spotifyId);
-                    c.GetRequests().AddSongCleanTrack(meta, track.Artist, trackId, trackId, track.Title, source, track.AlbumName, track.Popularity);
+                    c.GetRequests().AddSongCleanTrack(meta, track.Artist, trackId, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
                 }
             }
         }
@@ -40,7 +37,7 @@ namespace Omega.Crawler
                 //Thread.Sleep(1000);
                 await Task.Delay(500);
                 Track track = await c.GetGetATrack().GetTrackSpotify(trackId);
-                c.GetRequests().UpdateCleanTrack(meta, trackId, track.Title, source, track.AlbumName, track.Popularity);
+                c.GetRequests().UpdateCleanTrack(meta, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
             }
             else if (source == "d")
             {
@@ -52,7 +49,7 @@ namespace Omega.Crawler
                 {
                     MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(spotifyId);
                     Track track = await c.GetGetATrack().GetTrackSpotify(spotifyId);
-                    c.GetRequests().UpdateCleanTrack(meta, trackId, track.Title, source, track.AlbumName, track.Popularity);
+                    c.GetRequests().UpdateCleanTrack(meta, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
                 }
             }
         }

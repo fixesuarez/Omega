@@ -1,4 +1,6 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Omega.DAL
@@ -7,9 +9,9 @@ namespace Omega.DAL
     {
         public void CreateCleanTrackTable()
         {
-            // Retrieve the storage account from the connection string.
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("StorageConnectionString");
-            //CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            // Retrieve the storage  from the connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage = True");
+            //CloudStorageAccount storageaccountAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
             // Create the table client.
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
