@@ -1,0 +1,10 @@
+# Basic appveyor configuration : CodeCakeBuilder does the job.
+version: build{build}
+branches:
+  only:
+  - master
+  - dev
+
+build_script:
+- CodeCakeBuilder\bin\Release\CodeCakeBuilder.exe -nointeraction
+test: off

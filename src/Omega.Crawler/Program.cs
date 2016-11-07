@@ -28,7 +28,7 @@ namespace Omega.Crawler
         public static async Task CheckQueu()
         {
             // Retrieve storage account from connection string.
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("StorageConnectionString");
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ct.Config()["data:azure:ConnectionString"]);
 
             // Create the queue client.
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
@@ -65,7 +65,9 @@ namespace Omega.Crawler
 
         public static async Task BrowseTrack()
         {
-            CloudTable table = ct.GetRequests().ConnectCleanTrackTable();
+            //CloudTable table = ct.GetRequests().ConnectCleanTrackTable();
+            string secretKey = ct.Config()["data:azure:ConnectionString"];
+            CloudTable table = ct.GetRequests().ConnectCleanTrackTable(secretKey);
             TableContinuationToken continuationToken = null;
             TableQuery<CleanTrack> tableQuery = new TableQuery<CleanTrack>();
             TableQuerySegment<CleanTrack> tableQueryResult;

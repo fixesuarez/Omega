@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Omega.Crawler
 {
@@ -17,9 +19,11 @@ namespace Omega.Crawler
         DeezerConnect de;
         DeezerToSpotify s;
         SpotifyToDeezer std;
+        static IConfigurationRoot Configuration;
 
         public Controller()
         {
+            InitiateConfig();
             a = new Analyser();
             c = new CredentialAuth();
             r = new Requests();
@@ -30,6 +34,19 @@ namespace Omega.Crawler
             std = new SpotifyToDeezer();
         }
 
+        public static void InitiateConfig()
+        {
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
+        }
+
+        public IConfigurationRoot Config()
+        {
+            return Configuration;
+        }
         public SpotifyToDeezer SpotifyToDeezer()
         {
             return std;
