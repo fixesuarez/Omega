@@ -17,11 +17,16 @@ namespace OmegaWebApp.Services
             _passwordHasher = passwordHasher;
         }
 
-        public bool CreateUser( string email, string password )
+        //public bool CreateUser( string email, string password )
+        //{
+        //    if (_userGateway.FindUserByEmail( email ) != null) return false;
+        //    _userGateway.Create( email, _passwordHasher.HashPassword( password ), string.Empty );
+        //    return true;
+        //}
+
+        public async void CreateOrUpdateSpotifyUser( string email )
         {
-            if (_userGateway.FindByEmail( email ) != null) return false;
-            _userGateway.Create( email, _passwordHasher.HashPassword( password ), string.Empty );
-            return true;
+            _userGateway.InsertOrUpdateUserBySpotify( await _userGateway.FindUserByEmail( email ) );
         }
 
         //public bool CreateOrUpdateGithubUser( string email, string accessToken )
@@ -42,20 +47,20 @@ namespace OmegaWebApp.Services
             _userGateway.InsertOrUpdateUserBySpotify( spotifyUser );
         }
 
-        public User FindUser( string email, string password )
-        {
-            User user = _userGateway.FindByEmail( email );
-            if (user != null && _passwordHasher.VerifyHashedPassword( user.Password, password ) == PasswordVerificationResult.Success)
-            {
-                return FindUser( email );
-            }
+        //public async Task<User> FindUser( string email, string password )
+        //{
+        //    User user = await _userGateway.FindUserByEmail( email );
+        //    if (user != null && _passwordHasher.VerifyHashedPassword( user.Password, password ) == PasswordVerificationResult.Success)
+        //    {
+        //        return await FindUser( email );
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        public User FindUser( string email )
+        public async Task<User> FindUser( string email )
         {
-            return _userGateway.FindByEmail( email );
+            return await _userGateway.FindUserByEmail( email );
         }
     }
 }

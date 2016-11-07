@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Omega.DAL;
+using OmegaWebApp.Services;
+using OmegaWebApp.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using AspNet.Security.OAuth.Spotify;
 
 namespace OmegaWebApp
 {
@@ -29,7 +32,7 @@ namespace OmegaWebApp
         {
             // Add framework services.
             services.AddMvc();
-            services.AddTransient( _ => new UserGateway() );
+            services.AddTransient( _ => new UserGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient<PasswordHasher>();
             services.AddTransient<UserService>();
         }
@@ -77,19 +80,22 @@ namespace OmegaWebApp
             } );
 
             SpotifyAuthenticationEvents spotifyAuthenticationEvents = new SpotifyAuthenticationEvents( app.ApplicationServices.GetRequiredService<UserService>() );
-
-            app.UseSpotifyAuthentication( o =>
+            SpotifyAuthenticationOptions spotifyOptions = new SpotifyAuthenticationOptions
             {
-                o.SignInScheme = CookieAuthentication.AuthenticationScheme;
-                o.ClientId = Configuration["Authentication:Github:ClientId"];
-                o.ClientSecret = Configuration["Authentication:Github:ClientSecret"];
-                o.Scope.Add( "user" );
-                o.Scope.Add( "user:email" );
-                o.Events = new OAuthEvents
+                ClientId = Configuration["Authentication:Spotify:ClientId"],
+                ClientSecret = Configuration["Authentication:Spotify:ClientSecret"],
+                SignInScheme = CookieAuthentication.AuthenticationScheme,
+                Events = new OAuthEvents
                 {
                     OnCreatingTicket = spotifyAuthenticationEvents.OnCreatingTicket
-                };
-            } );
+                }
+            };
+            spotifyOptions.Scope.Add( "user-read-email" );// if email is needed.
+            spotifyOptions.Scope.Add( "playlist-read-private" );
+            spotifyOptions.Scope.Add( "playlist-read-collaborative" );
+            spotifyOptions.Scope.Add( "user-library-read" );
+
+            app.UseSpotifyAuthentication( spotifyOptions );
 
             app.UseMvc( routes =>
             {

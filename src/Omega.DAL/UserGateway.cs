@@ -9,16 +9,15 @@ namespace Omega.DAL
 {
     public class UserGateway
     {
-        static readonly CloudStorageAccount storageAccount;
-        static readonly CloudTableClient tableClient;
-        static readonly CloudTable tableUser;
-        static readonly CloudTable tableFacebookUser;
+        readonly CloudStorageAccount storageAccount;
+        readonly CloudTableClient tableClient;
+        readonly CloudTable tableUser;
+        readonly CloudTable tableFacebookUser;
 
-        public UserGateway() { }
-        static UserGateway()
+        public UserGateway( string connectionString )
         {
             // Retrieve the storage account from the connection string.
-            storageAccount = CloudStorageAccount.Parse( "StorageConnectionString" );
+            storageAccount = CloudStorageAccount.Parse( connectionString );
 
             // Create the table client.
             tableClient = storageAccount.CreateCloudTableClient();
@@ -26,6 +25,15 @@ namespace Omega.DAL
             // Create the CloudTables objects that represent the different tables.
             tableUser = tableClient.GetTableReference( "User" );
             tableFacebookUser = tableClient.GetTableReference( "FacebookUser" );
+        }
+
+        public async Task<User> FindUserByEmail( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+
+            // Execute the retrieve operation.
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            return (User)retrievedResult.Result;
         }
 
         public async void InsertOrUpdateUserBySpotify( User spotifyUser )

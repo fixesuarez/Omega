@@ -3,11 +3,11 @@
   "buildOptions": {
     "emitEntryPoint": true
   },
-
+  
   "dependencies": {
     "Microsoft.NETCore.App": {
       "type": "platform",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     "NUnitLite": "3.5.0"
   },
