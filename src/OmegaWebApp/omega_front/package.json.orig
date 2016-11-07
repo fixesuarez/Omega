@@ -11,9 +11,13 @@
     "babel-polyfill": "^6.13.0",
     "bootstrap": "^3.3.7",
     "vue": "^2.0.1",
+<<<<<<< HEAD
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
     "vuex": "^2.0.0-rc.5"
+=======
+    "vue-router": "^2.0.1",
+>>>>>>> 425ed813bb8fdbd3f7251c415ea0be099e861a1c
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

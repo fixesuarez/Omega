@@ -1,7 +1,14 @@
+import 'babel-polyfill'
 import Vue from 'vue'
-import App from './App.vue'
+import Router from 'vue-router'
+import store from './vuex/store'
+import Login from './components/Login.vue'
+
+Vue.use(Router)
+Vue.use(require('vue-resource'))
 
 new Vue({
   el: '#app',
-  render: h => h(App)
+  store,
+  render: h => h(Login)
 })
