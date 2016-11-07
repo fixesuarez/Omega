@@ -45,13 +45,13 @@ namespace Omega.Crawler
             {
                 string trackId;
                 string source;
-                if (message.AsString.Substring(0, 1) == "s")
+                if (message.AsString.Substring(0, 2) == "s:")
                 {
                     trackId = message.AsString.Substring(2);
                     source = "s";
                     await ct.GetAnalyser().AnalyseNewSong(ct, trackId, source);
                 }
-                else if (message.AsString.Substring(0, 1) == "d")
+                else if (message.AsString.Substring(0, 2) == "d:")
                 {
                     trackId = message.AsString.Substring(2);
                     source = "d";

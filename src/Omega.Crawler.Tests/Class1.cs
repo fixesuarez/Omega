@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Omega.Crawler.Tests
 {
+    [TestFixture]
     public class TestClass
     {
         //[Test]
@@ -173,6 +174,16 @@ namespace Omega.Crawler.Tests
         public void ShouldFail()
         {
             Assert.That( 3, Is.EqualTo( 2 ) );
+        }
+
+        [Test]
+        public async Task TestTokenAuth()
+        {
+            CredentialAuth ca = new CredentialAuth();
+
+            string t = await ca.GetAccessToken();
+
+            Console.WriteLine(t);
         }
     }
 }
