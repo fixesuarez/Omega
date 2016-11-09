@@ -1,5 +1,7 @@
 <template>
-  <p>hey</p>
+  <div class="moodWrapper">
+    Test
+  </div>
 </template>
 
 <script>

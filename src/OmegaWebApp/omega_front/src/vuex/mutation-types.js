@@ -1,7 +1,6 @@
-// Events
-
-
-// Groups
-
-
-// Playlists
+export const INCREMENT = 'INCREMENT'
+export const DECREMENT = 'DECREMENT'
+export const UPDATE = 'UPDATE'
+export const ADD = 'ADD'
+export const ADDTEXT = 'ADDTEXT'
+export const MAKEACTIVE = 'MAKEACTIVE'
