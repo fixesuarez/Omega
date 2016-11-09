@@ -12,7 +12,7 @@ export default new Vuex.Store({
   actions,
   getters,
   modules: {
-      sampleModule
+    sampleModule
   },
   strict: debug
 })
