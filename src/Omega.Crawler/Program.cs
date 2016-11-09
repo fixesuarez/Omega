@@ -28,7 +28,7 @@ namespace Omega.Crawler
         public static async Task CheckQueu()
         {
             // Retrieve storage account from connection string.
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("StorageConnectionString");
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ct.Config()["data:azure:ConnectionString"]);
 
             // Create the queue client.
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
@@ -45,13 +45,13 @@ namespace Omega.Crawler
             {
                 string trackId;
                 string source;
-                if (message.AsString.Substring(0, 1) == "s")
+                if (message.AsString.Substring(0, 2) == "s:")
                 {
                     trackId = message.AsString.Substring(2);
                     source = "s";
                     await ct.GetAnalyser().AnalyseNewSong(ct, trackId, source);
                 }
-                else if (message.AsString.Substring(0, 1) == "d")
+                else if (message.AsString.Substring(0, 2) == "d:")
                 {
                     trackId = message.AsString.Substring(2);
                     source = "d";
@@ -65,7 +65,9 @@ namespace Omega.Crawler
 
         public static async Task BrowseTrack()
         {
-            CloudTable table = ct.GetRequests().ConnectCleanTrackTable();
+            //CloudTable table = ct.GetRequests().ConnectCleanTrackTable();
+            string secretKey = ct.Config()["data:azure:ConnectionString"];
+            CloudTable table = ct.GetRequests().ConnectCleanTrackTable(secretKey);
             TableContinuationToken continuationToken = null;
             TableQuery<CleanTrack> tableQuery = new TableQuery<CleanTrack>();
             TableQuerySegment<CleanTrack> tableQueryResult;
