@@ -6,16 +6,66 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Authentication;
+using System.Security.Claims;
 
 namespace OmegaWebApp.Controllers
 {
     public class AccountController : Controller
     {
         readonly UserService _userService;
+        readonly TokenService _tokenService;
+        readonly Random _random;
 
         public AccountController( UserService userService )
         {
             _userService = userService;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ExternalLogin( [FromQuery] string provider )
+        {
+            // Note: the "provider" parameter corresponds to the external
+            // authentication provider choosen by the user agent.
+            if (string.IsNullOrWhiteSpace( provider ))
+            {
+                return BadRequest();
+            }
+
+            if (!HttpContext.IsProviderSupported( provider ))
+            {
+                return BadRequest();
+            }
+
+            // Instruct the middleware corresponding to the requested external identity
+            // provider to redirect the user agent to its own authorization endpoint.
+            // Note: the authenticationScheme parameter must match the value configured in Startup.cs
+            string redirectUri = Url.Action( nameof( ExternalLoginCallback ), "Account" );
+            return Challenge( new AuthenticationProperties { RedirectUri = redirectUri }, provider );
+        }
+
+        [HttpGet]
+        [Authorize( ActiveAuthenticationSchemes = CookieAuthentication.AuthenticationScheme )]
+        public IActionResult ExternalLoginCallback()
+        {
+            return RedirectToAction( nameof( Authenticated ) );
+        }
+
+        [HttpGet]
+        [Authorize( ActiveAuthenticationSchemes = CookieAuthentication.AuthenticationScheme )]
+        public IActionResult Authenticated()
+        {
+            string userId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
+            string email = User.FindFirst( ClaimTypes.Email ).Value;
+            Token token = _tokenService.GenerateToken( userId, email );
+            IEnumerable<string> providers = (IEnumerable<string>) _userService.GetAuthenticationProviders( email );
+            ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
+            ViewData["Token"] = token;
+            ViewData["Email"] = email;
+            ViewData["NoLayout"] = true;
+            ViewData["Providers"] = providers;
+            return View();
         }
 
         [HttpGet]
@@ -99,6 +149,13 @@ namespace OmegaWebApp.Controllers
             {
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
+        }
+
+        string GetBreachPadding()
+        {
+            byte[] data = new byte[_random.Next( 64, 256 )];
+            _random.NextBytes( data );
+            return Convert.ToBase64String( data );
         }
     }
 }

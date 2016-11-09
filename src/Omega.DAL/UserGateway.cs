@@ -1,8 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -117,6 +115,25 @@ namespace Omega.DAL
                 TableOperation insertFacebookUser = TableOperation.Insert( fUser );
                 await tableFacebookUser.ExecuteAsync( insertFacebookUser );
             }
+        }
+
+        public async Task<IEnumerable<string>> GetAuthenticationProviders( string email )
+        {
+            IList<string> providers = new List<string>();
+
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+
+            // Execute the retrieve operation.
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User user = (User)retrievedResult.Result;
+            if (user.DeezerId != null)
+                providers.Add( "Deezer" );
+            if (user.SpotifyId != null)
+                providers.Add( "Spotify" );
+            if (user.FacebookId != null)
+                providers.Add( "Facebook" );
+
+            return providers;
         }
     }
 }

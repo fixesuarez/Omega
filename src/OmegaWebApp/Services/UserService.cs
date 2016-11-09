@@ -29,22 +29,14 @@ namespace OmegaWebApp.Services
             _userGateway.InsertOrUpdateUserBySpotify( await _userGateway.FindUserByEmail( email ) );
         }
 
-        //public bool CreateOrUpdateGithubUser( string email, string accessToken )
-        //{
-        //    User user = _userGateway.FindByEmail( email );
-        //    if (user != null)
-        //    {
-        //        _userGateway.Update( user.UserId, email, user.Password, accessToken );
-        //        return false;
-        //    }
-
-        //    _userGateway.Create( email, new byte[0], accessToken );
-        //    return true;
-        //}
-
         public void CreateOrUpdateSpotifyUser( User spotifyUser )
         {
             _userGateway.InsertOrUpdateUserBySpotify( spotifyUser );
+        }
+
+        public void CreateOrUpdateFacebookUser( User facebookUser )
+        {
+            _userGateway.InsertOrUpdateUserByFacebook( facebookUser );
         }
 
         //public async Task<User> FindUser( string email, string password )
@@ -61,6 +53,11 @@ namespace OmegaWebApp.Services
         public async Task<User> FindUser( string email )
         {
             return await _userGateway.FindUserByEmail( email );
+        }
+
+        public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
+        {
+            return await _userGateway.GetAuthenticationProviders( userId );
         }
     }
 }

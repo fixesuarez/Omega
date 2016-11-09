@@ -79,7 +79,23 @@ namespace OmegaWebApp
                 }
             } );
 
-            SpotifyAuthenticationEvents spotifyAuthenticationEvents = new SpotifyAuthenticationEvents( app.ApplicationServices.GetRequiredService<UserService>() );
+            ExternalAuthenticationEvents facebookAuthenticationEvents = new ExternalAuthenticationEvents(
+                new FacebookExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
+            ExternalAuthenticationEvents spotifyAuthenticationEvents = new ExternalAuthenticationEvents(
+                new SpotifyExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
+
+            FacebookOptions facebookOptions = new FacebookOptions
+            {
+                SignInScheme = CookieAuthentication.AuthenticationScheme,
+                ClientId = Configuration["Authentication:Facebook:ClientId"],
+                ClientSecret = Configuration["Authentication:Facebook:ClientSecret"],
+                Events = new OAuthEvents
+                {
+                    OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
+                }
+            };
+            app.UseFacebookAuthentication( facebookOptions );
+            
             SpotifyAuthenticationOptions spotifyOptions = new SpotifyAuthenticationOptions
             {
                 ClientId = Configuration["Authentication:Spotify:ClientId"],
