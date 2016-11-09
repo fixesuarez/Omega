@@ -15,9 +15,12 @@
           </div>
           <div class="col-12">
             <nav v-bind:class="active" v-on:click.prevent>
-              <a href="#" class="playlistsTab" v-on:click="makeActive('playlistsTab')">playlists</a><br>
-              <a href="#" class="evenementsTab" v-on:click="makeActive('evenementsTab')">evenements</a><br>
-              <a href="#" class="groupesTab" v-on:click="makeActive('groupesTab')">groupes</a><br>
+              <a href="#" class="playlistsTab" @click="makeActive('playlistsTab')">playlists</a><br>
+              <a href="#" class="evenementsTab" @click="makeActive('evenementsTab')">evenements</a><br>
+              <a href="#" class="groupesTab" @click="makeActive('groupesTab')">groupes</a><br>
+              <!--<input type="radio" name="caca" v-bind:value="playlistsTab" v-on:click="testMakeActive" v-model="active">playlists<br>
+              <input type="radio" name="caca" v-bind:value="evenementsTab" v-on:click="testMakeActive" v-model="active">evenements<br>
+              <input type="radio" name="caca" v-bind:value="groupesTab" v-on:click="testMakeActive" v-model="active">groupes<br>-->
               <a href="#" class="ambiancesTab" id="redText" v-on:click="makeModalActive()">ambiances</a>
             </nav>
           </div>
@@ -57,12 +60,15 @@ export default {
       active: 'playlistsTab',
       activePlayer: '',
       modalActive: false,
+      playlistsTab: 'playlistsTab',
+      evenementsTab: 'evenementsTab',
+      groupesTab: 'groupesTab'
     }
   },
   methods: {
     makeActive: function(item) {
       this.active = item;
-      this.$emit('input', this.active)
+      this.$store.dispatch('makeActive', { active: this.active });
     },
     makeActivePlayer: function(item) {
       this.activePlayer = item;
@@ -77,5 +83,5 @@ export default {
 }
 </script>
 
-<style src="../styles/Login.css">
+<style src="../styles/controlPanel.css">
 </style>

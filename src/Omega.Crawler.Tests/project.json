@@ -9,12 +9,18 @@
       "type": "platform",
       "version": "1.0.1"
     },
-    "NUnitLite": "3.5.0"
+    "NUnitLite": "3.5.0",
+    "Omega.Crawler": {
+      "target": "project"
+    }
   },
 
   "frameworks": {
     "netcoreapp1.0": {
-      "imports": "dnxcore50"
+      "imports": [
+        "dnxcore50",
+        "portable-net451+win8"
+      ]
     }
   }
 }

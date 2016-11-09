@@ -6,9 +6,20 @@ namespace Omega.DAL
 {
     public class Requests
     {
-        public CloudTable ConnectCleanTrackTable()
+        //public CloudTable ConnectCleanTrackTable()
+        //{
+        //    CloudStorageAccount storageAccount = CloudStorageAccount.Parse("StorageConnectionString");
+
+        //    CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+        //    CloudTable table = tableClient.GetTableReference("CleanTrack");
+
+        //    return table;
+        //}
+
+        public CloudTable ConnectCleanTrackTable(string connectionString)
         {
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("StorageConnectionString");
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
@@ -17,12 +28,12 @@ namespace Omega.DAL
             return table;
         }
 
-        public async void AddSongCleanTrack(MetaDonnees meta, string artist, string deezerId, string trackId, string title, string source, string AlbumName, string popularity)
+        public async void AddSongCleanTrack(MetaDonnees meta, string artist, string deezerId, string trackId, string title, string source, string AlbumName, string popularity, string connectionString)
         {
             source = source.Substring(0, 1);
-            CloudTable table = ConnectCleanTrackTable();
+            CloudTable table = ConnectCleanTrackTable(connectionString);
             string name = source + ":" + trackId;
-            CleanTrack cleanT = await GetSongCleanTrack(name);
+            CleanTrack cleanT = await GetSongCleanTrack(name, connectionString);
 
             if (cleanT.Id == null)
             {
@@ -51,11 +62,11 @@ namespace Omega.DAL
             }
         }
 
-        public async Task<CleanTrack> GetSongCleanTrack(string trackIdSource)
+        public async Task<CleanTrack> GetSongCleanTrack(string trackIdSource, string connectionString)
         {
             CleanTrack ct = new CleanTrack();
 
-            CloudTable table = ConnectCleanTrackTable();
+            CloudTable table = ConnectCleanTrackTable(connectionString);
 
             TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>("", trackIdSource);
 
@@ -67,9 +78,9 @@ namespace Omega.DAL
             return ct;
         }
 
-        public async void UpdateCleanTrack(MetaDonnees meta, string trackId, string title, string source, string AlbumName, string popularity)
+        public async void UpdateCleanTrack(MetaDonnees meta, string trackId, string title, string source, string AlbumName, string popularity, string connectionString)
         {
-            CloudTable table = ConnectCleanTrackTable();
+            CloudTable table = ConnectCleanTrackTable(connectionString);
 
             TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>("", source + ":" + trackId);
 
@@ -102,11 +113,11 @@ namespace Omega.DAL
             }
         }
 
-        public async void DeleteTrack(string trackIdSource)
+        public async void DeleteTrack(string trackIdSource, string connectionString)
         {
             CleanTrack ct = new CleanTrack();
 
-            CloudTable table = ConnectCleanTrackTable();
+            CloudTable table = ConnectCleanTrackTable(connectionString);
 
             TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>("", trackIdSource);
 

@@ -1,0 +1,10 @@
+.wrapper {
+  background: #de002b;
+  margin-left: 250px;
+  height: 100vh;
+}
+
+.playlistsPanel {
+  margin-left: 5%;
+  margin-top: 5%;
+}
