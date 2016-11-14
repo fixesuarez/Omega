@@ -1,6 +1,7 @@
 <template>
   <div>
     <!--<Login v-model="active"></Login>-->
+    <controlPanel></controlPanel>
     <div v-if="active === 'playlistsTab'">
     </div>
     <div v-if="active === 'evenementsTab'">
@@ -19,6 +20,7 @@
   import IncrementButton from './components/IncrementButton.vue'
   import ChooseIncrement from './components/ChooseIncrement.vue'
   import controlPanel from './components/controlPanel.vue'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
   data () {
@@ -30,9 +32,7 @@
   methods: {
   },
   computed: {
-    count() {
-      return this.$store.getters.count
-    }
+    ...mapGetters(['active'])
   },
   name: 'app',
   components: {

@@ -2,43 +2,28 @@
   <div id="app">
     <html>
       <body>
-		
-        <button type="button" @click="http://localhost:5000/ExternalLogin(Spotify)" class="btn btn-lg btn-primary">Spotify</button>
+               <div class="text-center">
+            <div class="page-header">
+                <h1>Bienvenue sur Omega</h1>
+            </div>
 
+            <button type="button" class="FbButton" @click="login('Facebook')"> Se connecter via Facebook</button>
+            <button type="button" class="DeButton" @click="login('Deezer')"></button>
+            <button type="button" class="SpButton" @click="login('Spotify')">Se connecter via Spotify</button>
+        </div>
       </body>
     </html>
-  </div>
+  </div>    
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      active: 'playlistsTab',
-      activePlayer: '',
-      modalActive: false,
-      playlistsTab: 'playlistsTab',
-      evenementsTab: 'evenementsTab',
-      groupesTab: 'groupesTab'
-    }
-  },
   methods: {
-    makeActive: function(item) {
-      this.active = item;
-      this.$store.dispatch('makeActive', { active: this.active });
-    },
-    makeActivePlayer: function(item) {
-      this.activePlayer = item;
-    },
-    makeModalActive: function() {
-      this.modalActive = !this.modalActive
-      this.$emit('input', this.modalActive)
+    login: function (provider) {
+      this.$http.get('http://omega.itinet.fr/controller/login/' + provider  
     }
-  },
-  computed: {
   }
 }
 </script>
-
-<style>
+<style src="../styles/Home.css">
 </style>
