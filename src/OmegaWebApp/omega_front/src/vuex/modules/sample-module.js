@@ -4,7 +4,7 @@ const state = {
   count: 0,
   nb: 3,
   choice: 0,
-  active: '',
+  active: 'playlistsTab',
   text: ''
 }
 
@@ -22,7 +22,7 @@ const mutations = {
     state.count += payload.choice ;
   },
   [types.MAKEACTIVE](state, payload) {
-    state.active = payload.active ;
+    state.active = payload;
   },
   [types.ADDTEXT](state, payload) {
     state.text = payload.text ;

@@ -15,12 +15,9 @@
           </div>
           <div class="col-12">
             <nav v-bind:class="active" v-on:click.prevent>
-              <a href="#" class="playlistsTab" @click="makeActive('playlistsTab')">playlists</a><br>
-              <a href="#" class="evenementsTab" @click="makeActive('evenementsTab')">evenements</a><br>
-              <a href="#" class="groupesTab" @click="makeActive('groupesTab')">groupes</a><br>
-              <!--<input type="radio" name="caca" v-bind:value="playlistsTab" v-on:click="testMakeActive" v-model="active">playlists<br>
-              <input type="radio" name="caca" v-bind:value="evenementsTab" v-on:click="testMakeActive" v-model="active">evenements<br>
-              <input type="radio" name="caca" v-bind:value="groupesTab" v-on:click="testMakeActive" v-model="active">groupes<br>-->
+              <span @click="makeActive('playlistsTab')"><router-link to="/playlists" class="playlistsTab">playlists</router-link></span>
+              <span @click="makeActive('evenementsTab')"><router-link to="/events" class="evenementsTab" >evenements</router-link></span>
+              <span @click="makeActive('groupesTab')"><router-link to="/groups" class="groupesTab" >groupes</router-link></span>
               <a href="#" class="ambiancesTab" id="redText" v-on:click="makeModalActive()">ambiances</a>
             </nav>
           </div>
@@ -28,15 +25,15 @@
             <div class="players">
               <span v-if="activePlayer === 'deezerPlayer'">
                 <iframe class="spotifyPlayer" style="opacity: 0.2" src="https://embed.spotify.com/?uri=spotify:track:2V65y3PX4DkRhy1djlxd9p" width="250" height="80" frameborder="0" allowtransparency="true"></iframe>
-                <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe> {{activePlayer}} <button v-on:click="makeActivePlayer('spotifyPlayer')">Spotify</button><button v-on:click="makeActivePlayer('deezerPlayer')">Deezer</button>
+                <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe>
               </span>
               <span v-if="activePlayer === 'spotifyPlayer'">
                 <iframe class="spotifyPlayer" style="opacity: 1" src="https://embed.spotify.com/?uri=spotify:track:2V65y3PX4DkRhy1djlxd9p" width="250" height="80" frameborder="0" allowtransparency="true"></iframe>
-                <iframe class="deezerPlayer" style="opacity: 0.2" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe> {{activePlayer}} <button v-on:click="makeActivePlayer('spotifyPlayer')">Spotify</button><button v-on:click="makeActivePlayer('deezerPlayer')">Deezer</button>
+                <iframe class="deezerPlayer" style="opacity: 0.2" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe>
               </span>
               <span v-if="activePlayer === ''">
                 <iframe class="spotifyPlayer" style="opacity: 1" src="https://embed.spotify.com/?uri=spotify:track:2V65y3PX4DkRhy1djlxd9p" width="250" height="80" frameborder="0" allowtransparency="true"></iframe>
-                <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe> {{activePlayer}} <button v-on:click="makeActivePlayer('spotifyPlayer')">Spotify</button><button v-on:click="makeActivePlayer('deezerPlayer')">Deezer</button>
+                <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe>
               </span>              
             </div>
           </div>
@@ -59,7 +56,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      active: 'playlistsTab',
       activePlayer: '',
       modalActive: false,
       playlistsTab: 'playlistsTab',
@@ -68,10 +64,6 @@ export default {
     }
   },
   methods: {
-    // makeActive: function(item) {
-    //   this.active = item;
-    //   this.$store.dispatch('makeActive', { active: this.active });
-    // },
     makeActivePlayer: function(item) {
       this.activePlayer = item;
     },
@@ -82,6 +74,7 @@ export default {
     ...mapActions(['makeActive'])
   },
   computed: {
+    ...mapGetters(['active'])
   }
 }
 </script>

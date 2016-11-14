@@ -1,0 +1,9 @@
+html, body{
+  height:100%;
+  margin: 0px;
+}
+
+.DeButton {
+    padding: 0;
+    margin: 0;
+}

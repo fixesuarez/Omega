@@ -21,5 +21,6 @@ export const addText = ({commit}, payload) => {
 }
 
 export const makeActive = ({commit}, payload) => {
+  
     commit(types.MAKEACTIVE, payload)
 }
