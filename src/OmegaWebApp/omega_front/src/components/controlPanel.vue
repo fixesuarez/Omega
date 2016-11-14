@@ -83,5 +83,5 @@ export default {
 }
 </script>
 
-<style src="../styles/controlPanel.css">
+<style>
 </style>

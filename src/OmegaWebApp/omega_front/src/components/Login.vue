@@ -77,5 +77,5 @@ export default {
 }
 </script>
 
-<style src="../styles/Login.css">
+<style>
 </style>

@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using AspNet.Security.OAuth.Spotify;
+using OmegaWebApp.ProviderDeezer;
 
 namespace OmegaWebApp
 {
@@ -83,6 +84,8 @@ namespace OmegaWebApp
                 new FacebookExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
             ExternalAuthenticationEvents spotifyAuthenticationEvents = new ExternalAuthenticationEvents(
                 new SpotifyExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
+            ExternalAuthenticationEvents deezerAuthenticationEvents = new ExternalAuthenticationEvents(
+                new DeezerExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
 
             FacebookOptions facebookOptions = new FacebookOptions
             {
@@ -112,6 +115,19 @@ namespace OmegaWebApp
             spotifyOptions.Scope.Add( "user-library-read" );
 
             app.UseSpotifyAuthentication( spotifyOptions );
+
+            DeezerAuthenticationOptions deezerOptions = new DeezerAuthenticationOptions
+            {
+                ClientId = Configuration["Authentication:Deezer:ClientId"],
+                ClientSecret = Configuration["Authentication:Deezer:ClientSecret"],
+                SignInScheme = CookieAuthentication.AuthenticationScheme,
+                Events = new OAuthEvents
+                {
+                    OnCreatingTicket = deezerAuthenticationEvents.OnCreatingTicket
+                }
+            };
+
+            app.UseDeezerAuthentication( deezerOptions );
 
             app.UseMvc( routes =>
             {

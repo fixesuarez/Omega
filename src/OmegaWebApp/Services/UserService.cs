@@ -39,6 +39,11 @@ namespace OmegaWebApp.Services
             _userGateway.InsertOrUpdateUserByFacebook( facebookUser );
         }
 
+        public void CreateOrUpdateDeezerUser( User deezerUser )
+        {
+            _userGateway.InsertOrUpdateUserByDeezer( deezerUser );
+        }
+
         //public async Task<User> FindUser( string email, string password )
         //{
         //    User user = await _userGateway.FindUserByEmail( email );

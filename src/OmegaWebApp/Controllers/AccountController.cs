@@ -24,6 +24,7 @@ namespace OmegaWebApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route( "Account/ExternalLogin" )]
         public IActionResult ExternalLogin( [FromQuery] string provider )
         {
             // Note: the "provider" parameter corresponds to the external

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0/",
-    "signature": "30eefd0ad3a45baff192b2b6f0f2b2bc3e911233"
+    "signature": "81afa3a9a592fd9df93e52323d2db4b04fb03258"
   },
   "compilationOptions": {
     "defines": [
@@ -37,7 +37,8 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0",
           "Microsoft.AspNetCore.Cryptography.KeyDerivation": "1.0.0",
           "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0-preview1-final",
-          "Microsoft.AspNetCore.Http.Abstractions": "1.1.0-preview1-final"
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.0-preview1-final",
+          "JetBrains.Annotations": "10.2.1"
         },
         "compile": {
           "OmegaWebApp.dll": {}
@@ -49,6 +50,14 @@
         },
         "compile": {
           "lib/netstandard1.3/AspNet.Security.OAuth.Spotify.dll": {}
+        }
+      },
+      "JetBrains.Annotations/10.2.1": {
+        "dependencies": {
+          "System.Runtime": "4.3.0-preview1-24530-04"
+        },
+        "compile": {
+          "lib/netstandard1.0/JetBrains.Annotations.NetStandard.dll": {}
         }
       },
       "Libuv/1.9.0": {
@@ -2739,6 +2748,11 @@
       },
       "Omega.DAL/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0-preview1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
+          "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+          "Microsoft.Extensions.Configuration.Json": "1.0.0",
           "NETStandard.Library": "1.6.1-preview1-24530-04",
           "WindowsAzure.Storage": "7.2.1"
         },
@@ -2771,7 +2785,8 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0",
           "Microsoft.AspNetCore.Cryptography.KeyDerivation": "1.0.0",
           "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0-preview1-final",
-          "Microsoft.AspNetCore.Http.Abstractions": "1.1.0-preview1-final"
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.0-preview1-final",
+          "JetBrains.Annotations": "10.2.1"
         },
         "runtime": {
           "OmegaWebApp.dll": {}
@@ -2783,6 +2798,14 @@
         },
         "runtime": {
           "lib/netstandard1.3/AspNet.Security.OAuth.Spotify.dll": {}
+        }
+      },
+      "JetBrains.Annotations/10.2.1": {
+        "dependencies": {
+          "System.Runtime": "4.3.0-preview1-24530-04"
+        },
+        "runtime": {
+          "lib/netstandard1.0/JetBrains.Annotations.NetStandard.dll": {}
         }
       },
       "Libuv/1.9.0": {
@@ -5490,6 +5513,11 @@
       },
       "Omega.DAL/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0-preview1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
+          "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+          "Microsoft.Extensions.Configuration.Json": "1.0.0",
           "NETStandard.Library": "1.6.1-preview1-24530-04",
           "WindowsAzure.Storage": "7.2.1"
         },
@@ -5509,6 +5537,11 @@
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-QyK/ftKWYq82z1G5h+apG4sXGXjpjlm6O/zFxbB73BbE4NTgDxJdqzSDy0K9itTCSSrzWAZSrNSWGPe5MeQw4A=="
+    },
+    "JetBrains.Annotations/10.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yTPQ3CsP2I/3vgAsXWby3Bf+dbzsQC5I8/aOsktLi/cSvr50tVTANcL5rTrEmIllbEhZbtZ0rxzxJ2RU8UkMRg=="
     },
     "Libuv/1.9.0": {
       "type": "package",
