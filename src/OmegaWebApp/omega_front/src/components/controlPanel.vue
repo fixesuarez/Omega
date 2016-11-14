@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data () {
     return {
@@ -66,17 +68,18 @@ export default {
     }
   },
   methods: {
-    makeActive: function(item) {
-      this.active = item;
-      this.$store.dispatch('makeActive', { active: this.active });
-    },
+    // makeActive: function(item) {
+    //   this.active = item;
+    //   this.$store.dispatch('makeActive', { active: this.active });
+    // },
     makeActivePlayer: function(item) {
       this.activePlayer = item;
     },
     makeModalActive: function() {
       this.modalActive = !this.modalActive
       this.$emit('input', this.modalActive)
-    }
+    },
+    ...mapActions(['makeActive'])
   },
   computed: {
   }
