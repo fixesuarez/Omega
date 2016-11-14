@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->e
+  <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
       hey
     </div>

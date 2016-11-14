@@ -6,6 +6,9 @@ import App from './App.vue'
 import controlPanel from './components/controlPanel.vue'
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
+import playlists from './components/playlists.vue'
+import events from './components/events.vue'
+import groups from './components/groups.vue'
 
 Vue.use(Router)
 Vue.use(require('vue-resource'))
@@ -14,7 +17,9 @@ const router = new Router({
   mode: 'history',
   routes: [
     { path: '', component: Home },
-    { path: '/login', component: Login }
+    { path: '/playlists', component: playlists },
+    { path: '/groups', component: groups },
+    { path: '/events', component: events }
   ]
 })
 
