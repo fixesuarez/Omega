@@ -2,9 +2,8 @@
   background: #de002b;
   margin-left: 250px;
   height: 100vh;
+  padding: 20px;
 }
 
 .playlistsPanel {
-  margin-left: 5%;
-  margin-top: 5%;
 }

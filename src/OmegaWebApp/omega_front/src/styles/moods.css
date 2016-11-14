@@ -1,7 +1,8 @@
 .moodWrapper {
+  position: absolute;
   margin: auto;
   width: 60%;
   height: 500px;
-  background: red;
-  z-index: 9999;
+  background: black;
+  z-index: 1000;
 }
