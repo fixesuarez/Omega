@@ -21,11 +21,11 @@ namespace OmegaWebApp.Controllers
         {
             _userService = userService;
         }
-
+        
         [HttpGet]
         [AllowAnonymous]
-        [Route( "Account/ExternalLogin" )]
-        public IActionResult ExternalLogin( [FromQuery] string provider )
+        [Route( "Account/login/{provider}" )]
+        public IActionResult ExternalLogin( string provider )
         {
             // Note: the "provider" parameter corresponds to the external
             // authentication provider choosen by the user agent.

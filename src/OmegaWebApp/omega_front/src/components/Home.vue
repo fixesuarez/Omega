@@ -20,8 +20,8 @@
 export default {
   methods: {
     login: function (provider) {
-      this.$http.get('http://omega.itinet.fr/controller/login/' + provider  
-    }
+      this.$http.get('http://localhost:5000/Account/login/' + provider)
+    },
   }
 }
 </script>
