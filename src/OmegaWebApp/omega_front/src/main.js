@@ -43,6 +43,25 @@ const router = new Router({
   ]
 })
 
+AuthService.allowedOrigins = ['http://localhost:5000'];
+
+//AuthService.logoutEndpoint = '/Account/LogOff';
+
+AuthService.providers = {
+  'Base': {
+    endpoint: '/Account/Login'
+  },
+  'Facebook': {
+    endpoint: '/Account/ExternalLogin?provider=Facebook'
+  },
+  'Deezer': {
+    endpoint: '/Account/ExternalLogin?provider=Deezer'
+  },
+  'Spotify': {
+    endpoint: '/Account/ExternalLogin?provider=Spotify'
+  },
+};
+
 new Vue({
   el: '#app',
   store,
