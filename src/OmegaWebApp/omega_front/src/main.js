@@ -9,9 +9,29 @@ import Home from './components/Home.vue'
 import playlists from './components/playlists.vue'
 import events from './components/events.vue'
 import groups from './components/groups.vue'
+import AuthService from './services/AuthService'
 
 Vue.use(Router)
 Vue.use(require('vue-resource'))
+
+function requireAuth (to, from, next)  {
+  if (!AuthService.isConnected) {
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    });
+
+    return;
+  }
+
+  var requiredProviders = to.meta.requiredProviders;
+
+  if(requiredProviders && !AuthService.isBoundToProvider(requiredProviders)) {
+    next( false )
+  };
+
+  next();
+}
 
 const router = new Router({
   mode: 'history',

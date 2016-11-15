@@ -1,9 +1,23 @@
-html, body{
-  height:100%;
-  margin: 0px;
+
+
+
+.FbPanel {
+    background-color: #de002b;
+    width: 30%;
+    height: 60%;
+    margin-left: 35vh;
+    position: absolute;
 }
 
-.DeButton {
-    padding: 0;
-    margin: 0;
+.StreamPanel {
+    background-color: #de002b;
+    width: 30%;
+    height: 60%;
+    margin-left: 110vh;
+    position:  absolute;  
+}
+
+.imgHelp {
+ height: 150px;
+ width: 150px;
 }
