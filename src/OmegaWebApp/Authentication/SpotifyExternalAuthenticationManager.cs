@@ -25,12 +25,7 @@ namespace OmegaWebApp.Authentication
             }
         }
 
-        User IExternalAuthenticationManager.FindUser( OAuthCreatingTicketContext context )
-        {
-            throw new NotImplementedException();
-        }
-
-        async Task<User> FindUser( OAuthCreatingTicketContext context )
+        public async Task<User> FindUser( OAuthCreatingTicketContext context )
         {
             return (User)await _userService.FindUser( context.GetEmail() );
         }

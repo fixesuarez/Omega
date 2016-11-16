@@ -18,13 +18,13 @@ namespace OmegaWebApp.Authentication
             _userManager = userManager;
         }
 
-        public Task OnCreatingTicket( OAuthCreatingTicketContext context )
+        public async Task OnCreatingTicket( OAuthCreatingTicketContext context )
         {
             _userManager.CreateOrUpdateUser( context );
-            User user = _userManager.FindUser( context );
+            User user = await _userManager.FindUser( context );
             ClaimsPrincipal principal = CreatePrincipal( user );
             context.Ticket = new AuthenticationTicket( principal, context.Ticket.Properties, CookieAuthentication.AuthenticationScheme );
-            return Task.CompletedTask;
+            return;
         }
 
         ClaimsPrincipal CreatePrincipal( User user )

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.OAuth;
 using Omega.DAL;
 using OmegaWebApp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OmegaWebApp.Authentication
@@ -17,22 +14,30 @@ namespace OmegaWebApp.Authentication
             _userService = userService;
         }
 
+        //public async void CreateOrUpdateUser( OAuthCreatingTicketContext context )
+        //{
+        //    if (context.AccessToken != null)
+        //    {
+        //        _userService.CreateOrUpdateFacebookUser( await _userService.FindUser( context.GetEmail() ) );
+        //    }
+        //}
+
         public async void CreateOrUpdateUser( OAuthCreatingTicketContext context )
         {
-            if (context.RefreshToken != null)
-            {
-                _userService.CreateOrUpdateFacebookUser( await _userService.FindUser( context.GetEmail() ) );
-            }
+            //User currentUser = new User(context.GetEmail(), 
+
+            //if (context.AccessToken != null)
+            //{
+            //    User currentUser = await _userService.FindUser( context.GetEmail() );
+            //    if( currentUser == null )
+            //        //_userService.CreateFacebookUser();
+            //    _userService.CreateOrUpdateFacebookUser( await _userService.FindUser( context.GetEmail() ) );
+            //}
         }
 
         public async Task<User> FindUser( OAuthCreatingTicketContext context )
         {
-            return (User) await _userService.FindUser( context.GetEmail() );
-        }
-
-        User IExternalAuthenticationManager.FindUser( OAuthCreatingTicketContext context )
-        {
-            throw new NotImplementedException();
+            return await _userService.FindUser( context.GetEmail() );
         }
     }
 }

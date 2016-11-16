@@ -31,11 +31,23 @@ namespace OmegaWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices( IServiceCollection services )
         {
+            services.AddOptions();
+
+            string secretKey = Configuration["JwtBearer:SigningKey"];
+            SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
+
+            services.Configure<TokenProviderOptions>( o =>
+            {
+                o.Audience = Configuration["JwtBearer:Audience"];
+                o.Issuer = Configuration["JwtBearer:Issuer"];
+                o.SigningCredentials = new SigningCredentials( signingKey, SecurityAlgorithms.HmacSha256 );
+            } );
             // Add framework services.
             services.AddMvc();
             services.AddTransient( _ => new UserGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient<PasswordHasher>();
             services.AddTransient<UserService>();
+            services.AddSingleton<TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +65,8 @@ namespace OmegaWebApp
             {
                 app.UseExceptionHandler( "/Home/Error" );
             }
+
+            app.UseMiddleware<BreakPointMiddleware>();
 
             app.UseStaticFiles();
 
@@ -87,18 +101,28 @@ namespace OmegaWebApp
             ExternalAuthenticationEvents deezerAuthenticationEvents = new ExternalAuthenticationEvents(
                 new DeezerExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
 
-            FacebookOptions facebookOptions = new FacebookOptions
+            //FacebookOptions facebookOptions = new FacebookOptions
+            //{
+            //    SignInScheme = CookieAuthentication.AuthenticationScheme,
+            //    ClientId = Configuration["Authentication:Facebook:ClientId"],
+            //    ClientSecret = Configuration["Authentication:Facebook:ClientSecret"],
+            //    Events = new OAuthEvents
+            //    {
+            //        OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
+            //    }
+            //};
+            //app.UseFacebookAuthentication( facebookOptions );
+            app.UseFacebookAuthentication( c =>
             {
-                SignInScheme = CookieAuthentication.AuthenticationScheme,
-                ClientId = Configuration["Authentication:Facebook:ClientId"],
-                ClientSecret = Configuration["Authentication:Facebook:ClientSecret"],
-                Events = new OAuthEvents
+                c.SignInScheme = CookieAuthentication.AuthenticationScheme;
+                c.ClientId = Configuration["Authentication:Facebook:ClientId"];
+                c.ClientSecret = Configuration["Authentication:Facebook:ClientSecret"];
+                c.Events = new OAuthEvents
                 {
                     OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
-                }
-            };
-            app.UseFacebookAuthentication( facebookOptions );
-            
+                };
+            } );
+
             SpotifyAuthenticationOptions spotifyOptions = new SpotifyAuthenticationOptions
             {
                 ClientId = Configuration["Authentication:Spotify:ClientId"],
@@ -108,7 +132,7 @@ namespace OmegaWebApp
                 {
                     OnCreatingTicket = spotifyAuthenticationEvents.OnCreatingTicket
                 }
-            };
+        };
             spotifyOptions.Scope.Add( "user-read-email" );// if email is needed.
             spotifyOptions.Scope.Add( "playlist-read-private" );
             spotifyOptions.Scope.Add( "playlist-read-collaborative" );

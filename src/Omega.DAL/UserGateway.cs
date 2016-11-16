@@ -27,11 +27,18 @@ namespace Omega.DAL
 
         public async Task<User> FindUserByEmail( string email )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( "", email );
 
-            // Execute the retrieve operation.
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            return (User)retrievedResult.Result;
+            try
+            {
+                // Execute the retrieve operation.
+                TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+                return (User)retrievedResult.Result;
+            }
+            catch(System.Exception ex)
+            {
+                throw;
+            }
         }
 
         public async void InsertOrUpdateUserBySpotify( User spotifyUser )
@@ -81,6 +88,22 @@ namespace Omega.DAL
                 TableOperation insertOperation = TableOperation.Insert( deezerUser );
                 await tableUser.ExecuteAsync( insertOperation );
             }
+        }
+
+        public async Task CreateFacebookUser( User facebookUser )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, facebookUser.RowKey );
+
+            // Execute the retrieve operation.
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User)retrievedResult.Result;
+
+            TableOperation insertUserOperation = TableOperation.Insert( facebookUser );
+            await tableUser.ExecuteAsync( insertUserOperation );
+
+            FacebookUser fUser = new FacebookUser( facebookUser.FacebookId, facebookUser.Email );
+            TableOperation insertFacebookUser = TableOperation.Insert( fUser );
+            await tableFacebookUser.ExecuteAsync( insertFacebookUser );
         }
 
         public async void InsertOrUpdateUserByFacebook( User facebookUser )

@@ -23,42 +23,8 @@
 //        /// <param name="userdId"></param>
 //        /// <param name="playlistId"></param>
 //        /// <returns>Returns all the tracks of the playlist.</returns>
-//        private static async Task<List<Track>> GetAllTracksInPlaylists( string urlRequest, string accessToken, string userdId, string playlistId, string cover )
-//        {
-//            List<Track> tracksInPlaylist = new List<Track>();
-
-//            using (HttpClient client = new HttpClient())
-//            {
-//                HttpRequestHeaders headers = client.DefaultRequestHeaders;
-//                headers.Add( "Authorization", string.Format( "Bearer {0}", accessToken ) );
-//                HttpResponseMessage getTracksInPlaylistRequest = await client.GetAsync( urlRequest );
-
-//                using (Stream responseStreamTracksInPlaylist = await getTracksInPlaylistRequest.Content.ReadAsStreamAsync() )
-//                using (StreamReader readerTracksInPlaylists = new StreamReader( responseStreamTracksInPlaylist ))
-//                {
-//                    string allTracksInPlaylistString = readerTracksInPlaylists.ReadToEnd();
-//                    JObject allTracksInPlaylistJson = JObject.Parse( allTracksInPlaylistString );
-//                    JArray allTracksInPlaylistArray = (JArray)allTracksInPlaylistJson["items"];
-
-//                    for (int i = 0; i < allTracksInPlaylistArray.Count; i++)
-//                    {
-//                        string trackTitle = (string)allTracksInPlaylistJson["items"][i]["track"]["name"];
-//                        string trackId = (string)allTracksInPlaylistJson["items"][i]["track"]["id"];
-//                        string albumName = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["name"];
-//                        string trackPopularity = (string)allTracksInPlaylistJson["items"][i]["track"]["popularity"];
-//                        string duration = (string)allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
-//                        string coverAlbum = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
-
-//                        DatabaseQueries.InsertSpotifyTrack( userdId, playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum );
-//                        tracksInPlaylist.Add( new Track( "s", userdId, playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum ) );
 
 
-//                        return tracksInPlaylist;
-//                    }
-//                }
-//            }
-            
-            
 //        }
 
 //        [Route( "Spotify/playlists" )]
