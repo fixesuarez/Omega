@@ -17,11 +17,6 @@ namespace OmegaWebApp.Authentication
             _userService = userService;
         }
 
-        User IExternalAuthenticationManager.FindUser( OAuthCreatingTicketContext context )
-        {
-            throw new NotImplementedException();
-        }
-
         public async void CreateOrUpdateUser( OAuthCreatingTicketContext context )
         {
             if (context.RefreshToken != null)

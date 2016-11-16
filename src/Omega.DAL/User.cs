@@ -22,8 +22,12 @@ namespace Omega.DAL
         public string SpotifyAccessToken { get; set; }
         public string SpotifyRefreshToken { get; set; }
 
-        public User()
+        public User() {}
+        public User( string email, string facebookId, string facebookAccessToken )
         {
+            Email = email;
+            FacebookId = facebookId;
+            FacebookAccessToken = facebookAccessToken;
         }
     }
 }

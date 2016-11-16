@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.OAuth;
 using Omega.DAL;
+using System.Threading.Tasks;
 
 namespace OmegaWebApp.Authentication
 {
@@ -7,6 +8,6 @@ namespace OmegaWebApp.Authentication
     {
         void CreateOrUpdateUser( OAuthCreatingTicketContext context );
 
-        User FindUser( OAuthCreatingTicketContext context );
+        Task<User> FindUser( OAuthCreatingTicketContext context );
     }
 }

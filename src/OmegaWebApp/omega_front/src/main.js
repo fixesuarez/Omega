@@ -48,9 +48,9 @@ AuthService.allowedOrigins = ['http://localhost:5000'];
 //AuthService.logoutEndpoint = '/Account/LogOff';
 
 AuthService.providers = {
-  'Base': {
-    endpoint: '/Account/Login'
-  },
+  //'Base': {
+  //  endpoint: '/Account/Login'
+  //},
   'Facebook': {
     endpoint: '/Account/ExternalLogin?provider=Facebook'
   },

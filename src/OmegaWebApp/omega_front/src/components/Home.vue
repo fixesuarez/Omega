@@ -14,15 +14,19 @@
 </template>
 
 <script>
-export default {
+
+  import AuthService from '../services/AuthService'
+
+  export default {
   methods: {
-    login(provider) {
-      this.$http.get('http://localhost:5000/Account/login/' + provider)
-    },
-    onAuthenticated() {
-          this.$router.replace('/');
+  login(provider) {
+  AuthService.login(provider);
+  },
+  onAuthenticated() {
+  this.$router.replace('/');
   }
-}
+  }
+  }
 </script>
-<style src="../styles/Home.css"">
+<style src="../styles/Home.css">
 </style>

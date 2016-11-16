@@ -210,6 +210,7 @@
 -r:"C:\Users\Suarez\.nuget\packages\WindowsAzure.Storage\7.2.1\lib\netstandard1.3\Microsoft.WindowsAzure.Storage.dll"
 -r:"C:\Users\Suarez\Documents\S5\PI\Omega\src\Omega.DAL\bin\Debug\netstandard1.6\Omega.DAL.dll"
 -resource:"C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\obj\Debug\netcoreapp1.0\OmegaWebAppdotnet-compile.deps.json",OmegaWebApp.deps.json
+"C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\BreakPointMiddleware.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\HttpContextExtension.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\PasswordHasher.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Program.cs"
@@ -217,6 +218,7 @@
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\CookieAuthentication.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\DeezerExternalAuthenticationManager.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\ExternalAuthenticationEvents.cs"
+"C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\FacebookAppBuilderExtensions.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\FacebookExternalAuthenticationManager.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\IExternalAuthenticationManager.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\JwtBearerAuthentication.cs"
@@ -227,6 +229,7 @@
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Authentication\TokenProviderOptions.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Controllers\AccountController.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Controllers\HomeController.cs"
+"C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\Controllers\SpotifyController.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\ProviderDeezer\DeezerAuthenticationDefaults.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\ProviderDeezer\DeezerAuthenticationExtensions.cs"
 "C:\Users\Suarez\Documents\S5\PI\Omega\src\OmegaWebApp\ProviderDeezer\DeezerAuthenticationHandler.cs"
