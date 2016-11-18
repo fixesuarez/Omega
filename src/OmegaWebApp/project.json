@@ -30,11 +30,11 @@
     "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0-preview1-final",
     "Microsoft.AspNetCore.Http.Abstractions": "1.1.0-preview1-final",
     "JetBrains.Annotations": "10.2.1",
-    "BundlerMinifier.Core": "2.2.301"
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final"
   },
 
   "tools": {
-    "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
+    "Microsoft.AspNetCore.Razor.Tools" :  "1.0.0-preview2-final",
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final"
   },
 
