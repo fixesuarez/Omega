@@ -18,7 +18,7 @@
               <span @click="makeActive('playlistsTab')"><router-link to="/playlists" class="playlistsTab">playlists</router-link></span>
               <span @click="makeActive('evenementsTab')"><router-link to="/events" class="evenementsTab" >evenements</router-link></span>
               <span @click="makeActive('groupesTab')"><router-link to="/groups" class="groupesTab" >groupes</router-link></span>
-              <a href="#" class="ambiancesTab" id="redText" v-on:click="makeModalActive()">ambiances</a>
+              <span @click="sendCriterias(criterias)"><span @click="sendMoods(moods)"><span @click="showModal(true)"><router-link to="" class="ambiancesTab" id="redText">ambiances</router-link></span></span></span>
             </nav>
           </div>
           <div class="col-12">
@@ -40,11 +40,6 @@
         </div>
         <div class="redLine">
         </div>
-        <div class="modalMask" v-if="modalActive === true">
-        </div>
-        <div class="modalPanel" v-if="modalActive === true" @keyup.esc="makeModalActive()">
-          <button v-on:click="makeModalActive()">Fermer</button>
-        </div>
       </body>
     </html>
   </div>
@@ -60,21 +55,71 @@ export default {
       modalActive: false,
       playlistsTab: 'playlistsTab',
       evenementsTab: 'evenementsTab',
-      groupesTab: 'groupesTab'
+      groupesTab: 'groupesTab',
+      true: true,
+      criterias: [
+        { label: 'energy', value: null },
+        { label: 'popularity', value: null },
+        { label: 'instrumentalness', value: null },
+        { label: 'speechiness', value: null },
+        { label: 'acousticness', value: null },
+        { label: 'danceability', value: null },
+        { label: 'tempo', value: null },
+        { label: 'valence', value: null },
+        { label: 'duration_ms', value: null }
+      ],
+      moods: [
+        { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', criterias: [
+          { label: 'energy', value: null },
+          { label: 'popularity', value: null },
+          { label: 'instrumentalness', value: null },
+          { label: 'speechiness', value: null },
+          { label: 'acousticness', value: null },
+          { label: 'danceability', value: null },
+          { label: 'tempo', value: null },
+          { label: 'valence', value: null },
+          { label: 'duration_ms', value: null }] },
+        { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png', criterias: [
+          { label: 'energy', value: null },
+          { label: 'popularity', value: null },
+          { label: 'instrumentalness', value: null },
+          { label: 'speechiness', value: null },
+          { label: 'acousticness', value: null },
+          { label: 'danceability', value: null },
+          { label: 'tempo', value: null },
+          { label: 'valence', value: null },
+          { label: 'duration_ms', value: null }] },
+        { label: 'Dance', image: 'http://image.noelshack.com/fichiers/2016/24/1465931498-moodsport.png', criterias: [
+          { label: 'energy', value: null },
+          { label: 'popularity', value: null },
+          { label: 'instrumentalness', value: null },
+          { label: 'speechiness', value: null },
+          { label: 'acousticness', value: null },
+          { label: 'danceability', value: null },
+          { label: 'tempo', value: null },
+          { label: 'valence', value: null },
+          { label: 'duration_ms', value: null }] },
+        { label: 'Mad', image: 'http://image.noelshack.com/fichiers/2016/24/1465931510-moodwork.png', criterias: [
+          { label: 'energy', value: null },
+          { label: 'popularity', value: null },
+          { label: 'instrumentalness', value: null },
+          { label: 'speechiness', value: null },
+          { label: 'acousticness', value: null },
+          { label: 'danceability', value: null },
+          { label: 'tempo', value: null },
+          { label: 'valence', value: null },
+          { label: 'duration_ms', value: null }] }
+      ]
     }
   },
   methods: {
     makeActivePlayer: function(item) {
       this.activePlayer = item;
     },
-    makeModalActive: function() {
-      this.modalActive = !this.modalActive
-      this.$emit('input', this.modalActive)
-    },
-    ...mapActions(['makeActive'])
+    ...mapActions(['makeActive', 'showModal', 'sendMoods', 'sendCriterias'])
   },
   computed: {
-    ...mapGetters(['active'])
+    ...mapGetters(['active', 'enabledCriterias'])
   }
 }
 </script>
