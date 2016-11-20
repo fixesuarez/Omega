@@ -35,7 +35,6 @@ body {
 
 .leftContent {
   width: 250px; 
-  margin-left: -10%;
   min-height: 100vh;
   background-color: #171717;
   float: left;
