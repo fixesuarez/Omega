@@ -86,8 +86,7 @@ namespace CodeCakeBuilder
                          ToolPath = "../packages/OpenCover/4.6.519/tools/OpenCover.Console.exe",
                          Register = "User"
                      }
-                        .WithFilter("+[Test]*")
-                        .WithFilter("-[Test.Tests]*")
+                        .WithFilter("-[Omega.Crawler.Tests]*")
                     );
                 });
 
