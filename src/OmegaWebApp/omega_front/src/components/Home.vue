@@ -20,13 +20,12 @@
 import AuthService from '../services/AuthService'
 
 export default {
-    methods: {
-      login(provider) {
-      AuthService.login(provider);
-      },
-      onAuthenticated() {
-      this.$router.replace('/');
-      }
+  methods: {
+    login(provider) {
+    AuthService.login(provider);
+    },
+    onAuthenticated() {
+    this.$router.replace('/');
     }
   }
 }
