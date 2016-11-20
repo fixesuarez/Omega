@@ -16,9 +16,9 @@ before_build:
   - dotnet restore
   
 install:
- - ps: .\Galt\Bootstrap.ps1
+ - ps: .\Bootstrap.ps1
 
 build_script:
- - dotnet run -p Galt\src\CodeCakeBuilder -nointeraction
+ - dotnet run -p src\CodeCakeBuilder -nointeraction
  
 test: off
