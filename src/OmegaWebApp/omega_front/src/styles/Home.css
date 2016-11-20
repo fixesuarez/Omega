@@ -39,17 +39,39 @@ body {
     height: 60vh;
     float: left;
     position: absolute;
-    border-radius: 50em;
-    background-color: #de002b;
+    margin-left: 15vh;
 }
 
 #StreamPanel {
     width: 60vh;
     height: 60vh;
     position:  relative;
-    background-color: #de002b;
     float: right;
-    border-radius: 50em;
+}
+
+.FbButton {
+    margin-top: 45vh;
+    cursor:pointer;
+    margin-left: 10vh;
+    border: none;
+    background: transparent;
+    
+
+}
+
+.DeButton {
+    margin-top: 40vh;
+    cursor:pointer;
+    border: none;
+    background: transparent;
+}
+
+.SpButton {
+    margin-top: 0vh;
+    cursor:pointer;
+
+    border: none;
+    background: transparent;
 }
 
 #imgHelp {
