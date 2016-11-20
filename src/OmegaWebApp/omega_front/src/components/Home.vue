@@ -10,6 +10,7 @@
   <div id="StreamPanel">
     <button type="button" class="DeButton" @click="login('Deezer')">Se connecter via Deezer</button>
     <button type="button" class="SpButton" @click="login('Spotify')">Se connecter via Spotify</button>
+            <router-link to="/playlists">Passer la connection</router-link>
   </div>
 </div>   
 </template>
@@ -25,7 +26,6 @@
   },
   onAuthenticated() {
   this.$router.replace('/');
-  }
   }
   }
 </script>

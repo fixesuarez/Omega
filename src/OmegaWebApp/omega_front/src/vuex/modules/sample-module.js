@@ -5,7 +5,11 @@ const state = {
   nb: 3,
   choice: 0,
   active: 'playlistsTab',
-  text: ''
+  text: '',
+  modalActive: false,
+  moods: '',
+  enabledCriterias: false,
+  criterias: '',
 }
 
 const mutations = {
@@ -26,8 +30,22 @@ const mutations = {
   },
   [types.ADDTEXT](state, payload) {
     state.text = payload.text ;
+  },
+  [types.SHOWMODAL](state, payload) {
+    state.modalActive = payload;
+  },
+  [types.SENDMOODS](state, payload) {
+    state.moods = payload;
+  },
+  [types.SENDCRITERIAS](state, payload) {
+    state.criterias = payload;
+  },
+  [types.ENABLECRITERIAS](state, payload) {
+    state.enabledCriterias = payload;
+  },
+  [types.ADDMOOD](state, payload) {
+    state.moods.push.payload;
   }
-
 }
 
 export default {
