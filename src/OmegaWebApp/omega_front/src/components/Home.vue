@@ -17,9 +17,9 @@
 
 <script>
 
-  import AuthService from '../services/AuthService'
+import AuthService from '../services/AuthService'
 
-  export default {
+export default {
     methods: {
       login(provider) {
       AuthService.login(provider);
@@ -29,6 +29,9 @@
       }
     }
   }
+}
+
 </script>
+
 <style src="../styles/Home.css">
 </style>
