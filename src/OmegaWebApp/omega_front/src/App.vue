@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--<Login v-model="active"></Login>-->
-    <!--<controlPanel></controlPanel>-->
+    <controlPanel></controlPanel>
     <div v-if="active === 'playlistsTab'">
     </div>
     <div v-if="active === 'evenementsTab'">

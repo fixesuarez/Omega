@@ -124,5 +124,5 @@ export default {
 }
 </script>
 
-<style>
+<style src="../styles/controlPanel.css">
 </style>
