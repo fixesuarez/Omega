@@ -17,17 +17,22 @@ namespace OmegaWebApp.Authentication
             _userService = userService;
         }
 
-        public async void CreateOrUpdateUser( OAuthCreatingTicketContext context )
+        public async Task CreateOrUpdateUser( OAuthCreatingTicketContext context )
         {
-            if (context.RefreshToken != null)
+            if( context.AccessToken != null )
             {
-                _userService.CreateOrUpdateSpotifyUser( await _userService.FindUser( context.GetEmail() ) );
+                User currentUser = new User( context.GetSpotifyEmail(), context.GetId(), context.AccessToken, context.RefreshToken );
+                User retrievedUser = await _userService.FindUser( context.GetSpotifyEmail() );
+                if( retrievedUser == null )
+                    await _userService.CreateUser( currentUser );
+                else if( retrievedUser.SpotifyAccessToken != currentUser.SpotifyAccessToken )
+                    await _userService.UpdateSpotifyUser( currentUser );
             }
         }
 
         public async Task<User> FindUser( OAuthCreatingTicketContext context )
         {
-            return (User)await _userService.FindUser( context.GetEmail() );
+            return (User)await _userService.FindUser( context.GetSpotifyEmail() );
         }
     }
 }

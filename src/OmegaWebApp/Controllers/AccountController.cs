@@ -61,7 +61,7 @@ namespace OmegaWebApp.Controllers
             string userId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
             string email = User.FindFirst( ClaimTypes.Email ).Value;
             Token token = _tokenService.GenerateToken( userId, email );
-            IEnumerable<string> providers = (IEnumerable<string>) _userService.GetAuthenticationProviders( email );
+            IEnumerable<string> providers = _userService.GetAuthenticationProviders( email ).Result;
             ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
             ViewData["Token"] = token;
             ViewData["Email"] = email;

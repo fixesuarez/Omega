@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,48 +23,25 @@ namespace Omega.DAL
 
             // Create the CloudTables objects that represent the different tables.
             tableUser = tableClient.GetTableReference( "User" );
+            // Create the table if it doesn't exist.
+            tableUser.CreateIfNotExistsAsync();
+
             tableFacebookUser = tableClient.GetTableReference( "FacebookUser" );
+            // Create the table if it doesn't exist.
+            tableFacebookUser.CreateIfNotExistsAsync();
         }
 
         public async Task<User> FindUserByEmail( string email )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( "", email );
-
-            try
-            {
-                // Execute the retrieve operation.
-                TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-                return (User)retrievedResult.Result;
-            }
-            catch(System.Exception ex)
-            {
-                throw;
-            }
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            return (User)retrievedResult.Result;
         }
 
-        public async void InsertOrUpdateUserBySpotify( User spotifyUser )
+        public async Task CreateUser( User user )
         {
-            // Create a retrieve operation that takes a customer entity.
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, spotifyUser.RowKey );
-
-            // Execute the retrieve operation.
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            User retrievedUser = (User)retrievedResult.Result;
-
-            if (retrievedResult.Result != null && (retrievedUser.SpotifyId != spotifyUser.SpotifyId || retrievedUser.SpotifyAccessToken != spotifyUser.SpotifyAccessToken))
-            {
-                retrievedUser.SpotifyRefreshToken = spotifyUser.SpotifyRefreshToken;
-                retrievedUser.SpotifyAccessToken = spotifyUser.SpotifyAccessToken;
-                retrievedUser.SpotifyId = spotifyUser.SpotifyId;
-
-                TableOperation updateOperation = TableOperation.Replace( retrievedUser );
-                await tableUser.ExecuteAsync( updateOperation );
-            }
-            else if (retrievedUser == null)
-            {
-                TableOperation insertOperation = TableOperation.Insert( spotifyUser );
-                await tableUser.ExecuteAsync( insertOperation );
-            }
+            TableOperation insertUserOperation = TableOperation.Insert( user );
+            await tableUser.ExecuteAsync( insertUserOperation );
         }
 
         public async void InsertOrUpdateUserByDeezer( User deezerUser )
@@ -89,55 +67,48 @@ namespace Omega.DAL
                 await tableUser.ExecuteAsync( insertOperation );
             }
         }
-
-        public async Task CreateFacebookUser( User facebookUser )
+        
+        public async Task UpdateDeezerUser( User deezerUser )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, facebookUser.RowKey );
-
-            // Execute the retrieve operation.
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, deezerUser.RowKey );
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            User retrievedUser = (User)retrievedResult.Result;
+            User retrievedUser = (User) retrievedResult.Result;
+            retrievedUser.DeezerId = deezerUser.SpotifyId;
+            retrievedUser.DeezerAccessToken = deezerUser.SpotifyAccessToken;
+            retrievedUser.DeezerRefreshToken = deezerUser.SpotifyRefreshToken;
 
-            TableOperation insertUserOperation = TableOperation.Insert( facebookUser );
-            await tableUser.ExecuteAsync( insertUserOperation );
-
-            FacebookUser fUser = new FacebookUser( facebookUser.FacebookId, facebookUser.Email );
-            TableOperation insertFacebookUser = TableOperation.Insert( fUser );
-            await tableFacebookUser.ExecuteAsync( insertFacebookUser );
+            TableOperation updateOperation = TableOperation.Replace( retrievedUser );
+            await tableUser.ExecuteAsync( updateOperation );
         }
 
-        public async void InsertOrUpdateUserByFacebook( User facebookUser )
+        public async Task UpdateSpotifyUser( User spotifyUser )
         {
-            // Create a retrieve operation that takes a User entity.
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, facebookUser.RowKey );
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, spotifyUser.RowKey );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            retrievedUser.SpotifyId = spotifyUser.SpotifyId;
+            retrievedUser.SpotifyAccessToken = spotifyUser.SpotifyAccessToken;
+            retrievedUser.SpotifyRefreshToken = spotifyUser.SpotifyRefreshToken;
+
+            TableOperation updateOperation = TableOperation.Replace( retrievedUser );
+            await tableUser.ExecuteAsync( updateOperation );
+        }
+        
+        public async Task UpdateFacebookUser( User facebookUser)
+        {
+            /*
+             * updating FacebookAccessToken and FacebookId If they have changed in table User
+             */
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, facebookUser.RowKey);
 
             // Execute the retrieve operation.
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            TableResult retrievedResult = await tableUser.ExecuteAsync(retrieveOperation);
             User retrievedUser = (User)retrievedResult.Result;
+            
+            retrievedUser.FacebookAccessToken = facebookUser.FacebookAccessToken;
 
-            if (retrievedResult.Result != null && (retrievedUser.FacebookId != facebookUser.FacebookId || retrievedUser.FacebookAccessToken != facebookUser.FacebookAccessToken))
-            {
-                retrievedUser.FacebookId = facebookUser.FacebookId;
-                retrievedUser.FacebookAccessToken = facebookUser.FacebookAccessToken;
-
-                TableOperation updateOperation = TableOperation.Replace( retrievedUser );
-                await tableUser.ExecuteAsync( updateOperation );
-            }
-            else if (retrievedUser == null)
-            {
-                TableOperation insertOperation = TableOperation.Insert( facebookUser );
-                await tableUser.ExecuteAsync( insertOperation );
-            }
-
-            TableOperation retrieveFacebookUserOperation = TableOperation.Retrieve<FacebookUser>( string.Empty, facebookUser.FacebookId );
-            TableResult retrievedFacebookUserResult = await tableFacebookUser.ExecuteAsync( retrieveFacebookUserOperation );
-            FacebookUser retrievedFacebookUser = (FacebookUser)retrievedFacebookUserResult.Result;
-            if (retrievedFacebookUser == null)
-            {
-                FacebookUser fUser = new FacebookUser( facebookUser.FacebookId, facebookUser.Email );
-                TableOperation insertFacebookUser = TableOperation.Insert( fUser );
-                await tableFacebookUser.ExecuteAsync( insertFacebookUser );
-            }
+            TableOperation updateOperation = TableOperation.Replace(retrievedUser);
+            await tableUser.ExecuteAsync(updateOperation);
         }
 
         public async Task<IEnumerable<string>> GetAuthenticationProviders( string email )
@@ -148,12 +119,12 @@ namespace Omega.DAL
 
             // Execute the retrieve operation.
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            User user = (User)retrievedResult.Result;
-            if (user.DeezerId != null)
+            User user = (User) retrievedResult.Result;
+            if( user.DeezerId != null )
                 providers.Add( "Deezer" );
-            if (user.SpotifyId != null)
+            if( user.SpotifyId != null )
                 providers.Add( "Spotify" );
-            if (user.FacebookId != null)
+            if( user.FacebookId != null )
                 providers.Add( "Facebook" );
 
             return providers;

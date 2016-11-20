@@ -20,8 +20,9 @@ namespace OmegaWebApp.Authentication
 
         public async Task OnCreatingTicket( OAuthCreatingTicketContext context )
         {
-            _userManager.CreateOrUpdateUser( context );
+            await _userManager.CreateOrUpdateUser( context );
             User user = await _userManager.FindUser( context );
+            user.FacebookId = context.GetId();
             ClaimsPrincipal principal = CreatePrincipal( user );
             context.Ticket = new AuthenticationTicket( principal, context.Ticket.Properties, CookieAuthentication.AuthenticationScheme );
             return;
@@ -31,7 +32,7 @@ namespace OmegaWebApp.Authentication
         {
             List<Claim> claims = new List<Claim>
             {
-                // new Claim( ClaimTypes.NameIdentifier, user.UserId.ToString(), ClaimValueTypes.String ),
+                new Claim( ClaimTypes.NameIdentifier, user.FacebookId, ClaimValueTypes.String ),
                 new Claim( ClaimTypes.Email, user.Email )
             };
             ClaimsPrincipal principal = new ClaimsPrincipal( new ClaimsIdentity( claims, "Cookies", ClaimTypes.Email, string.Empty ) );

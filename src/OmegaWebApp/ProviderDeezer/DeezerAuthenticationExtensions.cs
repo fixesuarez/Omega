@@ -9,7 +9,7 @@ namespace OmegaWebApp.ProviderDeezer
     {
         /// <summary>
         /// Adds the <see cref="DeezerAuthenticationMiddleware"/> middleware to the specified
-        /// <see cref="IApplicationBuilder"/>, which enables Spotify authentication capabilities.
+        /// <see cref="IApplicationBuilder"/>, which enables Deezer authentication capabilities.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to add the middleware to.</param>
         /// <param name="options">A <see cref="DeezerAuthenticationOptions"/> that specifies options for the middleware.</param>        

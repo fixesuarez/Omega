@@ -17,11 +17,16 @@ namespace OmegaWebApp.Authentication
             _userService = userService;
         }
 
-        public async void CreateOrUpdateUser( OAuthCreatingTicketContext context )
+        public async Task CreateOrUpdateUser( OAuthCreatingTicketContext context )
         {
-            if (context.RefreshToken != null)
+            if( context.AccessToken != null )
             {
-                _userService.CreateOrUpdateDeezerUser( await _userService.FindUser( context.GetEmail() ) );
+                User currentUser = new User( context.GetEmail(), context.GetId(), context.AccessToken, context.RefreshToken );
+                User retrievedUser = await _userService.FindUser( context.GetEmail() );
+                if( retrievedUser == null )
+                    await _userService.CreateUser( currentUser );
+                else if( retrievedUser.DeezerAccessToken != currentUser.DeezerAccessToken )
+                    await _userService.UpdateDeezerUser( currentUser );
             }
         }
 

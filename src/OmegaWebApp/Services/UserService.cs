@@ -17,49 +17,29 @@ namespace OmegaWebApp.Services
             _passwordHasher = passwordHasher;
         }
 
-        //public bool CreateUser( string email, string password )
-        //{
-        //    if (_userGateway.FindUserByEmail( email ) != null) return false;
-        //    _userGateway.Create( email, _passwordHasher.HashPassword( password ), string.Empty );
-        //    return true;
-        //}
-
-        public async void CreateOrUpdateSpotifyUser( string email )
-        {
-            _userGateway.InsertOrUpdateUserBySpotify( await _userGateway.FindUserByEmail( email ) );
-        }
-
-        public void CreateOrUpdateSpotifyUser( User spotifyUser )
-        {
-            _userGateway.InsertOrUpdateUserBySpotify( spotifyUser );
-        }
-
-        public void CreateOrUpdateFacebookUser( User facebookUser )
-        {
-            _userGateway.InsertOrUpdateUserByFacebook( facebookUser );
-        }
-
-        public void CreateOrUpdateDeezerUser( User deezerUser )
-        {
-            _userGateway.InsertOrUpdateUserByDeezer( deezerUser );
-        }
-
-        //public async Task<User> FindUser( string email, string password )
-        //{
-        //    User user = await _userGateway.FindUserByEmail( email );
-        //    if (user != null && _passwordHasher.VerifyHashedPassword( user.Password, password ) == PasswordVerificationResult.Success)
-        //    {
-        //        return await FindUser( email );
-        //    }
-
-        //    return null;
-        //}
-
         public async Task<User> FindUser( string email )
         {
             return await _userGateway.FindUserByEmail( email );
         }
 
+        public async Task CreateUser( User user )
+        {
+            await _userGateway.CreateUser( user );
+        }
+        
+        public async Task UpdateSpotifyUser(User spotifyUser )
+        {
+            await _userGateway.UpdateSpotifyUser( spotifyUser );
+        }
+        public async Task UpdateDeezerUser( User deezerUser )
+        {
+            await _userGateway.UpdateDeezerUser( deezerUser );
+        }
+        public async Task UpdateFacebookUser(User facebookUser)
+        {
+            await _userGateway.UpdateFacebookUser(facebookUser);
+        }
+        
         public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
         {
             return await _userGateway.GetAuthenticationProviders( userId );

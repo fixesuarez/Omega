@@ -14,25 +14,17 @@ namespace OmegaWebApp.Authentication
             _userService = userService;
         }
 
-        //public async void CreateOrUpdateUser( OAuthCreatingTicketContext context )
-        //{
-        //    if (context.AccessToken != null)
-        //    {
-        //        _userService.CreateOrUpdateFacebookUser( await _userService.FindUser( context.GetEmail() ) );
-        //    }
-        //}
-
-        public async void CreateOrUpdateUser( OAuthCreatingTicketContext context )
+        public async Task CreateOrUpdateUser( OAuthCreatingTicketContext context )
         {
-            //User currentUser = new User(context.GetEmail(), 
-
-            //if (context.AccessToken != null)
-            //{
-            //    User currentUser = await _userService.FindUser( context.GetEmail() );
-            //    if( currentUser == null )
-            //        //_userService.CreateFacebookUser();
-            //    _userService.CreateOrUpdateFacebookUser( await _userService.FindUser( context.GetEmail() ) );
-            //}
+            if (context.AccessToken != null)
+            {
+                User currentUser = new User(context.GetEmail(), string.Empty, context.AccessToken);
+                User retrievedUser = await _userService.FindUser(context.GetEmail());
+                if (retrievedUser == null)
+                    await _userService.CreateUser(currentUser);
+                else if (retrievedUser.FacebookAccessToken != currentUser.FacebookAccessToken)
+                    await _userService.UpdateFacebookUser(currentUser);
+            }
         }
 
         public async Task<User> FindUser( OAuthCreatingTicketContext context )
