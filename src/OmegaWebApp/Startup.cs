@@ -1,23 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Omega.DAL;
+using OmegaWebApp.Services;
+using OmegaWebApp.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using AspNet.Security.OAuth.Spotify;
+using OmegaWebApp.ProviderDeezer;
 
 namespace OmegaWebApp
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup( IHostingEnvironment env )
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .SetBasePath( env.ContentRootPath )
+                .AddJsonFile( "appsettings.json", optional: true, reloadOnChange: true )
+                .AddJsonFile( $"appsettings.{env.EnvironmentName}.json", optional: true )
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -25,16 +29,31 @@ namespace OmegaWebApp
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices( IServiceCollection services )
         {
+            services.AddOptions();
+
+            string secretKey = Configuration["JwtBearer:SigningKey"];
+            SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
+
+            services.Configure<TokenProviderOptions>( o =>
+            {
+                o.Audience = Configuration["JwtBearer:Audience"];
+                o.Issuer = Configuration["JwtBearer:Issuer"];
+                o.SigningCredentials = new SigningCredentials( signingKey, SecurityAlgorithms.HmacSha256 );
+            } );
             // Add framework services.
             services.AddMvc();
+            services.AddTransient( _ => new UserGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient<PasswordHasher>();
+            services.AddTransient<UserService>();
+            services.AddSingleton<TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure( IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory )
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole( Configuration.GetSection( "Logging" ) );
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
@@ -44,17 +63,102 @@ namespace OmegaWebApp
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler( "/Home/Error" );
             }
+
+            app.UseMiddleware<BreakPointMiddleware>();
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
+            app.UseCookieAuthentication( new CookieAuthenticationOptions
+            {
+                AuthenticationScheme = CookieAuthentication.AuthenticationScheme
+            } );
+
+            string secretKey = Configuration["JwtBearer:SigningKey"];
+            SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
+
+            app.UseJwtBearerAuthentication( new JwtBearerOptions
+            {
+                AuthenticationScheme = JwtBearerAuthentication.AuthenticationScheme,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = signingKey,
+
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["JwtBearer:Issuer"],
+
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JwtBearer:Audience"]
+                }
+            } );
+
+            ExternalAuthenticationEvents facebookAuthenticationEvents = new ExternalAuthenticationEvents(
+                new FacebookExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
+            ExternalAuthenticationEvents spotifyAuthenticationEvents = new ExternalAuthenticationEvents(
+                new SpotifyExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
+            ExternalAuthenticationEvents deezerAuthenticationEvents = new ExternalAuthenticationEvents(
+                new DeezerExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
+
+            //FacebookOptions facebookOptions = new FacebookOptions
+            //{
+            //    SignInScheme = CookieAuthentication.AuthenticationScheme,
+            //    ClientId = Configuration["Authentication:Facebook:ClientId"],
+            //    ClientSecret = Configuration["Authentication:Facebook:ClientSecret"],
+            //    Events = new OAuthEvents
+            //    {
+            //        OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
+            //    }
+            //};
+            //app.UseFacebookAuthentication( facebookOptions );
+            app.UseFacebookAuthentication( c =>
+            {
+                c.SignInScheme = CookieAuthentication.AuthenticationScheme;
+                c.ClientId = Configuration["Authentication:Facebook:ClientId"];
+                c.ClientSecret = Configuration["Authentication:Facebook:ClientSecret"];
+                c.Events = new OAuthEvents
+                {
+                    OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
+                };
+            } );
+
+            SpotifyAuthenticationOptions spotifyOptions = new SpotifyAuthenticationOptions
+            {
+                ClientId = Configuration["Authentication:Spotify:ClientId"],
+                ClientSecret = Configuration["Authentication:Spotify:ClientSecret"],
+                SignInScheme = CookieAuthentication.AuthenticationScheme,
+                Events = new OAuthEvents
+                {
+                    OnCreatingTicket = spotifyAuthenticationEvents.OnCreatingTicket
+                }
+        };
+            spotifyOptions.Scope.Add( "user-read-email" );// if email is needed.
+            spotifyOptions.Scope.Add( "playlist-read-private" );
+            spotifyOptions.Scope.Add( "playlist-read-collaborative" );
+            spotifyOptions.Scope.Add( "user-library-read" );
+
+            app.UseSpotifyAuthentication( spotifyOptions );
+
+            DeezerAuthenticationOptions deezerOptions = new DeezerAuthenticationOptions
+            {
+                ClientId = Configuration["Authentication:Deezer:ClientId"],
+                ClientSecret = Configuration["Authentication:Deezer:ClientSecret"],
+                SignInScheme = CookieAuthentication.AuthenticationScheme,
+                Events = new OAuthEvents
+                {
+                    OnCreatingTicket = deezerAuthenticationEvents.OnCreatingTicket
+                }
+            };
+
+            app.UseDeezerAuthentication( deezerOptions );
+
+            app.UseMvc( routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+                    template: "{controller=Home}/{action=Index}/{id?}" );
+            } );
         }
     }
 }
