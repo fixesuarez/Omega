@@ -24,3 +24,28 @@ export const makeActive = ({commit}, payload) => {
   
     commit(types.MAKEACTIVE, payload)
 }
+
+export const showModal = ({commit}, payload) => {
+  
+    commit(types.SHOWMODAL, payload)
+}
+
+export const sendMoods = ({commit}, payload) => {
+  
+    commit(types.SENDMOODS, payload)
+}
+
+export const sendCriterias = ({commit}, payload) => {
+  
+    commit(types.SENDCRITERIAS, payload)
+}
+
+export const enableCriterias = ({commit}, payload) => {
+  
+    commit(types.ENABLECRITERIAS, payload)
+}
+
+export const addMood = ({commit}, payload) => {
+  
+    commit(types.ADDMOOD, payload)
+}

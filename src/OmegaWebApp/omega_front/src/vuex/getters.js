@@ -2,4 +2,8 @@ export const count = state => state.sampleModule.count;
 export const nb = state => state.sampleModule.nb;
 export const choice = state => state.sampleModule.choice;
 export const active = state => state.sampleModule.active;
+export const modalActive = state => state.sampleModule.modalActive;
+export const moods = state => state.sampleModule.moods;
+export const criterias = state => state.sampleModule.criterias;
 export const text = state => state.sampleModule.text;
+export const enabledCriterias = state => state.sampleModule.enabledCriterias;
