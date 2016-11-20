@@ -80,7 +80,7 @@ namespace CodeCakeBuilder
                             ToolPath = "../packages/NUnit.ConsoleRunner/3.5.0/tools/nunit3-console.exe"
                         });
                     },
-                     new FilePath("../resultOpenCover.xml"),
+                     new FilePath("CodeCakeBuilder/resultOpenCover.xml"),
                      new OpenCoverSettings
                      {
                          ToolPath = "../packages/OpenCover/4.6.519/tools/OpenCover.Console.exe",
