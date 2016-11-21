@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Omega.Crawler;
 
 namespace Omega.Crawler.Tests
 {
@@ -165,25 +166,30 @@ namespace Omega.Crawler.Tests
         //    return Users;
         //}
 
+        //[Test]
+        //public async Task TestTokenAuth()
+        //{
+        //    CredentialAuth ca = new CredentialAuth();
+
+        //    string t = await ca.GetAccessToken();
+
+        //    Console.WriteLine(t);
+        //}
+
+        [Test]
+        public async Task GetSong()
+        {
+            GetATrack gt = new GetATrack();
+
+            Track t = await gt.GetTrackSpotify("06AKEBrKUckW0KREUWRnvT");
+            string[] expected = new string[] { t.Artist };
+            string[] actual = new string[] { "Johan Liljedahl" };
+            Assert.That(expected, Is.EqualTo(actual));
+        }
+
         [Test]
         public void ShouldPass()
         {
-        }
-
-        [Test]
-        public void ShouldFail()
-        {
-            Assert.That( 3, Is.EqualTo( 2 ) );
-        }
-
-        [Test]
-        public async Task TestTokenAuth()
-        {
-            CredentialAuth ca = new CredentialAuth();
-
-            string t = await ca.GetAccessToken();
-
-            Console.WriteLine(t);
         }
     }
 }
