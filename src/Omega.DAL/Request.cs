@@ -78,7 +78,7 @@ namespace Omega.DAL
             return ct;
         }
 
-        public async void UpdateCleanTrack(MetaDonnees meta, string trackId, string title, string source, string AlbumName, string popularity, string connectionString)
+        public async void UpdateCleanTrack(MetaDonnees meta, string trackId, string title, string source, string AlbumName, string popularity, string connectionString, string artist)
         {
             CloudTable table = ConnectCleanTrackTable(connectionString);
 
@@ -106,6 +106,7 @@ namespace Omega.DAL
                 updateEntity.AlbumName = AlbumName;
                 updateEntity.Popularity = popularity;
                 updateEntity.Energy = meta.energy;
+                updateEntity.Artist = artist;
 
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
 
