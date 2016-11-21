@@ -56,7 +56,7 @@ namespace CodeCakeBuilder
                 .IsDependentOn("Restore-Tools")
                 .Does(() =>
                 {
-                DirectoryPathCollection AllProj = Cake.GetDirectories("./*", p => !p.Path.FullPath.Contains("CodeCakeBuilder") && !p.Path.FullPath.Contains("wwwroot") && !p.Path.FullPath.Contains("Omega.DataManager.Tests"));
+                DirectoryPathCollection AllProj = Cake.GetDirectories("./*", p => !p.Path.FullPath.Contains("CodeCakeBuilder") && !p.Path.FullPath.Contains("wwwroot") && !p.Path.FullPath.Contains("Omega.DataManager.Test"));
                     foreach (DirectoryPath proj in AllProj)
                     {
                         Cake.DotNetCoreBuild(proj.FullPath);
