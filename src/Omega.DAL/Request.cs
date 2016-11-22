@@ -1,22 +1,12 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
 {
     public class Requests
     {
-        //public CloudTable ConnectCleanTrackTable()
-        //{
-        //    CloudStorageAccount storageAccount = CloudStorageAccount.Parse("StorageConnectionString");
-
-        //    CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-
-        //    CloudTable table = tableClient.GetTableReference("CleanTrack");
-
-        //    return table;
-        //}
-
         public CloudTable ConnectCleanTrackTable(string connectionString)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
@@ -24,6 +14,17 @@ namespace Omega.DAL
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
             CloudTable table = tableClient.GetTableReference("CleanTrack");
+
+            return table;
+        }
+
+        public CloudTable ConnectAmbianceTable(string connectionString)
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
+
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+            CloudTable table = tableClient.GetTableReference("Ambiance");
 
             return table;
         }
@@ -131,6 +132,27 @@ namespace Omega.DAL
                 TableOperation deleteOperation = TableOperation.Delete(deleteEntity);
                 await table.ExecuteAsync(deleteOperation);
             }
+        }
+
+        // Model Requests
+
+        public async void AddMood(string user, string name, string metaDonnees, string connectionString)
+        {
+            CloudTable table = ConnectAmbianceTable(connectionString);
+            JObject rss = JObject.Parse(metaDonnees);
+
+            Ambiance mood = new Ambiance(user, name);
+            mood.Acousticness = (string)rss["Acousticness"];
+            mood.Danceability = (string)rss["Danceability"];
+            mood.Energy = (string)rss["Energy"];
+            mood.Instrumentalness = (string)rss["Instrumentalness"];
+            mood.Liveness = (string)rss["Liveness"];
+            mood.Loudness = (string)rss["Loudness"];
+            mood.Mode = (string)rss["Mode"];
+            mood.Popularity = (string)rss["Popularity"];
+            TableOperation insertOperation = TableOperation.Insert(mood);
+
+            await table.ExecuteAsync(insertOperation);
         }
     }
 }
