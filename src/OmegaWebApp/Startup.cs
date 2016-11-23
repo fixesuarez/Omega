@@ -46,6 +46,7 @@ namespace OmegaWebApp
             services.AddMvc();
             services.AddTransient( _ => new UserGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient( _ => new PlaylistGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient( _ => new AmbianceGateway(Configuration["data:azure:ConnectionString"]));
             services.AddTransient( _ => new TrackGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient<PasswordHasher>();
             services.AddTransient<UserService>();

@@ -14,6 +14,7 @@ namespace Omega.Crawler
 
         static void Main(string[] args)
         {
+            ct.GetDatabaseCreator().CreateCleanTrackTable(ct.Config()["data:azure:ConnectionString"]);
             Crawl().Wait();
         }
 

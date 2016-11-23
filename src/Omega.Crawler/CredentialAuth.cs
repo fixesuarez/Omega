@@ -32,19 +32,6 @@ namespace Omega.Crawler
 
                 }
             }
-
-            //WebRequest request = HttpWebRequest.Create("https://api.spotify.com/v1/audio-features/" + songId);
-            //request.Method = "GET";
-            //request.Headers.Add("Authorization", string.Format("Bearer {0}", token));
-            //request.ContentType = "application/json";
-            //using (WebResponse response = await request.GetResponseAsync())
-            //using (Stream responseStream = response.GetResponseStream())
-            //using (StreamReader reader = new StreamReader(responseStream))
-            //{
-            //    string responseFromServer = reader.ReadToEnd();
-            //    information = JsonConvert.DeserializeObject<MetaDonnees>(responseFromServer);
-            //    return information;
-            //}
         }
 
         public async Task<string> GetAccessToken()
