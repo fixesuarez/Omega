@@ -37,7 +37,7 @@ namespace Omega.DAL
             return (User)retrievedResult.Result;
         }
 
-        public async Task<string> FindSpotifyAccessTokenByEmail( string email )
+        public async Task<string> FindSpotifyAccessToken( string email )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );

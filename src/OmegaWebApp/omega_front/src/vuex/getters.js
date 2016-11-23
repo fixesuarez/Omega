@@ -1,3 +1,5 @@
+export const isLoading = ({ app }) => app.isLoading
+
 export const count = state => state.sampleModule.count;
 export const nb = state => state.sampleModule.nb;
 export const choice = state => state.sampleModule.choice;
