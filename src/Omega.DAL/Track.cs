@@ -4,7 +4,17 @@ namespace Omega.DAL
 {
     public class Track : TableEntity
     {
-        public string UserId { get; set; }
+        public string UserId
+        {
+            get
+            {
+                return PartitionKey;
+            }
+            set
+            {
+                PartitionKey = value;
+            }
+        }
         public string PlaylistId { get; set; }
         public string TrackId { get; set; }
         public string Title { get; set; }
@@ -17,7 +27,6 @@ namespace Omega.DAL
         {
             PartitionKey = userId;
             RowKey = source + ":" + playlistId + ":" + trackId;
-            UserId = userId;
             PlaylistId = playlistId;
             TrackId = trackId;
             Title = title;

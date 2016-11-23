@@ -45,8 +45,12 @@ namespace OmegaWebApp
             // Add framework services.
             services.AddMvc();
             services.AddTransient( _ => new UserGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient( _ => new PlaylistGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient( _ => new TrackGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient<PasswordHasher>();
             services.AddTransient<UserService>();
+            services.AddTransient<PlaylistService>();
+            services.AddTransient<TrackService>();
             services.AddSingleton<TokenService>();
         }
 
@@ -101,17 +105,6 @@ namespace OmegaWebApp
             ExternalAuthenticationEvents deezerAuthenticationEvents = new ExternalAuthenticationEvents(
                 new DeezerExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
 
-            //FacebookOptions facebookOptions = new FacebookOptions
-            //{
-            //    SignInScheme = CookieAuthentication.AuthenticationScheme,
-            //    ClientId = Configuration["Authentication:Facebook:ClientId"],
-            //    ClientSecret = Configuration["Authentication:Facebook:ClientSecret"],
-            //    Events = new OAuthEvents
-            //    {
-            //        OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
-            //    }
-            //};
-            //app.UseFacebookAuthentication( facebookOptions );
             app.UseFacebookAuthentication( c =>
             {
                 c.SignInScheme = CookieAuthentication.AuthenticationScheme;
@@ -119,7 +112,7 @@ namespace OmegaWebApp
                 c.ClientSecret = Configuration["Authentication:Facebook:ClientSecret"];
                 c.Events = new OAuthEvents
                 {
-                    OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
+                    OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket,
                 };
             } );
 
@@ -130,7 +123,8 @@ namespace OmegaWebApp
                 SignInScheme = CookieAuthentication.AuthenticationScheme,
                 Events = new OAuthEvents
                 {
-                    OnCreatingTicket = spotifyAuthenticationEvents.OnCreatingTicket
+                    OnCreatingTicket = spotifyAuthenticationEvents.OnCreatingTicket,
+                    
                 }
         };
             spotifyOptions.Scope.Add( "user-read-email" );// if email is needed.

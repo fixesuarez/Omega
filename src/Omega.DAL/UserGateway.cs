@@ -1,6 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -38,36 +37,20 @@ namespace Omega.DAL
             return (User)retrievedResult.Result;
         }
 
+        public async Task<string> FindSpotifyAccessTokenByEmail( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.SpotifyAccessToken;
+        }
+
         public async Task CreateUser( User user )
         {
             TableOperation insertUserOperation = TableOperation.Insert( user );
             await tableUser.ExecuteAsync( insertUserOperation );
         }
 
-        public async void InsertOrUpdateUserByDeezer( User deezerUser )
-        {
-            // Create a retrieve operation that takes a customer entity.
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, deezerUser.RowKey );
-
-            // Execute the retrieve operation.
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            User retrievedUser = (User)retrievedResult.Result;
-
-            if (retrievedResult.Result != null && (retrievedUser.DeezerId != deezerUser.DeezerId || retrievedUser.DeezerAccessToken != deezerUser.DeezerAccessToken))
-            {
-                retrievedUser.DeezerAccessToken = deezerUser.DeezerAccessToken;
-                retrievedUser.DeezerId = deezerUser.DeezerId;
-
-                TableOperation updateOperation = TableOperation.Replace( retrievedUser );
-                await tableUser.ExecuteAsync( updateOperation );
-            }
-            else if (retrievedUser == null)
-            {
-                TableOperation insertOperation = TableOperation.Insert( deezerUser );
-                await tableUser.ExecuteAsync( insertOperation );
-            }
-        }
-        
         public async Task UpdateDeezerUser( User deezerUser )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, deezerUser.RowKey );
@@ -80,7 +63,6 @@ namespace Omega.DAL
             TableOperation updateOperation = TableOperation.Replace( retrievedUser );
             await tableUser.ExecuteAsync( updateOperation );
         }
-
         public async Task UpdateSpotifyUser( User spotifyUser )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, spotifyUser.RowKey );
@@ -93,7 +75,6 @@ namespace Omega.DAL
             TableOperation updateOperation = TableOperation.Replace( retrievedUser );
             await tableUser.ExecuteAsync( updateOperation );
         }
-        
         public async Task UpdateFacebookUser( User facebookUser)
         {
             /*

@@ -1,27 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.IO;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Omega.DAL;
+using OmegaWebApp.Services;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using OmegaWebApp.Services;
-using Newtonsoft.Json;
-
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using System.Threading.Tasks;
 
 namespace OmegaWebApp.Controllers
 {
-    [Route( "api/[controller]" )]
-    public class SpotifyController : Controller
+    public class DeezerController : Controller
     {
         readonly PlaylistService _playlistService;
         readonly TrackService _trackService;
         readonly UserService _userService;
 
-        public SpotifyController( PlaylistService playlistService, TrackService trackService, UserService userService )
+        public DeezerController( PlaylistService playlistService, TrackService trackService, UserService userService )
         {
             _playlistService = playlistService;
             _trackService = trackService;
@@ -62,20 +59,20 @@ namespace OmegaWebApp.Controllers
                         string duration = (string) allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
                         string coverAlbum = (string) allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
 
-                        await _trackService.InsertTrack( userdId, "s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum );
-                        tracksInPlaylist.Add( new Track( "s", userdId, playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum ) );
+                        await _trackService.InsertTrack( userdId, "d", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum );
+                        tracksInPlaylist.Add( new Track( "d", userdId, playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum ) );
                     }
                     return tracksInPlaylist;
                 }
             }
         }
 
-        [HttpGet( "Playlists" )]
+        [Route( "Spotify/playlists" )]
         public async Task<JToken> GetAllSpotifyPlaylists()
         {
             string email = User.FindFirst( ClaimTypes.Email ).Value;
             string accessToken = _userService.GetSpotifyAccessToken( email ).Result;
-            
+
             using( HttpClient client = new HttpClient() )
             {
                 HttpRequestHeaders headers = client.DefaultRequestHeaders;
@@ -86,7 +83,7 @@ namespace OmegaWebApp.Controllers
                 using( StreamReader readerAllPlaylists = new StreamReader( responseStreamAllPlaylists ) )
                 {
                     string allplaylist;
-                    
+
                     string allPlaylistsString = readerAllPlaylists.ReadToEnd();
 
                     JObject allPlaylistsJson = JObject.Parse( allPlaylistsString );
@@ -103,10 +100,10 @@ namespace OmegaWebApp.Controllers
                         string name = (string) playlist["name"];
                         string idPlaylist = (string) playlist["id"];
                         string coverPlaylist = (string) playlist["images"][0]["url"];
-                        
+
                         Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist );
                         await _playlistService.InsertPlaylist( p );
-                        listOfPlaylists.Add( p );                        
+                        listOfPlaylists.Add( p );
                     }
                     allplaylist = JsonConvert.SerializeObject( listOfPlaylists );
                     JToken playlistsJson = JToken.Parse( allplaylist );
