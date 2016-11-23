@@ -45,6 +45,7 @@ namespace OmegaWebApp
             // Add framework services.
             services.AddMvc();
             services.AddTransient( _ => new UserGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient( _ => new AmbianceGateway(Configuration["data:azure:ConnectionString"]));
             services.AddTransient<PasswordHasher>();
             services.AddTransient<UserService>();
             services.AddSingleton<TokenService>();
