@@ -14,18 +14,16 @@ namespace OmegaWebApp.ProviderDeezer
         /// <summary>
         /// Gets the name corresponding to the authenticated user.
         /// </summary>
-        public static string GetName( [NotNull] JObject user ) => user.Value<string>( "display_name" );
+        public static string GetName( [NotNull] JObject user ) => user.Value<string>( "name" );
 
         /// <summary>
         /// Gets the URL corresponding to the authenticated user.
         /// </summary>
-        public static string GetLink( [NotNull] JObject user ) => user.Value<JObject>( "external_urls" )
-                                                                   ?.Value<string>( "deezer" );
+        public static string GetLink( [NotNull] JObject user ) => user.Value<string>( "link" );
 
         /// <summary>
         /// Gets the profile picture URL corresponding to the authenticated user.
         /// </summary>
-        public static string GetProfilePictureUrl( [NotNull] JObject user ) => user.Value<JArray>( "images" )
-                                                                                ?.First?.Value<string>( "url" );
+        public static string GetProfilePictureUrl( [NotNull] JObject user ) => user.Value<string>( "picture" );
     }
 }

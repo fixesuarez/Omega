@@ -21,8 +21,8 @@ namespace OmegaWebApp.Authentication
         {
             if( context.AccessToken != null )
             {
-                User currentUser = new User( context.GetSpotifyEmail(), context.GetId(), context.AccessToken, context.RefreshToken );
-                User retrievedUser = await _userService.FindUser( context.GetSpotifyEmail() );
+                User currentUser = new User( context.GetSpotifyOrDeezerEmail(), context.GetId(), context.AccessToken, context.RefreshToken );
+                User retrievedUser = await _userService.FindUser( context.GetSpotifyOrDeezerEmail() );
                 if( retrievedUser == null )
                     await _userService.CreateUser( currentUser );
                 else if( retrievedUser.SpotifyAccessToken != currentUser.SpotifyAccessToken )
@@ -32,7 +32,7 @@ namespace OmegaWebApp.Authentication
 
         public async Task<User> FindUser( OAuthCreatingTicketContext context )
         {
-            return (User)await _userService.FindUser( context.GetSpotifyEmail() );
+            return (User)await _userService.FindUser( context.GetSpotifyOrDeezerEmail() );
         }
     }
 }

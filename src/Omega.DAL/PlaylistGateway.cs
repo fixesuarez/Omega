@@ -14,7 +14,7 @@ namespace Omega.DAL
         {
             _storageAccount = CloudStorageAccount.Parse( connectionString );
             _tableClient = _storageAccount.CreateCloudTableClient();
-            _tablePlaylist = _tableClient.GetTableReference( "User" );
+            _tablePlaylist = _tableClient.GetTableReference( "Playlist" );
             _tablePlaylist.CreateIfNotExistsAsync();
         }
 

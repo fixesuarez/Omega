@@ -23,12 +23,12 @@ namespace Omega.DAL
         public string SpotifyRefreshToken { get; set; }
 
         public User() {}
-        public User( string email, string facebookId, string facebookAccessToken )
+        public User( string email, string id, string accessToken )
         {
             PartitionKey = string.Empty;
             RowKey = email;
-            FacebookId = facebookId;
-            FacebookAccessToken = facebookAccessToken;
+            FacebookId = id;
+            FacebookAccessToken = accessToken;
         }
         public User( string email, string spotifyId, string spotifyAccessToken, string spotifyRefreshToken )
         {
