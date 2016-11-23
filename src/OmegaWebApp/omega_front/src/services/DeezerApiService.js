@@ -1,16 +1,16 @@
 import { getAsync } from '../helpers/apiHelper'
 import AuthService from './AuthService'
 
-const endpoint = "/api/Spotify";
+const endpoint = "/api/Deezer";
 
-class SpotifyApiService {
+class DeezerApiService {
     constructor() {
 
     }
 
-    async getSpotifyPlaylist() {
+    async getDeezerPlaylist() {
         return await getAsync(endpoint, 'Playlists', AuthService.accessToken);
     }
 }
 
-export default new SpotifyApiService()
+export default new DeezerApiService()
