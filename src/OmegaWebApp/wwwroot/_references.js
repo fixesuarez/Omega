@@ -2,6 +2,7 @@
 /// <reference path="../omega_front/src/directives/requiredProviders.js" />
 /// <reference path="../omega_front/src/main.js" />
 /// <reference path="../omega_front/src/services/AuthService.js" />
+/// <reference path="../omega_front/src/services/spotifyapiservice.js" />
 /// <reference path="../omega_front/src/vuex/actions.js" />
 /// <reference path="../omega_front/src/vuex/getters.js" />
 /// <reference path="../omega_front/src/vuex/modules/app.js" />
