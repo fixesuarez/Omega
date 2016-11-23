@@ -1,13 +1,9 @@
 <template>
   <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
-      playlist: 
-      <button type="button" @click="loadPlaylist()">test</button>
-                      <tr v-for="i of playlist">
-                    <td>{{ i.OwnerId }}</td>
-                    <td>{{ i.PlaylistId }}</td>
-                    <td>{{ i.RowKey }}</td>
-                </tr>
+      playlist: {{playlist}}
+      <button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
+      <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
     </div>
   </div>
 </template>
@@ -15,6 +11,7 @@
 <script>
     import { mapGetters, mapActions } from 'vuex'
     import SpotifyApiService from '../services/SpotifyApiService'
+    import DeezerApiService from '../services/DeezerApiService'
 
   export default {
         data() {
@@ -26,11 +23,15 @@
         methods: {
             ...mapActions(['requestAsync']),
 
-            loadPlaylist: async function() {
-                var playlist = await this.requestAsync(() => SpotifyApiService.getPlaylistList());
-
+            loadSpotifyPlaylist: async function() {
+                var playlist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
                 this.playlist = playlist;
-            }
+            },
+            loadDeezerPlaylist: async function() {
+                var playlist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
+                this.playlist = playlist;
+            },
+
         }
 
     }
