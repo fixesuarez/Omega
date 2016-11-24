@@ -18,7 +18,10 @@ namespace OmegaWebApp.Authentication
         {
             if (context.AccessToken != null)
             {
-                User currentUser = new User(context.GetEmail(), string.Empty, context.AccessToken);
+                User currentUser = new User();
+                currentUser.Email = context.GetEmail();
+                currentUser.FacebookId = context.GetId();
+                currentUser.FacebookAccessToken = context.AccessToken;
                 User retrievedUser = await _userService.FindUser(context.GetEmail());
                 if (retrievedUser == null)
                     await _userService.CreateUser(currentUser);

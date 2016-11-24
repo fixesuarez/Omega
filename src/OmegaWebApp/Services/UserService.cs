@@ -42,6 +42,10 @@ namespace OmegaWebApp.Services
         {
             return await _userGateway.FindSpotifyAccessToken( email );
         }
+        public async Task<string> GetDeezerAccessToken( string email )
+        {
+            return await _userGateway.FindDeezerAccessToken( email );
+        }
 
         public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
         {

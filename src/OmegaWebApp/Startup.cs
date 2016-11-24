@@ -135,18 +135,18 @@ namespace OmegaWebApp
 
             app.UseSpotifyAuthentication( spotifyOptions );
 
-            DeezerAuthenticationOptions deezerOptions = new DeezerAuthenticationOptions
+            app.UseDeezerAuthentication( o =>
             {
-                ClientId = Configuration["Authentication:Deezer:ClientId"],
-                ClientSecret = Configuration["Authentication:Deezer:ClientSecret"],
-                SignInScheme = CookieAuthentication.AuthenticationScheme,
-                Events = new OAuthEvents
+                o.ClientId = Configuration["Authentication:Deezer:ClientId"];
+                o.ClientSecret = Configuration["Authentication:Deezer:ClientSecret"];
+                o.SignInScheme = CookieAuthentication.AuthenticationScheme;
+                o.Events = new OAuthEvents
                 {
                     OnCreatingTicket = deezerAuthenticationEvents.OnCreatingTicket
-                }
-            };
-
-            app.UseDeezerAuthentication( deezerOptions );
+                };
+                o.Scope.Add( "basic_access" );
+                o.Scope.Add( "email" );
+            } );
 
             app.UseMvc( routes =>
             {

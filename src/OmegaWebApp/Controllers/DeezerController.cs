@@ -3,8 +3,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Omega.DAL;
 using OmegaWebApp.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace OmegaWebApp.Controllers
 {
+    [Route( "api/[controller]" )]
     public class DeezerController : Controller
     {
         readonly PlaylistService _playlistService;
@@ -25,7 +28,7 @@ namespace OmegaWebApp.Controllers
             _userService = userService;
         }
 
-        /// <summary>
+        /// /// <summary>
         /// Insert the tracks of the current playlist in the table Track if they aren't in already.
         /// </summary>
         /// <param name="urlRequest"></param>
@@ -37,72 +40,78 @@ namespace OmegaWebApp.Controllers
         {
             using( HttpClient client = new HttpClient() )
             {
-                HttpRequestHeaders headers = client.DefaultRequestHeaders;
-                headers.Add( "Authorization", string.Format( "Bearer {0}", accessToken ) );
-                HttpResponseMessage message = await client.GetAsync( urlRequest );
+                List<Track> tracksInPlaylist = new List<Track>();
+                Uri tracksInPlaylistUri = new Uri( String.Format(
+                    "{0}?output=json&access_token={1}",
+                    urlRequest,
+                    accessToken ) );
+                HttpResponseMessage message = await client.GetAsync( tracksInPlaylistUri );
 
                 using( Stream responseStream = await message.Content.ReadAsStreamAsync() )
-                using( StreamReader readerTracksInPlaylists = new StreamReader( responseStream ) )
+                using( StreamReader reader = new StreamReader( responseStream ) )
                 {
-                    List<Track> tracksInPlaylist = new List<Track>();
-
-                    string allTracksInPlaylistString = readerTracksInPlaylists.ReadToEnd();
+                    string allTracksInPlaylistString = reader.ReadToEnd();
                     JObject allTracksInPlaylistJson = JObject.Parse( allTracksInPlaylistString );
-                    JArray allTracksInPlaylistArray = (JArray) allTracksInPlaylistJson["items"];
+                    JArray allTracksInPlaylistArray = (JArray) allTracksInPlaylistJson["data"];
 
                     for( int i = 0; i < allTracksInPlaylistArray.Count; i++ )
                     {
-                        string trackTitle = (string) allTracksInPlaylistJson["items"][i]["track"]["name"];
-                        string trackId = (string) allTracksInPlaylistJson["items"][i]["track"]["id"];
-                        string albumName = (string) allTracksInPlaylistJson["items"][i]["track"]["album"]["name"];
-                        string trackPopularity = (string) allTracksInPlaylistJson["items"][i]["track"]["popularity"];
-                        string duration = (string) allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
-                        string coverAlbum = (string) allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
+                        var track = allTracksInPlaylistArray[i];
 
-                        await _trackService.InsertTrack( userdId, "d", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum );
-                        tracksInPlaylist.Add( new Track( "d", userdId, playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum ) );
+                        string trackTitle = (string) track["title"];
+                        string trackId = (string) track["id"];
+                        string albumName = (string) track["album"]["title"];
+                        string trackRank = (string) track["rank"];
+                        string duration = (string) track["duration"];
+                        string coverAlbum = (string) track["album"]["cover"];
+
+                        await _trackService.InsertTrack( userdId, "d",  playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum );
+                        tracksInPlaylist.Add( new Track( "d", userdId, playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum ) );
                     }
-                    return tracksInPlaylist;
                 }
+                return tracksInPlaylist;
             }
         }
 
-        [Route( "Spotify/playlists" )]
-        public async Task<JToken> GetAllSpotifyPlaylists()
+        [HttpGet( "Playlists" )]
+        public async Task<JToken> GetAllDeezerPlaylists()
         {
-            string email = User.FindFirst( ClaimTypes.Email ).Value;
-            string accessToken = _userService.GetSpotifyAccessToken( email ).Result;
-
             using( HttpClient client = new HttpClient() )
             {
-                HttpRequestHeaders headers = client.DefaultRequestHeaders;
-                headers.Add( "Authorization", string.Format( "Bearer {0}", accessToken ) );
-                HttpResponseMessage message = await client.GetAsync( "https://api.spotify.com/v1/me/playlists" );
+                string email = User.FindFirst( ClaimTypes.Email ).Value;
+                string accessToken = await _userService.GetDeezerAccessToken( email );
 
-                using( Stream responseStreamAllPlaylists = await message.Content.ReadAsStreamAsync() )
-                using( StreamReader readerAllPlaylists = new StreamReader( responseStreamAllPlaylists ) )
+                Uri allPlaylistsUri = new Uri( string.Format(
+                "http://api.deezer.com/user/me/playlists?output=json&access_token={0}",
+                accessToken ) );
+
+                HttpResponseMessage message = await client.GetAsync( allPlaylistsUri );
+
+                using( Stream responseStream = await message.Content.ReadAsStreamAsync() )
+                using( StreamReader reader = new StreamReader( responseStream ) )
                 {
+                    JObject allPlaylistsJson;
                     string allplaylist;
 
-                    string allPlaylistsString = readerAllPlaylists.ReadToEnd();
+                    string allPlaylistsString = reader.ReadToEnd();
+                    allPlaylistsJson = JObject.Parse( allPlaylistsString );
+                    JArray allPlaylistsArray = (JArray) allPlaylistsJson["data"];
 
-                    JObject allPlaylistsJson = JObject.Parse( allPlaylistsString );
-                    JArray allPlaylistsArray = (JArray) allPlaylistsJson["items"];
                     List<Playlist> listOfPlaylists = new List<Playlist>();
 
                     for( int i = 0; i < allPlaylistsArray.Count; i++ )
                     {
                         var playlist = allPlaylistsArray[i];
 
-                        string requestTracksInPlaylist = (string) playlist["tracks"]["href"];
+                        string requestTracksInPlaylist = (string) playlist["tracklist"];
+                        requestTracksInPlaylist = requestTracksInPlaylist.Replace( "https", "http" );
 
-                        string idOwner = (string) playlist["owner"]["id"];
-                        string name = (string) playlist["name"];
+                        string idOwner = (string) playlist["creator"]["id"];
+                        string name = (string) playlist["title"];
                         string idPlaylist = (string) playlist["id"];
-                        string coverPlaylist = (string) playlist["images"][0]["url"];
+                        string coverPlaylist = (string) playlist["picture"];
 
                         Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist );
-                        await _playlistService.InsertPlaylist( p );
                         listOfPlaylists.Add( p );
                     }
                     allplaylist = JsonConvert.SerializeObject( listOfPlaylists );

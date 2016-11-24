@@ -1,8 +1,11 @@
 <template>
   <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
+<<<<<<< HEAD
+=======
       Splaylist: {{Splaylist}}
             Dplaylist: {{Dplaylist}}
+>>>>>>> 56817b4a49be371c27ed6a64346d80cd48c02961
       <button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
       <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
 	    <div class="playlists">

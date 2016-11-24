@@ -44,6 +44,13 @@ namespace Omega.DAL
             User retrievedUser = (User) retrievedResult.Result;
             return retrievedUser.SpotifyAccessToken;
         }
+        public async Task<string> FindDeezerAccessToken( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.DeezerAccessToken;
+        }
 
         public async Task CreateUser( User user )
         {
@@ -57,8 +64,7 @@ namespace Omega.DAL
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
             User retrievedUser = (User) retrievedResult.Result;
             retrievedUser.DeezerId = deezerUser.SpotifyId;
-            retrievedUser.DeezerAccessToken = deezerUser.SpotifyAccessToken;
-            retrievedUser.DeezerRefreshToken = deezerUser.SpotifyRefreshToken;
+            retrievedUser.DeezerAccessToken = deezerUser.DeezerAccessToken;
 
             TableOperation updateOperation = TableOperation.Replace( retrievedUser );
             await tableUser.ExecuteAsync( updateOperation );
@@ -85,7 +91,8 @@ namespace Omega.DAL
             // Execute the retrieve operation.
             TableResult retrievedResult = await tableUser.ExecuteAsync(retrieveOperation);
             User retrievedUser = (User)retrievedResult.Result;
-            
+
+            retrievedUser.FacebookId = facebookUser.FacebookId;
             retrievedUser.FacebookAccessToken = facebookUser.FacebookAccessToken;
 
             TableOperation updateOperation = TableOperation.Replace(retrievedUser);
