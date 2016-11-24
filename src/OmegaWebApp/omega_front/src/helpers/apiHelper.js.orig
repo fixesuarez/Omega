@@ -5,6 +5,23 @@ function dataFilter(data, type) {
     return data;
 }
 
+<<<<<<< HEAD
+export async function postAsync(endpoint, id, token, data) {
+    return await $.ajax({
+        method: 'POST',
+        url: endpoint.concat('/', id),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        dataFilter: dataFilter,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+}
+
+=======
+>>>>>>> 56817b4a49be371c27ed6a64346d80cd48c02961
 export async function getAsync(endpoint, id, token) {
     return await $.ajax({
         method: 'GET',
@@ -16,15 +33,7 @@ export async function getAsync(endpoint, id, token) {
         }
     });
 }
+<<<<<<< HEAD
+=======
 
-export async function deleteAsync(endpoint, id, token) {
-    return await $.ajax({
-        method: 'DELETE',
-        url: endpoint.concat('/', id),
-        dataType: 'json',
-        dataFilter: dataFilter,
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-}
+>>>>>>> 56817b4a49be371c27ed6a64346d80cd48c02961
