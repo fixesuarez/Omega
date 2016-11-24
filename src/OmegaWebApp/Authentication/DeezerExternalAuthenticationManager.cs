@@ -19,7 +19,7 @@ namespace OmegaWebApp.Authentication
             if( context.AccessToken != null )
             {
                 User currentUser = new User();
-                currentUser.Email = context.GetSpotifyOrDeezerEmail();
+                currentUser.RowKey = context.GetSpotifyOrDeezerEmail();
                 currentUser.DeezerId = context.GetId();
                 currentUser.DeezerAccessToken = context.AccessToken;
                 User retrievedUser = await _userService.FindUser( context.GetSpotifyOrDeezerEmail() );

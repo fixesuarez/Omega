@@ -22,7 +22,7 @@ namespace OmegaWebApp.Authentication
             if( context.AccessToken != null )
             {
                 User currentUser = new User();
-                currentUser.Email = context.GetSpotifyOrDeezerEmail();
+                currentUser.RowKey = context.GetSpotifyOrDeezerEmail();
                 currentUser.SpotifyId = context.GetId();
                 currentUser.SpotifyAccessToken = context.AccessToken;
                 currentUser.SpotifyRefreshToken = context.RefreshToken;

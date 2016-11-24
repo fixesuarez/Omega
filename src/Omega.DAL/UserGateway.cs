@@ -51,6 +51,13 @@ namespace Omega.DAL
             User retrievedUser = (User) retrievedResult.Result;
             return retrievedUser.DeezerAccessToken;
         }
+        public async Task<string> FindFacebookAccessToken( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.FacebookAccessToken;
+        }
 
         public async Task CreateUser( User user )
         {
