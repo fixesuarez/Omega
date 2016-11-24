@@ -23,20 +23,5 @@ namespace Omega.DAL
         public string SpotifyRefreshToken { get; set; }
 
         public User() {}
-        public User( string email, string id, string accessToken )
-        {
-            PartitionKey = string.Empty;
-            RowKey = email;
-            FacebookId = id;
-            FacebookAccessToken = accessToken;
-        }
-        public User( string email, string spotifyId, string spotifyAccessToken, string spotifyRefreshToken )
-        {
-            PartitionKey = string.Empty;
-            RowKey = email;
-            SpotifyId = spotifyId;
-            SpotifyAccessToken = spotifyAccessToken;
-            SpotifyRefreshToken = spotifyRefreshToken;
-        }
     }
 }
