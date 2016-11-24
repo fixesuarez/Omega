@@ -1,5 +1,6 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../omega_front/src/directives/requiredProviders.js" />
+/// <reference path="../omega_front/src/helpers/apiHelper.js" />
 /// <reference path="../omega_front/src/main.js" />
 /// <reference path="../omega_front/src/services/AuthService.js" />
 /// <reference path="../omega_front/src/services/deezerapiservice.js" />
