@@ -51,6 +51,11 @@ namespace OmegaWebApp.Services
             return await _userGateway.FindFacebookAccessToken( email );
         }
 
+        public async Task<string> GetFacebookId( string email )
+        {
+            return await _userGateway.FindFacebookId( email );
+        }
+
         public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
         {
             return await _userGateway.GetAuthenticationProviders( userId );

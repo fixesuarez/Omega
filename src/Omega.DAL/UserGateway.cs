@@ -59,6 +59,14 @@ namespace Omega.DAL
             return retrievedUser.FacebookAccessToken;
         }
 
+        public async Task<string> FindFacebookId( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.FacebookId;
+        }
+
         public async Task CreateUser( User user )
         {
             TableOperation insertUserOperation = TableOperation.Insert( user );
