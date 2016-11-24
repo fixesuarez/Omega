@@ -1,10 +1,15 @@
 <template>
   <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
-      playlist: {{playlist}}
       <button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
       <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
+	    <div class="playlists">
+	<div class="listplaylist" v-for="playlist in playlist">
+    	{{ playlist.Name }}
+    	<img class="imgplaylist" v-bind:src="playlist.Cover"/>
     </div>
+  	</div>
+  </div>
   </div>
 </template>
 
@@ -39,4 +44,5 @@
 </script>
 
 <style src="../styles/playlists.css">
+
 </style>

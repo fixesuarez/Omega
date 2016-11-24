@@ -7,3 +7,12 @@
 
 .playlistsPanel {
 }
+
+.playlists{
+  display: inline-block;
+	vertical-align: middle;
+}
+.imgplaylist {
+  width: 15vh;
+  height: 15vh;
+}
