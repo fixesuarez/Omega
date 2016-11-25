@@ -1,7 +1,7 @@
 <template>
       <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
-      groups: {{groups}}
+      groups: {{group}}
       <button type="button" @click="loadFacebookGroup()">Groups</button>
     </div>
   </div>
