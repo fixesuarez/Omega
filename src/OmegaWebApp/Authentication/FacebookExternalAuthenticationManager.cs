@@ -19,6 +19,7 @@ namespace OmegaWebApp.Authentication
             if (context.AccessToken != null)
             {
                 User currentUser = new User();
+                currentUser.PartitionKey = string.Empty;
                 currentUser.RowKey = context.GetEmail();
                 currentUser.FacebookId = context.GetId();
                 currentUser.FacebookAccessToken = context.AccessToken;

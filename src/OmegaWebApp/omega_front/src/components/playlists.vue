@@ -1,14 +1,9 @@
 <template>
   <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
-      playlist : {{playlist}}
+      playlist : {{playlists}}
       <button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
       <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
-	    <div class="playlists">
-	<div class="listplaylist" v-for="playlist in playlist">
-    	{{ playlist.Name }}
-    	<img class="imgplaylist" v-bind:src="playlist.Cover"/>
-    </div>
   	</div>
   </div>
   </div>
@@ -32,12 +27,13 @@
             ...mapActions(['requestAsync']),
 
             loadSpotifyPlaylist: async function() {
-                var playlist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
-                this.playlist = playlists.push;
+                var playlists = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
+                this.playlists = playlists;
+                loadDeezerPlaylist();
             },
             loadDeezerPlaylist: async function() {
-                var playlist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
-                this.playlist = playlists.push;
+                var dzplaylist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
+                this.playlists.push(dzplaylist);
             },
 
         }
