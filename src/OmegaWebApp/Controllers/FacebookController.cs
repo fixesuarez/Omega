@@ -19,7 +19,7 @@ namespace OmegaWebApp.Controllers
         readonly UserService _userService;
 
         // GET: /<controller>/
-        public FacebookController( UserService userService )
+        public FacebookController(UserService userService)
         {
             _userService = userService;
         }
@@ -31,11 +31,11 @@ namespace OmegaWebApp.Controllers
         [HttpGet( "Groups" )]
         public async Task<JToken> GetAllFacebookGroups()
         {
-            using( HttpClient client = new HttpClient() )
+            using (HttpClient client = new HttpClient())
             {
                 List<GroupOrEventFacebook> groups = new List<GroupOrEventFacebook>();
 
-                string email = User.FindFirst( ClaimTypes.Email ).Value;
+                string email = User.FindFirst(ClaimTypes.Email).Value;
                 string accessToken = await _userService.GetFacebookAccessToken( email );
                 string facebookId = await _userService.GetFacebookId( email );
                 string parameters = Uri.EscapeUriString( "id,cover,link,name,members{email,id,name}" );
@@ -53,7 +53,7 @@ namespace OmegaWebApp.Controllers
                 HttpResponseMessage message = await client.GetAsync( groupDetailUri );
 
                 using( Stream responseStream = await message.Content.ReadAsStreamAsync() )
-                using( StreamReader reader = new StreamReader( responseStream ) )
+                using (StreamReader reader = new StreamReader(responseStream))
                 {
                     string groupsStringResponse = reader.ReadToEnd();
                     JObject groupsJsonResponse = JObject.FromObject( groupsStringResponse );
@@ -76,4 +76,5 @@ namespace OmegaWebApp.Controllers
             }
         }
     }
-}
+    }
+
