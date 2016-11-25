@@ -1,9 +1,8 @@
 <template>
       <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
-      playlist: {{playlist}}
-      <button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
-      <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
+      events: {{event}}
+      <button type="button" @click="loadFacebookEvent()">Event</button>
     </div>
   </div>
 </template>
@@ -23,7 +22,7 @@
         methods: {
             ...mapActions(['requestAsync']),
 
-            loadFacebookGroup: async function() {
+            loadFacebookEvent: async function() {
                 var event = await this.requestAsync(() => FacebookApiService.getFacebookEvent());
                 this.event = event;
             }

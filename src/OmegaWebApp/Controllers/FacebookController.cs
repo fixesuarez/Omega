@@ -14,7 +14,7 @@ namespace OmegaWebApp.Controllers
     {
         readonly UserService _userService;
 
-        public FacebookController( UserService userService )
+        public FacebookController(UserService userService)
         {
             _userService = userService;
         }
@@ -24,55 +24,55 @@ namespace OmegaWebApp.Controllers
         /// Get all the user's facebook events
         /// </summary>
         /// <returns>List of FacebookEvents</returns>
-        [Route( "Facebook/events" )]
+        [Route("Facebook/events")]
         public async Task<JToken> GetAllFacebookEvents()
         {
-            using( HttpClient client = new HttpClient() )
+            using (HttpClient client = new HttpClient())
             {
                 List<GroupOrEventFacebook> events = new List<GroupOrEventFacebook>();
 
-                string email = User.FindFirst( ClaimTypes.Email ).Value;
-                string accessToken = 
+                string email = User.FindFirst(ClaimTypes.Email).Value;
+                string accessToken =
 
             }
-            string accessToken = DatabaseQueries.GetFacebookAccessTokenByEmail( email );
+            string accessToken = DatabaseQueries.GetFacebookAccessTokenByEmail(email);
 
-            FacebookClient fbClient = new FacebookClient( accessToken );
+            FacebookClient fbClient = new FacebookClient(accessToken);
 
-            dynamic fbEvents = fbClient.Get( "me/events" );
-            JObject facebookEventsJson = JObject.FromObject( fbEvents );
-            foreach( var dataEvent in facebookEventsJson["data"] )
+            dynamic fbEvents = fbClient.Get("me/events");
+            JObject facebookEventsJson = JObject.FromObject(fbEvents);
+            foreach (var dataEvent in facebookEventsJson["data"])
             {
-                string eventId = (string) dataEvent["id"];
-                dynamic eventDetailed = fbClient.Get( eventId );
-                JObject eventDetailedJson = JObject.FromObject( eventDetailed );
-                string startTime = (string) eventDetailedJson["start_time"];
-                startTime = startTime.Remove( 10 );
-                string name = (string) eventDetailedJson["name"];
+                string eventId = (string)dataEvent["id"];
+                dynamic eventDetailed = fbClient.Get(eventId);
+                JObject eventDetailedJson = JObject.FromObject(eventDetailed);
+                string startTime = (string)eventDetailedJson["start_time"];
+                startTime = startTime.Remove(10);
+                string name = (string)eventDetailedJson["name"];
 
 
                 Uri eventDetailUri = new Uri(
-                    string.Format( "https://graph.facebook.com/{0}/picture?fields=url&access_token={1}&format=json&redirect=false",
+                    string.Format("https://graph.facebook.com/{0}/picture?fields=url&access_token={1}&format=json&redirect=false",
                     eventId,
-                    accessToken ) );
-                HttpWebRequest fbEventsProfilePicture = (HttpWebRequest) HttpWebRequest.Create( eventDetailUri );
+                    accessToken));
+                HttpWebRequest fbEventsProfilePicture = (HttpWebRequest)HttpWebRequest.Create(eventDetailUri);
 
                 string cover;
-                using( WebResponse response = await fbEventsProfilePicture.GetResponseAsync() )
-                using( Stream responseStream = response.GetResponseStream() )
-                using( StreamReader reader = new StreamReader( responseStream ) )
+                using (WebResponse response = await fbEventsProfilePicture.GetResponseAsync())
+                using (Stream responseStream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(responseStream))
                 {
                     string eventPictureJson = reader.ReadToEnd();
-                    JObject eventJson = JObject.Parse( eventPictureJson );
-                    cover = (string) eventJson["data"]["url"];
+                    JObject eventJson = JObject.Parse(eventPictureJson);
+                    cover = (string)eventJson["data"]["url"];
                 }
 
-                FacebookEvent fbEvent = new FacebookEvent( eventId, name, cover );
-                events.Add( fbEvent );
+                FacebookEvent fbEvent = new FacebookEvent(eventId, name, cover);
+                events.Add(fbEvent);
             }
 
-            string eventsString = JsonConvert.SerializeObject( events );
-            JToken eventsJson = JToken.Parse( eventsString );
+            string eventsString = JsonConvert.SerializeObject(events);
+            JToken eventsJson = JToken.Parse(eventsString);
             return eventsJson;
         }
 
@@ -161,36 +161,37 @@ namespace OmegaWebApp.Controllers
         //    return allPlaylistsJson;
         //}
 
-    //    [Route( "Facebook/event/{eventId}/playlistsEvent" )]
-    //    public async Task<JToken> GetAllPlaylistsFromEvent( string eventId )
-    //    {
-    //        List<PlaylistEntity> AllPlaylistsFromGroupMembers = new List<PlaylistEntity>();
+        //    [Route( "Facebook/event/{eventId}/playlistsEvent" )]
+        //    public async Task<JToken> GetAllPlaylistsFromEvent( string eventId )
+        //    {
+        //        List<PlaylistEntity> AllPlaylistsFromGroupMembers = new List<PlaylistEntity>();
 
-    //        ClaimsIdentity claimsIdentity = await Request.GetOwinContext().Authentication.GetExternalIdentityAsync( DefaultAuthenticationTypes.ExternalCookie );
-    //        Claim claim = claimsIdentity.Claims.Single( c => c.Type == "http://omega.fr:user_email" );
-    //        string email = claim.Value;
-    //        string accessToken = DatabaseQueries.GetFacebookAccessTokenByEmail( email );
+        //        ClaimsIdentity claimsIdentity = await Request.GetOwinContext().Authentication.GetExternalIdentityAsync( DefaultAuthenticationTypes.ExternalCookie );
+        //        Claim claim = claimsIdentity.Claims.Single( c => c.Type == "http://omega.fr:user_email" );
+        //        string email = claim.Value;
+        //        string accessToken = DatabaseQueries.GetFacebookAccessTokenByEmail( email );
 
-    //        FacebookClient fbClient = new FacebookClient( accessToken );
-    //        dynamic eventMembers = fbClient.Get( string.Format( "{0}/attending", eventId ) );
-    //        JObject eventMembersJson = JObject.FromObject( eventMembers );
+        //        FacebookClient fbClient = new FacebookClient( accessToken );
+        //        dynamic eventMembers = fbClient.Get( string.Format( "{0}/attending", eventId ) );
+        //        JObject eventMembersJson = JObject.FromObject( eventMembers );
 
-    //        foreach( var member in eventMembersJson["data"] )
-    //        {
-    //            string currentMemberId = (string) member["id"];
-    //            string fbUserEmail = DatabaseQueries.GetEmailByFacebookId( currentMemberId );
+        //        foreach( var member in eventMembersJson["data"] )
+        //        {
+        //            string currentMemberId = (string) member["id"];
+        //            string fbUserEmail = DatabaseQueries.GetEmailByFacebookId( currentMemberId );
 
-    //            if( fbUserEmail != null )
-    //            {
-    //                if( DatabaseQueries.IsUserPresentInBase( fbUserEmail ) )
-    //                {
-    //                    AllPlaylistsFromGroupMembers.AddRange( DatabaseQueries.GetAllPlaylistsFromOwner( fbUserEmail ) );
-    //                }
-    //            }
-    //        }
-    //        string allPlaylistsString = JsonConvert.SerializeObject( AllPlaylistsFromGroupMembers );
-    //        JToken allPlaylistsJson = JToken.Parse( allPlaylistsString );
-    //        return allPlaylistsJson;
-    //    }
-    //}
-}
+        //            if( fbUserEmail != null )
+        //            {
+        //                if( DatabaseQueries.IsUserPresentInBase( fbUserEmail ) )
+        //                {
+        //                    AllPlaylistsFromGroupMembers.AddRange( DatabaseQueries.GetAllPlaylistsFromOwner( fbUserEmail ) );
+        //                }
+        //            }
+        //        }
+        //        string allPlaylistsString = JsonConvert.SerializeObject( AllPlaylistsFromGroupMembers );
+        //        JToken allPlaylistsJson = JToken.Parse( allPlaylistsString );
+        //        return allPlaylistsJson;
+        //    }
+        //}
+    }
+

@@ -1,8 +1,7 @@
 <template>
   <div class="wrapper"> <!-- TAB TAB APRES AVOIR TAPER LE MOT POUR FAIRE UNE BALISE -->
     <div class="playlistsPanel">
-      Splaylist: {{Splaylist}}
-            Dplaylist: {{Dplaylist}}
+      playlist : {{playlist}}
       <button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
       <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
 	    <div class="playlists">
@@ -23,8 +22,9 @@
   export default {
         data() {
             return {
-                Splaylist: [],
-                Dplaylist: []
+                //Splaylist: [],
+                //Dplaylist: []
+                playlists: []
             }
         },
 
@@ -32,12 +32,12 @@
             ...mapActions(['requestAsync']),
 
             loadSpotifyPlaylist: async function() {
-                var Splaylist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
-                this.Splaylist = Splaylist;
+                var playlist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
+                this.playlist = playlists.push;
             },
             loadDeezerPlaylist: async function() {
-                var Dplaylist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
-                this.Dplaylist = Dplaylist;
+                var playlist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
+                this.playlist = playlists.push;
             },
 
         }
