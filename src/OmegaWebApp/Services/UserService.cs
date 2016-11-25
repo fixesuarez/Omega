@@ -55,6 +55,14 @@ namespace OmegaWebApp.Services
         {
             return await _userGateway.FindFacebookId( email );
         }
+        public async Task<string> GetSpotifyId( string email )
+        {
+            return await _userGateway.FindSpotifyId( email );
+        }
+        public async Task<string> GetDeezerId( string email )
+        {
+            return await _userGateway.FindDeezerId( email );
+        }
 
         public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
         {

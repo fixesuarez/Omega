@@ -66,6 +66,20 @@ namespace Omega.DAL
             User retrievedUser = (User) retrievedResult.Result;
             return retrievedUser.FacebookId;
         }
+        public async Task<string> FindDeezerId( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.DeezerId;
+        }
+        public async Task<string> FindSpotifyId( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.SpotifyId;
+        }
 
         public async Task CreateUser( User user )
         {

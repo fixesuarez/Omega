@@ -112,6 +112,7 @@ namespace OmegaWebApp.Controllers
                         string coverPlaylist = (string) playlist["picture"];
 
                         Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist );
+                        await _playlistService.InsertPlaylist( p );
                         listOfPlaylists.Add( p );
                     }
                     allplaylist = JsonConvert.SerializeObject( listOfPlaylists );

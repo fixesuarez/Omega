@@ -38,7 +38,7 @@ namespace OmegaWebApp.Controllers
                 string email = User.FindFirst( ClaimTypes.Email ).Value;
                 string accessToken = await _userService.GetFacebookAccessToken( email );
                 string facebookId = await _userService.GetFacebookId( email );
-                string parameters = Uri.EscapeUriString( "id,cover,link,name,members{email,id,name}" );
+                string parameters = Uri.EscapeDataString( "id,cover,link,name,members{email,id,name}" );
 
                 Uri groupDetailUri = new Uri(
                 string.Format( "{0}/me/groups?" +
@@ -56,7 +56,7 @@ namespace OmegaWebApp.Controllers
                 using( StreamReader reader = new StreamReader( responseStream ) )
                 {
                     string groupsStringResponse = reader.ReadToEnd();
-                    JObject groupsJsonResponse = JObject.FromObject( groupsStringResponse );
+                    JObject groupsJsonResponse = JObject.Parse( groupsStringResponse );
 
                     foreach( var group in groupsJsonResponse["data"] )
                     {
