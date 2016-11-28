@@ -26,9 +26,8 @@
   export default {
         data() {
             return {
-                //Splaylist: [],
-                //Dplaylist: []
-                playlists: []
+                playlists: [],
+                SDplaylist: []
             }
         },
 
@@ -38,16 +37,15 @@
             loadPlaylists: async function() {
                 var playlists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
                 this.playlists = playlists;
-            }
-
-           /* loadSpotifyPlaylist: async function() {
-                var playlists = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
-                this.playlists = playlists;
+            },
+            loadSpotifyPlaylist: async function() {
+                var spplaylist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
+                this.SDplaylists.push(spplaylist);
             },
             loadDeezerPlaylist: async function() {
                 var dzplaylist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
-                this.playlists.push(dzplaylist);
-            },*/
+                this.SDplaylist.push(dzplaylist);
+            },
         }
     }
 
