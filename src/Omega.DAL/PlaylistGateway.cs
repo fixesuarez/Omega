@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -29,6 +30,40 @@ namespace Omega.DAL
                 batchOperation.Insert( p );
                 await _tablePlaylist.ExecuteBatchAsync( batchOperation );
             }
+        }
+        
+        public async Task<List<Playlist>> RetrieveAllPlaylistsFromUser( string spotifyId, string deezerId )
+        {
+            List<Playlist> playlists = new List<Playlist>();
+            if( spotifyId != null )
+            {
+                TableQuery<Playlist> query = new TableQuery<Playlist>()
+                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, spotifyId ) );
+
+                query.TakeCount = 1000;
+                TableContinuationToken tableContinuationToken = null;
+                do
+                {
+                    var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                    tableContinuationToken = queryResponse.ContinuationToken;
+                    playlists.AddRange( queryResponse.Results );
+                } while( tableContinuationToken != null );
+            }
+            else if( deezerId != null )
+            {
+                TableQuery<Playlist> query = new TableQuery<Playlist>()
+                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, spotifyId ) );
+
+                query.TakeCount = 1000;
+                TableContinuationToken tableContinuationToken = null;
+                do
+                {
+                    var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                    tableContinuationToken = queryResponse.ContinuationToken;
+                    playlists.AddRange( queryResponse.Results );
+                } while( tableContinuationToken != null );
+            }
+            return playlists;
         }
     }
 }

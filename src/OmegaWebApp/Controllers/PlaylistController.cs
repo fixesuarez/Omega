@@ -18,13 +18,13 @@ namespace OmegaWebApp.Controllers
     {
         readonly UserService _userService;
         readonly PlaylistService _playlistService;
-        readonly TrackService _trackService;
+        //readonly TrackService _trackService;
 
         public PlaylistController( UserService userService, PlaylistService playlistService, TrackService trackService )
         {
             _userService = userService;
             _playlistService = playlistService;
-            _trackService = trackService;
+            //_trackService = trackService;
         }
 
         // GET: /<controller>/
@@ -34,15 +34,8 @@ namespace OmegaWebApp.Controllers
             string spotifyId = await _userService.GetSpotifyId( email );
             string deezerId = await _userService.GetDeezerId( email );
 
-            TableQuery<Playlist> query = new TableQuery<Playlist>().Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, "Smith" ) );
-
-            //// Print the fields for each customer.
-            //foreach( CustomerEntity entity in table.ExecuteQuery( query ) )
-            //{
-            //    Console.WriteLine( "{0}, {1}\t{2}\t{3}", entity.PartitionKey, entity.RowKey,
-            //        entity.Email, entity.PhoneNumber );
-            //}
-            //return null;
+            List<Playlist> playlists = await _playlistService.GetAllPlaylistsFromUser( spotifyId, deezerId );
+            return null;
         }
     }
 }
