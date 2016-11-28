@@ -10,6 +10,7 @@ namespace Omega.DAL
         readonly CloudStorageAccount _storageAccount;
         readonly CloudTableClient _tableClient;
         readonly CloudTable _tablePlaylist;
+        readonly CloudTable _tableTrack;
 
         public PlaylistGateway( string connectionString )
         {
@@ -17,6 +18,8 @@ namespace Omega.DAL
             _tableClient = _storageAccount.CreateCloudTableClient();
             _tablePlaylist = _tableClient.GetTableReference( "Playlist" );
             _tablePlaylist.CreateIfNotExistsAsync();
+            _tableTrack = _tableClient.GetTableReference( "Track" );
+            _tableTrack.CreateIfNotExistsAsync();
         }
 
         public async Task InsertPlaylist( Playlist p )
@@ -63,7 +66,28 @@ namespace Omega.DAL
                     playlists.AddRange( queryResponse.Results );
                 } while( tableContinuationToken != null );
             }
+            foreach( Playlist p in playlists )
+            {
+                p.Tracks = await RetrieveTracksFromPlaylists( p );
+            }
             return playlists;
+        }
+
+        private async Task<List<Track>> RetrieveTracksFromPlaylists( Playlist p )
+        {
+            List<Track> tracks = new List<Track>();
+            TableQuery<Track> query = new TableQuery<Track>()
+                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, p.PartitionKey ) );
+
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+            do
+            {
+                var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                tableContinuationToken = queryResponse.ContinuationToken;
+                tracks.AddRange( queryResponse.Results );
+            } while( tableContinuationToken != null );
+            return tracks;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -33,7 +34,7 @@ namespace Omega.DAL
             if( retrievedTrack == null )
             {
                 TableBatchOperation batchOperation = new TableBatchOperation();
-                Track t = new Track( source, userId, playlistId, trackId, title, albumName, popularity, duration, cover );
+                Track t = new Track( source, playlistId, trackId, title, albumName, popularity, duration, cover );
                 batchOperation.Insert( t );
                 await _tableTrack.ExecuteBatchAsync( batchOperation );
             }

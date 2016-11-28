@@ -4,8 +4,7 @@ namespace Omega.DAL
 {
     public class Track : TableEntity
     {
-        public string UserId
-        {
+        public string PlaylistId {
             get
             {
                 return PartitionKey;
@@ -15,7 +14,6 @@ namespace Omega.DAL
                 PartitionKey = value;
             }
         }
-        public string PlaylistId { get; set; }
         public string TrackId { get; set; }
         public string Title { get; set; }
         public string AlbumName { get; set; }
@@ -23,9 +21,9 @@ namespace Omega.DAL
         public string Duration { get; set; }
         public string Cover { get; set; }
 
-        public Track( string source, string userId, string playlistId, string trackId, string title, string albumName, string popularity, string duration, string cover )
+        public Track( string source, string playlistId, string trackId, string title, string albumName, string popularity, string duration, string cover )
         {
-            PartitionKey = userId;
+            PartitionKey = playlistId;
             RowKey = source + ":" + playlistId + ":" + trackId;
             PlaylistId = playlistId;
             TrackId = trackId;
