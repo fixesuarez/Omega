@@ -36,7 +36,7 @@
             ...mapActions(['requestAsync']),
 
             loadPlaylists: async function() {
-                var playlists = await this requestAsync(() => PlaylistApiService.getPlaylists());
+                var playlists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
                 this.playlists = playlists;
             }
 
