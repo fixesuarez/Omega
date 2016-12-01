@@ -10,13 +10,7 @@ class AuthService {
         window.addEventListener("message", this.onMessage, false);
     }
 
-    get identity() {
-        return Omega.getIdentity();
-    }
 
-    set identity(i) {
-        Omega.setIdentity(i);
-    }
 
     get isConnected() {
         return this.identity != null;

@@ -10,6 +10,12 @@ const state = {
   moods: '',
   enabledCriterias: false,
   criterias: '',
+  authenticated: false,
+  currentMood: '',
+  currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
+  tempoMood: '',
+  checkedPlaylists: [],
+  playlists: []
 }
 
 const mutations = {
@@ -36,6 +42,7 @@ const mutations = {
   },
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
+    state.moods.map(m => { m.check = false; return m })
   },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
@@ -44,7 +51,47 @@ const mutations = {
     state.enabledCriterias = payload;
   },
   [types.ADDMOOD](state, payload) {
-    state.moods.push.payload;
+    state.moods.push(payload)
+  },
+  [types.AUTHENTICATE](state, payload) {
+    state.authenticated = payload;
+  },
+  [types.SETCURRENTMOOD](state, payload) {
+    state.currentMood = payload;
+    state.currentMood.check = !state.currentMood.check;
+  },
+  [types.SETCURRENTPLAYLIST](state, payload) {
+    state.currentPlaylist= payload;
+  },
+  [types.SELECTPLAYLIST](state, playlist) {
+    // playlist.check = !playlist.check;
+    if(playlist.check = !playlist.check) {
+      state.checkedPlaylists.push(playlist)
+    } else {
+      state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(playlist), 1)
+    }
+    
+    // state.currentPlaylist = payload;
+    // console.log(state.checkedPlaylists.length)
+    // // payload.check = !payload.check;
+    // var playlist = payload;
+
+    // if(playlist.check === false) {
+    //   console.log('False de base :'+playlist.check)
+    //   playlist.check = true
+    //   console.log('Maintenant true : '+playlist.check)
+    //   state.checkedPlaylists.push(playlist)
+    // } else {
+    //   playlist.check = false
+    //   console.log('True de base :'+playlist.check)
+    //   var index = state.playlists.indexOf(playlist);
+    //   state.checkedPlaylists.splice(index, 1)
+    //   console.log(state.checkedPlaylists.length)
+  },
+  [types.SENDPLAYLISTS](state, payload) {
+    // var tempoPlaylists = payload;
+    // tempoPlaylists.map(m => { Vue.set(m, 'check', false); return m});
+    state.playlists.push.apply(state.playlists, payload);
   }
 }
 
