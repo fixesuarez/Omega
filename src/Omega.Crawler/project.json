@@ -5,21 +5,22 @@
   },
 
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.0.1"
-    },
     "Newtonsoft.Json": "9.0.1",
     "WindowsAzure.Storage": "7.2.1",
     "Omega.DAL": {
       "target": "project"
     },
-    "Microsoft.AspNetCore.Mvc.Core": "1.0.1",
-    "Microsoft.Extensions.Configuration": "1.0.0",
-    "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
-    "Microsoft.IdentityModel.Tokens": "5.0.0",
-    "Microsoft.AspNetCore.Mvc": "1.0.1",
-    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0"
+    "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
+    "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0",
+    "Microsoft.AspNetCore.Mvc": "1.1.0",
+    "Microsoft.AspNetCore.Mvc.Core": "1.1.0",
+    "Microsoft.Extensions.Configuration": "1.1.0",
+    "Microsoft.IdentityModel.Tokens": "5.1.0",
+    "Microsoft.NETCore.App": {
+      "version": "1.1.0",
+      "type": "platform"
+    }
+
   },
 
   "frameworks": {

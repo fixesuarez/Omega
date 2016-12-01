@@ -11,7 +11,7 @@ namespace OmegaWebApp.Authentication
             return @this.Identity.FindFirst( c => c.Type == ClaimTypes.Email ).Value;
         }
 
-        public static string GetSpotifyEmail( this OAuthCreatingTicketContext @this )
+        public static string GetSpotifyOrDeezerEmail( this OAuthCreatingTicketContext @this )
         {
             JToken userJson = @this.User;
             return (string) userJson["email"];

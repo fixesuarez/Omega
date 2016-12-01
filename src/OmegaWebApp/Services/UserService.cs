@@ -1,7 +1,5 @@
 ﻿using Omega.DAL;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OmegaWebApp.Services
@@ -40,6 +38,32 @@ namespace OmegaWebApp.Services
             await _userGateway.UpdateFacebookUser(facebookUser);
         }
         
+        public async Task<string> GetSpotifyAccessToken( string email )
+        {
+            return await _userGateway.FindSpotifyAccessToken( email );
+        }
+        public async Task<string> GetDeezerAccessToken( string email )
+        {
+            return await _userGateway.FindDeezerAccessToken( email );
+        }
+        public async Task<string> GetFacebookAccessToken( string email )
+        {
+            return await _userGateway.FindFacebookAccessToken( email );
+        }
+
+        public async Task<string> GetFacebookId( string email )
+        {
+            return await _userGateway.FindFacebookId( email );
+        }
+        public async Task<string> GetSpotifyId( string email )
+        {
+            return await _userGateway.FindSpotifyId( email );
+        }
+        public async Task<string> GetDeezerId( string email )
+        {
+            return await _userGateway.FindDeezerId( email );
+        }
+
         public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
         {
             return await _userGateway.GetAuthenticationProviders( userId );

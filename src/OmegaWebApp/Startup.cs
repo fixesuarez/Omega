@@ -45,8 +45,13 @@ namespace OmegaWebApp
             // Add framework services.
             services.AddMvc();
             services.AddTransient( _ => new UserGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient( _ => new PlaylistGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient( _ => new AmbianceGateway(Configuration["data:azure:ConnectionString"]));
+            services.AddTransient( _ => new TrackGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient<PasswordHasher>();
             services.AddTransient<UserService>();
+            services.AddTransient<PlaylistService>();
+            services.AddTransient<TrackService>();
             services.AddSingleton<TokenService>();
         }
 
@@ -54,12 +59,10 @@ namespace OmegaWebApp
         public void Configure( IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory )
         {
             loggerFactory.AddConsole( Configuration.GetSection( "Logging" ) );
-            loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
@@ -101,17 +104,6 @@ namespace OmegaWebApp
             ExternalAuthenticationEvents deezerAuthenticationEvents = new ExternalAuthenticationEvents(
                 new DeezerExternalAuthenticationManager( app.ApplicationServices.GetRequiredService<UserService>() ) );
 
-            //FacebookOptions facebookOptions = new FacebookOptions
-            //{
-            //    SignInScheme = CookieAuthentication.AuthenticationScheme,
-            //    ClientId = Configuration["Authentication:Facebook:ClientId"],
-            //    ClientSecret = Configuration["Authentication:Facebook:ClientSecret"],
-            //    Events = new OAuthEvents
-            //    {
-            //        OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
-            //    }
-            //};
-            //app.UseFacebookAuthentication( facebookOptions );
             app.UseFacebookAuthentication( c =>
             {
                 c.SignInScheme = CookieAuthentication.AuthenticationScheme;
@@ -119,7 +111,7 @@ namespace OmegaWebApp
                 c.ClientSecret = Configuration["Authentication:Facebook:ClientSecret"];
                 c.Events = new OAuthEvents
                 {
-                    OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket
+                    OnCreatingTicket = facebookAuthenticationEvents.OnCreatingTicket,
                 };
             } );
 
@@ -130,7 +122,8 @@ namespace OmegaWebApp
                 SignInScheme = CookieAuthentication.AuthenticationScheme,
                 Events = new OAuthEvents
                 {
-                    OnCreatingTicket = spotifyAuthenticationEvents.OnCreatingTicket
+                    OnCreatingTicket = spotifyAuthenticationEvents.OnCreatingTicket,
+                    
                 }
         };
             spotifyOptions.Scope.Add( "user-read-email" );// if email is needed.
@@ -140,18 +133,18 @@ namespace OmegaWebApp
 
             app.UseSpotifyAuthentication( spotifyOptions );
 
-            DeezerAuthenticationOptions deezerOptions = new DeezerAuthenticationOptions
+            app.UseDeezerAuthentication( o =>
             {
-                ClientId = Configuration["Authentication:Deezer:ClientId"],
-                ClientSecret = Configuration["Authentication:Deezer:ClientSecret"],
-                SignInScheme = CookieAuthentication.AuthenticationScheme,
-                Events = new OAuthEvents
+                o.ClientId = Configuration["Authentication:Deezer:ClientId"];
+                o.ClientSecret = Configuration["Authentication:Deezer:ClientSecret"];
+                o.SignInScheme = CookieAuthentication.AuthenticationScheme;
+                o.Events = new OAuthEvents
                 {
                     OnCreatingTicket = deezerAuthenticationEvents.OnCreatingTicket
-                }
-            };
-
-            app.UseDeezerAuthentication( deezerOptions );
+                };
+                o.Scope.Add( "basic_access" );
+                o.Scope.Add( "email" );
+            } );
 
             app.UseMvc( routes =>
             {

@@ -3,11 +3,11 @@
   "buildOptions": {
     "emitEntryPoint": true
   },
-  
+
   "dependencies": {
     "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.0.1"
+      "version": "1.1.0",
+      "type": "platform"
     },
     "NUnitLite": "3.5.0",
     "Omega.Crawler": {
@@ -18,9 +18,11 @@
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
-        "dnxcore50",
-        "portable-net451+win8"
-      ]
+        "portable-net451+win8",
+        "dnxcore50"
+      ],
+      "dependencies": {
+      }
     }
   }
 }

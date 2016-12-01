@@ -6,10 +6,6 @@ using Cake.Common.Tools.OpenCover;
 using Cake.Core;
 using Cake.Core.IO;
 using CodeCake;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CodeCakeBuilder
 {
@@ -60,7 +56,7 @@ namespace CodeCakeBuilder
                 .IsDependentOn("Restore-Tools")
                 .Does(() =>
                 {
-                DirectoryPathCollection AllProj = Cake.GetDirectories("./*", p => !p.Path.FullPath.Contains("CodeCakeBuilder") && !p.Path.FullPath.Contains("wwwroot") && !p.Path.FullPath.Contains("Omega.DataManager.Tests"));
+                DirectoryPathCollection AllProj = Cake.GetDirectories("./*", p => !p.Path.FullPath.Contains("CodeCakeBuilder") && !p.Path.FullPath.Contains("wwwroot") && !p.Path.FullPath.Contains("Omega.DataManager.Test"));
                     foreach (DirectoryPath proj in AllProj)
                     {
                         Cake.DotNetCoreBuild(proj.FullPath);
@@ -71,23 +67,8 @@ namespace CodeCakeBuilder
                 .IsDependentOn("Build")
                 .Does(() =>
                 {
-                    FilePathCollection FilePathTests = Cake.GetFiles("./**/*.Tests.exe", p => Cake.FileExists(p.Path + "/nunit.framework.dll"));
-
-                    Cake.OpenCover(tool =>
-                    {
-                        tool.NUnit3(FilePathTests, new NUnit3Settings
-                        {
-                            ToolPath = "../packages/NUnit.ConsoleRunner/3.5.0/tools/nunit3-console.exe"
-                        });
-                    },
-                     new FilePath("CodeCakeBuilder/resultOpenCover.xml"),
-                     new OpenCoverSettings
-                     {
-                         ToolPath = "../packages/OpenCover/4.6.519/tools/OpenCover.Console.exe",
-                         Register = "User"
-                     }
-                        .WithFilter("-[Omega.Crawler.Tests]*")
-                    );
+                    var testProjects = Cake.GetDirectories("./*.Tests");
+                    foreach(var project in testProjects) Cake.DotNetCoreRun(project.FullPath);
                 });
 
             // The Default task for this script can be set here.
