@@ -10,12 +10,12 @@
       "type": "platform"
     },
     "NUnitLite": "3.5.0",
-    "Omega.Crawler": {
+    "Omega.DAL": {
       "target": "project"
     }
   },
 
-  "frameworks": {
+    "frameworks": {
     "netcoreapp1.0": {
       "imports": [
         "portable-net451+win8",

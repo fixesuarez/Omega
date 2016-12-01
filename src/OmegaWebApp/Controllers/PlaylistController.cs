@@ -28,6 +28,7 @@ namespace OmegaWebApp.Controllers
         }
 
         // GET: /<controller>/
+        [HttpGet( "Playlists" )]
         public async Task<JToken> GetAllPlaylists()
         {
             string email = User.FindFirst( ClaimTypes.Email ).Value;

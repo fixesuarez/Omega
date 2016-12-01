@@ -29,34 +29,25 @@ namespace Omega.DAL
             // Create the table if it doesn't exist.
             tableFacebookUser.CreateIfNotExistsAsync();
         }
+        
+        public async Task CreateUser( User user )
+        {
+            if( user != null && user.Email != null )
+            {
+                User retrievedUser = await FindUserByEmail( user.Email );
+                if( retrievedUser == null )
+                {
+                    TableOperation insertUserOperation = TableOperation.Insert( user );
+                    await tableUser.ExecuteAsync( insertUserOperation );
+                }
+            }
+        }
 
         public async Task<User> FindUserByEmail( string email )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
             return (User)retrievedResult.Result;
-        }
-
-        public async Task<string> FindSpotifyAccessToken( string email )
-        {
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            User retrievedUser = (User) retrievedResult.Result;
-            return retrievedUser.SpotifyAccessToken;
-        }
-        public async Task<string> FindDeezerAccessToken( string email )
-        {
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            User retrievedUser = (User) retrievedResult.Result;
-            return retrievedUser.DeezerAccessToken;
-        }
-        public async Task<string> FindFacebookAccessToken( string email )
-        {
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
-            User retrievedUser = (User) retrievedResult.Result;
-            return retrievedUser.FacebookAccessToken;
         }
 
         public async Task<string> FindFacebookId( string email )
@@ -81,10 +72,40 @@ namespace Omega.DAL
             return retrievedUser.SpotifyId;
         }
 
-        public async Task CreateUser( User user )
+        public async Task<string> FindSpotifyAccessToken( string email )
         {
-            TableOperation insertUserOperation = TableOperation.Insert( user );
-            await tableUser.ExecuteAsync( insertUserOperation );
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.SpotifyAccessToken;
+        }
+        public async Task<string> FindDeezerAccessToken( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.DeezerAccessToken;
+        }
+        public async Task<string> FindFacebookAccessToken( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, email );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            return retrievedUser.FacebookAccessToken;
+        }
+
+        
+        public async Task DeleteUser( string email )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, "test@email.com" );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User deleteEntity = (User) retrievedResult.Result;
+
+            if( deleteEntity != null )
+            {
+                TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
+                await tableUser.ExecuteAsync( deleteOperation );
+            }
         }
 
         public async Task UpdateDeezerUser( User deezerUser )
@@ -92,7 +113,7 @@ namespace Omega.DAL
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, deezerUser.RowKey );
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
             User retrievedUser = (User) retrievedResult.Result;
-            retrievedUser.DeezerId = deezerUser.SpotifyId;
+            retrievedUser.DeezerId = deezerUser.DeezerId;
             retrievedUser.DeezerAccessToken = deezerUser.DeezerAccessToken;
 
             TableOperation updateOperation = TableOperation.Replace( retrievedUser );

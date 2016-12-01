@@ -16,5 +16,10 @@ namespace OmegaWebApp.Services
         {
             await _trackGateway.InsertTrack( userId, source, playlistId, trackId, title, albumName, popularity, duration, cover );
         }
+
+        public async Task GetTrack( string source, string idPlaylist, string idTrack )
+        {
+            await _trackGateway.RetrieveTrack( source, idPlaylist, idTrack );
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,8 +41,9 @@ namespace Omega.DAL
             List<Playlist> playlists = new List<Playlist>();
             if( spotifyId != null )
             {
-                TableQuery<Playlist> query = new TableQuery<Playlist>()
-                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, spotifyId ) );
+                var cond = TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, spotifyId );
+                TableQuery<Playlist> query = new TableQuery<Playlist>();
+                query = query.Where( cond );
 
                 query.TakeCount = 1000;
                 TableContinuationToken tableContinuationToken = null;
@@ -52,16 +54,16 @@ namespace Omega.DAL
                     playlists.AddRange( queryResponse.Results );
                 } while( tableContinuationToken != null );
             }
-            else if( deezerId != null )
+            if( deezerId != null )
             {
                 TableQuery<Playlist> query = new TableQuery<Playlist>()
-                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, spotifyId ) );
+                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, deezerId ) );
 
                 query.TakeCount = 1000;
                 TableContinuationToken tableContinuationToken = null;
                 do
                 {
-                    var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                    var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
                     tableContinuationToken = queryResponse.ContinuationToken;
                     playlists.AddRange( queryResponse.Results );
                 } while( tableContinuationToken != null );
@@ -76,18 +78,26 @@ namespace Omega.DAL
         private async Task<List<Track>> RetrieveTracksFromPlaylists( Playlist p )
         {
             List<Track> tracks = new List<Track>();
-            TableQuery<Track> query = new TableQuery<Track>()
-                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, p.PartitionKey ) );
-
-            query.TakeCount = 1000;
-            TableContinuationToken tableContinuationToken = null;
-            do
+            try
             {
-                var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
-                tableContinuationToken = queryResponse.ContinuationToken;
-                tracks.AddRange( queryResponse.Results );
-            } while( tableContinuationToken != null );
-            return tracks;
+                var cond = TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, p.PlaylistId );
+                TableQuery<Track> query = new TableQuery<Track>()
+                        .Where( cond );
+
+                query.TakeCount = 1000;
+                TableContinuationToken tableContinuationToken = null;
+                do
+                {
+                    var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                    tableContinuationToken = queryResponse.ContinuationToken;
+                    tracks.AddRange( queryResponse.Results );
+                } while( tableContinuationToken != null );
+                return tracks;
+            }
+            catch( Exception ex )
+            {
+                throw ex;
+            }
         }
     }
 }

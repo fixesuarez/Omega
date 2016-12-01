@@ -27,6 +27,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CodeCakeBuilder", "src\Code
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Omega.Model", "src\Omega.Model\Omega.Model.xproj", "{8D4D0F21-B001-4724-9C48-6CCC60E6F814}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Omega.DAL.Tests", "src\Omega.DAL.Tests\Omega.DAL.Tests.xproj", "{413E69E2-3BFD-45C4-8BD4-F888343B35EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{8D4D0F21-B001-4724-9C48-6CCC60E6F814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D4D0F21-B001-4724-9C48-6CCC60E6F814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D4D0F21-B001-4724-9C48-6CCC60E6F814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{413E69E2-3BFD-45C4-8BD4-F888343B35EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{413E69E2-3BFD-45C4-8BD4-F888343B35EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{413E69E2-3BFD-45C4-8BD4-F888343B35EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{413E69E2-3BFD-45C4-8BD4-F888343B35EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +74,6 @@ Global
 		{5C77526C-E81A-47B4-85E3-918B8FD00630} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
 		{2B105407-A74D-475B-8419-B4180BD73BF5} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
 		{8D4D0F21-B001-4724-9C48-6CCC60E6F814} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
+		{413E69E2-3BFD-45C4-8BD4-F888343B35EA} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
 	EndGlobalSection
 EndGlobal

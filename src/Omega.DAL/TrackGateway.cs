@@ -41,5 +41,15 @@ namespace Omega.DAL
             CloudQueueMessage message = new CloudQueueMessage( source + ":" + trackId );
             await _queue.AddMessageAsync( message );
         }
+
+        public async Task<Track> RetrieveTrack( string source, string idPlaylist, string idTrack )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( idPlaylist, string.Format("{0}:{1}:{2}",
+                source, idPlaylist, idTrack
+                ) );
+            TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveOperation );
+            Track retrievedUser = (Track) retrievedResult.Result;
+            return retrievedUser;
+        }
     }
 }

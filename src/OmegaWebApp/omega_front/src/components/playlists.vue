@@ -3,7 +3,7 @@
     <div class="playlistsPanel">
     <button type="button" @click="loadPlaylists()">Load all playlist</button>
     {{playlists}}
-      <!--<button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
+      <button type="button" @click="loadSpotifyPlaylist()">Spotify</button>
       <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
         <div class="listgroup" v-for="playlist in playlists">
       <div class="content-group" >
@@ -12,7 +12,7 @@
         {{ playlist.Name }}
     </div>
   </div>
-  	</div>-->
+  	</div>
   </div>
   </div>
 </template>
