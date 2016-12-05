@@ -75,7 +75,7 @@ namespace Omega.DAL
             return playlists;
         }
 
-        private async Task<List<Track>> RetrieveTracksFromPlaylists( Playlist p )
+        public async Task<List<Track>> RetrieveTracksFromPlaylists( Playlist p )
         {
             List<Track> tracks = new List<Track>();
             try

@@ -66,7 +66,7 @@ namespace OmegaWebApp.Controllers
                         string coverAlbum = (string) track["album"]["cover"];
 
                         if( _trackService.GetTrack("d", playlistId, trackId) == null )
-                            await _trackService.InsertTrack( userdId, "d",  playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum );
+                            await _trackService.InsertTrack( "d",  playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum );
                         tracksInPlaylist.Add( new Track( "d", playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum ) );
                     }
                 }
