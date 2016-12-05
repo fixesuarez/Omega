@@ -55,9 +55,8 @@ namespace Omega.DAL
 
         public async Task<Track> RetrieveTrack( string source, string idPlaylist, string idTrack )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<Track>( idPlaylist, string.Format("{0}:{1}:{2}",
-                source, idPlaylist, idTrack
-                ) );
+            string rowKey = source + ":" + idPlaylist + ":" + idTrack;
+            TableOperation retrieveOperation = TableOperation.Retrieve<Track>( idPlaylist, rowKey );
             TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveOperation );
             Track retrievedUser = (Track) retrievedResult.Result;
             return retrievedUser;

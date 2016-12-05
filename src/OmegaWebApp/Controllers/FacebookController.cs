@@ -75,5 +75,11 @@ namespace OmegaWebApp.Controllers
                 }
             }
         }
+
+        [HttpGet( "Events" )]
+        public async Task<JToken> GetAllFacebookEvents()
+        {
+            return null;
+        }
     }
 }

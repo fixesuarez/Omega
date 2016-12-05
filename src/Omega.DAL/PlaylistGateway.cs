@@ -63,7 +63,7 @@ namespace Omega.DAL
                 TableContinuationToken tableContinuationToken = null;
                 do
                 {
-                    var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                    var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
                     tableContinuationToken = queryResponse.ContinuationToken;
                     playlists.AddRange( queryResponse.Results );
                 } while( tableContinuationToken != null );
