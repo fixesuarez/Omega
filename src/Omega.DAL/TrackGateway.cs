@@ -1,7 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -25,9 +24,9 @@ namespace Omega.DAL
             _queue.CreateIfNotExistsAsync();
         }
 
-        public async Task InsertTrack( string userId, string source, string playlistId, string trackId, string title, string albumName, string popularity, string duration, string cover )
+        public async Task InsertTrack( string source, string playlistId, string trackId, string title, string albumName, string popularity, string duration, string cover )
         {
-            TableOperation retrieveTrackOperation = TableOperation.Retrieve<Track>( userId, source + ":" + playlistId + ":" + trackId );
+            TableOperation retrieveTrackOperation = TableOperation.Retrieve<Track>( playlistId, source + ":" + playlistId + ":" + trackId );
 
             TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveTrackOperation );
             Track retrievedTrack = (Track) retrievedResult.Result;
@@ -41,12 +40,23 @@ namespace Omega.DAL
             CloudQueueMessage message = new CloudQueueMessage( source + ":" + trackId );
             await _queue.AddMessageAsync( message );
         }
+        public async Task DeleteTrack( string playlistId, string source, string trackId )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<Track>( playlistId, string.Format("{0}:{1}:{2}", source, playlistId, trackId ) );
+            TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveOperation );
+            Track deleteEntity = (Track) retrievedResult.Result;
+
+            if( deleteEntity != null )
+            {
+                TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
+                await _tableTrack.ExecuteAsync( deleteOperation );
+            }
+        }
 
         public async Task<Track> RetrieveTrack( string source, string idPlaylist, string idTrack )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<User>( idPlaylist, string.Format("{0}:{1}:{2}",
-                source, idPlaylist, idTrack
-                ) );
+            string rowKey = source + ":" + idPlaylist + ":" + idTrack;
+            TableOperation retrieveOperation = TableOperation.Retrieve<Track>( idPlaylist, rowKey );
             TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveOperation );
             Track retrievedUser = (Track) retrievedResult.Result;
             return retrievedUser;

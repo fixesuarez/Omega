@@ -63,7 +63,7 @@ namespace Omega.DAL
                 TableContinuationToken tableContinuationToken = null;
                 do
                 {
-                    var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                    var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
                     tableContinuationToken = queryResponse.ContinuationToken;
                     playlists.AddRange( queryResponse.Results );
                 } while( tableContinuationToken != null );
@@ -75,7 +75,7 @@ namespace Omega.DAL
             return playlists;
         }
 
-        private async Task<List<Track>> RetrieveTracksFromPlaylists( Playlist p )
+        public async Task<List<Track>> RetrieveTracksFromPlaylists( Playlist p )
         {
             List<Track> tracks = new List<Track>();
             try

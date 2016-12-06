@@ -20,7 +20,7 @@ namespace Omega.DAL
         {
             get
             {
-                return PlaylistId;
+                return RowKey;
             }
             set
             {
