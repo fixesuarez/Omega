@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Facebook;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Omega.DAL;
@@ -79,6 +80,13 @@ namespace OmegaWebApp.Controllers
         [HttpGet( "Events" )]
         public async Task<JToken> GetAllFacebookEvents()
         {
+            string email = User.FindFirst( ClaimTypes.Email ).Value;
+            string accessToken = await _userService.GetFacebookAccessToken( email );
+            FacebookClient fbClient = new FacebookClient( accessToken );
+
+            dynamic result = await fbClient.GetTaskAsync( "/me/events?fields=cover,id,name,attending{id,email,name}" );
+            //result[]
+
             return null;
         }
     }
