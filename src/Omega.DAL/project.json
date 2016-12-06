@@ -2,6 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
+    "Facebook-NetCore": "1.0.0",
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
