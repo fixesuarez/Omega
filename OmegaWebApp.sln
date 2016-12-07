@@ -31,6 +31,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Omega.DAL.Tests", "src\Omeg
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Omega.FacebookCrawler", "src\Omega.FacebookCrawler\Omega.FacebookCrawler.xproj", "{CE1D3A81-6A4D-42E9-8663-9C9DD0916242}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Omega.FacebookCrawler.Tests", "src\Omega.FacebookCrawler.Tests\Omega.FacebookCrawler.Tests.xproj", "{7336C628-C0A0-47A4-9BFD-38D940BBD881}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{CE1D3A81-6A4D-42E9-8663-9C9DD0916242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE1D3A81-6A4D-42E9-8663-9C9DD0916242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE1D3A81-6A4D-42E9-8663-9C9DD0916242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7336C628-C0A0-47A4-9BFD-38D940BBD881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7336C628-C0A0-47A4-9BFD-38D940BBD881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7336C628-C0A0-47A4-9BFD-38D940BBD881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7336C628-C0A0-47A4-9BFD-38D940BBD881}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +88,6 @@ Global
 		{8D4D0F21-B001-4724-9C48-6CCC60E6F814} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
 		{413E69E2-3BFD-45C4-8BD4-F888343B35EA} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
 		{CE1D3A81-6A4D-42E9-8663-9C9DD0916242} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
+		{7336C628-C0A0-47A4-9BFD-38D940BBD881} = {90D3EB02-9A05-4E68-92F5-238D22FA966E}
 	EndGlobalSection
 EndGlobal
