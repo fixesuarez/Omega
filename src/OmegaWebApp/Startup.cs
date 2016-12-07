@@ -48,11 +48,14 @@ namespace OmegaWebApp
             services.AddTransient( _ => new PlaylistGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient( _ => new AmbianceGateway(Configuration["data:azure:ConnectionString"]));
             services.AddTransient( _ => new TrackGateway( Configuration[ "data:azure:ConnectionString" ] ) );
+            services.AddTransient( _ => new CleanTrackGateway(Configuration["data:azure:ConnectionString"]));
             services.AddTransient<PasswordHasher>();
             services.AddTransient<UserService>();
             services.AddTransient<PlaylistService>();
             services.AddTransient<TrackService>();
             services.AddSingleton<TokenService>();
+            services.AddSingleton<AmbianceService>();
+            services.AddSingleton<CleanTrackService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

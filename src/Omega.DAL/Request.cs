@@ -133,26 +133,5 @@ namespace Omega.DAL
                 await table.ExecuteAsync(deleteOperation);
             }
         }
-
-        // Model Requests
-
-        public async void AddMood(string user, string name, string metaDonnees, string connectionString)
-        {
-            CloudTable table = ConnectAmbianceTable(connectionString);
-            JObject rss = JObject.Parse(metaDonnees);
-
-            Ambiance mood = new Ambiance(user, name);
-            mood.Acousticness = (string)rss["Acousticness"];
-            mood.Danceability = (string)rss["Danceability"];
-            mood.Energy = (string)rss["Energy"];
-            mood.Instrumentalness = (string)rss["Instrumentalness"];
-            mood.Liveness = (string)rss["Liveness"];
-            mood.Loudness = (string)rss["Loudness"];
-            mood.Mode = (string)rss["Mode"];
-            mood.Popularity = (string)rss["Popularity"];
-            TableOperation insertOperation = TableOperation.Insert(mood);
-
-            await table.ExecuteAsync(insertOperation);
-        }
     }
 }
