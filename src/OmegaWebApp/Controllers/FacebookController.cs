@@ -82,11 +82,39 @@ namespace OmegaWebApp.Controllers
         {
             string email = User.FindFirst( ClaimTypes.Email ).Value;
             string accessToken = await _userService.GetFacebookAccessToken( email );
+            //FacebookClient fbClient = new FacebookClient( accessToken );
+
+            //dynamic result = await fbClient.GetTaskAsync( "/me/events?fields=cover,id,name,attending{id,email,name}" );
+            ////result[]
+
+            //return null;
             FacebookClient fbClient = new FacebookClient( accessToken );
-
+            
             dynamic result = await fbClient.GetTaskAsync( "/me/events?fields=cover,id,name,attending{id,email,name}" );
-            //result[]
+            //string json = JsonConvert.SerializeObject( result );
+            JObject eventsJson = JObject.FromObject( result );
 
+            foreach( var _event in eventsJson["data"] )
+            {
+                string eventId = (string) _event["id"];
+                string eventName = (string) _event["name"];
+                string groupCover = (string) _event["cover"]["source"];
+                List<User> eventAttendings = new List<User>();
+                JArray attendingTokens = (JArray) _event["attending"]["data"];
+                foreach( var attending in attendingTokens )
+                {
+                    string mail = (string) attending["email"];
+                    string id = (string) attending["id"];
+                    if( mail != null )
+                    {
+                        User u = new User();
+                        u.PartitionKey = string.Empty;
+                        u.RowKey = mail;
+                        u.FacebookId = id;
+                        eventAttendings.Add( u );
+                    }
+                }
+            }
             return null;
         }
     }

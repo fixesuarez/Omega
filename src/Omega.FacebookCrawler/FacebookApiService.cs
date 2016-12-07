@@ -12,7 +12,7 @@ namespace Omega.FacebookCrawler
         {
             FacebookClient client = new FacebookClient( accessToken );
             dynamic response = await client.GetTaskAsync( "/v2.8/me/groups?fields=id,name,cover,members{id,name,email}" );
-
+            JObject groupsJson = JObject.FromObject( response );
             JArray groups = (JArray) response["data"];
 
             foreach( var group in groups )
@@ -29,7 +29,8 @@ namespace Omega.FacebookCrawler
                     if( email != null )
                     {
                         User u = new User();
-                        u.PartitionKey = email;
+                        u.PartitionKey = string.Empty;
+                        u.RowKey = email;
                         u.FacebookId = id;
                         groupMembers.Add( u );
                     }
@@ -42,16 +43,30 @@ namespace Omega.FacebookCrawler
             FacebookClient fbClient = new FacebookClient( accessToken );
 
             dynamic result = await fbClient.GetTaskAsync( "/me/events?fields=cover,id,name,attending{id,email,name}" );
-
+            JObject eventsJson = JObject.FromObject( result );
             JArray events = (JArray) result["data"];
 
             foreach( var _event in events )
             {
                 string eventId = (string) _event["id"];
                 string eventName = (string) _event["name"];
-                //string groupCover = 
+                string groupCover = (string) _event["cover"]["source"];
+                List<User> eventAttendings = new List<User>();
+                JToken attendingTokens = _event["attending"]["data"];
+                foreach( var attending in attendingTokens )
+                {
+                    string email = (string) attending["email"];
+                    string id = (string) attending["id"];
+                    if( email != null )
+                    {
+                        User u = new User();
+                        u.PartitionKey = string.Empty;
+                        u.RowKey = email;
+                        u.FacebookId = id;
+                        eventAttendings.Add( u );
+                    }
+                }
             }
-            
         }
     }
 }
