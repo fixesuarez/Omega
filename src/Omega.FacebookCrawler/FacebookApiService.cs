@@ -1,6 +1,7 @@
 ﻿using Facebook;
 using Newtonsoft.Json.Linq;
 using Omega.DAL;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,9 +31,9 @@ namespace Omega.FacebookCrawler
                 string groupId = (string) group["id"];
                 string groupName = (string) group["name"];
                 JToken groupCoverJToken = group["cover"];
-                string eventCover = null;
+                string groupCover = null;
                 if( groupCoverJToken != null )
-                    eventCover = (string) group["cover"]["source"];
+                    groupCover = (string) group["cover"]["source"];
                 List<User> groupMembers = new List<User>();
                 JArray members = (JArray) group["members"]["data"];
                 foreach( var member in members )
@@ -55,36 +56,51 @@ namespace Omega.FacebookCrawler
         public async Task GetAllFacebookEvents( string email )
         {
             string accessToken = await _userGateway.FindFacebookAccessToken( email );
-            FacebookClient fbClient = new FacebookClient( "EAACEdEose0cBAC0o91sSKXme7hsDDvU4kvN2qVd3UBPZAAbff3Ub7qe2aVj4DI7v8P9NaVFGWnqB3UNPSa59xqfo03niHrG0WvG7wMtZCoOKwQw3ATEuO6fNBxnKJuJLK1GrpJasxZA7D7K5Ahqt2w1rk8Odg4EN4Biu69c3AZDZD" );
+            FacebookClient fbClient = new FacebookClient( "accessToken" );
 
-            dynamic result = await fbClient.GetTaskAsync( "/v2.8/me/events?fields=id,name,cover,attending{id,email,name}" );
+            dynamic result = await fbClient.GetTaskAsync( "/v2.8/me/events?fields=id,name,start_time,cover,attending{id,email,name}" );
             JObject eventsJson = JObject.FromObject( result );
             JArray events = (JArray) eventsJson["data"];
 
             foreach( var _event in events )
             {
-                string eventId = (string) _event["id"];
-                string eventName = (string) _event["name"];
-                JToken eventCoverJToken = _event["cover"];
-                string eventCover = null;
-                if( eventCoverJToken != null)
-                    eventCover = (string) _event["cover"]["source"];
-                List<User> eventAttendings = new List<User>();
-                JToken attendingTokens = _event["attending"]["data"];
-                foreach( var attending in attendingTokens )
+                string startTime = (string) _event["start_time"];
+                string day = startTime.Substring( 8, 2 );
+                int dayInt = int.Parse( day );
+                string month = startTime.Substring( 5, 2 );
+                int monthInt = int.Parse( month );
+                string year = startTime.Substring( 0, 4 );
+                int yearInt = int.Parse( year );
+                DateTime today = DateTime.Today;
+                DateTime dateEvent = new DateTime( yearInt, monthInt, dayInt );
+                today.AddDays( 3 );
+                if( DateTime.Compare( today, dateEvent ) < 0 )
                 {
-                    string mail = (string) attending["email"];
-                    string id = (string) attending["id"];
-                    if( mail != null )
+                    string eventId = (string) _event["id"];
+                    string eventName = (string) _event["name"];
+                    JToken eventCoverJToken = _event["cover"];
+                    string eventCover = null;
+                    if( eventCoverJToken != null )
+                        eventCover = (string) _event["cover"]["source"];
+
+                    List<User> eventAttendings = new List<User>();
+                    JToken attendingTokens = _event["attending"]["data"];
+
+                    foreach( var attending in attendingTokens )
                     {
-                        User u = new User();
-                        u.PartitionKey = string.Empty;
-                        u.RowKey = mail;
-                        u.FacebookId = id;
-                        eventAttendings.Add( u );
+                        string mail = (string) attending["email"];
+                        string id = (string) attending["id"];
+                        if( mail != null )
+                        {
+                            User u = new User();
+                            u.PartitionKey = string.Empty;
+                            u.RowKey = mail;
+                            u.FacebookId = id;
+                            eventAttendings.Add( u );
+                        }
                     }
+                    await _eventGroupGateway.InsertEventGroup( eventId, eventAttendings, "event", eventCover );
                 }
-                await _eventGroupGateway.InsertEventGroup( eventId, eventAttendings, "event", eventCover );
             }
         }
     }
