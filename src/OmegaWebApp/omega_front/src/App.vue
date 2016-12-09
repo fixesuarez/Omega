@@ -7,8 +7,8 @@
         </div>
         <div class="col-4 appProviders">
           <a href="" @click="login('Facebook')">FACEBOOK</a>
-          <a href="" @click="login('Facebook')" id="appRedText">DEEZER</a>
-          <a href="" @click="login('Facebook')">SPOTIFY</a>
+          <a href="" @click="login('Deezer')" id="appRedText">DEEZER</a>
+          <a href="" @click="login('Spotify')">SPOTIFY</a>
         </div>
         <div class="col-4 appProfile">
           <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">RODOLPHE WACHTER</span>
