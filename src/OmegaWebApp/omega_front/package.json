@@ -10,10 +10,11 @@
   "dependencies": {
     "babel-polyfill": "^6.13.0",
     "bootstrap": "^3.3.7",
-    "jquery": "^3.1.1",
+    "jump.js": "https://github.com/brhue/jump.js/tarball/a656f73f10abc53b1cd1edf041248231b741e233",
     "vue": "^2.0.1",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
+    "vue-scrollspy": "^0.1.3",
     "vueboot": "^0.4.5",
     "vuex": "^2.0.0-rc.5"
   },

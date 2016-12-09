@@ -1,41 +1,29 @@
 <template>
   <div>
-    <!--<Login v-model="active"></Login>-->
-    <controlPanel></controlPanel>
-    <div v-if="active === 'playlistsTab'">
-    </div>
-    <div v-if="active === 'evenementsTab'">
-    </div>
-    <div v-if="active === 'groupesTab'">
-    </div>
-    <!--input v-model="modalActive"></input >{{modalActive}}-->
-    <router-view></router-view>
-    <modal v-if="modalActive == true" @close="modalActive == false" class="moodsModal">
-      <div slot="header" class="moodsHeader">ambiances</div>
-      <div slot="body" class="moodsBody">
-        <p>choisissez une ambiance pour votre mix</p>
-        <div class="moods">
-          <span v-for="mood in moods">
-            <div class="mood">
-              <img v-bind:src="mood.image">
-              <div class="moodOverlay">
-                <span class="moodLabel">{{mood.label}}</span>
-              </div>
-            </div>
-          </span>
-          <span @click="enableCriterias(true)"><img src="http://image.noelshack.com/fichiers/2016/46/1479417772-pluslogo.png"></span>
-          <div class="criterias" v-if="enabledCriterias == true">
-            <p>creez votre propre ambiance</p>
-            <p>nom de votre ambiance :<input type="text" v-model="moodName"></p> {{moodName}}
-            <span class="criteriasWrapper" v-for="criteria in localCriterias">
-              <img v-bind:src="criteria.image"><input type="range" v-model="criteria.value"><span class="criteriaValue">{{criteria.value}}<br></span>
-            </span>
-            <br><br><button @click="addMood(localCriterias, moodName)">Créer</button>
-          </div>
+    <div class="col-12 navbarContainer">
+      <div class="col-12 appNavbar">
+        <div class="col-4">
+          <img src="./assets/triangleGrey.png" id="appLogo"><span class="appTitle"><span id="appRedText">o</span>mega</span>
         </div>
-        <!--<span class="static" v-for="mood in moods" v-bind:class="{active: isActive}">{{mood.label}}</span>-->
+        <div class="col-4 appProviders">
+          <a href="" @click="login('Facebook')">FACEBOOK</a>
+          <a href="" @click="login('Facebook')" id="appRedText">DEEZER</a>
+          <a href="" @click="login('Facebook')">SPOTIFY</a>
+        </div>
+        <div class="col-4 appProfile">
+          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">RODOLPHE WACHTER</span>
+        </div>
       </div>
-    </modal>
+      <div class="col-12 appControlPanel">
+        <div class="col-4">&nbsp</div>
+        <div class="col-1"><span @click="showModal(true)"><router-link to="/playlists"><img src="./assets/playlistsIcon.png"><br>playlists</router-link></span></div>
+        <div class="col-1"><router-link to="/events"><img src="./assets/eventIcon.png"><br>évènements</router-link></div>
+        <div class="col-1"><router-link to="/groups"><img src="./assets/groupIcon.png"><br>groupes</router-link></div>
+        <div class="col-1"><router-link to="/playlists"><img src="./assets/moodIcon.png"><br>ambiances</router-link></div>
+        <div class="col-4">&nbsp</div>
+      </div>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -44,10 +32,8 @@
   import playlists from './components/playlists.vue'
   import moods from './components/moods.vue'
   import Modal from './components/modal.vue'
-  import IncrementButton from './components/IncrementButton.vue'
-  import ChooseIncrement from './components/ChooseIncrement.vue'
-  import controlPanel from './components/controlPanel.vue'
   import { mapGetters, mapActions } from 'vuex'
+  import AuthService from './services/AuthService'
 
   export default {
   data () {
@@ -55,7 +41,9 @@
       active: 'playlistsTab',
       isActive: true,
       true: true,
-      moodName: '',
+      check: false,
+      label: '',
+      image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png',
       localCriterias: [
         { label: 'energy', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" },
         { label: 'popularity', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" },
@@ -70,23 +58,27 @@
     }
   },
   methods: {
-    ...mapActions(['enableCriterias', 'test', 'addMood']),
+    ...mapActions(['showModal']),
+    login(provider) {
+    AuthService.login(provider);
+    },
+    onAuthenticated() {
+    this.$router.replace('/');
+    }
   },
   computed: {
-    ...mapGetters(['active', 'modalActive', 'moods', 'test', 'enabledCriterias', 'criterias'])
+    ...mapGetters(['active', 'modalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated'])
   },
   name: 'app',
   components: {
     Login,
     Modal,
-    playlists,
-    IncrementButton,
-    ChooseIncrement,
-    controlPanel
+    playlists
+  },
+  mounted () {
   }
 }
 </script>
 
 <style src="./styles/app.css">
-</style>
 </style>
