@@ -1,54 +1,154 @@
 <template>
-  <transition name="playlists">
-  <div class="col-12 pContainer">
-    <div class="playlistsWrapper">
-      <div class="col-12 pPlaylists" id="pPlaylists">
-        <img src="../assets/rightButton.png" class="rightButton" @click="scrollRight">
-        <img src="../assets/leftButton.png" class="leftButton" @click="scrollLeft">
+  <div class="col-12 playlistGlobal">
+    
+    <!--Contains the top part of the playlist vue-->
+    <div class="col-12 playlistContainer">
+      <div class="playlistWrapper" id="playlistWrapper">
+        <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
+        <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
         <span v-for="p in playlists" @click="selectPlaylist(p)" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.image" class="playlistImage">
-          <img v-else="p.check == true" v-bind:src="p.image" class="checked">
+          <img v-else="p.check == true" v-bind:src="p.image" class="checkedImage">
         </span>
       </div>
     </div>
-    <div class="col-12 pBottomPanel" id="pBottomPanel">
-      <div class="col-2 pCurrentPlaylist">
-      </div>
-      <div class="col-5 pCurrentPlaylist">
-        <div class="col-4 checkedPlaylists">
-          <span class="col-12 checkedCounter">
-            {{checkedPlaylists.length}} PLAYLISTS
-          </span>
-          <div class="col-3">&nbsp</div>
-          <div class="col-6 checkedList">
-            <span v-for="p in checkedPlaylists">
-              <img v-bind:src="p.image" @click="setCurrentPlaylist(p)">
-            </span>
-          </div>
-          <div class="col-3">&nbsp</div>
-        </div>
-        <div class="col-5">
+
+    <!--Contains the bottom part of the playlist vue-->
+    <div class="col-12 playlistNavbar">
+      <div class="col-7 leftBottom">
+        <transition name="playlistCover">
           <img v-bind:src="currentPlaylist.image" class="currentPlaylistImage">
-        </div>
-        <div class="col-3 playlistDetails">
-          <span id="playlistName">{{currentPlaylist.name}}</span><br>
-          <span id="playlistAuthor">{{currentPlaylist.id}}</span><br>
-          <span id="tracksNumber">{{currentPlaylist.id}} titres</span><br>
-          <span id="playlistDuration">{{currentPlaylist.id}} minutes</span>
-        </div>
+        </transition>
       </div>
-      <div class="col-5 pCurrentTrackList">
-        <div class="trackList">
-          <span v-for="track in playlists">
-            <hr>e
-          </span>
-         </div>
+      <div class="col-5 rightBottom">
+        Right
       </div>
-      <modal v-if="modalActive == true"></modal>
     </div>
+
+    <modal v-if="modalActive == true"></modal>
   </div>
-  </transition>
-</template>
+</template> 
+
+<style>
+/*Set the element size and position*/
+.playlistGlobal {
+  height: 72vh;
+}
+
+.playlistContainer {
+  height: 26vh;
+  min-height: 169px;
+  background: #0e1014;
+}
+
+.playlistNavbar {
+  height: 46vh;
+  min-height: 299px;
+  background: #171c27;
+}
+
+/*Playlists display*/
+.playlistWrapper {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.playlistImage {
+  width: 200px;
+  margin-left: 10px;
+  margin-right: 10px;
+  opacity: 0.5;
+  box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
+  transition: all .5s ease;
+}
+
+.playlistImage:hover {
+  opacity: 1;
+}
+
+.checkedImage {
+  width: 200px;
+  margin-left: 10px;
+  margin-right: 10px;
+  box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
+  transition: all .5s ease;
+}
+
+.rightScroll {
+  position: absolute;
+  width: 18px;
+  opacity: 0.5;
+  z-index: 2;
+  right: 0;  
+  margin-right: 10px;
+  margin-top: 4%;
+  transition: all .3s ease;
+}
+
+.leftScroll {
+  position: absolute;
+  width: 18px;
+  opacity: 0.5;
+  z-index: 2;
+  margin-left: 10px;
+  margin-top: 4%;
+  transition: all .3s ease;
+}
+
+.leftScroll:hover, .rightScroll:hover {
+  width: 22px;
+  opacity: 0.7;
+}
+
+/*Left bottom panel display*/
+
+.leftBottom {
+  padding: 10px;
+  text-align: center;
+  height: 100%;
+}
+
+.currentPlaylistImage {
+  height: 100%;
+}
+
+.playlistCover-enter-active, .playlistCover-leave-active {
+  transition: opacity .5s
+}
+
+.playlistCover-enter, .playlistCover-leave-active {
+  opacity: 0
+}
+
+/*Right bottom panel display*/
+
+.rightBottom {
+  height: 100%;
+  background: #12161e;
+}
+
+@media screen and (max-height: 900px) {
+  .playlistImage, .checkedImage {
+    width: 180px;
+  }
+}
+
+@media screen and (max-height: 800px) {
+  .playlistImage, .checkedImage {
+    width: 160px;
+  }
+}
+
+@media screen and (max-height: 700px) {
+  .playlistImage, .checkedImage {
+    width: 140px;
+  }
+}
+
+</style>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -67,11 +167,11 @@ export default {
 
     scrollRight: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
-      document.getElementById('pPlaylists').scrollLeft += scroll;
+      document.getElementById('playlistWrapper').scrollLeft += scroll;
     },
     scrollLeft: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
-      document.getElementById('pPlaylists').scrollLeft -= scroll;
+      document.getElementById('playlistWrapper').scrollLeft -= scroll;
     },
     loadPlaylists: async function() {
       var playlists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
@@ -101,6 +201,3 @@ export default {
   }
 }
 </script>
-
-<style src="../styles/playlists.css">
-</style>

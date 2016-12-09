@@ -71,3 +71,28 @@ export const addMood = ({commit}, payload) => {
   
     commit(types.ADDMOOD, payload)
 }
+
+export const authenticate = ({commit}, payload) => {
+  
+    commit(types.AUTHENTICATE, payload)
+}
+
+export const setCurrentMood = ({commit}, payload) => {
+  
+    commit(types.SETCURRENTMOOD, payload)
+}
+
+export const setCurrentPlaylist = ({commit}, payload) => {
+  
+    commit(types.SETCURRENTPLAYLIST, payload)
+}
+
+export const selectPlaylist = ({commit}, payload) => {
+  
+    commit(types.SELECTPLAYLIST, payload)
+}
+
+export const sendPlaylists = ({commit}, payload) => {
+  
+    commit(types.SENDPLAYLISTS, payload)
+}

@@ -6,7 +6,9 @@ import App from './App.vue'
 import controlPanel from './components/controlPanel.vue'
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
-import playlists from './components/playlists.vue'
+import home2 from './components/home2.vue'
+import playlists from './components/playlists2.vue'
+import board from './components/board.vue'
 import events from './components/events.vue'
 import groups from './components/groups.vue'
 import AuthService from './services/AuthService'
@@ -36,7 +38,8 @@ function requireAuth (to, from, next)  {
 const router = new Router({
   mode: 'history',
   routes: [
-    { path: '', component: Home },
+    { path: '', component: home2 },
+    { path: '/board', component: board },
     { path: '/playlists', component: playlists },
     { path: '/groups', component: groups },
     { path: '/events', component: events }
