@@ -8,6 +8,7 @@ using OmegaWebApp.Services;
 using Microsoft.WindowsAzure.Storage.Table;
 using Omega.DAL;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,7 +37,9 @@ namespace OmegaWebApp.Controllers
             string deezerId = await _userService.GetDeezerId( email );
 
             List<Playlist> playlists = await _playlistService.GetAllPlaylistsFromUser( spotifyId, deezerId );
-            return null;
+            string allPlaylist = JsonConvert.SerializeObject( playlists );
+            JToken playlistsJson = JToken.Parse( allPlaylist );
+            return playlistsJson;
         }
     }
 }

@@ -93,7 +93,6 @@ namespace Omega.DAL
             User retrievedUser = (User) retrievedResult.Result;
             return retrievedUser.FacebookAccessToken;
         }
-
         
         public async Task DeleteUser( string email )
         {
