@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using Omega.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OmegaWebApp.Services

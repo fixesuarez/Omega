@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Omega.Model;
 using OmegaWebApp.Services;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Omega.DAL;
 using Newtonsoft.Json.Linq;
 using System;
