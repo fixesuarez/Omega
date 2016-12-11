@@ -7,8 +7,15 @@
         <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
         <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
         <span v-for="p in playlists" @click="selectPlaylist(p)" id="spanPlaylist">
-          <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
-          <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
+          <img v-if="p.check == false" v-bind:src="p.image" class="playlistImage">
+          <img v-else="p.check == true" v-bind:src="p.image" class="checkedImage">
+          <span class="imageOverlay">
+            <img src="https://cdn4.iconfinder.com/data/icons/flat-black/512/menu.png" id="settingsImage">
+            {{p.name}}
+          </span>
+          <span class="playlistBanner">
+            DEEZER
+          </span>
         </span>
       </div>
     </div>
@@ -17,15 +24,15 @@
     <div class="col-12 playlistNavbar">
       <div class="col-7 leftBottom">
         <transition name="playlistCover">
-          <img v-bind:src="currentPlaylist.Cover" class="currentPlaylistImage">
+          <img v-bind:src="currentPlaylist.image" class="currentPlaylistImage">
         </transition>
       </div>
       <div class="col-5 rightBottom">
-        Right
       </div>
     </div>
 
-    <modal v-if="modalActive == true"></modal>
+    <PlaylistHelperModal v-if="playlistHelperModalActive == true"></PlaylistHelperModal>
+    <EventModal v-if="eventModalActive == true"></EventModal>
   </div>
 </template> 
 
@@ -49,11 +56,16 @@
 
 /*Playlists display*/
 .playlistWrapper {
-  text-align: center;
   height: 100%;
   width: 100%;
   white-space: nowrap;
   overflow-x: auto;
+}
+
+#spanPlaylist {
+  position: relative;
+  transition: all .5s ease;
+  color: white;
 }
 
 .playlistImage {
@@ -65,7 +77,7 @@
   transition: all .5s ease;
 }
 
-.playlistImage:hover {
+#spanPlaylist:hover > .imageOverlay {
   opacity: 1;
 }
 
@@ -75,6 +87,45 @@
   margin-right: 10px;
   box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
   transition: all .5s ease;
+}
+
+.imageOverlay {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 10px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+  opacity: 0;
+  transition: all .5s ease;
+  font-family: 'Montserrat-ultra-light';
+  font-size: 14px;
+  text-align: center;
+  overflow: hidden;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+}
+
+#settingsImage {
+  width: 30px;
+  filter: invert(1);
+  vertical-align: middle;
+}
+
+.playlistBanner {
+  position: absolute;
+  margin-top: 160px;
+  left: 5px;
+  height: 25px;
+  background: green;
+  border-radius: 0px 0px 2px 2px;
+  padding: 2px;
+  font-size: 13px;
+  font-family: 'Montserrat-ultra-light';
+}
+
+.playlistSettings:hover {
+  background: blue;
+  height: 100px;
 }
 
 .rightScroll {
@@ -93,6 +144,7 @@
   width: 18px;
   opacity: 0.5;
   z-index: 2;
+  left: 0;
   margin-left: 10px;
   margin-top: 4%;
   transition: all .3s ease;
@@ -152,7 +204,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Modal from '../components/playlistHelperModal.vue'
+import PlaylistHelperModal from '../components/playlistHelperModal.vue'
+import EventModal from '../components/events.vue'
 import PlaylistApiService from '../services/PlaylistApiService'
 
 export default {
@@ -177,7 +230,7 @@ export default {
     },
     loadPlaylists: async function() {
       this.SDplaylists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
-      this.sendPlaylists(this.SDplaylists.map(m => { this.$set(m, 'check', false); return m}));
+      this.sendPlaylists(this.localPlaylists.map(m => { this.$set(m, 'check', false); return m}));
     }/*,
     loadSpotifyPlaylist: async function() {
       var spplaylist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
@@ -189,7 +242,7 @@ export default {
     }*/
   },
   computed: {
-    ...mapGetters(['modalActive', 'playlists', 'currentPlaylist', 'checkedPlaylists'])
+    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'playlists', 'currentPlaylist', 'checkedPlaylists'])
   },
   created () {
     if(this.playlists.length === 0) {
@@ -199,7 +252,8 @@ export default {
   mounted () {
   },
   components: {
-    Modal
+    PlaylistHelperModal,
+    EventModal
   }
 }
 </script>

@@ -6,7 +6,8 @@ const state = {
   choice: 0,
   active: 'playlistsTab',
   text: '',
-  modalActive: false,
+  playlistHelperModalActive: false,
+  eventModalActive: false,
   moods: '',
   enabledCriterias: false,
   criterias: '',
@@ -37,8 +38,11 @@ const mutations = {
   [types.ADDTEXT](state, payload) {
     state.text = payload.text ;
   },
-  [types.SHOWMODAL](state, payload) {
-    state.modalActive = payload;
+  [types.SHOWPLAYLISTHELPERMODAL](state, payload) {
+    state.playlistHelperModalActive = payload;
+  },
+  [types.SHOWEVENTMODAL](state, payload) {
+    state.eventModalActive = payload;
   },
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
