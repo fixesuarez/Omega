@@ -2,6 +2,8 @@
   <div class="col-12 playlistGlobal">
     <!--<button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
     <button type="button" @click="loadDeezerPlaylist()">Deezer</button>-->
+
+
     <!--Contains the top part of the playlist vue-->
     <div class="col-12 playlistContainer">
       <div class="playlistWrapper" id="playlistWrapper">
@@ -22,12 +24,29 @@
     </div>
 
     <!--Contains the bottom part of the playlist vue-->
+
     <div class="col-12 playlistNavbar">
+
+      <!--Left-->
+
       <div class="col-7 leftBottom">
-        <transition name="playlistCover">
-          <img v-bind:src="currentPlaylist.Cover" class="currentPlaylistImage">
-        </transition>
+        <div class="playlistAndTracks">
+          <div class="currentPlaylistImage">
+            <img v-bind:src="currentPlaylist.Cover" class="">
+          </div>
+          <div class="tracks">
+            <span id="playlistTitle">{{currentPlaylist.Name}}</span><br>
+            <span id="playlistOwner">{{currentPlaylist.OwnerId}}</span><br>
+            <span id="tracksLength">{{currentPlaylist.Tracks.length}} titres</span>
+            <span v-for"track in currentPlaylist.Tracks">
+              {{track.Title}}
+            </span>
+          </div>
+        </div>
       </div>
+
+      <!--Right-->
+      
       <div class="col-5 rightBottom">
       </div>
     </div>
@@ -160,12 +179,51 @@
 
 .leftBottom {
   padding: 10px;
-  text-align: center;
   height: 100%;
+}
+
+.playlistAndTracks {
+  height: 100%;
+  color: white;
+  float: right;
 }
 
 .currentPlaylistImage {
   height: 100%;
+  float: left;
+}
+
+.currentPlaylistImage img {
+  height: 100%;
+}
+
+.tracks {
+  min-width: 200px;
+  height: 100%;
+  float: left;
+  padding: 2px;
+  overflow-y: hidden;
+}
+
+#playlistTitle {
+  font-family: 'Montserrat-ultra-light';
+  font-size: 24px;
+  text-transform: uppercase;
+  margin-left: 10px;
+}
+
+#playlistOwner {
+  font-family: 'Montserrat-regular';
+  font-size: 14px;
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+#tracksLength {
+  font-family: 'Montserrat-ultra-light';
+  line-height: 40px;
+  font-size: 14px;
+  margin-left: 10px;
 }
 
 .playlistCover-enter-active, .playlistCover-leave-active {
