@@ -16,8 +16,8 @@
       </div>
       <div class="col-12 appControlPanel">
         <div class="col-4">&nbsp</div>
-        <div class="col-1"><span @click="showModal(true)"><router-link to="/playlists"><img src="./assets/playlistsIcon.png"><br>playlists</router-link></span></div>
-        <div class="col-1"><router-link to="/events"><img src="./assets/eventIcon.png"><br>évènements</router-link></div>
+        <div class="col-1"><span @click="showPlaylistHelperModal(true)"><router-link to="/playlists"><img src="./assets/playlistsIcon.png"><br>playlists</router-link></span></div>
+        <div class="col-1"><span @click="showEventModal(true)"><img src="./assets/eventIcon.png"><br>évènements</span></div>
         <div class="col-1"><router-link to="/groups"><img src="./assets/groupIcon.png"><br>groupes</router-link></div>
         <div class="col-1"><router-link to="/playlists"><img src="./assets/moodIcon.png"><br>ambiances</router-link></div>
         <div class="col-4">&nbsp</div>
@@ -58,7 +58,7 @@
     }
   },
   methods: {
-    ...mapActions(['showModal']),
+    ...mapActions(['showPlaylistHelperModal', 'showEventModal']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -67,7 +67,7 @@
     }
   },
   computed: {
-    ...mapGetters(['active', 'modalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated'])
+    ...mapGetters(['active', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated'])
   },
   name: 'app',
   components: {

@@ -47,9 +47,14 @@ export const makeActive = ({commit}, payload) => {
     commit(types.MAKEACTIVE, payload)
 }
 
-export const showModal = ({commit}, payload) => {
+export const showPlaylistHelperModal = ({commit}, payload) => {
   
-    commit(types.SHOWMODAL, payload)
+    commit(types.SHOWPLAYLISTHELPERMODAL, payload)
+}
+
+export const showEventModal = ({commit}, payload) => {
+  
+    commit(types.SHOWEVENTMODAL, payload)
 }
 
 export const sendMoods = ({commit}, payload) => {

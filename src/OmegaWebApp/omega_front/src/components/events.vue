@@ -1,81 +1,99 @@
 <template>
-  <div>
-    <button id="left">Left</button>
-    <button id="right">Right</button>
-    <button id='upClick'>Go Up</button> <button id='downClick'>Go Down</button><button class='clearValue'>Clear Value</button> 
-
-
-<div class='cover'><div class='rightSection'></div></div>
-  </div>
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+          <div class="modalText">
+          </div>
+          <div class="modalClose" @click="showEventModal(false)">
+            COMMENCER <img src="../assets/arrow.png">
+          </div>
+          <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
-import $ from 'jquery'
-
-var scrolled=0;
-
-$("document").ready(function(){
-           console.log('event scroll = '+ scrolled);
-
-    	
-    $("#downClick").on("click" ,function(){
-                scrolled=scrolled+300;
-        
-				$(".cover").animate({
-				        scrollLeft:  scrolled
-				   });
-           console.log(scrolled);
-			});
-
-    
-    $("#upClick").on("click" ,function(){
-				scrolled=scrolled-300;
-				
-				$(".cover").animate({
-				        scrollLeft:  scrolled
-				   });
-           console.log(scrolled);
-
-			});
-
-
-$(".clearValue").on("click" ,function(){
-				scrolled=0;
-		});
-
-
-});
-
-
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data () {
-    return {
-      playlists: [{"id":0,"name":"Apero Party","image":"http://d817ypd61vbww.cloudfront.net/sites/default/files/styles/media_responsive_widest/public/tile/image/A-116-01comp.jpg?itok=LjWmwzjU"},{"id":1,"name":"Mexico","image":"https://caliloved.files.wordpress.com/2013/07/deer-album-cover-new.jpg"},{"id":2,"name":"Chanson francaise","image":"http://www.designformusic.com/wp-content/uploads/2016/01/perfectly-chilled-album-cover-artwork-design-500x500.jpg"},{"id":3,"name":"Cam box","image":"https://www.smashingmagazine.com/images/music-cd-covers/64.jpg"},{"id":4,"name":"Jaccuzi money billey","image":"https://img.buzzfeed.com/buzzfeed-static/static/2016-01/27/11/enhanced/webdr14/enhanced-6784-1453912540-22.jpg"},{"id":5,"name":"Beer-Pong","image":"http://androidjones.com/wp-content/uploads/2012/05/HOPE-1024x1024.jpg"},{"id":6,"name":"Runing Time","image":"http://illusion.scene360.com/wp-content/uploads/2014/10/computergraphics-album-covers-2014-05.jpg"},{"id":7,"name":"Soiree OKLM","image":"http://www.fuse.tv/image/5682ea90ac0e76bd68000055/768/512/brown-eyed-girls-basic-album-cover-full-size.jpg"},{"id":8,"name":"Apero Party","image":"http://takuya.fr/wp-content/uploads/2016/06/takuya-fr-thedoubt.jpg"}],
-      test: 'Test Reussi'
-    }
-  },
   methods: {
-  },
-  computed: {
-  },
-  components: {
+    ...mapActions(['showEventModal'])
   }
 }
+
 </script>
 
 <style>
-.cover{
-    width:500px;
-    height:100px;
-    background-color:#000000;
-    overflow:auto;
+@font-face {
+    font-family: 'montserrat-ultra-light';
+    src:url('../assets/montserrat-ultra-light.otf');
+    font-family: 'Montserrat-Regular';
+    src:url('../assets/Montserrat-Regular.otf');
 }
 
+.modal-mask {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
 
-.rightSection{
-    width:3300px;
-    height:100px;
+.modal-wrapper {
+  position: absolute;
+  display: table-cell;
+}
+
+.modal-container {
+  margin-bottom: 100px;
+  margin-left: 20%;
+  height: 40px;
+  width: 180px;
+  background-color: #191B27;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px #171717;
+  transition: all .3s ease;
+  font-family: 'montserrat-ultra-light', Arial, sans-serif;
+  color: white;
+}
+
+.modalText {
+  width: 300px;
+  padding: 10px;
+  background: #191B27;
+}
+
+.modalClose {
+  width: 180px;
+  padding: 10px;
+  background: #de002b;
+  color: black;
+  font-family: 'Montserrat-Regular';
+  cursor: pointer;
+}
+
+.modalClose img {
+  margin-left: 6px;
+  width: 25px;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+.modal-leave-active {
+  opacity: 0;
+}
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 </style>

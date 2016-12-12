@@ -6,7 +6,7 @@
           <div class="modalText">
             Voici vos playlists<br>Selectionnez celles que vous voulez garder pour votre mix
           </div>
-          <div class="modalClose" @click="showModal(false)">
+          <div class="modalClose" @click="showPlaylistHelperModal(false)">
             COMMENCER <img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
@@ -21,7 +21,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   methods: {
-    ...mapActions(['showModal'])
+    ...mapActions(['showPlaylistHelperModal'])
   }
 }
 
