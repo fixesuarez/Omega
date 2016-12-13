@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OmegaWebApp.Services;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OmegaWebApp.Controllers
@@ -16,13 +17,15 @@ namespace OmegaWebApp.Controllers
         [HttpGet("InsertAmbiance")]
         public async Task InsertAmbiance(string ambiance)
         {
-            await _ambianceService.InsertAmbiance(ambiance);
+            string email = User.FindFirst(ClaimTypes.Email).Value;
+            await _ambianceService.InsertAmbiance(email, ambiance);
         }
 
         [HttpGet("DeleteAmbiance")]
         public async Task DeleteAmbiance(string ambiance)
         {
-            await _ambianceService.DeleteAmbiance(ambiance);
+            string email = User.FindFirst(ClaimTypes.Email).Value;
+            await _ambianceService.DeleteAmbiance(email, ambiance);
         }
     }
 }
