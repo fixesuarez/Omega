@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Omega.DAL;
 using OmegaWebApp.Services;
 using System.Security.Claims;
@@ -17,15 +18,20 @@ namespace OmegaWebApp.Controllers
 
         public class Mood
         {
-            public MetaDonnees Criteres { get; set; }
+            public MetaDonnees Metadonnees { get; set; }
             public string Name { get; set; }
+
+            public static string StringifyMood( Mood m )
+            {
+                return JsonConvert.SerializeObject(m);
+            }
         }
 
         [HttpPost("InsertAmbiance")]
         public async Task InsertAmbiance([FromBody]Mood ambiance)
         {
             string email = User.FindFirst(ClaimTypes.Email).Value;
-            await _ambianceService.InsertAmbiance(email, ambiance.ToString());
+            await _ambianceService.InsertAmbiance(email, Mood.StringifyMood(ambiance));
         }
 
         [HttpGet("DeleteAmbiance")]

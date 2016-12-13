@@ -23,10 +23,10 @@ namespace Omega.DAL
             // Create the table if it doesn't exist.
             _table.CreateIfNotExistsAsync();
 
-            if(RetrieveAmbiance("allUser","Lounge") == null)
-            {
-                InsertAllUserAmbiance().Wait();
-            }
+            //if(RetrieveAmbiance("allUser","Lounge") == null)
+            //{
+            //    InsertAllUserAmbiance().Wait();
+            //}
         }
 
         public async Task InsertAmbiance(string user, string name, string metaDonnees)

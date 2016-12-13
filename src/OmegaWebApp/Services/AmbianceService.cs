@@ -16,7 +16,19 @@ namespace OmegaWebApp.Services
         public async Task InsertAmbiance(string user, string ambiance)
         {
             JObject rss = JObject.Parse(ambiance);
-            await _ambianceGateway.InsertAmbiance(user, (string)rss["name"], (string)rss["metadonnees"]);
+            string name = (string)rss["Name"];
+            MetaDonnees metadonnees = new MetaDonnees();
+            metadonnees.acousticness = (string)rss["Metadonnees"]["acousticness"];
+            metadonnees.danceability = (string)rss["Metadonnees"]["danceability"];
+            metadonnees.instrumentalness = (string)rss["Metadonnees"]["instrumentalness"];
+            metadonnees.liveness = (string)rss["Metadonnees"]["liveness"];
+            metadonnees.loudness = (string)rss["Metadonnees"]["loudness"];
+            metadonnees.mode = (string)rss["Metadonnees"]["mode"];
+            metadonnees.popularity = (string)rss["Metadonnees"]["popularity"];
+            metadonnees.speechiness = (string)rss["Metadonnees"]["speechiness"];
+            metadonnees.tempo = (string)rss["Metadonnees"]["tempo"];
+            metadonnees.valence = (string)rss["Metadonnees"]["valence"];
+            await _ambianceGateway.InsertAmbiance(user, name, metadonnees);
         }
 
         public async Task DeleteAmbiance(string user, string ambiance)
