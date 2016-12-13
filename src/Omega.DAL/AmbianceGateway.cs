@@ -23,10 +23,11 @@ namespace Omega.DAL
             // Create the table if it doesn't exist.
             _table.CreateIfNotExistsAsync();
 
-            //if(RetrieveAmbiance("allUser","Lounge") == null)
-            //{
-            //    InsertAllUserAmbiance().Wait();
-            //}
+            Ambiance retrievedAmbiance = RetrieveAmbiance("allUser", "Lounge").Result;
+            if (retrievedAmbiance == null)
+            {
+                InsertAllUserAmbiance().Wait();
+            }
         }
 
         public async Task InsertAmbiance(string user, string name, string metaDonnees)
@@ -49,7 +50,7 @@ namespace Omega.DAL
 
         public async Task InsertAmbiance(string user, string name, MetaDonnees metaDonnees)
         {
-            if(RetrieveAmbiance(user, name) == null)
+            if(await RetrieveAmbiance(user, name) == null)
             {
                 Ambiance mood = new Ambiance(user, name);
                 mood.Acousticness = metaDonnees.acousticness;
@@ -59,6 +60,8 @@ namespace Omega.DAL
                 mood.Liveness = metaDonnees.liveness;
                 mood.Loudness = metaDonnees.loudness;
                 mood.Mode = metaDonnees.mode;
+                mood.Tempo = metaDonnees.tempo;
+                mood.Speechiness = metaDonnees.speechiness;
                 mood.Popularity = metaDonnees.popularity;
                 TableOperation insertOperation = TableOperation.Insert(mood);
                 await _table.ExecuteAsync(insertOperation);
@@ -93,9 +96,9 @@ namespace Omega.DAL
             MetaDonnees mad = new MetaDonnees("0.9", "0.9", "", "", "", "", "", "", "", "");
 
             await InsertAmbiance("allUser", "Lounge", lounge);
-            await InsertAmbiance("allUser", "Energy", lounge);
-            await InsertAmbiance("allUser", "Dance", lounge);
-            await InsertAmbiance("allUser", "Mad", lounge);
+            await InsertAmbiance("allUser", "Energy", energy);
+            await InsertAmbiance("allUser", "Dance", dance);
+            await InsertAmbiance("allUser", "Mad", mad);
         }
     }
 }
