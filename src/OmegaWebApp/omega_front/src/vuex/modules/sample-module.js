@@ -16,7 +16,8 @@ const state = {
   currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
   tempoMood: '',
   checkedPlaylists: [],
-  playlists: []
+  playlists: [],
+  moodToInsert: ''
 }
 
 const mutations = {
@@ -66,6 +67,9 @@ const mutations = {
   },
   [types.SETCURRENTPLAYLIST](state, payload) {
     state.currentPlaylist= payload;
+  },
+  [types.INSERTMOOD](state, payload) {
+    state.moodToInsert= payload;
   },
   [types.SELECTPLAYLIST](state, playlist) {
     state.currentPlaylist = playlist;

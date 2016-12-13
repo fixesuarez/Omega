@@ -101,3 +101,8 @@ export const sendPlaylists = ({commit}, payload) => {
   
     commit(types.SENDPLAYLISTS, payload)
 }
+
+export const insertMood = ({commit}, payload) => {
+    
+    commit(types.INSERTMOOD, payload)
+}

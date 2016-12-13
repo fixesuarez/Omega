@@ -2,7 +2,7 @@ import { getAsync } from '../helpers/apiHelper'
 import { postAsync } from '../helpers/apiHelper'
 import AuthService from './AuthService'
 
-const endpoint = "/api/AmbianceController";
+const endpoint = "/api/Ambiance";
 
 class MoodService {
     constructor() {

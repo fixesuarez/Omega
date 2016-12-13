@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Omega.DAL;
 using OmegaWebApp.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,11 +15,17 @@ namespace OmegaWebApp.Controllers
             _ambianceService = ambianceService;
         }
 
-        [HttpGet("InsertAmbiance")]
-        public async Task InsertAmbiance(string ambiance)
+        public class Mood
+        {
+            public MetaDonnees Criteres { get; set; }
+            public string Name { get; set; }
+        }
+
+        [HttpPost("InsertAmbiance")]
+        public async Task InsertAmbiance([FromBody]Mood ambiance)
         {
             string email = User.FindFirst(ClaimTypes.Email).Value;
-            await _ambianceService.InsertAmbiance(email, ambiance);
+            await _ambianceService.InsertAmbiance(email, ambiance.ToString());
         }
 
         [HttpGet("DeleteAmbiance")]
