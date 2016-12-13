@@ -19,7 +19,7 @@
         <div class="col-1"><span @click="showPlaylistHelperModal(true)"><router-link to="/playlists"><img src="./assets/playlistsIcon.png"><br>playlists</router-link></span></div>
         <div class="col-1"><span @click="showEventModal(true)"><img src="./assets/eventIcon.png"><br>évènements</span></div>
         <div class="col-1"><router-link to="/groups"><img src="./assets/groupIcon.png"><br>groupes</router-link></div>
-        <div class="col-1"><router-link to="/playlists"><img src="./assets/moodIcon.png"><br>ambiances</router-link></div>
+        <div class="col-1"><span @click="showMoodsModal(true)"><img src="./assets/moodIcon.png"><br>ambiances</div>
         <div class="col-4">&nbsp</div>
       </div>
     </div>
@@ -58,7 +58,7 @@
     }
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal', 'showEventModal']),
+    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal']),
     login(provider) {
     AuthService.login(provider);
     },

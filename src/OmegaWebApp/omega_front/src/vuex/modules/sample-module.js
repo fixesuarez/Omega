@@ -8,6 +8,7 @@ const state = {
   text: '',
   playlistHelperModalActive: false,
   eventModalActive: false,
+  moodsModalActive: false,
   moods: '',
   enabledCriterias: false,
   criterias: '',
@@ -45,9 +46,11 @@ const mutations = {
   [types.SHOWEVENTMODAL](state, payload) {
     state.eventModalActive = payload;
   },
+  [types.SHOWMOODSMODAL](state, payload) {
+    state.moodsModalActive = payload;
+  },
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
-    state.moods.map(m => { m.check = false; return m })
   },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
