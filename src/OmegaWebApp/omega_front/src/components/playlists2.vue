@@ -38,9 +38,9 @@
             <span id="playlistTitle">{{currentPlaylist.Name}}</span><br>
             <span id="playlistOwner">{{currentPlaylist.OwnerId}}</span><br>
             <span id="tracksLength" v-if="currentPlaylist.Tracks != null">{{currentPlaylist.Tracks.length}} titres</span><br>
-            <span v-for="track in currentPlaylist.Tracks" class="track">
+            <div v-for="track in currentPlaylist.Tracks" class="track">
               {{track.Title}}<br>
-            </span>
+            </div>
           </div>
         </div>
       </div>
@@ -202,7 +202,6 @@
   max-width: 300px;
   height: 100%;
   float: left;
-  padding: 2px;
   overflow-y: auto;
   overflow-x: hidden;
   text-overflow: ellipsis;
@@ -211,8 +210,11 @@
 .track {
   font-size: 12px;
   font-family: 'Montserrat-ultra-light';
-  margin-left: 10px;
+  padding-left: 10px;
+  padding-top: 10px;
   white-space: nowrap;
+  background: red;
+  height: 35px;
 }
 
 #playlistTitle {
