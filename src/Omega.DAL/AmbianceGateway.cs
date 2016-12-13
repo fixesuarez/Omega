@@ -49,18 +49,20 @@ namespace Omega.DAL
 
         public async Task InsertAmbiance(string user, string name, MetaDonnees metaDonnees)
         {
-            Ambiance mood = new Ambiance(user, name);
-            mood.Acousticness = metaDonnees.acousticness;
-            mood.Danceability = metaDonnees.danceability;
-            mood.Energy = metaDonnees.energy;
-            mood.Instrumentalness = metaDonnees.instrumentalness;
-            mood.Liveness = metaDonnees.liveness;
-            mood.Loudness = metaDonnees.loudness;
-            mood.Mode = metaDonnees.mode;
-            mood.Popularity = metaDonnees.popularity;
-            TableOperation insertOperation = TableOperation.Insert(mood);
-
-            await _table.ExecuteAsync(insertOperation);
+            if(RetrieveAmbiance(user, name) == null)
+            {
+                Ambiance mood = new Ambiance(user, name);
+                mood.Acousticness = metaDonnees.acousticness;
+                mood.Danceability = metaDonnees.danceability;
+                mood.Energy = metaDonnees.energy;
+                mood.Instrumentalness = metaDonnees.instrumentalness;
+                mood.Liveness = metaDonnees.liveness;
+                mood.Loudness = metaDonnees.loudness;
+                mood.Mode = metaDonnees.mode;
+                mood.Popularity = metaDonnees.popularity;
+                TableOperation insertOperation = TableOperation.Insert(mood);
+                await _table.ExecuteAsync(insertOperation);
+            }
         }
 
         public async Task DeleteAmbiance(string user, string ambianceName)

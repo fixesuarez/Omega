@@ -34,11 +34,11 @@ namespace OmegaWebApp.Controllers
             await _ambianceService.InsertAmbiance(email, Mood.StringifyMood(ambiance));
         }
 
-        [HttpGet("DeleteAmbiance")]
-        public async Task DeleteAmbiance(string ambiance)
+        [HttpPost("DeleteAmbiance")]
+        public async Task DeleteAmbiance(Mood ambiance)
         {
             string email = User.FindFirst(ClaimTypes.Email).Value;
-            await _ambianceService.DeleteAmbiance(email, ambiance);
+            await _ambianceService.DeleteAmbiance(email, Mood.StringifyMood(ambiance));
         }
     }
 }
