@@ -32,14 +32,14 @@
       <div class="col-7 leftBottom">
         <div class="playlistAndTracks">
           <div class="currentPlaylistImage">
-            <img v-bind:src="currentPlaylist.Cover" class="">
+            <img v-bind:src="currentPlaylist.Cover">
           </div>
           <div class="tracks">
             <span id="playlistTitle">{{currentPlaylist.Name}}</span><br>
             <span id="playlistOwner">{{currentPlaylist.OwnerId}}</span><br>
-            <span id="tracksLength">{{currentPlaylist.Tracks.length}} titres</span>
-            <span v-for"track in currentPlaylist.Tracks">
-              {{track.Title}}
+            <span id="tracksLength" v-if="currentPlaylist.Tracks != null">{{currentPlaylist.Tracks.length}} titres</span><br>
+            <span v-for="track in currentPlaylist.Tracks" class="track">
+              {{track.Title}}<br>
             </span>
           </div>
         </div>
@@ -199,10 +199,20 @@
 
 .tracks {
   min-width: 200px;
+  max-width: 300px;
   height: 100%;
   float: left;
   padding: 2px;
-  overflow-y: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.track {
+  font-size: 12px;
+  font-family: 'Montserrat-ultra-light';
+  margin-left: 10px;
+  white-space: nowrap;
 }
 
 #playlistTitle {
