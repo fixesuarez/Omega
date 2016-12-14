@@ -110,7 +110,7 @@ export default {
       this.dPlaylists.push(dzplaylist);
     },
     startMix: async function() {
-      this.mix(this.checkedPlaylists);
+      this.mix();
       this.$http.post('http://localhost:5000/api/Mix/Mix', this.mixToMix, function () {
        })
     }
