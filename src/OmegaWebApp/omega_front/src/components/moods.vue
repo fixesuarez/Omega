@@ -55,7 +55,7 @@ export default {
 
     loadMoods: async function() {
       this.data = await this.requestAsync(() => MoodService.getMoods());
-      this.sendMoods(data);
+      this.sendMoods(this.data);
     },
   },
   computed: {
