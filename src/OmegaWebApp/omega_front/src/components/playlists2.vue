@@ -76,9 +76,10 @@ export default {
       sPlaylists: [],
       dPlaylists: [],
       SDplaylists: [],
+      number: 1,
       height: '',
       localPlaylists: [{"id":0,"name":"Apero Party","image":"http://d817ypd61vbww.cloudfront.net/sites/default/files/styles/media_responsive_widest/public/tile/image/A-116-01comp.jpg?itok=LjWmwzjU"},{"id":1,"name":"Mexico","image":"https://caliloved.files.wordpress.com/2013/07/deer-album-cover-new.jpg"},{"id":2,"name":"Chanson francaise","image":"http://www.designformusic.com/wp-content/uploads/2016/01/perfectly-chilled-album-cover-artwork-design-500x500.jpg"},{"id":3,"name":"Cam box","image":"https://www.smashingmagazine.com/images/music-cd-covers/64.jpg"},{"id":4,"name":"Jaccuzi money billey","image":"https://img.buzzfeed.com/buzzfeed-static/static/2016-01/27/11/enhanced/webdr14/enhanced-6784-1453912540-22.jpg"},{"id":5,"name":"Beer-Pong","image":"http://androidjones.com/wp-content/uploads/2012/05/HOPE-1024x1024.jpg"},{"id":6,"name":"Runing Time","image":"http://illusion.scene360.com/wp-content/uploads/2014/10/computergraphics-album-covers-2014-05.jpg"},{"id":7,"name":"Soiree OKLM","image":"http://www.fuse.tv/image/5682ea90ac0e76bd68000055/768/512/brown-eyed-girls-basic-album-cover-full-size.jpg"},{"id":8,"name":"Apero Party","image":"http://takuya.fr/wp-content/uploads/2016/06/takuya-fr-thedoubt.jpg"}],
-      mood: {'name': 'TerribleAmbiance', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
+      mood: {'cover': 'http://www.firstredeemer.org/wp-content/uploads/girl-backpack-thinking-sunset-field-fence-.jpg', 'name': 'Heyyy', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
     }
   },
   methods: {
@@ -111,9 +112,10 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      this.mix(this.checkedPlaylists);
-      this.$http.get('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
-       })
+      var data = await this.requestAsync(() => MixService.mix());
+    },
+    increment: function() {
+      this.number++;
     }
   },
   computed: {
@@ -291,7 +293,6 @@ export default {
   padding-left: 10px;
   padding-top: 10px;
   white-space: nowrap;
-  background: red;
   height: 35px;
 }
 

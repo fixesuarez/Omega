@@ -22,6 +22,8 @@ namespace OmegaWebApp.Controllers
             public MetaDonnees Metadonnees { get; set; }
             public string Name { get; set; }
 
+            public string Cover { get; set; }
+
             public static string StringifyMood( Mood m )
             {
                 return JsonConvert.SerializeObject(m);
