@@ -43,10 +43,31 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet("RetrieveAllUserAmbiance")]
-        public async Task<List<Ambiance>> RetrieveAllUserAmbiance()
+        public async Task<List<NewAmbiance>> RetrieveAllUserAmbiance()
         {
             string email = User.FindFirst(ClaimTypes.Email).Value;
-            return await _ambianceService.RetrieveAllUSerAmbiance(email);
+            List<Ambiance> ambiances = await _ambianceService.RetrieveAllUSerAmbiance(email);
+            List<NewAmbiance> newAmbiances = new List<NewAmbiance>();
+            
+            foreach (Ambiance ambiance in ambiances)
+            {
+                NewMetadonnees metadonnees = new NewMetadonnees();
+                NewAmbiance newAmbiance = new NewAmbiance(ambiance.PartitionKey, ambiance.RowKey);
+
+                newAmbiance.Cover = ambiance.Cover;
+                metadonnees.acousticness = ambiance.Acousticness;
+                metadonnees.danceability = ambiance.Danceability;
+                metadonnees.energy = ambiance.Energy;
+                metadonnees.instrumentalness = ambiance.Instrumentalness;
+                metadonnees.liveness = ambiance.Liveness;
+                metadonnees.loudness = ambiance.Loudness;
+                metadonnees.mode = ambiance.Mode;
+                metadonnees.speechiness = ambiance.Speechiness;
+                metadonnees.popularity = ambiance.Popularity;
+                newAmbiance.Metadonnees = metadonnees;
+                newAmbiances.Add(newAmbiance);
+            }
+            return newAmbiances;
         }
     }
 }

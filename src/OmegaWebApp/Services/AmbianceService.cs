@@ -18,6 +18,7 @@ namespace OmegaWebApp.Services
         {
             JObject rss = JObject.Parse(ambiance);
             string name = (string)rss["Name"];
+            string cover = (string)rss["Cover"];
             MetaDonnees metadonnees = new MetaDonnees();
             metadonnees.acousticness = (string)rss["Metadonnees"]["acousticness"];
             metadonnees.danceability = (string)rss["Metadonnees"]["danceability"];
@@ -29,7 +30,7 @@ namespace OmegaWebApp.Services
             metadonnees.speechiness = (string)rss["Metadonnees"]["speechiness"];
             metadonnees.tempo = (string)rss["Metadonnees"]["tempo"];
             metadonnees.valence = (string)rss["Metadonnees"]["valence"];
-            await _ambianceGateway.InsertAmbiance(user, name, metadonnees);
+            await _ambianceGateway.InsertAmbiance(user, name,cover, metadonnees);
         }
 
         public async Task DeleteAmbiance(string user, string ambiance)
