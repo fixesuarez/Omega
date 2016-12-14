@@ -11,6 +11,7 @@ import playlists from './components/playlists2.vue'
 import board from './components/board.vue'
 import events from './components/events.vue'
 import groups from './components/groups.vue'
+import relogin from './components/relogin.vue'
 import AuthService from './services/AuthService'
 
 Vue.use(Router)
@@ -42,7 +43,8 @@ const router = new Router({
     { path: '/board', component: board },
     { path: '/playlists', component: playlists },
     { path: '/groups', component: groups },
-    { path: '/events', component: events }
+    { path: '/events', component: events },
+    { path: '/relogin', component: relogin }
   ]
 })
 
