@@ -111,7 +111,7 @@ export default {
     },
     startMix: async function() {
       this.mix(this.checkedPlaylists);
-      this.$http.post('http://localhost:5000/api/Mix/Mix', this.mixToMix, function () {
+      this.$http.get('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
        })
     }
   },
