@@ -1,8 +1,8 @@
 <template>
   <div class="col-12 playlistGlobal">
-    <!--<button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
+    <button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
     <button type="button" @click="loadDeezerPlaylist()">Deezer</button>-->
-    <!--<button @click="insertMood(mood)">Send mood</button>-->
+    <!--<button @click="insertMood(mood)">Send mood</button>
 
 
     <!--Contains the top part of the playlist vue-->

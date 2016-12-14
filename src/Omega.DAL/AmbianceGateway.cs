@@ -91,10 +91,10 @@ namespace Omega.DAL
 
         public async Task InsertAllUserAmbiance()
         {
-            MetaDonnees lounge = new MetaDonnees("", "", "", "0.10", "", "", "0.2", "", "50", "");
-            MetaDonnees energy = new MetaDonnees("", "0.9", "", "", "", "", "", "", "", "");
-            MetaDonnees dance = new MetaDonnees("0.9", "0.9", "", "", "", "", "", "1", "", "");
-            MetaDonnees mad = new MetaDonnees("0.9", "0.9", "", "", "", "", "", "", "", "");
+            MetaDonnees lounge = new MetaDonnees(null, null, null, "0.10", null, null, "0.2", null, "50", null);
+            MetaDonnees energy = new MetaDonnees(null, "0.9", null, null, null, null, null, null, null, null);
+            MetaDonnees dance = new MetaDonnees("0.9", "0.9", null, null, null, null, null, "1", null, null);
+            MetaDonnees mad = new MetaDonnees("0.9", "0.9", null, null, null, null, null, null, null, null);
 
             await InsertAmbiance("allUser", "Lounge", lounge);
             await InsertAmbiance("allUser", "Energy", energy);
@@ -116,6 +116,19 @@ namespace Omega.DAL
                 tableContinuationToken = queryResponse.ContinuationToken;
                 ambiances.AddRange(queryResponse.Results);
             } while (tableContinuationToken != null);
+
+            query = new TableQuery<Ambiance>()
+        .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "allUser"));
+
+            query.TakeCount = 1000;
+            tableContinuationToken = null;
+            do
+            {
+                var queryResponse = await _table.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                tableContinuationToken = queryResponse.ContinuationToken;
+                ambiances.AddRange(queryResponse.Results);
+            } while (tableContinuationToken != null);
+
             return ambiances;
         }
     }
