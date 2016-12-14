@@ -19,7 +19,7 @@ const state = {
   checkedPlaylists: [],
   playlists: [],
   moodToInsert: '',
-  mixToMix: {playlists: '', mood: ''}
+  mixToMix: {AmbianceName: '', AllPlaylists: ''}
 }
 
 const mutations = {
