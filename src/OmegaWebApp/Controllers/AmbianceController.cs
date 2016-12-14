@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Omega.DAL;
 using OmegaWebApp.Services;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -39,6 +40,13 @@ namespace OmegaWebApp.Controllers
         {
             string email = User.FindFirst(ClaimTypes.Email).Value;
             await _ambianceService.DeleteAmbiance(email, Mood.StringifyMood(ambiance));
+        }
+
+        [HttpGet("RetrieveAllUserAmbiance")]
+        public async Task<List<Ambiance>> RetrieveAllUserAmbiance()
+        {
+            string email = User.FindFirst(ClaimTypes.Email).Value;
+            return await _ambianceService.RetrieveAllUSerAmbiance(email);
         }
     }
 }

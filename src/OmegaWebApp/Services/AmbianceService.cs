@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Omega.DAL;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -41,6 +42,11 @@ namespace OmegaWebApp.Services
         {
             JObject rss = JObject.Parse(ambiance);
             return await _ambianceGateway.RetrieveAmbiance(user, ambiance);
+        }
+
+        public async Task<List<Ambiance>> RetrieveAllUSerAmbiance(string userName)
+        {
+            return await _ambianceGateway.RetrieveAllUserAmbiance(userName);
         }
     }
 }

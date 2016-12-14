@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -99,6 +100,23 @@ namespace Omega.DAL
             await InsertAmbiance("allUser", "Energy", energy);
             await InsertAmbiance("allUser", "Dance", dance);
             await InsertAmbiance("allUser", "Mad", mad);
+        }
+
+        public async Task<List<Ambiance>> RetrieveAllUserAmbiance(string userName)
+        {
+            List<Ambiance> ambiances = new List<Ambiance>();
+            TableQuery<Ambiance> query = new TableQuery<Ambiance>()
+                    .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, userName));
+
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+            do
+            {
+                var queryResponse = await _table.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                tableContinuationToken = queryResponse.ContinuationToken;
+                ambiances.AddRange(queryResponse.Results);
+            } while (tableContinuationToken != null);
+            return ambiances;
         }
     }
 }

@@ -23,7 +23,16 @@ namespace OmegaWebApp.Controllers
         [HttpGet("Mix")]
         public async Task<JArray> MixPlaylist( string ambianceName, string playlists)
         {
-            string email = User.FindFirst(ClaimTypes.Email).Value;
+            string email = "";
+            if (ambianceName == "Lounge" || ambianceName == "Energy" || ambianceName == "Mad" || ambianceName == "Dance")
+            {
+                email = "allUser";
+            }
+            else
+            {
+                email = User.FindFirst(ClaimTypes.Email).Value;
+            }
+            
             Ambiance ambiance = await _ambianceService.RetrieveAmbiance(email, ambianceName);
             MetaDonnees metadonnes = new MetaDonnees();
             metadonnes.acousticness = ambiance.Acousticness;
