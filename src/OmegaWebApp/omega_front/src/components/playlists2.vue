@@ -3,6 +3,7 @@
     <button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
     <button type="button" @click="loadDeezerPlaylist()">Deezer</button>-->
     <button @click="insertMood(mood)">Send mood</button>
+    <button @click="startMix()">Mix</button>
 
 
     <!--Contains the top part of the playlist vue-->
@@ -67,6 +68,7 @@ import PlaylistApiService from '../services/PlaylistApiService'
 import SpotifyApiService from '../services/SpotifyApiService'
 import DeezerApiService from '../services/DeezerApiService'
 import MoodService from '../services/MoodService'
+import MixService from '../services/MixService'
 
 export default {
   data () {
@@ -80,7 +82,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood']),
+    ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix']),
 
     scrollRight: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
@@ -106,10 +108,15 @@ export default {
     loadDeezerPlaylist: async function() {
       var dzplaylist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
       this.dPlaylists.push(dzplaylist);
+    },
+    startMix: async function() {
+      this.mix(this.checkedPlaylists);
+      this.$http.post('http://localhost:5000/api/Mix/Mix', this.mixToMix, function () {
+       })
     }
   },
   computed: {
-    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'checkedPlaylists', 'moodToInsert'])
+    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'checkedPlaylists', 'moodToInsert', 'mixToMix'])
   },
   created () {
     if(this.playlists.length === 0) {

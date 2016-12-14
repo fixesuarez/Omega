@@ -4,7 +4,7 @@
       <div class="moodModal-wrapper">
         <div class="moodModal-container">
           <div class="moodModalText">
-            <button @click="sendMoods(localMoods)">Moods</button>
+            <button @click="sendMoods(moods)">Moods</button>
             <span id="moodsHeader">Ambiances</span>
           </div>
           <div class="currentMood">
@@ -25,6 +25,7 @@
           </div>
           <div class="moods">
             <span v-for="mood in moods">
+              <span @click="setCurrentMood(mood)">{{mood.rowKey}}</span>
               <img v-bind:src="mood.image" @click="setCurrentMood(mood)">
             </span>
           </div>
