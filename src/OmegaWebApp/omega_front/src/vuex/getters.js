@@ -6,6 +6,7 @@ export const choice = state => state.sampleModule.choice;
 export const active = state => state.sampleModule.active;
 export const playlistHelperModalActive = state => state.sampleModule.playlistHelperModalActive;
 export const eventModalActive = state => state.sampleModule.eventModalActive;
+export const moodsModalActive = state => state.sampleModule.moodsModalActive;
 export const moods = state => state.sampleModule.moods;
 export const criterias = state => state.sampleModule.criterias;
 export const text = state => state.sampleModule.text;

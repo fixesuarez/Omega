@@ -57,6 +57,11 @@ export const showEventModal = ({commit}, payload) => {
     commit(types.SHOWEVENTMODAL, payload)
 }
 
+export const showMoodsModal = ({commit}, payload) => {
+  
+    commit(types.SHOWMOODSMODAL, payload)
+}
+
 export const sendMoods = ({commit}, payload) => {
   
     commit(types.SENDMOODS, payload)
