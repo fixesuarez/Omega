@@ -53,10 +53,17 @@ class AuthService {
         //else if(data.type == 'signedOut') this.onSignedOut();
     }
 
-    login = (selectedProvider, authenticatedCallback) => {
+    login(selectedProvider) {
         var provider = this.providers[selectedProvider];
         
         var popup = window.open(provider.endpoint, "Connexion à Omega", "menubar=no, status=no, scrollbars=no, menubar=no, width=700, height=700");
+    }
+    async relogin(selectedProvider, scopes = null) {
+        // We must open the popup window first otherwise it is blocked by  browsers 
+        // security policy (the open must be done directly after the click of the user).
+        var popup = window.open('about:blank', "Lier un autre compte", "menubar=no, status=no, scrollbars=no, menubar=no, width=700, height=700");
+        const r = await postAsync( '/Account/OAuthRelogin', '', this.accessToken, { provider: selectedProvider, scopes: scopes } );
+        popup.location.href = r.redirectURI;        
     }
 
     registerAuthenticatedCallback(cb) {
