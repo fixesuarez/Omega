@@ -86,7 +86,6 @@ namespace Omega.Crawler
                     await ct.GetAnalyser().AnalyseSong(ct, trackId, source);
                     Console.WriteLine("Table Checked");
                     await Task.Delay(1000);
-                    //Thread.Sleep(1000);
                 }
             } while (continuationToken != null);
         }

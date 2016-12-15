@@ -1,7 +1,9 @@
 ﻿using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace Omega.DAL
 {
@@ -10,13 +12,24 @@ namespace Omega.DAL
         readonly CloudStorageAccount _storageAccount;
         readonly CloudTableClient _tableClient;
         readonly CloudTable _tableEventGroup;
+        readonly CloudQueueClient _queueClient;
+        readonly CloudQueue _normalQueue;
+        readonly CloudQueue _priorityQueue;
 
         public EventGroupGateway(string connectionString)
         {
+            //EventGroupTable
             _storageAccount = CloudStorageAccount.Parse(connectionString);
             _tableClient = _storageAccount.CreateCloudTableClient();
             _tableEventGroup = _tableClient.GetTableReference("EventGroup");
             _tableEventGroup.CreateIfNotExistsAsync();
+
+            _queueClient = _storageAccount.CreateCloudQueueClient();
+            _normalQueue = _queueClient.GetQueueReference("normalQueue");
+            _normalQueue.CreateIfNotExistsAsync();
+            
+            _priorityQueue = _queueClient.GetQueueReference("priorityQueue");
+            _priorityQueue.CreateIfNotExistsAsync();
         }
 
         public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover)
@@ -45,6 +58,23 @@ namespace Omega.DAL
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventGroupId, email );
             TableResult retrievedGroupEvent = await _tableEventGroup.ExecuteAsync( retrieveOperation );
             return (EventGroup) retrievedGroupEvent.Result;
+        }
+
+        public async Task InsertNormalQueue(string email)
+        {
+            CloudQueueMessage message = new CloudQueueMessage(email);
+            await _normalQueue.AddMessageAsync(message);
+        }
+
+        public async Task InsertPriorityQueue(string email)
+        {
+            CloudQueueMessage message = new CloudQueueMessage(email);
+            await _priorityQueue.AddMessageAsync(message);
+        }
+
+        public async Task<TableContinuationToken> PriorityContinuationToken()
+        {
+            throw new NotImplementedException();
         }
     }
 }
