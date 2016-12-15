@@ -41,7 +41,7 @@ namespace OmegaWebApp.Services
 
         public async Task<Ambiance> RetrieveAmbiance(string user, string ambiance)
         {
-            JObject rss = JObject.Parse(ambiance);
+            //JObject rss = JObject.Parse(ambiance);
             return await _ambianceGateway.RetrieveAmbiance(user, ambiance);
         }
 

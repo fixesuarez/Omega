@@ -106,8 +106,8 @@ const mutations = {
     state.playlists.push.apply(state.playlists, payload);
   },
   [types.MIX](state, payload) {
-    state.mixToMix.playlists = state.checkedPlaylists;
-    state.mixToMix.mood = state.currentMood;
+    state.mixToMix.AllPlaylists = state.checkedPlaylists;
+    state.mixToMix.AmbianceName = state.currentMood.rowKey;
   }
 }
 

@@ -7,11 +7,11 @@
 
 
     <!--Contains the top part of the playlist vue-->
-    <div class="col-12 playlistContainer">
+    <div class="col-12 playlistContainer">  
       <div class="playlistWrapper" id="playlistWrapper">
         <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
         <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
-        <span v-for="p in playlists" @click="selectPlaylist(p)" id="spanPlaylist">
+        <span v-for="p in playlists" @click="selectPlaylist(p),setSPlayer()" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
@@ -40,7 +40,7 @@
             <span id="playlistTitle">{{currentPlaylist.Name}}</span><br>
             <span id="playlistOwner">{{currentPlaylist.OwnerId}}</span><br>
             <span id="tracksLength" v-if="currentPlaylist.Tracks != null">{{currentPlaylist.Tracks.length}} titres</span><br>
-            <div v-for="track in currentPlaylist.Tracks" class="track">
+            <div v-for="track in currentPlaylist.Tracks" class="track" @click="currentTrack == track.id">
               {{track.Title}}<br>
             </div>
           </div>
@@ -50,6 +50,8 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
+      <iframe v-bind:src="sPlayer" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+        <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe>
       </div>
     </div>
 
@@ -73,9 +75,12 @@ import MixService from '../services/MixService'
 export default {
   data () {
     return {
+      sPlayer: '',
+      dPlayer:'',
       sPlaylists: [],
       dPlaylists: [],
       SDplaylists: [],
+      currentTrack: '',
       number: 1,
       height: '',
       localPlaylists: [{"id":0,"name":"Apero Party","image":"http://d817ypd61vbww.cloudfront.net/sites/default/files/styles/media_responsive_widest/public/tile/image/A-116-01comp.jpg?itok=LjWmwzjU"},{"id":1,"name":"Mexico","image":"https://caliloved.files.wordpress.com/2013/07/deer-album-cover-new.jpg"},{"id":2,"name":"Chanson francaise","image":"http://www.designformusic.com/wp-content/uploads/2016/01/perfectly-chilled-album-cover-artwork-design-500x500.jpg"},{"id":3,"name":"Cam box","image":"https://www.smashingmagazine.com/images/music-cd-covers/64.jpg"},{"id":4,"name":"Jaccuzi money billey","image":"https://img.buzzfeed.com/buzzfeed-static/static/2016-01/27/11/enhanced/webdr14/enhanced-6784-1453912540-22.jpg"},{"id":5,"name":"Beer-Pong","image":"http://androidjones.com/wp-content/uploads/2012/05/HOPE-1024x1024.jpg"},{"id":6,"name":"Runing Time","image":"http://illusion.scene360.com/wp-content/uploads/2014/10/computergraphics-album-covers-2014-05.jpg"},{"id":7,"name":"Soiree OKLM","image":"http://www.fuse.tv/image/5682ea90ac0e76bd68000055/768/512/brown-eyed-girls-basic-album-cover-full-size.jpg"},{"id":8,"name":"Apero Party","image":"http://takuya.fr/wp-content/uploads/2016/06/takuya-fr-thedoubt.jpg"}],
@@ -84,6 +89,11 @@ export default {
   },
   methods: {
     ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix']),
+    ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood']),
+    setSPlayer: function() {
+      var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
+      this.sPlayer = player;
+    },
 
     scrollRight: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
@@ -112,7 +122,9 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      var data = await this.requestAsync(() => MixService.mix());
+      // var data = await this.requestAsync(() => MixService.mix());
+      this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
+       })
     },
     increment: function() {
       this.number++;

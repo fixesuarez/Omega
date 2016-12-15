@@ -97,10 +97,10 @@ namespace Omega.DAL
             MetaDonnees energy = new MetaDonnees(null, "0.9", null, null, null, null, null, null, null, null);
             MetaDonnees dance = new MetaDonnees("0.9", "0.9", null, null, null, null, null, "1", null, null);
             MetaDonnees mad = new MetaDonnees("0.9", "0.9", null, null, null, null, null, null, null, null);
-            string coverLounge = "empty";
-            string coverEnergy = "empty";
-            string coverDance = "empty";
-            string coverMad = "empty";
+            string coverLounge = "http://park-place-hotel.com/assets/uploads/photo-gallery/beacon-lounge-horz.jpg";
+            string coverEnergy = "http://www.lockheedmartin.com/content/dam/lockheed/data/corporate/photo/features/2015/energy-lightning.jpg";
+            string coverDance = "https://wildlyfreewoman.files.wordpress.com/2011/04/creative-dance.jpg";
+            string coverMad = "http://www.citylit.ac.uk/media/catalog/product/cache/1/image/1280x/040ec09b1e35df139433887a97daa66f/m/u/munch_2048_1.jpg";
             await InsertAmbiance("allUser", "Lounge",coverLounge, lounge);
             await InsertAmbiance("allUser", "Energy", coverEnergy, energy);
             await InsertAmbiance("allUser", "Dance", coverDance, dance);

@@ -20,16 +20,29 @@
 
 <script>
 import AuthService from '../services/AuthService'
+import Vue from 'vue'
+import $ from 'jquery'
 
 export default {
+  data() {
+      return {
+          endpoint: null
+      }
+  },
   methods: {
     login(provider) {
     AuthService.login(provider);
     },
     onAuthenticated() {
-    this.$router.replace('/');
+    this.$router.replace('/playlist');
     }
-  }
+  },
+  created() {
+    AuthService.registerAuthenticatedCallback(this.onAuthenticated);
+  },
+  beforeDestroy() {
+    AuthService.removeAuthenticatedCallback(this.onAuthenticated);
+  },  
 }
 
 </script>

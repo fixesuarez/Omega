@@ -24,11 +24,11 @@ namespace OmegaWebApp.Controllers
         {
             public string AmbianceName { get; set; }
 
-            public string AllPlaylists { get; set; }
+            public List<Playlist> AllPlaylists { get; set; }
         }
 
-        [HttpGet("MixPlaylist")]
-        public async Task<JArray> MixPlaylist( [FromBody]Playlists playlists)
+        [HttpPost("MixPlaylist")]
+        public async Task<List<Track>> MixPlaylist( [FromBody]Playlists playlists)
         {
             string email = "";
             if (playlists.AmbianceName == "Lounge" || playlists.AmbianceName == "Energy" || playlists.AmbianceName == "Mad" || playlists.AmbianceName == "Dance")
@@ -52,22 +52,22 @@ namespace OmegaWebApp.Controllers
             metadonnes.speechiness = ambiance.Speechiness;
             metadonnes.tempo = ambiance.Tempo;
             metadonnes.valence = ambiance.Valence;
+            metadonnes.energy = ambiance.Energy;
             return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
         }
 
-        public async Task<JArray> PlaylistAnalyser(string playlists, MetaDonnees askedDonnees, double ratio = 10)
+        public async Task<List<Track>> PlaylistAnalyser(List<Playlist> playlists, MetaDonnees askedDonnees, double ratio = 20)
         {
             List<string> FilteredList = new List<string>();
-            JArray filteredArray = new JArray();
+            List<Track> filteredArray = new List<Track>();
             List<CleanTrack> cleanTracks = new List<CleanTrack>();
             string trackIdSource;
-            JArray playlistObj = JArray.Parse(playlists);
      
-            foreach (var playlistArray in playlistObj)
+            foreach (var playlistArray in playlists)
             {
-                foreach (var track in playlistArray)
+                foreach (var track in playlistArray.Tracks)
                 {
-                    trackIdSource = track["RowKey"].ToString().Substring(0, 1) + ":" + track["TrackId"].ToString();
+                    trackIdSource = track.RowKey.Substring(0,2) + track.TrackId;
                     CleanTrack analysedSong = await _cleanTrackService.GetSongCleanTrack(trackIdSource);
                     if (Compare(askedDonnees.acousticness, analysedSong.Acousticness, ratio)
                     && Compare(askedDonnees.danceability, analysedSong.Danceability, ratio)

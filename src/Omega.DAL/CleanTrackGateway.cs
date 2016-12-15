@@ -17,7 +17,7 @@ namespace Omega.DAL
             _tableClient = _storageAccount.CreateCloudTableClient();
 
             // Retrieve a reference to the table.
-            _table = _tableClient.GetTableReference("Ambiance");
+            _table = _tableClient.GetTableReference("CleanTrack");
 
             // Create the table if it doesn't exist.
             _table.CreateIfNotExistsAsync();
@@ -27,7 +27,7 @@ namespace Omega.DAL
         {
             CleanTrack ct = new CleanTrack();
 
-            TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>("", trackIdSource);
+            TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>(string.Empty, trackIdSource);
 
             TableResult retrievedResult = await _table.ExecuteAsync(retrieveOperation);
 
