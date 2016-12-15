@@ -20,11 +20,18 @@ namespace OmegaWebApp.Controllers
             _cleanTrackService = cleanTrackService;
         }
 
-        [HttpGet("Mix")]
-        public async Task<JArray> MixPlaylist( string ambianceName, string playlists)
+        public class Playlists
+        {
+            public string AmbianceName { get; set; }
+
+            public List<Playlist> AllPlaylists { get; set; }
+        }
+
+        [HttpPost("MixPlaylist")]
+        public async Task<JArray> MixPlaylist( [FromBody]Playlists playlists)
         {
             string email = "";
-            if (ambianceName == "Lounge" || ambianceName == "Energy" || ambianceName == "Mad" || ambianceName == "Dance")
+            if (playlists.AmbianceName == "Lounge" || playlists.AmbianceName == "Energy" || playlists.AmbianceName == "Mad" || playlists.AmbianceName == "Dance")
             {
                 email = "allUser";
             }
@@ -33,7 +40,7 @@ namespace OmegaWebApp.Controllers
                 email = User.FindFirst(ClaimTypes.Email).Value;
             }
             
-            Ambiance ambiance = await _ambianceService.RetrieveAmbiance(email, ambianceName);
+            Ambiance ambiance = await _ambianceService.RetrieveAmbiance(email, playlists.AmbianceName);
             MetaDonnees metadonnes = new MetaDonnees();
             metadonnes.acousticness = ambiance.Acousticness;
             metadonnes.danceability = ambiance.Danceability;
@@ -45,7 +52,8 @@ namespace OmegaWebApp.Controllers
             metadonnes.speechiness = ambiance.Speechiness;
             metadonnes.tempo = ambiance.Tempo;
             metadonnes.valence = ambiance.Valence;
-            return await PlaylistAnalyser(playlists, metadonnes);
+            //return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
+            return null;
         }
 
         public async Task<JArray> PlaylistAnalyser(string playlists, MetaDonnees askedDonnees, double ratio = 10)

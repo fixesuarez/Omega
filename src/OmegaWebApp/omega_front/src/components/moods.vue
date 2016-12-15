@@ -3,14 +3,15 @@
     <div class="moodModal-mask">
       <div class="moodModal-wrapper">
         <div class="moodModal-container">
+          <span @click="showMoodsModal(false)" id="closeButton">X</span>
           <div class="moodModalText">
-            <button @click="sendMoods(localMoods)">Moods</button>
+            <!--<button @click="sendMoods(moods)">Moods</button>-->
             <span id="moodsHeader">Ambiances</span>
           </div>
           <div class="currentMood">
             <div class="topCurrentMood">
-              <img v-bind:src="currentMood.image">
-              <span id="currentMoodName">{{currentMood.label}}</span>
+              <img v-bind:src="currentMood.cover">
+              <span id="currentMoodName">{{currentMood.rowKey}}</span>
               <span id="deleteMood">X</span>
             </div>
             <div class="middleCurrentMood">
@@ -22,13 +23,16 @@
                 <img v-if="data == '' || data == null" src="../assets/bar.png" id="dataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
               </span>
             </div>
+            <div class="bottomCurrentMood">
+              Bottom here
+            </div>
           </div>
           <div class="moods">
             <span v-for="mood in moods">
-              <img v-bind:src="mood.image" @click="setCurrentMood(mood)">
+              <!--<span @click="setCurrentMood(mood)">{{mood.rowKey}}</span>-->
+              <img v-bind:src="mood.cover" @click="setCurrentMood(mood)">
             </span>
           </div>
-          <button @click="showMoodsModal(false)">FERMER</button>
         </div>
       </div>
     </div>
@@ -118,6 +122,7 @@ export default {
   height: 400px;
   width: 220px;
   margin-right: 20px;
+  margin-top: 20px;
   float: left;
   overflow: hidden;
   border-radius: 3px;
@@ -154,6 +159,12 @@ export default {
 
 .middleCurrentMood {
   text-align: center;
+  height: 200px;
+}
+
+.bottomCurrentMood {
+  height: 80px;
+  background: #ffe;
 }
 
 #dataBar {
@@ -162,12 +173,20 @@ export default {
   margin-top: 30px;
 }
 
+#closeButton {
+  float: right;
+}
+
 .moods {
+  margin-top: 20px;
   float: left;
+  width: 250px;
 }
 
 .moods img {
-  width: 50px;
+  width: 80px;
+  padding: 1px;
+  height: 50px;
 }
 
 .modalClose {

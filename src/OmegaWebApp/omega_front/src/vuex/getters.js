@@ -18,3 +18,4 @@ export const tempoMood = state => state.sampleModule.tempoMood;
 export const checkedPlaylists = state => state.sampleModule.checkedPlaylists;
 export const playlists = state => state.sampleModule.playlists;
 export const moodToInsert = state => state.sampleModule.moodToInsert;
+export const mixToMix = state => state.sampleModule.mixToMix;

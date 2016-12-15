@@ -111,3 +111,8 @@ export const insertMood = ({commit}, payload) => {
     
     commit(types.INSERTMOOD, payload)
 }
+
+export const mix = ({commit}, payload) => {
+    
+    commit(types.MIX, payload)
+}

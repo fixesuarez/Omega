@@ -5,6 +5,7 @@
 /// <reference path="../omega_front/src/services/AuthService.js" />
 /// <reference path="../omega_front/src/services/deezerapiservice.js" />
 /// <reference path="../omega_front/src/services/FacebookApiService.js" />
+/// <reference path="../omega_front/src/services/mixservice.js" />
 /// <reference path="../omega_front/src/services/moodservice.js" />
 /// <reference path="../omega_front/src/services/playlistapiservice.js" />
 /// <reference path="../omega_front/src/services/spotifyapiservice.js" />

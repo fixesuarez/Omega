@@ -18,7 +18,8 @@ const state = {
   tempoMood: '',
   checkedPlaylists: [],
   playlists: [],
-  moodToInsert: ''
+  moodToInsert: '',
+  mixToMix: {AmbianceName: '', AllPlaylists: ''}
 }
 
 const mutations = {
@@ -103,6 +104,10 @@ const mutations = {
     // var tempoPlaylists = payload;
     // tempoPlaylists.map(m => { Vue.set(m, 'check', false); return m});
     state.playlists.push.apply(state.playlists, payload);
+  },
+  [types.MIX](state, payload) {
+    state.mixToMix.AllPlaylists = state.checkedPlaylists;
+    state.mixToMix.AmbianceName = state.currentMood.rowKey;
   }
 }
 

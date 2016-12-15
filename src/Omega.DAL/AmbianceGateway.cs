@@ -31,11 +31,12 @@ namespace Omega.DAL
             }
         }
 
-        public async Task InsertAmbiance(string user, string name, string metaDonnees)
+        public async Task InsertAmbiance(string user, string name,string cover, string metaDonnees)
         {
             JObject rss = JObject.Parse(metaDonnees);
 
             Ambiance mood = new Ambiance(user, name);
+            mood.Cover = cover;
             mood.Acousticness = (string)rss["Acousticness"];
             mood.Danceability = (string)rss["Danceability"];
             mood.Energy = (string)rss["Energy"];
@@ -49,11 +50,12 @@ namespace Omega.DAL
             await _table.ExecuteAsync(insertOperation);
         }
 
-        public async Task InsertAmbiance(string user, string name, MetaDonnees metaDonnees)
+        public async Task InsertAmbiance(string user, string name, string cover, MetaDonnees metaDonnees)
         {
             if(await RetrieveAmbiance(user, name) == null)
             {
                 Ambiance mood = new Ambiance(user, name);
+                mood.Cover = cover;
                 mood.Acousticness = metaDonnees.acousticness;
                 mood.Danceability = metaDonnees.danceability;
                 mood.Energy = metaDonnees.energy;
@@ -95,11 +97,14 @@ namespace Omega.DAL
             MetaDonnees energy = new MetaDonnees(null, "0.9", null, null, null, null, null, null, null, null);
             MetaDonnees dance = new MetaDonnees("0.9", "0.9", null, null, null, null, null, "1", null, null);
             MetaDonnees mad = new MetaDonnees("0.9", "0.9", null, null, null, null, null, null, null, null);
-
-            await InsertAmbiance("allUser", "Lounge", lounge);
-            await InsertAmbiance("allUser", "Energy", energy);
-            await InsertAmbiance("allUser", "Dance", dance);
-            await InsertAmbiance("allUser", "Mad", mad);
+            string coverLounge = "empty";
+            string coverEnergy = "empty";
+            string coverDance = "empty";
+            string coverMad = "empty";
+            await InsertAmbiance("allUser", "Lounge",coverLounge, lounge);
+            await InsertAmbiance("allUser", "Energy", coverEnergy, energy);
+            await InsertAmbiance("allUser", "Dance", coverDance, dance);
+            await InsertAmbiance("allUser", "Mad", coverMad, mad);
         }
 
         public async Task<List<Ambiance>> RetrieveAllUserAmbiance(string userName)

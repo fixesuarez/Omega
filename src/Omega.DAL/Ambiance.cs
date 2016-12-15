@@ -16,6 +16,8 @@ namespace Omega.DAL
 
         public Ambiance() { }
 
+        public string Cover { get; set; }
+
         public string Danceability { get; set; }
 
         public string Energy { get; set; }
