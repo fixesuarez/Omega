@@ -10,7 +10,13 @@ class AuthService {
         window.addEventListener("message", this.onMessage, false);
     }
 
+    get identity() {
+        return ITI.PrimarySchool.getIdentity();
+    }
 
+    set identity(i) {
+        ITI.PrimarySchool.setIdentity(i);
+    }
 
     get isConnected() {
         return this.identity != null;
@@ -77,7 +83,7 @@ class AuthService {
 
     /*logout = () => {
         var popup = window.open(this.logoutEndpoint, "Déconnexion d'ITI.PrimarySchool", "menubar=no, status=no, scrollbars=no, menubar=no, width=700, height=600");        
-    }*/
+    }
 
     registerSignedOutCallback(cb) {
         this.signedOutCallbacks.push(cb);
@@ -87,7 +93,7 @@ class AuthService {
         this.signedOutCallbacks.splice(this.signedOutCallbacks.indexOf(cb), 1);
     }
 
-    /*onSignedOut = () => {
+    onSignedOut = () => {
         this.identity = null;
 
         for(var cb of this.signedOutCallbacks) {
