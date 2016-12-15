@@ -24,10 +24,10 @@ namespace OmegaWebApp.Controllers
         {
             public string AmbianceName { get; set; }
 
-            public string AllPlaylists { get; set; }
+            public List<Playlist> AllPlaylists { get; set; }
         }
 
-        [HttpGet("MixPlaylist")]
+        [HttpPost("MixPlaylist")]
         public async Task<JArray> MixPlaylist( [FromBody]Playlists playlists)
         {
             string email = "";
@@ -52,7 +52,8 @@ namespace OmegaWebApp.Controllers
             metadonnes.speechiness = ambiance.Speechiness;
             metadonnes.tempo = ambiance.Tempo;
             metadonnes.valence = ambiance.Valence;
-            return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
+            //return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
+            return null;
         }
 
         public async Task<JArray> PlaylistAnalyser(string playlists, MetaDonnees askedDonnees, double ratio = 10)
