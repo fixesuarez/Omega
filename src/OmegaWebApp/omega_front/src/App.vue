@@ -34,10 +34,13 @@
   import Modal from './components/modal.vue'
   import { mapGetters, mapActions } from 'vuex'
   import AuthService from './services/AuthService'
+  import Vue from 'vue'
+  import $ from 'jquery'
 
   export default {
   data () {
     return {
+      endpoint: null,
       active: 'playlistsTab',
       isActive: true,
       true: true,
@@ -56,6 +59,12 @@
         { label: 'duration_ms', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" }
       ],
     }
+  },
+  created() {
+    AuthService.registerAuthenticatedCallback(this.onAuthenticated);
+  },
+  beforeDestroy() {
+    AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
     ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal']),
