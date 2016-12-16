@@ -6,15 +6,12 @@
     string providerNames = providers == null ? string.Empty : string.Join(",", providers.Select(p => string.Format("'{0}'", p)));
 }
 <!DOCTYPE html>
-
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
     <title>SPA</title>
 </head>
 <body>
     <div id="app"></div>
-
     <script>
         (function () {
             var primarySchool = (function () {
@@ -38,7 +35,6 @@
             this.ITI.PrimarySchool = primarySchool;
         })();
     </script>
-
     @if (token != null && email != null)
     {
         <script>
@@ -54,7 +50,6 @@
             })();
         </script>
     }
-
     <environment names="Development">
         <script type="text/javascript" src="http://localhost:8080/dist/omega-front.js"></script>
     </environment>

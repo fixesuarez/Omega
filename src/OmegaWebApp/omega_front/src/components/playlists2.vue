@@ -11,7 +11,7 @@
       <div class="playlistWrapper" id="playlistWrapper">
         <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
         <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
-        <span v-for="p in playlists" @click="selectPlaylist(p),setSPlayer()" id="spanPlaylist">
+        <span v-for="p in playlists" @click="selectPlaylist(p),setSPlayer(),setDPlayer()" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
@@ -50,8 +50,9 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-      <iframe v-bind:src="sPlayer" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
-        <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe>
+      <iframe margin-top="10" v-bind:src="sPlayer" width="300" height="70" frameborder="0" allowtransparency="true"></iframe>
+      <iframe scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="300" height="62"></iframe>
+      
       </div>
     </div>
 
@@ -76,7 +77,7 @@ export default {
   data () {
     return {
       sPlayer: '',
-      dPlayer:'',
+      DzPlayer: '',
       sPlaylists: [],
       dPlaylists: [],
       SDplaylists: [],
@@ -85,7 +86,6 @@ export default {
       height: '',
       localPlaylists: [{"id":0,"name":"Apero Party","image":"http://d817ypd61vbww.cloudfront.net/sites/default/files/styles/media_responsive_widest/public/tile/image/A-116-01comp.jpg?itok=LjWmwzjU"},{"id":1,"name":"Mexico","image":"https://caliloved.files.wordpress.com/2013/07/deer-album-cover-new.jpg"},{"id":2,"name":"Chanson francaise","image":"http://www.designformusic.com/wp-content/uploads/2016/01/perfectly-chilled-album-cover-artwork-design-500x500.jpg"},{"id":3,"name":"Cam box","image":"https://www.smashingmagazine.com/images/music-cd-covers/64.jpg"},{"id":4,"name":"Jaccuzi money billey","image":"https://img.buzzfeed.com/buzzfeed-static/static/2016-01/27/11/enhanced/webdr14/enhanced-6784-1453912540-22.jpg"},{"id":5,"name":"Beer-Pong","image":"http://androidjones.com/wp-content/uploads/2012/05/HOPE-1024x1024.jpg"},{"id":6,"name":"Runing Time","image":"http://illusion.scene360.com/wp-content/uploads/2014/10/computergraphics-album-covers-2014-05.jpg"},{"id":7,"name":"Soiree OKLM","image":"http://www.fuse.tv/image/5682ea90ac0e76bd68000055/768/512/brown-eyed-girls-basic-album-cover-full-size.jpg"},{"id":8,"name":"Apero Party","image":"http://takuya.fr/wp-content/uploads/2016/06/takuya-fr-thedoubt.jpg"}],
       mood: {'cover': 'http://www.firstredeemer.org/wp-content/uploads/girl-backpack-thinking-sunset-field-fence-.jpg', 'name': 'Heyyy', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
-      mood: {'name': 'TerribleAmbiance', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
     }
   },
   methods: {
@@ -95,7 +95,10 @@ export default {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
     },
-
+    setDPlayer: function() {
+     var player = 'https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=350&height=350&color=007FEB&layout=dark&size=medium&type=playlist&id='+ this.currentPlaylist.PlaylistId +'&app_id=176241';
+      this.DzPlayer = player;
+    },
     scrollRight: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
       document.getElementById('playlistWrapper').scrollLeft += scroll;
@@ -123,9 +126,9 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      // var data = await this.requestAsync(() => MixService.mix());
-      this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
-       })
+      var data = await this.requestAsync(() => MixService.mix());
+      //this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
+       //})
     },
     increment: function() {
       this.number++;
