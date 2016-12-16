@@ -11,7 +11,7 @@
           <a href="" @click="login('Spotify')">SPOTIFY</a>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">RODOLPHE WACHTER</span>
+          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText"><router-link to="/relogin">RODOLPHE WACHTER</span>
         </div>
       </div>
       <div class="col-12 appControlPanel">

@@ -50,10 +50,14 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-      <iframe margin-top="10" v-bind:src="sPlayer" width="300" height="70" frameborder="0" allowtransparency="true"></iframe>
-      <iframe scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="300" height="62"></iframe>
-      
+         <div class="players">
+              <span>
+                <iframe class="spotifyPlayer" style="opacity: 1" src="https://embed.spotify.com/?uri=spotify:track:2V65y3PX4DkRhy1djlxd9p" width="250" height="80" frameborder="0" allowtransparency="true"></iframe>
+                <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe>
+              </span>            
+            </div>
       </div>
+
     </div>
 
     <PlaylistHelperModal v-if="playlistHelperModalActive == true"></PlaylistHelperModal>

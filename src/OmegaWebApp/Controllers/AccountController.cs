@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.Features.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace OmegaWebApp.Controllers
 {
@@ -47,6 +49,43 @@ namespace OmegaWebApp.Controllers
             return Challenge( new AuthenticationProperties { RedirectUri = redirectUri }, provider );
         }
 
+        /// <summary>
+        /// Relogin supports both multiple account bindings and OAuth scope augmentation.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize( ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme )]
+        [Route( "/Account/OAuthRelogin" )]
+        public async Task<IActionResult> OAuthRelogin( [FromBody]OAuthReLoginModel model )
+        {
+            string redirectUri = Url.Action( nameof( Authenticated ), "Account" );
+            var authP = new AuthenticationProperties { RedirectUri = redirectUri };
+            string sUserGuid = User.FindFirst( "www.omega.com:guid" ).Value;
+            authP.Items["reLoginUserId"] = sUserGuid;
+            if( !string.IsNullOrWhiteSpace( model.Scopes ) )
+            {
+                // This will be added to the query string of the challenge url.
+                authP.Items["scope"] = model.Scopes;
+                // This will be stored in the state parameter.
+                // This will enable us to store the actual obtained scopes along with the 
+                // refresh token.
+                authP.Items["augmentScope"] = model.Scopes;
+            }
+            var ctx = HttpContext;
+            await ctx.Authentication.ChallengeAsync(
+                model.Provider,
+                authP,
+                ChallengeBehavior.Unauthorized );
+            if( ctx.Response.StatusCode == StatusCodes.Status302Found )
+            {
+                var loc = ctx.Response.Headers["Location"];
+                ctx.Response.Headers.Remove( "Location" );
+                return new ObjectResult( new { RedirectURI = loc } ) { StatusCode = StatusCodes.Status200OK };
+            }
+            return new EmptyResult();
+        }
+
         [HttpGet]
         [Authorize( ActiveAuthenticationSchemes = CookieAuthentication.AuthenticationScheme )]
         public IActionResult ExternalLoginCallback()
@@ -58,13 +97,16 @@ namespace OmegaWebApp.Controllers
         [Authorize( ActiveAuthenticationSchemes = CookieAuthentication.AuthenticationScheme )]
         public IActionResult Authenticated()
         {
-            string userId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
-            string email = User.FindFirst( ClaimTypes.Email ).Value;
-            Token token = _tokenService.GenerateToken( userId, email );
-            IEnumerable<string> providers = _userService.GetAuthenticationProviders( email ).Result;
+            string guid = User.FindFirst( "http://omega.com:guid" ).Value;
+            //string userId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
+            //string email = User.FindFirst( ClaimTypes.Email ).Value;
+            //Token token = _tokenService.GenerateToken( userId, email );
+            Token token = _tokenService.GenerateToken( guid );
+            IEnumerable<string> providers = _userService.GetAuthenticationProviders( guid ).Result;
             ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
             ViewData["Token"] = token;
-            ViewData["Email"] = email;
+            //ViewData["Email"] = email;
+            ViewData["Guid"] = guid;
             ViewData["NoLayout"] = true;
             ViewData["Providers"] = providers;
             return View();
@@ -92,6 +134,20 @@ namespace OmegaWebApp.Controllers
         {
             await HttpContext.Authentication.SignOutAsync( CookieAuthentication.AuthenticationScheme );
             return RedirectToAction( "Index", "Home" );
+        }
+
+        public class OAuthReLoginModel
+        {
+            /// <summary>
+            /// Gets or sets the provider name.
+            /// </summary>
+            public string Provider { get; set; }
+
+            /// <summary>
+            /// Gets or sets the scopes.
+            /// Null or empty to use the default scopes configured in Startup.
+            /// </summary>
+            public string Scopes { get; set; }
         }
 
         IActionResult RedirectToLocal( string returnUrl )

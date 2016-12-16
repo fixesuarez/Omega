@@ -1,5 +1,6 @@
 import $ from 'jquery'
 
+
 function dataFilter(data, type) {
     if(data === '') return null;
     return data;

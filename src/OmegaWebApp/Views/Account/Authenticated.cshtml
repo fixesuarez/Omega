@@ -3,10 +3,11 @@
 @{
     string location = string.Format( "{0}://{1}/", Context.Request.Scheme, Context.Request.Host );
     Token token = (Token) ViewData["Token"];
-    string email = (string) ViewData["Email"];
+    //string email = (string) ViewData["Email"];
     string breachPadding = (string) ViewData["BreachPadding"];
     IEnumerable<string> providers = (IEnumerable<string>) ViewData["Providers"];
     string providerNames = string.Join( ",", providers.Select( p => string.Format( "'{0}'", p ) ) );
+    string guid = (string) ViewData["Guid"];
 }
 
 <!DOCTYPE html>
@@ -26,7 +27,8 @@
                         access_token: '@token.AccessToken',
                         expires_in: @token.ExpiresIn
                     },
-                    email: '@email',
+                    @*email: '@email',*@
+                    guid: '@guid',
                     boundProviders: [@Html.Raw( providerNames )]
                 }
             }), '@location');
