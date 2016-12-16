@@ -1,5 +1,7 @@
 <template>
   <div class="col-12 playlistGlobal">
+
+    {{Connected}}
     <button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
     <button type="button" @click="loadDeezerPlaylist()">Deezer</button>-->
     <button @click="insertMood(mood)">Send mood</button>
@@ -50,8 +52,9 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-      <iframe margin-top="10" v-bind:src="sPlayer" width="300" height="70" frameborder="0" allowtransparency="true"></iframe>
-      <iframe scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="300" height="62"></iframe>
+      <iframe v-bind:src="sPlayer" width="300" height="300" frameborder="0" allowtransparency="true"></iframe>
+      <iframe scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="300" height="350"></iframe>
+
       
       </div>
     </div>
@@ -72,6 +75,7 @@ import SpotifyApiService from '../services/SpotifyApiService'
 import DeezerApiService from '../services/DeezerApiService'
 import MoodService from '../services/MoodService'
 import MixService from '../services/MixService'
+import AuthService from '../services/AuthService'
 
 export default {
   data () {
@@ -79,6 +83,7 @@ export default {
       sPlayer: '',
       DzPlayer: '',
       sPlaylists: [],
+      Connected: false,
       dPlaylists: [],
       SDplaylists: [],
       currentTrack: '',
@@ -89,14 +94,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix']),
-    ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood']),
+    ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity']),
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
     },
     setDPlayer: function() {
-     var player = 'https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=350&height=350&color=007FEB&layout=dark&size=medium&type=playlist&id='+ this.currentPlaylist.PlaylistId +'&app_id=176241';
+     var player = 'https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=true&width=350&height=350&color=007FEB&layout=dark&size=medium&type=playlist&id='+ this.currentPlaylist.PlaylistId +'&app_id=176241';
       this.DzPlayer = player;
     },
     scrollRight: function() {
@@ -135,12 +139,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'checkedPlaylists', 'moodToInsert', 'mixToMix'])
+    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity'])
   },
   created () {
     if(this.playlists.length === 0) {
       this.loadPlaylists()
     }
+    this.getIdentity(true);
   },
   mounted () {
   },
