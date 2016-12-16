@@ -6,10 +6,13 @@ using Omega.DAL;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using OmegaWebApp.Authentication;
 
 namespace OmegaWebApp.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class MixController : Controller
     {
         readonly AmbianceService _ambianceService;
@@ -37,7 +40,7 @@ namespace OmegaWebApp.Controllers
             }
             else
             {
-                email = User.FindFirst(ClaimTypes.Email).Value;
+                email = User.FindFirst("www.omega.com:guid").Value;
             }
             
             Ambiance ambiance = await _ambianceService.RetrieveAmbiance(email, playlists.AmbianceName);

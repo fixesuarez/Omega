@@ -39,10 +39,10 @@ namespace Omega.DAL
 
             foreach (User user in users)
             {
-                EventGroup e = await RetrieveGroupEvent( eventId, user.Guid );
+                EventGroup e = await RetrieveGroupEvent( eventId, user.RowKey);
                 if( e == null )
                 {
-                    eventGroup = new EventGroup( eventId, user.Guid );
+                    eventGroup = new EventGroup( eventId, user.RowKey );
                     eventGroup.UserId = user.FacebookId;
                     eventGroup.Type = type;
                     eventGroup.Cover = cover;
@@ -59,13 +59,13 @@ namespace Omega.DAL
 
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover)
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, user.Email);
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, user.RowKey);
             TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
             EventGroup updateEntity = (EventGroup)retrievedResult.Result;
 
             if (updateEntity != null)
             {
-                EventGroup track = new EventGroup(eventId, user.Email);
+                EventGroup track = new EventGroup(eventId, user.RowKey);
                 updateEntity.UserId = user.FacebookId;
                 updateEntity.Type = type;
                 updateEntity.Cover = cover;

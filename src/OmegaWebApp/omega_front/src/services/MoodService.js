@@ -12,8 +12,8 @@ class MoodService {
     async getMoods() {
         return await getAsync(endpoint, 'RetrieveAllUserAmbiance', AuthService.accessToken);
     }
-    async createMood() {
-        return await postAsync(endpoint, 'InsertAmbiance', AuthService.accessToken);
+    async createMood(mood) {
+        return await postAsync(endpoint, 'InsertAmbiance', AuthService.accessToken, mood);
     }
 }
 

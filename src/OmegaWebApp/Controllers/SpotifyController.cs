@@ -9,11 +9,14 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using OmegaWebApp.Services;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using OmegaWebApp.Authentication;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace OmegaWebApp.Controllers
 {
+    [Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     [Route( "api/[controller]" )]
     public class SpotifyController : Controller
     {

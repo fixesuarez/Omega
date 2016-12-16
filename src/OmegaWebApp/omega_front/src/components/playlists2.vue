@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 playlistGlobal">
     <button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
-    <button type="button" @click="loadDeezerPlaylist()">Deezer</button>-->
+    <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
     <button @click="insertMood(mood)">Send mood</button>
     <button @click="startMix()">Mix</button>
 
@@ -130,9 +130,9 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      //var data = await this.requestAsync(() => MixService.mix());
-      this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
-       })
+      var data = MixService.mix(this.mixToMix);
+      // this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
+      //  })
     },
     increment: function() {
       this.number++;

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Omega.DAL;
+using OmegaWebApp.Authentication;
 using OmegaWebApp.Services;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 namespace OmegaWebApp.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class AmbianceController : Controller
     {
         readonly AmbianceService _ambianceService;
@@ -33,22 +36,22 @@ namespace OmegaWebApp.Controllers
         [HttpPost("InsertAmbiance")]
         public async Task InsertAmbiance([FromBody]Mood ambiance)
         {
-            string email = User.FindFirst(ClaimTypes.Email).Value;
-            await _ambianceService.InsertAmbiance(email, Mood.StringifyMood(ambiance));
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            await _ambianceService.InsertAmbiance(guid, Mood.StringifyMood(ambiance));
         }
 
         [HttpPost("DeleteAmbiance")]
         public async Task DeleteAmbiance(Mood ambiance)
         {
-            string email = User.FindFirst(ClaimTypes.Email).Value;
-            await _ambianceService.DeleteAmbiance(email, Mood.StringifyMood(ambiance));
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            await _ambianceService.DeleteAmbiance(guid, Mood.StringifyMood(ambiance));
         }
 
         [HttpGet("RetrieveAllUserAmbiance")]
         public async Task<List<NewAmbiance>> RetrieveAllUserAmbiance()
         {
-            string email = User.FindFirst(ClaimTypes.Email).Value;
-            List<Ambiance> ambiances = await _ambianceService.RetrieveAllUSerAmbiance(email);
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            List<Ambiance> ambiances = await _ambianceService.RetrieveAllUSerAmbiance(guid);
             List<NewAmbiance> newAmbiances = new List<NewAmbiance>();
             
             foreach (Ambiance ambiance in ambiances)
