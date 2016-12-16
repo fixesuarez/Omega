@@ -1,11 +1,12 @@
 <template>
   <div>
-    <div class="col-12 navbarContainer">
+    <div v-if="identity == true" class="col-12 navbarContainer">
       <div class="col-12 appNavbar">
         <div class="col-4">
           <img src="./assets/triangleGrey.png" id="appLogo"><span class="appTitle"><span id="appRedText">o</span>mega</span>
         </div>
         <div class="col-4 appProviders">
+          {{ Connected}}
           <a href="" @click="login('Facebook')">FACEBOOK</a>
           <a href="" @click="login('Deezer')" id="appRedText">DEEZER</a>
           <a href="" @click="login('Spotify')">SPOTIFY</a>
@@ -44,6 +45,7 @@
       active: 'playlistsTab',
       isActive: true,
       true: true,
+      Connected: false,
       check: false,
       label: '',
       image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png',
@@ -62,21 +64,28 @@
   },
   created() {
     AuthService.registerAuthenticatedCallback(this.onAuthenticated);
+    this.authVerify();
   },
   beforeDestroy() {
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal']),
+    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal', 'getIdentity']),
     login(provider) {
     AuthService.login(provider);
     },
     onAuthenticated() {
     this.$router.replace('/');
+    },
+    authVerify : function ()  {
+      if (AuthService.identity != null) {
+          this.Connected = true;
+          this.getIdentity(this.Connected);
+      }
     }
   },
   computed: {
-    ...mapGetters(['active', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated'])
+    ...mapGetters(['active', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity'])
   },
   name: 'app',
   components: {
