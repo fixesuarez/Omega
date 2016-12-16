@@ -36,8 +36,6 @@ namespace Omega.DAL
 
         public string Valence { get; set; }
 
-        public string Tempo { get; set; }
-
         public string Popularity { get; set; }
     }
 }
