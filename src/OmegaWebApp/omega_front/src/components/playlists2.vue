@@ -126,9 +126,9 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      var data = await this.requestAsync(() => MixService.mix());
-      //this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
-       //})
+      //var data = await this.requestAsync(() => MixService.mix());
+      this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
+       })
     },
     increment: function() {
       this.number++;
