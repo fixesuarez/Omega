@@ -28,7 +28,6 @@ namespace OmegaWebApp.Services
             metadonnees.mode = (string)rss["Metadonnees"]["mode"];
             metadonnees.popularity = (string)rss["Metadonnees"]["popularity"];
             metadonnees.speechiness = (string)rss["Metadonnees"]["speechiness"];
-            metadonnees.tempo = (string)rss["Metadonnees"]["tempo"];
             metadonnees.valence = (string)rss["Metadonnees"]["valence"];
             await _ambianceGateway.InsertAmbiance(user, name,cover, metadonnees);
         }
