@@ -49,7 +49,6 @@
     </div>
   </transition>
 </template>
-
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import MoodService from '../services/MoodService'
@@ -66,10 +65,9 @@ export default {
         { label: 'Instrumentalness', value: null},
         { label: 'Liveness', value: null},
         { label: 'Loudness', value: null},
-        { label: 'Mode', value: null},
         { label: 'Popularity', value: null}
       ],
-      metadonnees: {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''},
+      metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Liveness': null, 'Loudness': null, 'Mode': null, 'Popularity': null},
       localMoods: [
       { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', 'metadonnees': {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''} },
       { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png','metadonnees': {'Accousticness': '0.48', 'Danceability': '0.72', 'Energy': '0.84', 'Instrumentalness': '0.84', 'Liveness': '0.41', 'Loudness': '-44', 'Mode': '0', 'Popularity': '78'} },
@@ -95,14 +93,17 @@ export default {
     createLocalMood: function(item) {
       this.moodToCreate.cover = this.moodCover;
       this.moodToCreate.name = this.moodName;
-      var ar = this.moodCriterias.slice(0);
-      var test = ar.substring(0, 9);
-      console.log(test);
-      this.metadonnees.Accousticness = test;
-      this.moodToCreate.metadonnees = this.moodCriterias;
-      // this.insertMood(this.moodToCreate);
-      // this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
-      //  })
+      this.metadonnees.Accousticness = this.moodCriterias[0].value/100;
+      this.metadonnees.Danceability = this.moodCriterias[1].value/100;
+      this.metadonnees.Energy = this.moodCriterias[2].value/100;
+      this.metadonnees.Instrumentalness = this.moodCriterias[3].value/100;
+      this.metadonnees.Liveness = this.moodCriterias[4].value/100;
+      this.metadonnees.Loudness = (this.moodCriterias[5].value)/(-100)*60;
+      this.metadonnees.Popularity = this.moodCriterias[6].value/100;
+      this.moodToCreate.metadonnees = this.metadonnees;
+      this.insertMood(this.moodToCreate);
+      this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
+       })
     }
   },
   computed: {
