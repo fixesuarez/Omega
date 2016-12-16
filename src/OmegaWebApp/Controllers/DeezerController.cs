@@ -79,8 +79,8 @@ namespace OmegaWebApp.Controllers
         {
             using( HttpClient client = new HttpClient() )
             {
-                string email = User.FindFirst( ClaimTypes.Email ).Value;
-                string accessToken = await _userService.GetDeezerAccessToken( email );
+                string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+                string accessToken = await _userService.GetDeezerAccessToken( guid );
 
                 Uri allPlaylistsUri = new Uri( string.Format(
                 "http://api.deezer.com/user/me/playlists?output=json&access_token={0}",
