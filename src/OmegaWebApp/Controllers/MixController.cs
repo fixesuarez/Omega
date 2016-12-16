@@ -50,7 +50,6 @@ namespace OmegaWebApp.Controllers
             metadonnes.mode = ambiance.Mode;
             metadonnes.popularity = ambiance.Popularity;
             metadonnes.speechiness = ambiance.Speechiness;
-            metadonnes.tempo = ambiance.Tempo;
             metadonnes.valence = ambiance.Valence;
             metadonnes.energy = ambiance.Energy;
             return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
