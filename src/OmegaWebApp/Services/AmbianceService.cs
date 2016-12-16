@@ -20,7 +20,7 @@ namespace OmegaWebApp.Services
             string name = (string)rss["Name"];
             string cover = (string)rss["Cover"];
             MetaDonnees metadonnees = new MetaDonnees();
-            metadonnees.acousticness = (string)rss["Metadonnees"]["acousticness"];
+            metadonnees.accousticness = (string)rss["Metadonnees"]["accousticness"];
             metadonnees.danceability = (string)rss["Metadonnees"]["danceability"];
             metadonnees.instrumentalness = (string)rss["Metadonnees"]["instrumentalness"];
             metadonnees.liveness = (string)rss["Metadonnees"]["liveness"];
