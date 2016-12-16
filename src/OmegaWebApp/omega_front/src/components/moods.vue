@@ -63,11 +63,12 @@ export default {
         { label: 'Danceability', value: null},
         { label: 'Energy', value: null},
         { label: 'Instrumentalness', value: null},
+        { label: 'Speechiness', value: null},
         { label: 'Liveness', value: null},
         { label: 'Loudness', value: null},
         { label: 'Popularity', value: null}
       ],
-      metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Liveness': null, 'Loudness': null, 'Mode': null, 'Popularity': null},
+      metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Speechiness': null, 'Liveness': null, 'Loudness': null, 'Popularity': null},
       localMoods: [
       { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', 'metadonnees': {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''} },
       { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png','metadonnees': {'Accousticness': '0.48', 'Danceability': '0.72', 'Energy': '0.84', 'Instrumentalness': '0.84', 'Liveness': '0.41', 'Loudness': '-44', 'Mode': '0', 'Popularity': '78'} },
@@ -93,13 +94,54 @@ export default {
     createLocalMood: function(item) {
       this.moodToCreate.cover = this.moodCover;
       this.moodToCreate.name = this.moodName;
-      this.metadonnees.Accousticness = this.moodCriterias[0].value/100;
-      this.metadonnees.Danceability = this.moodCriterias[1].value/100;
-      this.metadonnees.Energy = this.moodCriterias[2].value/100;
-      this.metadonnees.Instrumentalness = this.moodCriterias[3].value/100;
-      this.metadonnees.Liveness = this.moodCriterias[4].value/100;
-      this.metadonnees.Loudness = (this.moodCriterias[5].value)/(-100)*60;
-      this.metadonnees.Popularity = this.moodCriterias[6].value/100;
+      if(this.moodCriterias[0].value == null) {
+        this.metadonnees.Accousticness = this.moodCriterias[0].value;
+      } else {
+        this.metadonnees.Accousticness = this.moodCriterias[0].value/100;
+      }
+
+      if(this.moodCriterias[1].value == null) {
+        this.metadonnees.Danceability = this.moodCriterias[1].value;
+      } else {
+        this.metadonnees.Danceability = this.moodCriterias[1].value/100;
+      }
+
+      if(this.moodCriterias[2].value == null) {
+        this.metadonnees.Energy = this.moodCriterias[2].value;
+      } else {
+        this.metadonnees.Energy = this.moodCriterias[2].value/100;
+      }
+
+      if(this.moodCriterias[3].value == null) {
+        this.metadonnees.Instrumentalness = this.moodCriterias[3].value;
+      } else {
+        this.metadonnees.Instrumentalness = this.moodCriterias[3].value/100;
+      }
+
+      if(this.moodCriterias[4].value == null) {
+        this.metadonnees.Speechiness = this.moodCriterias[4].value;
+      } else {
+        this.metadonnees.Speechiness = this.moodCriterias[4].value/100;
+      }
+
+      if(this.moodCriterias[5].value == null) {
+        this.metadonnees.Liveness = this.moodCriterias[5].value
+      } else {
+        this.metadonnees.Liveness = this.moodCriterias[5].value/100;
+      }
+
+      if(this.moodCriterias[6].value == null) {
+        this.metadonnees.Loudness = this.moodCriterias[6].value
+      } else {
+        this.metadonnees.Loudness = (this.moodCriterias[6].value)/(-100)*60;
+      }
+
+      if(this.moodCriterias[7].value == null) {
+        this.metadonnees.Popularity = this.moodCriterias[7].value;
+      } else {
+        this.metadonnees.Popularity = this.moodCriterias[7].value/100;
+      }
+      
       this.moodToCreate.metadonnees = this.metadonnees;
       this.insertMood(this.moodToCreate);
       this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
