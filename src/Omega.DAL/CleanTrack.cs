@@ -6,7 +6,7 @@ namespace Omega.DAL
     {
         public CleanTrack(string id, string source)
         {
-            this.PartitionKey = "";
+            this.PartitionKey = string.Empty;
             this.RowKey = source + ":" + id;
         }
 

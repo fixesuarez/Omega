@@ -69,7 +69,7 @@ namespace Omega.DAL
 
             CloudTable table = ConnectCleanTrackTable(connectionString);
 
-            TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>("", trackIdSource);
+            TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>(string.Empty, trackIdSource);
 
             TableResult retrievedResult = await table.ExecuteAsync(retrieveOperation);
 

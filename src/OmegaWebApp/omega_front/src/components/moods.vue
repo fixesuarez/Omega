@@ -32,13 +32,23 @@
               <!--<span @click="setCurrentMood(mood)">{{mood.rowKey}}</span>-->
               <img v-bind:src="mood.cover" @click="setCurrentMood(mood)">
             </span>
+          </div><br>
+          <div class="addMood">
+            Créer une Ambiance<br>
+            <span id="smallText">Nom : <input type="text" v-model="moodName"><br><span>
+            <span id="smallText">Image : <input type="text" v-model="moodCover"></span>
+            <span class="allCriterias" v-for="data in moodCriterias">
+              <input type="range" v-model="data.value" id="singleCriteria" v-bind:class="{active: data.value == null}"><span v-if="data.value !== null" id="criteriaValue">{{data.value}}</span>
+              <!--<input v-if="data.value == null" type="range" v-model="data.value" id="singleCriteria"><span v-if="data.value == null" id="criteriaValue">{{data.value}}</span>-->
+            </span><br>
+            <button @click="createLocalMood({moodCriterias, moodName, moodCover})">Créer</button>
+            {{metadonnees}}
           </div>
         </div>
       </div>
     </div>
   </transition>
 </template>
-
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import MoodService from '../services/MoodService'
@@ -46,21 +56,55 @@ import MoodService from '../services/MoodService'
 export default {
   data () {
     return {
+      moodCover: '',
+      moodName: '',
+      moodCriterias: [
+        { label: 'Accousticness', value: null},
+        { label: 'Danceability', value: null},
+        { label: 'Energy', value: null},
+        { label: 'Instrumentalness', value: null},
+        { label: 'Liveness', value: null},
+        { label: 'Loudness', value: null},
+        { label: 'Popularity', value: null}
+      ],
+      metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Liveness': null, 'Loudness': null, 'Mode': null, 'Popularity': null},
       localMoods: [
       { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', 'metadonnees': {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''} },
       { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png','metadonnees': {'Accousticness': '0.48', 'Danceability': '0.72', 'Energy': '0.84', 'Instrumentalness': '0.84', 'Liveness': '0.41', 'Loudness': '-44', 'Mode': '0', 'Popularity': '78'} },
       { label: 'Dance', image: 'http://image.noelshack.com/fichiers/2016/24/1465931498-moodsport.png', 'metadonnees': {'Accousticness': '0.95', 'Danceability': '0.52', 'Energy': '0.84', 'Instrumentalness': '0.24', 'Liveness': '0.91', 'Loudness': '-44', 'Mode': '1', 'Popularity': '18'} },
       { label: 'Mad', image: 'http://image.noelshack.com/fichiers/2016/24/1465931510-moodwork.png', 'metadonnees': {'Accousticness': '0.25', 'Danceability': '0.32', 'Energy': '0.84', 'Instrumentalness': '0.04', 'Liveness': '0.61', 'Loudness': '-44', 'Mode': '1', 'Popularity': '02'} }],
-      data: ''
+      data: '',
+      moodToCreate: {
+        'cover': null,
+        'name': null, 
+        'metadonnees': null
+      },
+      mood: {'cover': 'http://www.firstredeemer.org/wp-content/uploads/girl-backpack-thinking-sunset-field-fence-.jpg', 'name': 'Heyyy', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
+      
     }
   },
   methods: {
-    ...mapActions(['showMoodsModal', 'sendMoods','setCurrentMood', 'requestAsync']),
+    ...mapActions(['showMoodsModal', 'sendMoods','setCurrentMood', 'requestAsync', 'insertMood']),
 
     loadMoods: async function() {
       this.data = await this.requestAsync(() => MoodService.getMoods());
       this.sendMoods(this.data);
     },
+    createLocalMood: function(item) {
+      this.moodToCreate.cover = this.moodCover;
+      this.moodToCreate.name = this.moodName;
+      this.metadonnees.Accousticness = this.moodCriterias[0].value/100;
+      this.metadonnees.Danceability = this.moodCriterias[1].value/100;
+      this.metadonnees.Energy = this.moodCriterias[2].value/100;
+      this.metadonnees.Instrumentalness = this.moodCriterias[3].value/100;
+      this.metadonnees.Liveness = this.moodCriterias[4].value/100;
+      this.metadonnees.Loudness = (this.moodCriterias[5].value)/(-100)*60;
+      this.metadonnees.Popularity = this.moodCriterias[6].value/100;
+      this.moodToCreate.metadonnees = this.metadonnees;
+      this.insertMood(this.moodToCreate);
+      this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
+       })
+    }
   },
   computed: {
     ...mapGetters(['moods', 'currentMood'])
@@ -98,7 +142,7 @@ export default {
   vertical-align: middle;
 }
 .moodModal-container {
-  width: 50%;
+  width: 650px;
   overflow: auto;
   margin: 0px auto;
   padding: 40px 60px;
@@ -181,12 +225,45 @@ export default {
   margin-top: 20px;
   float: left;
   width: 250px;
+  height: 180px;
+  overflow: auto;
 }
 
 .moods img {
   width: 80px;
   padding: 1px;
   height: 50px;
+}
+
+.addMood {
+  margin-top: 0px;
+  height: 220px;
+  float: left;
+  width: 280px;
+  font-size: 14px;
+}
+
+#smallText {
+  margin-left: 16px;
+  font-size: 12px;
+}
+
+.allCriterias {
+  margin-left: 18px;
+}
+
+#singleCriteria {
+  margin-top: 10px;
+}
+
+.active {
+  filter: grayscale(100%);
+  opacity: 0.3;
+}
+
+#criteriaValue {
+  margin-left: 10px;
+  font-size: 12px;
 }
 
 .modalClose {
@@ -215,5 +292,10 @@ export default {
   transform: scale(1.1);
 }
 
+input[type="text"] {
+  border: 0;
+  border-bottom: 1px solid silver;
+  width: auto;
+}
 </style>
 
