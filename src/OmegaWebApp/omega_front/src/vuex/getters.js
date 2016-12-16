@@ -19,3 +19,4 @@ export const checkedPlaylists = state => state.sampleModule.checkedPlaylists;
 export const playlists = state => state.sampleModule.playlists;
 export const moodToInsert = state => state.sampleModule.moodToInsert;
 export const mixToMix = state => state.sampleModule.mixToMix;
+export const identity = state => state.sampleModule.identity;

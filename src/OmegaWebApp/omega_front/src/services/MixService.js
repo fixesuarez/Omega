@@ -9,8 +9,8 @@ class MixService {
 
     }
 
-    async mix() {
-        return await getAsync(endpoint, 'MixPlaylist', AuthService.accessToken);
+    async mix(mixToMix) {
+        return await postAsync(endpoint, 'MixPlaylist', AuthService.accessToken, mixToMix);
     }
 }
 

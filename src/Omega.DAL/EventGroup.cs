@@ -8,10 +8,10 @@ namespace Omega.DAL
 {
     public class EventGroup : TableEntity
     {
-        public EventGroup(string eventId, string userEmail)
+        public EventGroup(string eventId, string userGuid)
         {
             PartitionKey = eventId;
-            RowKey = userEmail;
+            RowKey = userGuid;
         }
 
         public EventGroup() { }

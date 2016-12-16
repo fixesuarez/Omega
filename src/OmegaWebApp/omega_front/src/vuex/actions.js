@@ -116,3 +116,8 @@ export const mix = ({commit}, payload) => {
     
     commit(types.MIX, payload)
 }
+
+export const getIdentity = ({commit}, payload) => {
+    
+    commit(types.GETIDENTITY, payload)
+}

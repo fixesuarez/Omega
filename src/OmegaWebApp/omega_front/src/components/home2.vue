@@ -2,9 +2,9 @@
   <div class="global">
     <div class="firstPage">
       <div class="navbar">
-        <router-link to="/board" @click="login('Facebook')">FACEBOOK</router-link>
-        <a href="" id="orangeText" @click="login('Facebook')">DEEZER</a>
-        <a href="" @click="login('Facebook')">SPOTIFY</a>
+         <a href="" @click="login('Facebook')">FACEBOOK</a>
+        <a href="" id="orangeText" @click="login('Deezer')">DEEZER</a>
+        <a href="" @click="login('Spotify')">SPOTIFY</a>
       </div>
       <div class="header">
         <img src="../assets/triangleGrey.png" id="logo"><br>

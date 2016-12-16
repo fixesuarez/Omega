@@ -19,7 +19,8 @@ const state = {
   checkedPlaylists: [],
   playlists: [],
   moodToInsert: '',
-  mixToMix: {AmbianceName: '', AllPlaylists: ''}
+  mixToMix: {AmbianceName: '', AllPlaylists: ''},
+  identity: false
 }
 
 const mutations = {
@@ -108,6 +109,9 @@ const mutations = {
   [types.MIX](state, payload) {
     state.mixToMix.AllPlaylists = state.checkedPlaylists;
     state.mixToMix.AmbianceName = state.currentMood.rowKey;
+  },
+  [types.GETIDENTITY](state, payload) {
+    state.identity = payload;
   }
 }
 

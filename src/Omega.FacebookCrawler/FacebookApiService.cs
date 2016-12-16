@@ -17,10 +17,11 @@ namespace Omega.FacebookCrawler
             _eventGroupGateway = eventGroupGateway;
             _userGateway = userGateway;
         }
+        public FacebookApiService() { }
 
-        public async Task GetAllFacebookGroups( string email )
+        public async Task GetAllFacebookGroups( string guid )
         {
-            string accessToken = await _userGateway.FindFacebookAccessToken( email );
+            string accessToken = await _userGateway.FindFacebookAccessToken( guid );
             FacebookClient client = new FacebookClient( accessToken );
             dynamic response = await client.GetTaskAsync( "/v2.8/me/groups?fields=id,name,cover,members{id,name,email}" );
             JObject groupsJson = JObject.FromObject( response );
@@ -44,7 +45,7 @@ namespace Omega.FacebookCrawler
                     {
                         User u = new User();
                         u.PartitionKey = string.Empty;
-                        u.RowKey = mail;
+                        u.RowKey = guid;
                         u.FacebookId = id;
                         groupMembers.Add( u );
                     }
@@ -53,10 +54,10 @@ namespace Omega.FacebookCrawler
             }
         }
         
-        public async Task GetAllFacebookEvents( string email )
+        public async Task GetAllFacebookEvents( string guid )
         {
-            string accessToken = await _userGateway.FindFacebookAccessToken( email );
-            FacebookClient fbClient = new FacebookClient( "accessToken" );
+            string accessToken = await _userGateway.FindFacebookAccessToken( guid );
+            FacebookClient fbClient = new FacebookClient( accessToken );
 
             dynamic result = await fbClient.GetTaskAsync( "/v2.8/me/events?fields=id,name,start_time,cover,attending{id,email,name}" );
             JObject eventsJson = JObject.FromObject( result );
@@ -94,7 +95,7 @@ namespace Omega.FacebookCrawler
                         {
                             User u = new User();
                             u.PartitionKey = string.Empty;
-                            u.RowKey = mail;
+                            u.RowKey = guid;
                             u.FacebookId = id;
                             eventAttendings.Add( u );
                         }

@@ -143,7 +143,7 @@ export default {
       
       this.moodToCreate.metadonnees = this.metadonnees;
       this.insertMood(this.moodToCreate);
-      var result = await MoodService.createMood(this.moodToCreate);
+      var result = MoodService.createMood(this.moodToCreate);
       // this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
       //  })
     }

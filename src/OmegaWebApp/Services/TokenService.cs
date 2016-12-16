@@ -15,7 +15,7 @@ namespace OmegaWebApp.Services
             _options = options.Value;
         }
 
-        public Token GenerateToken( string userId, string email )
+        public Token GenerateToken( /*string userId, string email*/ string guid )
         {
             var now = DateTime.UtcNow;
 
@@ -23,9 +23,10 @@ namespace OmegaWebApp.Services
             // You can add other claims here, if you want:
             var claims = new Claim[]
             {
-                new Claim( JwtRegisteredClaimNames.Sub, userId ),
-                new Claim( JwtRegisteredClaimNames.Email, email ),
-                new Claim( JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString() ),
+                //new Claim( JwtRegisteredClaimNames.Sub, userId ),
+                //new Claim( JwtRegisteredClaimNames.Email, email ),
+                //new Claim( JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString() ),
+                new Claim( "www.omega.com:guid" , guid ),
                 new Claim( JwtRegisteredClaimNames.Iat, ( ( int )( now - new DateTime( 1970, 1, 1 ) ).TotalSeconds).ToString(), ClaimValueTypes.Integer64 )
             };
 

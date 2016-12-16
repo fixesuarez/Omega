@@ -15,14 +15,22 @@ namespace OmegaWebApp.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<User> FindUser( string email )
+        public async Task<User> FindUser( string guid )
         {
-            return await _userGateway.FindUserByEmail( email );
+            return await _userGateway.FindUser( guid );
+        }
+        public async Task<UserIndex> FindUserIndex(string provider, string apiId )
+        {
+            return await _userGateway.FindUserIndex( provider, apiId );
         }
 
         public async Task CreateUser( User user )
         {
             await _userGateway.CreateUser( user );
+        }
+        public async Task CreateUserIndex( string provider, string apiId, string guid )
+        {
+            await _userGateway.CreateUserIndex( provider, apiId, guid );
         }
         
         public async Task UpdateSpotifyUser(User spotifyUser )
@@ -38,35 +46,35 @@ namespace OmegaWebApp.Services
             await _userGateway.UpdateFacebookUser(facebookUser);
         }
         
-        public async Task<string> GetSpotifyAccessToken( string email )
+        public async Task<string> GetSpotifyAccessToken( string guid )
         {
-            return await _userGateway.FindSpotifyAccessToken( email );
+            return await _userGateway.FindSpotifyAccessToken( guid );
         }
-        public async Task<string> GetDeezerAccessToken( string email )
+        public async Task<string> GetDeezerAccessToken( string guid )
         {
-            return await _userGateway.FindDeezerAccessToken( email );
+            return await _userGateway.FindDeezerAccessToken( guid );
         }
-        public async Task<string> GetFacebookAccessToken( string email )
+        public async Task<string> GetFacebookAccessToken( string guid )
         {
-            return await _userGateway.FindFacebookAccessToken( email );
-        }
-
-        public async Task<string> GetFacebookId( string email )
-        {
-            return await _userGateway.FindFacebookId( email );
-        }
-        public async Task<string> GetSpotifyId( string email )
-        {
-            return await _userGateway.FindSpotifyId( email );
-        }
-        public async Task<string> GetDeezerId( string email )
-        {
-            return await _userGateway.FindDeezerId( email );
+            return await _userGateway.FindFacebookAccessToken( guid );
         }
 
-        public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
+        public async Task<string> GetFacebookId( string guid )
         {
-            return await _userGateway.GetAuthenticationProviders( userId );
+            return await _userGateway.FindFacebookId( guid );
+        }
+        public async Task<string> GetSpotifyId( string guid )
+        {
+            return await _userGateway.FindSpotifyId( guid );
+        }
+        public async Task<string> GetDeezerId( string guid )
+        {
+            return await _userGateway.FindDeezerId( guid );
+        }
+
+        public async Task<IEnumerable<string>> GetAuthenticationProviders( string guid )
+        {
+            return await _userGateway.GetAuthenticationProviders( guid );
         }
     }
 }
