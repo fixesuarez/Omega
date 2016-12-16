@@ -42,7 +42,7 @@ namespace OmegaWebApp.Controllers
             
             Ambiance ambiance = await _ambianceService.RetrieveAmbiance(email, playlists.AmbianceName);
             MetaDonnees metadonnes = new MetaDonnees();
-            metadonnes.acousticness = ambiance.Acousticness;
+            metadonnes.accousticness = ambiance.Accousticness;
             metadonnes.danceability = ambiance.Danceability;
             metadonnes.instrumentalness = ambiance.Instrumentalness;
             metadonnes.liveness = ambiance.Liveness;
@@ -50,7 +50,6 @@ namespace OmegaWebApp.Controllers
             metadonnes.mode = ambiance.Mode;
             metadonnes.popularity = ambiance.Popularity;
             metadonnes.speechiness = ambiance.Speechiness;
-            metadonnes.tempo = ambiance.Tempo;
             metadonnes.valence = ambiance.Valence;
             metadonnes.energy = ambiance.Energy;
             return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
@@ -69,7 +68,7 @@ namespace OmegaWebApp.Controllers
                 {
                     trackIdSource = track.RowKey.Substring(0,2) + track.TrackId;
                     CleanTrack analysedSong = await _cleanTrackService.GetSongCleanTrack(trackIdSource);
-                    if (Compare(askedDonnees.acousticness, analysedSong.Acousticness, ratio)
+                    if (Compare(askedDonnees.accousticness, analysedSong.Acousticness, ratio)
                     && Compare(askedDonnees.danceability, analysedSong.Danceability, ratio)
                     && Compare(askedDonnees.energy, analysedSong.Energy, ratio)
                     && Compare(askedDonnees.instrumentalness, analysedSong.Instrumentalness, ratio)

@@ -11,7 +11,7 @@
       <div class="playlistWrapper" id="playlistWrapper">
         <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
         <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
-        <span v-for="p in playlists" @click="selectPlaylist(p),setSPlayer()" id="spanPlaylist">
+        <span v-for="p in playlists" @click="selectPlaylist(p),setSPlayer(),setDPlayer()" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
@@ -50,8 +50,9 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-      <iframe v-bind:src="sPlayer" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
-        <iframe class="deezerPlayer" style="opacity: 1" scrolling="no" frameborder="0" allowTransparency="true" src="https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=250&height=200&color=007FEB&layout=dark&size=medium&type=playlist&id=30595446&app_id=1" width="250" height="62"></iframe>
+      <iframe margin-top="10" v-bind:src="sPlayer" width="300" height="70" frameborder="0" allowtransparency="true"></iframe>
+      <iframe scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="300" height="62"></iframe>
+      
       </div>
     </div>
 
@@ -76,7 +77,7 @@ export default {
   data () {
     return {
       sPlayer: '',
-      dPlayer:'',
+      DzPlayer: '',
       sPlaylists: [],
       dPlaylists: [],
       SDplaylists: [],
@@ -94,7 +95,10 @@ export default {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
     },
-
+    setDPlayer: function() {
+     var player = 'https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=false&width=350&height=350&color=007FEB&layout=dark&size=medium&type=playlist&id='+ this.currentPlaylist.PlaylistId +'&app_id=176241';
+      this.DzPlayer = player;
+    },
     scrollRight: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
       document.getElementById('playlistWrapper').scrollLeft += scroll;
@@ -122,7 +126,7 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      // var data = await this.requestAsync(() => MixService.mix());
+      //var data = await this.requestAsync(() => MixService.mix());
       this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
        })
     },

@@ -28,15 +28,13 @@ namespace Omega.DAL
 
         public string Speechiness { get; set; }
 
-        public string Acousticness { get; set; }
+        public string Accousticness { get; set; }
 
         public string Instrumentalness { get; set; }
 
         public string Liveness { get; set; }
 
         public string Valence { get; set; }
-
-        public string Tempo { get; set; }
 
         public string Popularity { get; set; }
     }

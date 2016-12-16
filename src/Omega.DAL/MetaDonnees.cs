@@ -8,7 +8,7 @@
             energy = penergy;
             loudness = ploudness;
             speechiness = pspeechiness;
-            acousticness = pacousticness;
+            accousticness = pacousticness;
             instrumentalness = pinstrumentalness;
             liveness = pliveness;
             valence = pvalence;
@@ -26,7 +26,7 @@
         public string loudness { get; set; }
         public string mode { get; set; }
         public string speechiness { get; set; }
-        public string acousticness { get; set; }
+        public string accousticness { get; set; }
         public string instrumentalness { get; set; }
         public string liveness { get; set; }
         public string valence { get; set; }
