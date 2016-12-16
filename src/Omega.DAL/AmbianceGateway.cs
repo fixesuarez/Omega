@@ -37,13 +37,13 @@ namespace Omega.DAL
 
             Ambiance mood = new Ambiance(user, name);
             mood.Cover = cover;
-            mood.Acousticness = (string)rss["Acousticness"];
+            mood.Accousticness = (string)rss["Accousticness"];
             mood.Danceability = (string)rss["Danceability"];
             mood.Energy = (string)rss["Energy"];
             mood.Instrumentalness = (string)rss["Instrumentalness"];
             mood.Liveness = (string)rss["Liveness"];
             mood.Loudness = (string)rss["Loudness"];
-            mood.Mode = (string)rss["Mode"];
+            mood.Speechiness = (string)rss["Speechiness"];
             mood.Popularity = (string)rss["Popularity"];
             TableOperation insertOperation = TableOperation.Insert(mood);
 
@@ -56,7 +56,7 @@ namespace Omega.DAL
             {
                 Ambiance mood = new Ambiance(user, name);
                 mood.Cover = cover;
-                mood.Acousticness = metaDonnees.acousticness;
+                mood.Accousticness = metaDonnees.accousticness;
                 mood.Danceability = metaDonnees.danceability;
                 mood.Energy = metaDonnees.energy;
                 mood.Instrumentalness = metaDonnees.instrumentalness;

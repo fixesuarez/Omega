@@ -48,7 +48,7 @@ namespace Omega.DAL
                 track.Loudness = meta.loudness;
                 track.Mode = meta.mode;
                 track.Speechiness = meta.speechiness;
-                track.Acousticness = meta.acousticness;
+                track.Acousticness = meta.accousticness;
                 track.Instrumentalness = meta.instrumentalness;
                 track.Liveness = meta.liveness;
                 track.Valence = meta.valence;
@@ -99,7 +99,7 @@ namespace Omega.DAL
                 updateEntity.Loudness = meta.loudness;
                 updateEntity.Mode = meta.mode;
                 updateEntity.Speechiness = meta.speechiness;
-                updateEntity.Acousticness = meta.acousticness;
+                updateEntity.Acousticness = meta.accousticness;
                 updateEntity.Instrumentalness = meta.instrumentalness;
                 updateEntity.Liveness = meta.liveness;
                 updateEntity.Valence = meta.valence;
