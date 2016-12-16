@@ -26,10 +26,10 @@ namespace Omega.DAL
 
             foreach (User user in users)
             {
-                EventGroup e = await RetrieveGroupEvent( eventId, user.Email );
+                EventGroup e = await RetrieveGroupEvent( eventId, user.Guid );
                 if( e == null )
                 {
-                    eventGroup = new EventGroup( eventId, user.Email );
+                    eventGroup = new EventGroup( eventId, user.Guid );
                     eventGroup.UserId = user.FacebookId;
                     eventGroup.Type = type;
                     eventGroup.Cover = cover;

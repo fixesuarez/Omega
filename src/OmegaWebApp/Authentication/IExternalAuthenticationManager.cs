@@ -6,8 +6,9 @@ namespace OmegaWebApp.Authentication
 {
     public interface IExternalAuthenticationManager
     {
-        Task CreateOrUpdateUser( OAuthCreatingTicketContext context );
+        Task<string> CreateOrUpdateUser( OAuthCreatingTicketContext context );
+        Task CreateOrUpdateUserIndex( string provider, string apiId, string guid );
 
-        Task<User> FindUser( OAuthCreatingTicketContext context );
+        Task<User> FindUser( string guid );
     }
 }

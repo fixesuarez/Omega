@@ -1,3 +1,5 @@
+import { postAsync } from '../helpers/apiHelper'
+
 class AuthService {
     constructor() {
         this.allowedOrigins = [];
@@ -85,14 +87,6 @@ class AuthService {
     /*logout = () => {
         var popup = window.open(this.logoutEndpoint, "Déconnexion d'ITI.PrimarySchool", "menubar=no, status=no, scrollbars=no, menubar=no, width=700, height=600");        
     }*/
-
-    async relogin(selectedProvider, scopes = null) {
-        // We must open the popup window first otherwise it is blocked by  browsers 
-        // security policy (the open must be done directly after the click of the user).
-        var popup = window.open('about:blank', "Lier un autre compte", "menubar=no, status=no, scrollbars=no, menubar=no, width=700, height=700");
-        const r = await postAsync( '/Account/OAuthRelogin', '', this.accessToken, { provider: selectedProvider, scopes: scopes } );
-        popup.location.href = r.redirectURI;        
-    }
     
     registerSignedOutCallback(cb) {
         this.signedOutCallbacks.push(cb);

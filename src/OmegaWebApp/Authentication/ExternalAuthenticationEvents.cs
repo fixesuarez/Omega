@@ -27,18 +27,14 @@ namespace OmegaWebApp.Authentication
                 // Binding a new provider or augmenting scopes of an existing provider. 
                 // I'm not sure that the "augmentScope" parameter is a good idea...
                 // WE MUST be able to retrieve the scopes actually ACCEPTED by the user here!
-                string augmentedScopes;
-                if( autP.Items.TryGetValue( "augmentScope", out augmentedScopes ) )
-                {
-                    autP.Items.Remove( "augmentScope" );
-                    // This where the new scopes (augmentedScopes) should be saved...
-                }
+                string provider = context.Options.ClaimsIssuer;
+                string pGuid = autP.Items["reLoginUserId"];
+                await _userManager.CreateOrUpdateUserIndex( provider, context.GetId(), pGuid );
             }
             // This is also where the email should be handled and account binding 
             // should occur.
-            await _userManager.CreateOrUpdateUser( context );
-            User user = await _userManager.FindUser( context );
-            user.FacebookId = context.GetId();
+            string guid = await _userManager.CreateOrUpdateUser( context );
+            User user = await _userManager.FindUser( guid );
             ClaimsPrincipal principal = CreatePrincipal( user );
             context.Ticket = new AuthenticationTicket( principal, autP, CookieAuthentication.AuthenticationScheme );
             return;
@@ -48,10 +44,10 @@ namespace OmegaWebApp.Authentication
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim( ClaimTypes.NameIdentifier, user.FacebookId, ClaimValueTypes.String ),
-                new Claim( ClaimTypes.Email, user.Email )
+                //new Claim( ClaimTypes.NameIdentifier, user.FacebookId, ClaimValueTypes.String ),
+                new Claim( "http://omega.com:guid", user.Guid )
             };
-            ClaimsPrincipal principal = new ClaimsPrincipal( new ClaimsIdentity( claims, "Cookies", ClaimTypes.Email, string.Empty ) );
+            ClaimsPrincipal principal = new ClaimsPrincipal( new ClaimsIdentity( claims, "Cookies", "http://omega.com:guid", string.Empty ) );
             return principal;
         }
     }

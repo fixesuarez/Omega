@@ -56,12 +56,13 @@ namespace OmegaWebApp.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize( ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme )]
+        [Route( "/Account/OAuthRelogin" )]
         public async Task<IActionResult> OAuthRelogin( [FromBody]OAuthReLoginModel model )
         {
             string redirectUri = Url.Action( nameof( Authenticated ), "Account" );
             var authP = new AuthenticationProperties { RedirectUri = redirectUri };
-            string sUserId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
-            authP.Items["reLoginUserId"] = sUserId;
+            string sUserGuid = User.FindFirst( "www.omega.com:guid" ).Value;
+            authP.Items["reLoginUserId"] = sUserGuid;
             if( !string.IsNullOrWhiteSpace( model.Scopes ) )
             {
                 // This will be added to the query string of the challenge url.
@@ -96,13 +97,16 @@ namespace OmegaWebApp.Controllers
         [Authorize( ActiveAuthenticationSchemes = CookieAuthentication.AuthenticationScheme )]
         public IActionResult Authenticated()
         {
-            string userId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
-            string email = User.FindFirst( ClaimTypes.Email ).Value;
-            Token token = _tokenService.GenerateToken( userId, email );
-            IEnumerable<string> providers = _userService.GetAuthenticationProviders( email ).Result;
+            string guid = User.FindFirst( "http://omega.com:guid" ).Value;
+            //string userId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
+            //string email = User.FindFirst( ClaimTypes.Email ).Value;
+            //Token token = _tokenService.GenerateToken( userId, email );
+            Token token = _tokenService.GenerateToken( guid );
+            IEnumerable<string> providers = _userService.GetAuthenticationProviders( guid ).Result;
             ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
             ViewData["Token"] = token;
-            ViewData["Email"] = email;
+            //ViewData["Email"] = email;
+            ViewData["Guid"] = guid;
             ViewData["NoLayout"] = true;
             ViewData["Providers"] = providers;
             return View();
