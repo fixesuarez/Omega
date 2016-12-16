@@ -101,8 +101,8 @@ const mutations = {
     //   console.log(state.checkedPlaylists.length)
   },
   [types.SENDPLAYLISTS](state, payload) {
-    // var tempoPlaylists = payload;
-    // tempoPlaylists.map(m => { Vue.set(m, 'check', false); return m});
+    var provider = payload[0].Tracks[0].RowKey.charAt(0);
+    payload = payload.map(p => { p.provider = provider; return p })
     state.playlists.push.apply(state.playlists, payload);
   },
   [types.MIX](state, payload) {

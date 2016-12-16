@@ -1,9 +1,9 @@
 <template>
   <div class="col-12 playlistGlobal">
-    <button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
-    <button type="button" @click="loadDeezerPlaylist()">Deezer</button>-->
+    <!--<button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
+    <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
     <button @click="insertMood(mood)">Send mood</button>
-    <button @click="startMix()">Mix</button>
+    <button @click="startMix()">Mix</button>-->
 
 
     <!--Contains the top part of the playlist vue-->
@@ -18,7 +18,10 @@
             <img src="https://cdn4.iconfinder.com/data/icons/flat-black/512/menu.png" id="settingsImage">
             {{p.Name}}
           </span>
-          <span class="playlistBanner">
+          <span v-if="p.provider == 's'" class="sPlaylistBanner">
+            SPOTIFY
+          </span>
+          <span v-if="p.provider == 'd'" class="dPlaylistBanner">
             DEEZER
           </span>
         </span>
@@ -113,7 +116,8 @@ export default {
     },
     loadPlaylists: async function() {
       this.SDplaylists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
-      this.sendPlaylists(this.SDplaylists.map(m => { this.$set(m, 'check', false); return m}));
+      this.SDplaylists.map(m => { this.$set(m, 'check', false); return m});
+      this.sendPlaylists(this.SDplaylists);
     },
     loadSpotifyPlaylist: async function() {
       var spplaylist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
@@ -227,7 +231,19 @@ export default {
   vertical-align: middle;
 }
 
-.playlistBanner {
+.sPlaylistBanner {
+  position: absolute;
+  margin-top: 160px;
+  left: 5px;
+  height: 25px;
+  background: green;
+  border-radius: 0px 0px 2px 2px;
+  padding: 2px;
+  font-size: 13px;
+  font-family: 'Montserrat-ultra-light';
+}
+
+.dPlaylistBanner {
   position: absolute;
   margin-top: 160px;
   left: 5px;

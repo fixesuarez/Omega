@@ -42,7 +42,6 @@
               <!--<input v-if="data.value == null" type="range" v-model="data.value" id="singleCriteria"><span v-if="data.value == null" id="criteriaValue">{{data.value}}</span>-->
             </span><br>
             <button @click="createLocalMood({moodCriterias, moodName, moodCover})">Créer</button>
-            {{metadonnees}}
           </div>
         </div>
       </div>
@@ -91,7 +90,7 @@ export default {
       this.data = await this.requestAsync(() => MoodService.getMoods());
       this.sendMoods(this.data);
     },
-    createLocalMood: function(item) {
+    createLocalMood: async function(item) {
       this.moodToCreate.cover = this.moodCover;
       this.moodToCreate.name = this.moodName;
       if(this.moodCriterias[0].value == null) {
@@ -144,8 +143,9 @@ export default {
       
       this.moodToCreate.metadonnees = this.metadonnees;
       this.insertMood(this.moodToCreate);
-      this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
-       })
+      var result = await MoodService.createMood(this.moodToCreate);
+      // this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
+      //  })
     }
   },
   computed: {
