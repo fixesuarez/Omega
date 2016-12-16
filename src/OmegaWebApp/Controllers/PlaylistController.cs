@@ -32,9 +32,9 @@ namespace OmegaWebApp.Controllers
         [HttpGet( "Playlists" )]
         public async Task<JToken> GetAllPlaylists()
         {
-            string email = User.FindFirst( ClaimTypes.Email ).Value;
-            string spotifyId = await _userService.GetSpotifyId( email );
-            string deezerId = await _userService.GetDeezerId( email );
+            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+            string spotifyId = await _userService.GetSpotifyId( guid );
+            string deezerId = await _userService.GetDeezerId( guid );
 
             List<Playlist> playlists = await _playlistService.GetAllPlaylistsFromUser( spotifyId, deezerId );
             string allPlaylist = JsonConvert.SerializeObject( playlists );

@@ -36,9 +36,9 @@ namespace OmegaWebApp.Controllers
             {
                 List<GroupOrEventFacebook> groups = new List<GroupOrEventFacebook>();
 
-                string email = User.FindFirst( ClaimTypes.Email ).Value;
-                string accessToken = await _userService.GetFacebookAccessToken( email );
-                string facebookId = await _userService.GetFacebookId( email );
+                string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+                string accessToken = await _userService.GetFacebookAccessToken( guid );
+                string facebookId = await _userService.GetFacebookId( guid );
                 string parameters = Uri.EscapeDataString( "id,cover,link,name,members{email,id,name}" );
 
                 Uri groupDetailUri = new Uri(
@@ -80,8 +80,8 @@ namespace OmegaWebApp.Controllers
         [HttpGet( "Events" )]
         public async Task<JToken> GetAllFacebookEvents()
         {
-            string email = User.FindFirst( ClaimTypes.Email ).Value;
-            string accessToken = await _userService.GetFacebookAccessToken( email );
+            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+            string accessToken = await _userService.GetFacebookAccessToken( guid );
             //FacebookClient fbClient = new FacebookClient( accessToken );
 
             //dynamic result = await fbClient.GetTaskAsync( "/me/events?fields=cover,id,name,attending{id,email,name}" );

@@ -17,6 +17,7 @@ namespace Omega.FacebookCrawler
             _eventGroupGateway = eventGroupGateway;
             _userGateway = userGateway;
         }
+        public FacebookApiService() { }
 
         public async Task GetAllFacebookGroups( string email )
         {
@@ -56,7 +57,7 @@ namespace Omega.FacebookCrawler
         public async Task GetAllFacebookEvents( string email )
         {
             string accessToken = await _userGateway.FindFacebookAccessToken( email );
-            FacebookClient fbClient = new FacebookClient( "accessToken" );
+            FacebookClient fbClient = new FacebookClient( accessToken );
 
             dynamic result = await fbClient.GetTaskAsync( "/v2.8/me/events?fields=id,name,start_time,cover,attending{id,email,name}" );
             JObject eventsJson = JObject.FromObject( result );

@@ -74,8 +74,8 @@ namespace OmegaWebApp.Controllers
         [HttpGet( "Playlists" )]
         public async Task<JToken> GetAllSpotifyPlaylists()
         {
-            string email = User.FindFirst( ClaimTypes.Email ).Value;
-            string accessToken = _userService.GetSpotifyAccessToken( email ).Result;
+            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+            string accessToken = _userService.GetSpotifyAccessToken( guid ).Result;
             
             using( HttpClient client = new HttpClient() )
             {
