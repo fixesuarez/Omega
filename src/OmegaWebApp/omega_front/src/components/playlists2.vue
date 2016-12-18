@@ -44,9 +44,11 @@
             <span id="playlistTitle">{{currentPlaylist.Name}}</span><br>
             <span id="playlistOwner">{{currentPlaylist.OwnerId}}</span><br>
             <span id="tracksLength" v-if="currentPlaylist.Tracks != null">{{currentPlaylist.Tracks.length}} titres</span><br>
-            <div v-for="track in currentPlaylist.Tracks" class="track" @click="currentTrack == track.id">
+            <!--<div v-for="track in currentPlaylist.Tracks" class="track" @click="currentTrack == track.id">
               {{track.Title}}<br>
-            </div>
+            </div>-->
+            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="75%" frameborder="0" allowtransparency="true"></iframe>
+            <iframe v-if="currentPlaylist.provider == 'd'" scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="100%" height="300"></iframe>
           </div>
         </div>
       </div>
@@ -54,10 +56,6 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-      <iframe v-bind:src="sPlayer" width="300" height="300" frameborder="0" allowtransparency="true"></iframe>
-      <iframe scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="300" height="350"></iframe>
-
-      
       </div>
     </div>
 

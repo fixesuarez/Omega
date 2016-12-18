@@ -1,14 +1,11 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
-          <div class="modalText">
+    <div class="modal-mask" @click="showEventModal(false)">
+      <div class="eventModal-wrapper">
+        <div class="eventModal-container">
+          <div class="event" v-for="event in events">
+            ee
           </div>
-          <div class="modalClose" @click="showEventModal(false)">
-            COMMENCER <img src="../assets/arrow.png">
-          </div>
-          <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
       </div>
     </div>
@@ -19,6 +16,15 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data () {
+    return {
+      events: [
+        {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'},
+        {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'},
+        {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'}
+      ]
+    }
+  },
   methods: {
     ...mapActions(['showEventModal'])
   }
@@ -42,41 +48,41 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
-  display: table;
   transition: opacity .3s ease;
 }
 
-.modal-wrapper {
-  position: absolute;
+.eventModal-wrapper {
   display: table-cell;
+  vertical-align: middle;
 }
 
-.modal-container {
-  margin-bottom: 100px;
-  margin-left: 20%;
-  height: 40px;
-  width: 180px;
-  background-color: #191B27;
+.eventModal-container {
+  height: 500px;
+  width: 600px;
+  overflow: auto;
+  margin: 0px auto;
+  background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px #171717;
   transition: all .3s ease;
-  font-family: 'montserrat-ultra-light', Arial, sans-serif;
-  color: white;
-}
-
-.modalText {
-  width: 300px;
-  padding: 10px;
-  background: #191B27;
-}
-
-.modalClose {
-  width: 180px;
-  padding: 10px;
-  background: #de002b;
+  font-family: 'Montserrat-ultra-light', Arial, sans-serif;
+  position: relative;
   color: black;
-  font-family: 'Montserrat-Regular';
-  cursor: pointer;
+}
+
+.event {
+  background: red;
+  width: 320px;
+  height: 180px;
+  margin-top: 10px;
+  float: left;
+}
+
+.eventModalClose {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  bottom: 0;
 }
 
 .modalClose img {
