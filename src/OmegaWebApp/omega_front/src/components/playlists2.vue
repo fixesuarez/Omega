@@ -3,8 +3,8 @@
     <!--<button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
     <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
     <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
-    <button @click="insertMood(mood)">Send mood</button>
-    <button @click="startMix()">Mix</button>-->
+    <button @click="insertMood(mood)">Send mood</button>-->
+    <button @click="startMix()">Mix</button>
 
 
     <!--Contains the top part of the playlist vue-->
@@ -56,6 +56,7 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
+        {{finalMix }}
       </div>
     </div>
 
@@ -80,6 +81,7 @@ import AuthService from '../services/AuthService'
 export default {
   data () {
     return {
+      finalMix: '',
       sPlayer: '',
       DzPlayer: '',
       sPlaylists: [],
@@ -131,7 +133,7 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      var data = MixService.mix(this.mixToMix);
+      this.finalMix = await MixService.mix(this.mixToMix);
       // this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
       //  })
     },
