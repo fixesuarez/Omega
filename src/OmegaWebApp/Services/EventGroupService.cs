@@ -13,10 +13,6 @@ namespace OmegaWebApp.Services
         {
             _eventGroupGateway = eventGroupGateway;
         }
-
-        public async Task<List<EventGroup>> RetrieveEventGroup(string guid)
-        {
-
-        }
+        
     }
 }
