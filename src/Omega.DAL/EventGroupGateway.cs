@@ -32,7 +32,7 @@ namespace Omega.DAL
             _priorityQueue.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover)
+        public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name, DateTime startTime)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             EventGroup eventGroup;
@@ -46,18 +46,46 @@ namespace Omega.DAL
                     eventGroup.UserId = user.FacebookId;
                     eventGroup.Type = type;
                     eventGroup.Cover = cover;
+                    eventGroup.Name = name;
+                    eventGroup.StartTime = startTime;
                     batchOperation.Insert( eventGroup );
                 }
                 else
                 {
-                    await UpdateEventGroup(eventId, user, type, cover);
+                    await UpdateEventGroup(eventId, user, type, cover, name, startTime);
                 }
             }
             if( batchOperation.Count != 0)
                 await _tableEventGroup.ExecuteBatchAsync(batchOperation);
         }
 
-        public async Task UpdateEventGroup(string eventId, User user, string type, string cover)
+        public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name)
+        {
+            TableBatchOperation batchOperation = new TableBatchOperation();
+            EventGroup eventGroup;
+
+            foreach (User user in users)
+            {
+                EventGroup e = await RetrieveGroupEvent(eventId, user.RowKey);
+                if (e == null)
+                {
+                    eventGroup = new EventGroup(eventId, user.RowKey);
+                    eventGroup.UserId = user.FacebookId;
+                    eventGroup.Type = type;
+                    eventGroup.Cover = cover;
+                    eventGroup.Name = name;
+                    batchOperation.Insert(eventGroup);
+                }
+                else
+                {
+                    await UpdateEventGroup(eventId, user, type, cover, name);
+                }
+            }
+            if (batchOperation.Count != 0)
+                await _tableEventGroup.ExecuteBatchAsync(batchOperation);
+        }
+
+        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, user.RowKey);
             TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
@@ -69,6 +97,8 @@ namespace Omega.DAL
                 updateEntity.UserId = user.FacebookId;
                 updateEntity.Type = type;
                 updateEntity.Cover = cover;
+                updateEntity.Name = name;
+                updateEntity.StartTime = startTime;
 
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
 
@@ -76,22 +106,42 @@ namespace Omega.DAL
             }
         }
 
-        public async Task<EventGroup> RetrieveGroupEvent( string eventGroupId, string email )
+        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name)
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventGroupId, email );
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, user.RowKey);
+            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
+            EventGroup updateEntity = (EventGroup)retrievedResult.Result;
+
+            if (updateEntity != null)
+            {
+                EventGroup track = new EventGroup(eventId, user.RowKey);
+                updateEntity.UserId = user.FacebookId;
+                updateEntity.Type = type;
+                updateEntity.Cover = cover;
+                updateEntity.Name = name;
+
+                TableOperation updateOperation = TableOperation.Replace(updateEntity);
+
+                await _tableEventGroup.ExecuteAsync(updateOperation);
+            }
+        }
+
+        public async Task<EventGroup> RetrieveGroupEvent( string eventGroupId, string guid )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventGroupId, guid );
             TableResult retrievedGroupEvent = await _tableEventGroup.ExecuteAsync( retrieveOperation );
             return (EventGroup) retrievedGroupEvent.Result;
         }
 
-        public async Task InsertNormalQueue(string email)
+        public async Task InsertNormalQueue(string guid)
         {
-            CloudQueueMessage message = new CloudQueueMessage(email);
+            CloudQueueMessage message = new CloudQueueMessage(guid);
             await _normalQueue.AddMessageAsync(message);
         }
 
-        public async Task InsertPriorityQueue(string email)
+        public async Task InsertPriorityQueue(string guid)
         {
-            CloudQueueMessage message = new CloudQueueMessage(email);
+            CloudQueueMessage message = new CloudQueueMessage(guid);
             await _priorityQueue.AddMessageAsync(message);
         }
 
