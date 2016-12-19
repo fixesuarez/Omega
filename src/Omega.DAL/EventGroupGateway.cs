@@ -126,22 +126,22 @@ namespace Omega.DAL
             }
         }
 
-        public async Task<EventGroup> RetrieveGroupEvent( string eventGroupId, string email )
+        public async Task<EventGroup> RetrieveGroupEvent( string eventGroupId, string guid )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventGroupId, email );
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventGroupId, guid );
             TableResult retrievedGroupEvent = await _tableEventGroup.ExecuteAsync( retrieveOperation );
             return (EventGroup) retrievedGroupEvent.Result;
         }
 
-        public async Task InsertNormalQueue(string email)
+        public async Task InsertNormalQueue(string guid)
         {
-            CloudQueueMessage message = new CloudQueueMessage(email);
+            CloudQueueMessage message = new CloudQueueMessage(guid);
             await _normalQueue.AddMessageAsync(message);
         }
 
-        public async Task InsertPriorityQueue(string email)
+        public async Task InsertPriorityQueue(string guid)
         {
-            CloudQueueMessage message = new CloudQueueMessage(email);
+            CloudQueueMessage message = new CloudQueueMessage(guid);
             await _priorityQueue.AddMessageAsync(message);
         }
 

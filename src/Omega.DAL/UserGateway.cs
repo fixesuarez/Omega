@@ -1,5 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -231,6 +233,40 @@ namespace Omega.DAL
                 providers.Add( "Facebook" );
 
             return providers;
+        }
+
+        public async Task UpdateUserGroups(string guid, JArray groups)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
+
+            // Execute the retrieve operation.
+            TableResult retrievedResult = await tableUser.ExecuteAsync(retrieveOperation);
+            User retrievedUser = (User)retrievedResult.Result;
+
+            if (retrievedUser != null)
+            {
+                retrievedUser.GroupsId = JsonConvert.SerializeObject(groups);
+
+                TableOperation updateOperation = TableOperation.Replace(retrievedUser);
+                await tableUser.ExecuteAsync(updateOperation);
+            }
+        }
+
+        public async Task UpdateUserEvents(string guid, JArray events)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
+
+            // Execute the retrieve operation.
+            TableResult retrievedResult = await tableUser.ExecuteAsync(retrieveOperation);
+            User retrievedUser = (User)retrievedResult.Result;
+
+            if (retrievedUser != null)
+            {
+                retrievedUser.EventsId = JsonConvert.SerializeObject(events);
+
+                TableOperation updateOperation = TableOperation.Replace(retrievedUser);
+                await tableUser.ExecuteAsync(updateOperation);
+            }
         }
     }
 }

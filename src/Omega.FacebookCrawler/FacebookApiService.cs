@@ -26,6 +26,7 @@ namespace Omega.FacebookCrawler
             dynamic response = await client.GetTaskAsync( "/v2.8/me/groups?fields=id,name,cover,members{id,name,email}" );
             JObject groupsJson = JObject.FromObject( response );
             JArray groups = (JArray) groupsJson["data"];
+            await _userGateway.UpdateUserGroups(guid, groups);
 
             foreach( var group in groups )
             {
@@ -62,8 +63,9 @@ namespace Omega.FacebookCrawler
             dynamic result = await fbClient.GetTaskAsync( "/v2.8/me/events?fields=id,name,start_time,cover,attending{id,email,name}" );
             JObject eventsJson = JObject.FromObject( result );
             JArray events = (JArray) eventsJson["data"];
+            await _userGateway.UpdateUserEvents(guid, events);
 
-            foreach( var _event in events )
+            foreach ( var _event in events )
             {
                 string startTime = (string) _event["start_time"];
                 string day = startTime.Substring( 8, 2 );
