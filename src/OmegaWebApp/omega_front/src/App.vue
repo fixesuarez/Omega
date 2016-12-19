@@ -78,7 +78,7 @@
       await AuthService.relogin(provider);
     },
     onAuthenticated() {
-    this.$router.replace('/');
+    this.$router.replace('/playlist');
     },
     authVerify : function ()  {
       if (AuthService.identity != null) {

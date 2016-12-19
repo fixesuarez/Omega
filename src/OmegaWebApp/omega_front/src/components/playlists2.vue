@@ -1,9 +1,9 @@
 <template>
   <div class="col-12 playlistGlobal">
-    <!--<button type="button" @click="loadSpotifyPlaylist()">Spotify</button> {{height}}
-    <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
-    <button type="button" @click="loadDeezerPlaylist()">Deezer</button>
-    <button @click="insertMood(mood)">Send mood</button>-->
+    <button type="button" @click="loadSpotifyPlaylist(),loadDeezerPlaylist()">Refresh Playlist</button>
+    <button type="button" @click="loadPlaylists()">show Playlist</button>
+    
+    <!--<button @click="insertMood(mood)">Send mood</button>-->
     <button @click="startMix()">Mix</button>
 
 
