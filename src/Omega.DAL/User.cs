@@ -1,4 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Omega.DAL
 {
@@ -25,6 +27,9 @@ namespace Omega.DAL
 
         public string SpotifyAccessToken { get; set; }
         public string SpotifyRefreshToken { get; set; }
+
+        public string EventsId { get; set; }
+        public string GroupsId { get; set; }
 
         public User() {}
     }

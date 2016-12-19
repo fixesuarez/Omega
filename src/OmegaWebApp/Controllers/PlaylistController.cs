@@ -9,12 +9,15 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Omega.DAL;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using OmegaWebApp.Authentication;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace OmegaWebApp.Controllers
 {
     [Route( "api/[controller]" )]
+    [Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class PlaylistController : Controller
     {
         readonly UserService _userService;

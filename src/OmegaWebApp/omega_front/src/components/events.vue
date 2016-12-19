@@ -1,10 +1,10 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask" @click="showEventModal(false)">
+    <div class="modal-mask">
       <div class="eventModal-wrapper">
         <div class="eventModal-container">
+            <button @click="loadEvents()">Load events</button>
           <div class="event" v-for="event in events">
-            ee
           </div>
         </div>
       </div>
@@ -14,10 +14,14 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import FacebookApiService from '../services/FacebookApiService'
+import AuthService from '../services/AuthService'
+
 
 export default {
   data () {
     return {
+      localEvents: '',
       events: [
         {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'},
         {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'},
@@ -26,7 +30,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showEventModal'])
+    ...mapActions(['showEventModal', 'requestAsync']),
+    loadEvents: async function() {
+      this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
+    }
   }
 }
 

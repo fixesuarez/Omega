@@ -8,11 +8,13 @@ namespace OmegaWebApp.Services
     {
         readonly UserGateway _userGateway;
         readonly PasswordHasher _passwordHasher;
+        readonly EventGroupGateway _eventGroupGateway;
 
-        public UserService( UserGateway userGateway, PasswordHasher passwordHasher )
+        public UserService( UserGateway userGateway, PasswordHasher passwordHasher, EventGroupGateway eventGroupGateway )
         {
             _userGateway = userGateway;
             _passwordHasher = passwordHasher;
+            _eventGroupGateway = eventGroupGateway;
         }
 
         public async Task<User> FindUser( string guid )
@@ -27,6 +29,7 @@ namespace OmegaWebApp.Services
         public async Task CreateUser( User user )
         {
             await _userGateway.CreateUser( user );
+            await _eventGroupGateway.InsertPriorityQueue(user.RowKey);
         }
         public async Task CreateUserIndex( string provider, string apiId, string guid )
         {
@@ -44,6 +47,7 @@ namespace OmegaWebApp.Services
         public async Task UpdateFacebookUser(User facebookUser)
         {
             await _userGateway.UpdateFacebookUser(facebookUser);
+            await _eventGroupGateway.InsertNormalQueue(facebookUser.RowKey);
         }
         
         public async Task<string> GetSpotifyAccessToken( string guid )
