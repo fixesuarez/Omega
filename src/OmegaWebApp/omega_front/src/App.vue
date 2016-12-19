@@ -6,10 +6,10 @@
           <img src="./assets/triangleGrey.png" id="appLogo"><span class="appTitle"><span id="appRedText">o</span>mega</span>
         </div>
         <div class="col-4 appProviders">
-          {{ Connected}}
-          <a href="" @click="login('Facebook')">FACEBOOK</a>
-          <a href="" @click="login('Deezer')" id="appRedText">DEEZER</a>
-          <a href="" @click="login('Spotify')">SPOTIFY</a>
+
+          <span @click="relogin('Facebook')">FACEBOOK</span>
+          <span @click="relogin('Deezer')" id="appRedText">DEEZER</span>
+          <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
           <img src="./assets/profile.png" id="appProfile"><span class="appProfileText"><router-link to="/relogin">RODOLPHE WACHTER</span>
@@ -73,6 +73,9 @@
     ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal', 'getIdentity']),
     login(provider) {
     AuthService.login(provider);
+    },
+    async relogin(provider) {
+      await AuthService.relogin(provider);
     },
     onAuthenticated() {
     this.$router.replace('/');

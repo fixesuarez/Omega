@@ -144,7 +144,7 @@ export default {
   },
   created () {
     if(this.playlists.length === 0) {
-      this.loadPlaylists()
+      this.loadPlaylists();
     }
     this.getIdentity(true);
   },
