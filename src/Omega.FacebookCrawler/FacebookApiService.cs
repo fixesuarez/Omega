@@ -50,7 +50,7 @@ namespace Omega.FacebookCrawler
                         groupMembers.Add( u );
                     }
                 }
-                await _eventGroupGateway.InsertEventGroup( groupId, groupMembers, "group", groupCover );
+                await _eventGroupGateway.InsertEventGroup( groupId, groupMembers, "group", groupCover, groupName );
             }
         }
         
@@ -100,7 +100,7 @@ namespace Omega.FacebookCrawler
                             eventAttendings.Add( u );
                         }
                     }
-                    await _eventGroupGateway.InsertEventGroup( eventId, eventAttendings, "event", eventCover );
+                    await _eventGroupGateway.InsertEventGroup( eventId, eventAttendings, "event", eventCover, eventName, dateEvent);
                 }
             }
         }
