@@ -12,15 +12,15 @@
           <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText"><router-link to="/relogin">RODOLPHE WACHTER</span>
+          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">RODOLPHE WACHTER</span>
         </div>
       </div>
       <div class="col-12 appControlPanel">
         <div class="col-4">&nbsp</div>
-        <div class="col-1"><span @click="showPlaylistHelperModal(true)"><router-link to="/playlist"><img src="./assets/playlistsIcon.png"><br>playlists</router-link></span></div>
+        <div class="col-1"><span @click="showPlaylistHelperModal(true)"><img src="./assets/playlistsIcon.png"><br>playlists</span></div>
         <div class="col-1"><span @click="showEventModal(true)"><img src="./assets/eventIcon.png"><br>évènements</span></div>
-        <div class="col-1"><router-link to="/groups"><img src="./assets/groupIcon.png"><br>groupes</router-link></div>
-        <div class="col-1"><span @click="showMoodsModal(true)"><img src="./assets/moodIcon.png"><br>ambiances</div>
+        <div class="col-1"><span><img src="./assets/groupIcon.png"><br>groupes</span></div>
+        <div class="col-1"><span @click="showMoodsModal(true), loadMoods()"><img src="./assets/moodIcon.png"><br>ambiances</div>
         <div class="col-4">&nbsp</div>
       </div>
     </div>
@@ -70,7 +70,7 @@
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal', 'getIdentity']),
+    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -85,6 +85,10 @@
           this.Connected = true;
           this.getIdentity(this.Connected);
       }
+    },
+    loadMoods: async function() {
+      var data = await this.requestAsync(() => MoodService.getMoods());
+      this.sendMoods(data);
     }
   },
   computed: {

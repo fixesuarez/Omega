@@ -102,8 +102,10 @@ const mutations = {
     //   console.log(state.checkedPlaylists.length)
   },
   [types.SENDPLAYLISTS](state, payload) {
-    var provider = payload[0].Tracks[0].RowKey.charAt(0);
-    payload = payload.map(p => { p.provider = provider; return p })
+    payload = payload.map(p => { p.provider = ''; return p })
+    for(var i = 0; i < payload.length; i++) {
+      payload[i].provider = payload[i].Tracks[0].RowKey.charAt(0);
+    }
     state.playlists.push.apply(state.playlists, payload);
   },
   [types.MIX](state, payload) {

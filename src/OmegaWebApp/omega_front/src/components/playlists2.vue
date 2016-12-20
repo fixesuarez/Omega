@@ -1,9 +1,7 @@
 <template>
   <div class="col-12 playlistGlobal">
-    <button type="button" @click="loadSpotifyPlaylist(),loadDeezerPlaylist()">Refresh Playlist</button>
-    <button type="button" @click="loadPlaylists()">show Playlist</button>
-    
-    <!--<button @click="insertMood(mood)">Send mood</button>-->
+    <!--<button type="button" @click="loadSpotifyPlaylist(),loadDeezerPlaylist()">Refresh Playlist</button>-->
+    <!--<button type="button" @click="loadPlaylists()">show Playlist</button>-->
     <button @click="startMix()">Mix</button>
 
 
@@ -134,11 +132,6 @@ export default {
     startMix: async function() {
       this.mix();
       this.finalMix = await MixService.mix(this.mixToMix);
-      // this.$http.post('http://localhost:5000/api/Mix/MixPlaylist', this.mixToMix, function () {
-      //  })
-    },
-    increment: function() {
-      this.number++;
     }
   },
   computed: {
@@ -146,6 +139,12 @@ export default {
   },
   created () {
     if(this.playlists.length === 0) {
+      this.loadPlaylists();
+      this.loadSpotifyPlaylist();
+      this.loadDeezerPlaylist();
+    } else {
+      this.loadSpotifyPlaylist();
+      this.loadDeezerPlaylist();
       this.loadPlaylists();
     }
     this.getIdentity(true);

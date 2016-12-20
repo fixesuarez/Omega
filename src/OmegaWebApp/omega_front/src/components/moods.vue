@@ -87,8 +87,8 @@ export default {
     ...mapActions(['showMoodsModal', 'sendMoods','setCurrentMood', 'requestAsync', 'insertMood']),
 
     loadMoods: async function() {
-      this.data = await this.requestAsync(() => MoodService.getMoods());
-      this.sendMoods(this.data);
+      var data = await this.requestAsync(() => MoodService.getMoods());
+      this.sendMoods(data);
     },
     createLocalMood: async function(item) {
       this.moodToCreate.cover = this.moodCover;
@@ -144,17 +144,13 @@ export default {
       this.moodToCreate.metadonnees = this.metadonnees;
       this.insertMood(this.moodToCreate);
       var result = MoodService.createMood(this.moodToCreate);
-      // this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.moodToCreate, function () {
-      //  })
     }
   },
   computed: {
     ...mapGetters(['moods', 'currentMood'])
   },
   created () {
-    if(this.moods.length === 0) {
-      this.loadMoods()
-    }
+    this.loadMoods()
   },
 }
 

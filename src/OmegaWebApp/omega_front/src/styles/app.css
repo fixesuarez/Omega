@@ -204,19 +204,20 @@ input[type="range"]::-webkit-slider-thumb:hover{
   text-align: center;
 }
 
-.appProviders a {
+.appProviders span {
   transition: color .5s, font-size .5s;  
 }
 
-.appProviders a:hover {
+.appProviders span:hover {
   color: #de002b;
 }
 
-.appProviders a {
+.appProviders span {
   padding-left: 5%;
   padding-right: 5%;
   text-decoration: none;
   color: white;
+  cursor: pointer;
 }
 
 .appProfile {
@@ -252,13 +253,14 @@ input[type="range"]::-webkit-slider-thumb:hover{
   transition: width 0.5s;
 }
 
-.appControlPanel a {
+.appControlPanel span {
   color: #b3b4b6;
   text-decoration: none;
   transition: color 0.5s, font-size .5s;
+  cursor: pointer;
 }
 
-.appControlPanel a:hover {
+.appControlPanel span:hover {
   color: #de002b;
 }
 
