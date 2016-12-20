@@ -2,7 +2,6 @@
   <div class="col-12 playlistGlobal">
     <!--<button type="button" @click="loadSpotifyPlaylist(),loadDeezerPlaylist()">Refresh Playlist</button>-->
     <!--<button type="button" @click="loadPlaylists()">show Playlist</button>-->
-    <button @click="startMix()">Mix</button>
 
 
     <!--Contains the top part of the playlist vue-->
@@ -54,7 +53,10 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-        {{finalMix }}
+        <span v-for="track in finalMix">
+          {{track.title}}
+        </span>
+        <br><button @click="startMix()">Mix</button>
       </div>
     </div>
 
@@ -365,6 +367,7 @@ export default {
 .rightBottom {
   height: 100%;
   background: #12161e;
+  color: white;
 }
 
 @media screen and (max-height: 900px) {

@@ -5,7 +5,6 @@
         <a href="" @click="login('Facebook')">FACEBOOK</a>
         <a href="" id="orangeText" @click="login('Deezer')">DEEZER</a>
         <a href="" @click="login('Spotify')">SPOTIFY</a>
-        <router-link to="/playlist">SKIP</router-link>
       </div>
       <div class="header">
         <img src="../assets/triangleGrey.png" id="logo"><br>
