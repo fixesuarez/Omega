@@ -5,8 +5,8 @@
         <div class="eventModal-container">
           <button @click="loadEvents()">Load events</button>
           <button @click="showEventModal(false)">Close</button>
-          <div class="event" v-for="event in events">
-            {{localEvents}}
+          <div class="event" v-for="event in localEvents">
+            {{event.name}}
           </div>
         </div>
       </div>
