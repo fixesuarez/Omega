@@ -54,6 +54,7 @@ namespace OmegaWebApp
             services.AddTransient<UserService>();
             services.AddTransient<PlaylistService>();
             services.AddTransient<TrackService>();
+            services.AddTransient<EventGroupService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<AmbianceService>();
             services.AddSingleton<CleanTrackService>();
@@ -73,7 +74,7 @@ namespace OmegaWebApp
                 app.UseExceptionHandler( "/Home/Error" );
             }
 
-            app.UseMiddleware<BreakPointMiddleware>();
+            //app.UseMiddleware<BreakPointMiddleware>();
 
             app.UseStaticFiles();
 
@@ -155,6 +156,17 @@ namespace OmegaWebApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}" );
+
+                routes.MapRoute(
+                "refresh",                            // Route name
+                "playlist",                           // URL with parameters
+                new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+            );
+
+                routes.MapRoute(
+                    name: "spa-fallback",
+                    template: "Home/{anything}",
+                    defaults: new { controller = "Home", action = "Index" } );
             } );
         }
     }

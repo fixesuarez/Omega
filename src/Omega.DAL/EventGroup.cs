@@ -17,13 +17,9 @@ namespace Omega.DAL
         public EventGroup() { }
 
         public string Name { get; set; }
-
         public DateTime StartTime { get; set; }
-
         public string UserId { get; set; }
-
         public string Type { get; set; }
-
         public string Cover { get; set; }
     }
 }

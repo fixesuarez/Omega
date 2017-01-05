@@ -14,5 +14,9 @@ namespace OmegaWebApp.Services
             _eventGroupGateway = eventGroupGateway;
         }
         
+        public async Task<List<EventGroup>> GetAllMembersFromEventGroup(string idEventGroup )
+        {
+            return await _eventGroupGateway.RetrieveMembersFromGroupEvent( idEventGroup );
+        }
     }
 }

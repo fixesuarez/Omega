@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using OmegaWebApp.Services;
-using Microsoft.WindowsAzure.Storage.Table;
 using Omega.DAL;
-using System.Security.Claims;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using OmegaWebApp.Authentication;
@@ -22,18 +18,18 @@ namespace OmegaWebApp.Controllers
     {
         readonly UserService _userService;
         readonly PlaylistService _playlistService;
-        //readonly TrackService _trackService;
+        readonly EventGroupService _eventGroupService;
 
-        public PlaylistController( UserService userService, PlaylistService playlistService, TrackService trackService )
+        public PlaylistController( UserService userService, PlaylistService playlistService, EventGroupService eventGroupService )
         {
             _userService = userService;
             _playlistService = playlistService;
-            //_trackService = trackService;
+            _eventGroupService = eventGroupService;
         }
 
         // GET: /<controller>/
         [HttpGet( "Playlists" )]
-        public async Task<JToken> GetAllPlaylists()
+        public async Task<JToken> GetAllPlaylistsFromUser()
         {
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             string spotifyId = await _userService.GetSpotifyId( guid );
@@ -42,6 +38,30 @@ namespace OmegaWebApp.Controllers
             List<Playlist> playlists = await _playlistService.GetAllPlaylistsFromUser( spotifyId, deezerId );
             string allPlaylist = JsonConvert.SerializeObject( playlists );
             JToken playlistsJson = JToken.Parse( allPlaylist );
+            return playlistsJson;
+        }
+        public async Task<List<Playlist>> GetAllPlaylistsFromUser( string guid )
+        {
+            string spotifyId = await _userService.GetSpotifyId( guid );
+            string deezerId = await _userService.GetDeezerId( guid );
+
+            List<Playlist> playlists = await _playlistService.GetAllPlaylistsFromUser( spotifyId, deezerId );
+            return playlists;
+        }
+
+        // GET: /<controller>/
+        [HttpGet( "EventOrGroup" )]
+        public async Task<JToken> GetAllPlaylistsFromGroupOrEvent( string idEventGroup)
+        {
+            List<Playlist> allPlaylists = new List<Playlist>();
+            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+            List<EventGroup> membersFromEventGroup = await _eventGroupService.GetAllMembersFromEventGroup( idEventGroup );
+            foreach( var member in membersFromEventGroup )
+            {
+                allPlaylists.AddRange( await GetAllPlaylistsFromUser( member.RowKey ) );
+            }
+            string allPlaylistsFromUser = JsonConvert.SerializeObject( allPlaylists );
+            JToken playlistsJson = JToken.Parse( allPlaylistsFromUser );
             return playlistsJson;
         }
     }
