@@ -3,7 +3,7 @@ version: 1.0.{build}-{branch}
 branches:
   only:
   - master
-  - develop
+  - dev
 
 image: Visual Studio 2015
 
