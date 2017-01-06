@@ -133,6 +133,23 @@ namespace Omega.DAL
             return (EventGroup) retrievedGroupEvent.Result;
         }
 
+        public async Task<List<EventGroup>> RetrieveMembersFromGroupEvent(string idEventGroup )
+        {
+            List<EventGroup> membersFromEventGroup = new List<EventGroup>();
+            TableQuery<EventGroup> query = new TableQuery<EventGroup>()
+                .Where(TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, idEventGroup ));
+
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+            do
+            {
+                var queryResponse = await _tableEventGroup.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                tableContinuationToken = queryResponse.ContinuationToken;
+                membersFromEventGroup.AddRange( queryResponse.Results );
+            } while ( tableContinuationToken != null );
+
+            return membersFromEventGroup;
+        }
         public async Task InsertNormalQueue(string guid)
         {
             CloudQueueMessage message = new CloudQueueMessage(guid);

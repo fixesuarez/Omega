@@ -20,7 +20,6 @@ namespace OmegaWebApp.Authentication
         public async Task OnCreatingTicket( OAuthCreatingTicketContext context )
         {
             AuthenticationProperties autP = context.Ticket.Properties;
-            // context.Options
             string sReLoginUserId;
             if( autP.Items.TryGetValue( "reLoginUserId", out sReLoginUserId ) )
             {

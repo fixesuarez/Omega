@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Authentication;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.AspNetCore.Http;
 
@@ -98,14 +97,10 @@ namespace OmegaWebApp.Controllers
         public IActionResult Authenticated()
         {
             string guid = User.FindFirst( "http://omega.com:guid" ).Value;
-            //string userId = User.FindFirst( ClaimTypes.NameIdentifier ).Value;
-            //string email = User.FindFirst( ClaimTypes.Email ).Value;
-            //Token token = _tokenService.GenerateToken( userId, email );
             Token token = _tokenService.GenerateToken( guid );
             IEnumerable<string> providers = _userService.GetAuthenticationProviders( guid ).Result;
             ViewData["BreachPadding"] = GetBreachPadding(); // Mitigate BREACH attack. See http://www.breachattack.com/
             ViewData["Token"] = token;
-            //ViewData["Email"] = email;
             ViewData["Guid"] = guid;
             ViewData["NoLayout"] = true;
             ViewData["Providers"] = providers;
