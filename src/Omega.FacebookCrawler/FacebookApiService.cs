@@ -4,6 +4,7 @@ using Omega.DAL;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static Omega.DAL.Event;
 
 namespace Omega.FacebookCrawler
 {
@@ -64,6 +65,12 @@ namespace Omega.FacebookCrawler
         {
             User user = _userGateway.FindUser(guid).Result;
             DateTime userLastConnection = user.Timestamp.DateTime;
+
+            List<Event> cleanEvents = new List<Event>();
+            Event cleanEvent = new Event();
+            List<Attendings> attendings = new List<Attendings>();
+            Attendings attendingA = new Attendings();
+
             if (DateTime.Compare(userLastConnection.AddDays(30), DateTime.Now) > 0)
             {
                 string accessToken = await _userGateway.FindFacebookAccessToken(guid);
@@ -72,7 +79,8 @@ namespace Omega.FacebookCrawler
                 dynamic result = await fbClient.GetTaskAsync("/v2.8/me/events?fields=id,name,start_time,cover,attending{id,email,name}");
                 JObject eventsJson = JObject.FromObject(result);
                 JArray events = (JArray)eventsJson["data"];
-                await _userGateway.UpdateUserEvents(guid, events);
+                //await _userGateway.UpdateUserEvents(guid, events);
+
 
                 foreach (var _event in events)
                 {
@@ -86,6 +94,8 @@ namespace Omega.FacebookCrawler
                     DateTime today = DateTime.Today;
                     DateTime dateEvent = new DateTime(yearInt, monthInt, dayInt);
                     today.AddDays(3);
+
+
                     if (DateTime.Compare(today, dateEvent) < 0)
                     {
                         string eventId = (string)_event["id"];
@@ -97,24 +107,35 @@ namespace Omega.FacebookCrawler
 
                         List<User> eventAttendings = new List<User>();
                         JToken attendingTokens = _event["attending"]["data"];
-
+                        
                         foreach (var attending in attendingTokens)
                         {
                             string mail = (string)attending["email"];
                             string id = (string)attending["id"];
                             if (mail != null)
                             {
+                                cleanEvent = new Event();
                                 User u = new User();
                                 u.PartitionKey = string.Empty;
                                 u.RowKey = guid;
                                 u.FacebookId = id;
                                 eventAttendings.Add(u);
+                                attendingA.Email = mail;
+                                attendingA.FacebookId = id;
+                                attendings.Add(attendingA);
+                                cleanEvent.attendings = attendings;
+                                cleanEvent.Cover = eventCover;
+                                cleanEvent.Id = eventId;
+                                cleanEvent.Name = eventName;
+                                cleanEvent.StartTime = dateEvent;
+                                cleanEvents.Add(cleanEvent);
                             }
                         }
-                        await _eventGroupGateway.InsertEventGroup(eventId, eventAttendings, "event", eventCover, eventName, dateEvent);
-                    }
+                        await _eventGroupGateway.InsertEventGroup(eventId, eventAttendings, "event", eventCover, eventName, dateEvent);     
+                    }                 
                 }
             }
+            await _userGateway.UpdateUserEvents(guid, cleanEvents);
         }
     }
 }
