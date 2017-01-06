@@ -3,10 +3,11 @@
     <div class="modal-mask">
       <div class="eventModal-wrapper">
         <div class="eventModal-container">
-          <button @click="loadEvents()">Load events</button>
+          <button @click="loadEvents()">Load events from FB</button>
           <button @click="showEventModal(false)">Close</button>
           <div class="event" v-for="event in localEvents">
-            {{event.name}}
+            <button @click="loadEventsFromDB(event.id)">Load events from database</button>
+            {{event.name}} {{event.id}}
           </div>
         </div>
       </div>
@@ -17,6 +18,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import FacebookApiService from '../services/FacebookApiService'
+import PlaylistApiService from '../services/PlaylistApiService'
 import AuthService from '../services/AuthService'
 
 
@@ -28,13 +30,23 @@ export default {
         {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'},
         {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'},
         {'name': 'Soirée chill', 'description': 'Soirée chill chez Mamadou à base de gros saucisson des familles'}
-      ]
+      ],
+      facebookPlaylists: '',
+      eventId: ''
     }
   },
   methods: {
     ...mapActions(['showEventModal', 'requestAsync']),
     loadEvents: async function() {
       this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
+    },
+    loadEventsFromDB: async function(id) {
+      this.eventId = id;
+      await PlaylistApiService.getPlaylistsWithFacebook(this.eventId);
+      // this.localEvents = await this.requestAsync(() => PlaylistApiService.getPlaylistsWithFacebook());
+    },
+    getFacebookPlaylists: async function() {
+      this.facebookPlaylists = await PlaylistApiService.getPlaylistsWithFacebook(this.currentEventId);
     }
   }
 }
