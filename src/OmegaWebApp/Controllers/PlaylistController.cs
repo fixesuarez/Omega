@@ -50,7 +50,7 @@ namespace OmegaWebApp.Controllers
         }
 
         // GET: /<controller>/
-        [HttpGet( "EventOrGroup" )]
+        [HttpGet( "EventOrGroup/{idEventGroup}" )]
         public async Task<JToken> GetAllPlaylistsFromGroupOrEvent( string idEventGroup)
         {
             List<Playlist> allPlaylists = new List<Playlist>();
