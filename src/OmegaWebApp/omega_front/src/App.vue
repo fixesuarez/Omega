@@ -17,10 +17,10 @@
       </div>
       <div class="col-12 appControlPanel">
         <div class="col-4">&nbsp</div>
-        <div class="col-1"><span @click="showPlaylistHelperModal(true)"><img src="./assets/playlistsIcon.png"><br>playlists</span></div>
+        <div class="col-1"><router-link to="/playlist"><span @click="showPlaylistHelperModal(true)"><img src="./assets/playlistsIcon.png"><br>playlists</span></router-link></div>
         <div class="col-1"><span @click="showEventModal(true)"><img src="./assets/eventIcon.png"><br>évènements</span></div>
         <div class="col-1"><span><img src="./assets/groupIcon.png"><br>groupes</span></div>
-        <div class="col-1"><span @click="showMoodsModal(true), loadMoods()"><img src="./assets/moodIcon.png"><br>ambiances</div>
+        <div class="col-1"><router-link to="/moods"><img src="./assets/moodIcon.png"><br>ambiances</router-link></div>
         <div class="col-4">&nbsp</div>
       </div>
     </div>
@@ -30,8 +30,8 @@
 
 <script>
   import Login from './components/Login.vue'
-  import playlists from './components/playlists.vue'
-  import moods from './components/moods.vue'
+  import playlist from './components/playlists2.vue'
+  import moods from './components/moods2.vue'
   import Modal from './components/modal.vue'
   import { mapGetters, mapActions } from 'vuex'
   import AuthService from './services/AuthService'
@@ -98,7 +98,8 @@
   components: {
     Login,
     Modal,
-    playlists
+    playlist,
+    moods
   },
   mounted () {
   }

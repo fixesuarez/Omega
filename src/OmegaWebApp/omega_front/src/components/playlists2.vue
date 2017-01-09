@@ -3,7 +3,6 @@
     <!--<button type="button" @click="loadSpotifyPlaylist(),loadDeezerPlaylist()">Refresh Playlist</button>-->
     <!--<button type="button" @click="loadPlaylists()">show Playlist</button>-->
 
-
     <!--Contains the top part of the playlist vue-->
     <div class="col-12 playlistContainer">  
       <div class="playlistWrapper" id="playlistWrapper">

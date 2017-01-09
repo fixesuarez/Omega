@@ -156,7 +156,7 @@ export default {
 
 </script>
 
-<style>
+<!--<style>
 @font-face {
     font-family: 'montserrat-ultra-light';
     src:url('../assets/montserrat-ultra-light.otf');
@@ -335,5 +335,5 @@ input[type="text"] {
   border-bottom: 1px solid silver;
   width: auto;
 }
-</style>
+</style>-->
 
