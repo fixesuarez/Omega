@@ -6,6 +6,7 @@ const state = {
   choice: 0,
   active: 'playlistsTab',
   text: '',
+  finalMix: '',
   playlistHelperModalActive: false,
   eventModalActive: false,
   moodsModalActive: false,
@@ -15,12 +16,14 @@ const state = {
   authenticated: false,
   currentMood: '',
   currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
+  currentTrack: '',
   tempoMood: '',
   checkedPlaylists: [],
   playlists: [],
   moodToInsert: '',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
-  identity: false
+  identity: false,
+  track: ''
 }
 
 const mutations = {
@@ -73,6 +76,9 @@ const mutations = {
   [types.SETCURRENTPLAYLIST](state, payload) {
     state.currentPlaylist= payload;
   },
+  [types.SETCURRENTTRACK](state, payload) {
+    state.currentTrack = payload;
+  },
   [types.INSERTMOOD](state, payload) {
     state.moodToInsert= payload;
   },
@@ -83,23 +89,9 @@ const mutations = {
     } else {
       state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(playlist), 1)
     }
-    
-    // state.currentPlaylist = payload;
-    // console.log(state.checkedPlaylists.length)
-    // // payload.check = !payload.check;
-    // var playlist = payload;
-
-    // if(playlist.check === false) {
-    //   console.log('False de base :'+playlist.check)
-    //   playlist.check = true
-    //   console.log('Maintenant true : '+playlist.check)
-    //   state.checkedPlaylists.push(playlist)
-    // } else {
-    //   playlist.check = false
-    //   console.log('True de base :'+playlist.check)
-    //   var index = state.playlists.indexOf(playlist);
-    //   state.checkedPlaylists.splice(index, 1)
-    //   console.log(state.checkedPlaylists.length)
+  },
+  [types.SELECTTRACK](state, payload) {
+    state.currentTrack = payload;
   },
   [types.SENDPLAYLISTS](state, payload) {
     payload = payload.map(p => { p.provider = ''; return p })
@@ -114,6 +106,10 @@ const mutations = {
   },
   [types.GETIDENTITY](state, payload) {
     state.identity = payload;
+  },
+  [types.SENDMIX](state, payload) {
+    state.finalMix = payload;
+    state.currentTrack = state.finalMix[0];
   }
 }
 

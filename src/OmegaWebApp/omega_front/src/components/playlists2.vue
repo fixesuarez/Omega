@@ -57,7 +57,7 @@
           {{track.title}}
           </br>
         </span>
-        <br><button @click="startMix()">Mix</button>
+        <br><span @click="startMix()"><router-link to="/mix">Mix</span>
       </div>
     </div>
 
@@ -82,7 +82,7 @@ import AuthService from '../services/AuthService'
 export default {
   data () {
     return {
-      finalMix: '',
+      localfinalMix: '',
       sPlayer: '',
       DzPlayer: '',
       sPlaylists: [],
@@ -97,7 +97,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity']),
+    ...mapActions(['sendMix', 'checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity']),
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
@@ -134,11 +134,13 @@ export default {
     },
     startMix: async function() {
       this.mix();
-      this.finalMix = await MixService.mix(this.mixToMix);
+      this.localfinalMix = await MixService.mix(this.mixToMix);
+      this.sendMix(this.localfinalMix);
     }
+
   },
   computed: {
-    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity'])
+    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
   },
   created () {
     if(this.playlists.length === 0) {

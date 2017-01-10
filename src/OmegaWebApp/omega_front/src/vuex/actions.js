@@ -97,6 +97,16 @@ export const setCurrentPlaylist = ({commit}, payload) => {
     commit(types.SETCURRENTPLAYLIST, payload)
 }
 
+export const setCurrentTrack = ({commit}, payload) => {
+  
+    commit(types.SETCURRENTTRACK, payload)
+}
+
+export const selectTrack = ({commit}, payload) => {
+  
+    commit(types.SELECTTRACK, payload)
+}
+
 export const selectPlaylist = ({commit}, payload) => {
   
     commit(types.SELECTPLAYLIST, payload)
@@ -120,4 +130,9 @@ export const mix = ({commit}, payload) => {
 export const getIdentity = ({commit}, payload) => {
     
     commit(types.GETIDENTITY, payload)
+}
+
+export const sendMix = ({commit}, payload) => {
+    
+    commit(types.SENDMIX, payload)
 }

@@ -13,7 +13,7 @@ import events from './components/events.vue'
 import groups from './components/groups.vue'
 import relogin from './components/relogin.vue'
 import AuthService from './services/AuthService'
-
+import mix from './components/mix.vue'
 Vue.use(Router)
 Vue.use(require('vue-resource'))
 
@@ -44,7 +44,8 @@ const router = new Router({
     { path: '/playlist', component: playlist },
     { path: '/groups', component: groups },
     { path: '/events', component: events },
-    { path: '/relogin', component: relogin }
+    { path: '/relogin', component: relogin },
+    { path: '/mix' , component : mix }
   ]
 })
 
