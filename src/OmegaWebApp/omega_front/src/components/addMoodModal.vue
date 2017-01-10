@@ -4,10 +4,21 @@
       <div class="moodModal-wrapper">
         <div class="moodModal-container">
           <div class="addMoodText">
-            Hey<br>Heyhey
+            <div class="addMoodModal">
+              <span id="moodTitle">NOUVELLE AMBIANCE</span><br>
+              <br>
+              <span id="smallText">Nom : <input type="text" v-model="moodName"><br><span>
+              <span id="smallText">Image : <input type="text" v-model="moodCover"></span>
+              <br><br>
+              <span class="allCriterias" v-for="data in moodCriterias">
+                <input v-if="data.value !== null" type="range" v-model="data.value" id="singleCriteria" v-bind:class="{active: data.value == null}"><span v-if="data.value !== null" id="criteriaValue">{{data.value}}</span>
+                <input v-if="data.value == null" type="range" v-model="data.value" id="singleCriteria"><span v-if="data.value == null" id="criteriaValue">{{data.value}}</span>
+              </span><br>
+              <button @click="createLocalMood({moodCriterias, moodName, moodCover})">Créer</button>
+            </div>
           </div>
           <div class="modalClose" @click="showMoodsModal(false)">
-            COMMENCER <img src="../assets/arrow.png">
+            FERMER <img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
@@ -32,10 +43,9 @@ export default {
         { label: 'Instrumentalness', value: null},
         { label: 'Speechiness', value: null},
         { label: 'Liveness', value: null},
-        { label: 'Loudness', value: null},
         { label: 'Popularity', value: null}
       ],
-      metadonnees: {'Danceability': null, 'Energy': null, 'Loudness': null, 'Speechiness': null, 'Accousticness': null, 'Instrumentalness': null, 'Liveness': null, 'Popularity': null},
+      metadonnees: {'Danceability': null, 'Energy': null, 'Speechiness': null, 'Accousticness': null, 'Instrumentalness': null, 'Liveness': null, 'Popularity': null},
       data: '',
       moodToCreate: {
         'cover': null,
@@ -149,8 +159,8 @@ export default {
 .moodModal-container {
   margin-bottom: 100px;
   margin-left: 20%;
-  height: 40px;
-  width: 400px;
+  height: 350px;
+  width: 300px;
   background-color: #191B27;
   border-radius: 2px;
   box-shadow: 0 2px 8px #171717;
@@ -159,8 +169,21 @@ export default {
   color: white;
 }
 
+.addMoodModal {
+  text-align: center;
+}
+
+.allCriterias {
+}
+
+#criteriaValue {
+  position: absolute;
+  margin-left: 10px;
+}
+
 .addMoodText {
   height: 100%;
+  padding: 20px;
   width: 100%;
 }
 
@@ -171,6 +194,7 @@ export default {
   color: black;
   font-family: 'Montserrat-Regular';
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .modalClose img {
@@ -178,14 +202,29 @@ export default {
   width: 25px;
 }
 
-.modal-enter {
+#moodTitle {
+  font-size: 22px;
+}
+
+#smallText {
+  font-size: 14px;
+}
+
+input[type="text"] {
+  border: 0;
+  border-bottom: 1px solid silver;
+  width: auto;
+  background: #191B27;
+}
+
+.moodModal-enter {
   opacity: 0;
 }
-.modal-leave-active {
+.moodModal-leave-active {
   opacity: 0;
 }
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
+.moodModal-enter .moodModal-container,
+.moodModal-leave-active .moodModal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }

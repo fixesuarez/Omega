@@ -15,7 +15,7 @@
             <img v-if="data < 0" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*150)/(-60) +'px'}">
             <img v-if="data == '' || data == null" src="../assets/bar.png" id="dataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
           </span><br>
-          <span id="dataLetter">D E L S A I L P</span>
+          <span id="dataLetter">D E S A I L P</span>
         </div>
         <div class="bottomCurrentMood" v-if="currentMood != mood">
           <div class="selectMood" @click="setCurrentMood(mood)">
