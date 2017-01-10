@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Omega.DAL
 {
@@ -15,6 +16,8 @@ namespace Omega.DAL
         readonly CloudQueueClient _queueClient;
         readonly CloudQueue _normalQueue;
         readonly CloudQueue _priorityQueue;
+        readonly CloudBlobClient _blobClient;
+        readonly CloudBlobContainer _container;
 
         public EventGroupGateway(string connectionString)
         {
@@ -30,6 +33,10 @@ namespace Omega.DAL
             
             _priorityQueue = _queueClient.GetQueueReference("priorityqueue");
             _priorityQueue.CreateIfNotExistsAsync().Wait();
+
+            _blobClient = _storageAccount.CreateCloudBlobClient();
+            _container = _blobClient.GetContainerReference("mycontainer");
+            _container.CreateIfNotExistsAsync().Wait();
         }
 
         public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime )

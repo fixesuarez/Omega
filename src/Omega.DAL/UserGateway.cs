@@ -252,7 +252,7 @@ namespace Omega.DAL
             }
         }
 
-        public async Task UpdateUserEvents(string guid, JArray events)
+        public async Task UpdateUserEvents(string guid, List<Event> events)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
 
