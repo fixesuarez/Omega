@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Omega.DAL;
 using OmegaWebApp.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Omega.DAL;
 using System.Threading.Tasks;
 
 namespace OmegaWebApp.Controllers

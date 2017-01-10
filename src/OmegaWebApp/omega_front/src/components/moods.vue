@@ -1,38 +1,9 @@
-<template>
+<!--<template>
   <transition name="modal">
     <div class="moodModal-mask">
       <div class="moodModal-wrapper">
         <div class="moodModal-container">
           <span @click="showMoodsModal(false)" id="closeButton">X</span>
-          <div class="moodModalText">
-            <!--<button @click="sendMoods(moods)">Moods</button>-->
-            <span id="moodsHeader">Ambiances</span>
-          </div>
-          <div class="currentMood">
-            <div class="topCurrentMood">
-              <img v-bind:src="currentMood.cover">
-              <span id="currentMoodName">{{currentMood.rowKey}}</span>
-              <span id="deleteMood">X</span>
-            </div>
-            <div class="middleCurrentMood">
-              <span v-for="data in currentMood.metadonnees">
-                <img v-if="data < 1 && data > 0" src="../assets/bar.png" id="dataBar" v-bind:style="{height: 150*data +'px'}">
-                <img v-if="data <= 100 && data > 1" src="../assets/bar.png" id="dataBar" v-bind:style="{height: data*1.5 +'px'}">
-                <img v-if="data == 1 || data == 0 && data != ''" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*75)+75 +'px'}">
-                <img v-if="data < 0" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*150)/(-60) +'px'}">
-                <img v-if="data == '' || data == null" src="../assets/bar.png" id="dataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
-              </span>
-            </div>
-            <div class="bottomCurrentMood">
-              Bottom here
-            </div>
-          </div>
-          <div class="moods">
-            <span v-for="mood in moods">
-              <!--<span @click="setCurrentMood(mood)">{{mood.rowKey}}</span>-->
-              <img v-bind:src="mood.cover" @click="setCurrentMood(mood)">
-            </span>
-          </div><br>
           <div class="addMood">
             Créer une Ambiance<br>
             <span id="smallText">Nom : <input type="text" v-model="moodName"><br><span>
@@ -67,12 +38,7 @@ export default {
         { label: 'Loudness', value: null},
         { label: 'Popularity', value: null}
       ],
-      metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Speechiness': null, 'Liveness': null, 'Loudness': null, 'Popularity': null},
-      localMoods: [
-      { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', 'metadonnees': {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''} },
-      { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png','metadonnees': {'Accousticness': '0.48', 'Danceability': '0.72', 'Energy': '0.84', 'Instrumentalness': '0.84', 'Liveness': '0.41', 'Loudness': '-44', 'Mode': '0', 'Popularity': '78'} },
-      { label: 'Dance', image: 'http://image.noelshack.com/fichiers/2016/24/1465931498-moodsport.png', 'metadonnees': {'Accousticness': '0.95', 'Danceability': '0.52', 'Energy': '0.84', 'Instrumentalness': '0.24', 'Liveness': '0.91', 'Loudness': '-44', 'Mode': '1', 'Popularity': '18'} },
-      { label: 'Mad', image: 'http://image.noelshack.com/fichiers/2016/24/1465931510-moodwork.png', 'metadonnees': {'Accousticness': '0.25', 'Danceability': '0.32', 'Energy': '0.84', 'Instrumentalness': '0.04', 'Liveness': '0.61', 'Loudness': '-44', 'Mode': '1', 'Popularity': '02'} }],
+      metadonnees: {'Danceability': null, 'Energy': null, 'Loudness': null, 'Speechiness': null, 'Accousticness': null, 'Instrumentalness': null, 'Liveness': null, 'Popularity': null},
       data: '',
       moodToCreate: {
         'cover': null,
@@ -336,4 +302,4 @@ input[type="text"] {
   width: auto;
 }
 </style>-->
-
+-->

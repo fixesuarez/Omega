@@ -45,6 +45,7 @@ const router = new Router({
     { path: '/playlist', component: playlist },
     { path: '/groups', component: groups },
     { path: '/events', component: events },
+    { path: '/moods', component: moods },
     { path: '/relogin', component: relogin },
     { path: '/mix' , component : mix }
   ]

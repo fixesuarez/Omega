@@ -96,7 +96,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['sendMix', 'checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity']),
+    ...mapActions(['sendMix', 'checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
@@ -152,6 +152,7 @@ export default {
       this.loadPlaylists();
     }
     this.getIdentity(true);
+    this.showPlaylistHelperModal(true);
   },
   mounted () {
   },

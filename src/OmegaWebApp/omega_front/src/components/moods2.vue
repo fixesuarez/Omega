@@ -14,14 +14,33 @@
             <img v-if="data == 1 || data == 0 && data != ''" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*75)+75 +'px'}">
             <img v-if="data < 0" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*150)/(-60) +'px'}">
             <img v-if="data == '' || data == null" src="../assets/bar.png" id="dataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
-          </span>
+          </span><br>
+          <span id="dataLetter">D E L S A I L P</span>
         </div>
-        <div class="bottomCurrentMood">
-          Bottom here
+        <div class="bottomCurrentMood" v-if="currentMood != mood">
+          <div class="selectMood" @click="setCurrentMood(mood)">
+            SELECT
+          </div>
+        </div>
+        <div class="bottomCurrentMood green" v-if="currentMood == mood">
+          <div class="selectMood" @click="setCurrentMood(mood)">
+            SELECT
+          </div>
+        </div>
+      </div>
+      <div class="currentMood addMood" @click="showMoodsModal(true)">
+        <div class="topCurrentMood">
+        </div>
+        <div class="middleCurrentMood addMood" @click="showMoodsModal(true)">
+          <img src="../assets/plus.png" id="plusMood">
+        </div>
+        <div class="bottomCurrentMood addMood" @click="showMoodsModal(true)">
+          &nbsp
         </div>
       </div>
     </div>
-    
+   
+    <moodModal v-if="moodsModalActive == true"><moodmodal>
   </div>
 </template>
 
@@ -40,15 +59,14 @@
   display: inline-block;
   text-align: center;
   overflow-x: auto;
+  float: left;
 }
 
 .currentMood {
   display: inline-block;
-  height: 400px;
+  height: 380px;
   width: 220px;
   margin-right: 40px;
-  margin-top: 20px;
-  border-radius: 3px;
 }
 
 .topCurrentMood {
@@ -84,13 +102,19 @@
 
 .middleCurrentMood {
   text-align: center;
-  height: 200px;
+  height: 220px;
   background: white;
 }
 
 .bottomCurrentMood {
-  height: 80px;
-  background: #ffe;
+  height: 40px;
+  background: #D9534F;
+  letter-spacing: 4px;
+  color: #fff;
+  font-family: 'Montserrat-Ultra-Light';
+  padding: 10px;
+  cursor: pointer;
+  transition: all .5s ease;
 }
 
 #dataBar {
@@ -99,12 +123,36 @@
   margin-top: 30px;
 }
 
+.addMood {
+  background: silver;
+  font-family: 'Montserrat-Ultra-Light';
+  color: #0e1014;
+  cursor: pointer;
+}
+
+#plusMood {
+  height: 120px;
+}
+
+#dataLetter {
+  letter-spacing: 4px;
+  color: #0e1014;
+  font-family: 'Montserrat-Ultra-Light';
+}
+
+.green {
+  transition: all .8s ease;
+  background: #5CB85C;
+}
+
 </style>
 
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
 import MoodService from '../services/MoodService'
+import moodModal from '../components/addMoodModal.vue'
+
 
 export default {
   data () {
@@ -201,10 +249,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['moods', 'currentMood'])
+    ...mapGetters(['moods', 'currentMood', 'moodsModalActive'])
   },
   created () {
     this.loadMoods()
   },
+  components: {
+    moodModal
+  }
 }
 </script>
