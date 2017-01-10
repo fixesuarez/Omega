@@ -95,7 +95,6 @@ const mutations = {
   },
   [types.SENDPLAYLISTS](state, payload) {
     payload = payload.map(p => { p.provider = ''; return p })
-    console.log(JSON.stringify(payload))
     for(var i = 0; i < payload.length; i++) {
       if(payload[i].Tracks.length == 0) {
         payload[i].provider = 'd';
