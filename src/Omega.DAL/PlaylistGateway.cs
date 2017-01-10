@@ -18,9 +18,9 @@ namespace Omega.DAL
             _storageAccount = CloudStorageAccount.Parse( connectionString );
             _tableClient = _storageAccount.CreateCloudTableClient();
             _tablePlaylist = _tableClient.GetTableReference( "Playlist" );
-            _tablePlaylist.CreateIfNotExistsAsync();
+            _tablePlaylist.CreateIfNotExistsAsync().Wait();
             _tableTrack = _tableClient.GetTableReference( "Track" );
-            _tableTrack.CreateIfNotExistsAsync();
+            _tableTrack.CreateIfNotExistsAsync().Wait();
         }
 
         public async Task InsertPlaylist( Playlist p )
