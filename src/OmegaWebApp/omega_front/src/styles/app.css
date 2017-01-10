@@ -260,6 +260,14 @@ input[type="range"]::-webkit-slider-thumb:hover{
   cursor: pointer;
 }
 
+.appControlPanel a {
+  color: #b3b4b6;
+  text-decoration: none;
+  transition: color 0.5s, font-size .5s;
+  cursor: pointer;
+}
+
+
 .appControlPanel span:hover {
   color: #de002b;
 }

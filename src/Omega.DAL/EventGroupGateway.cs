@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Omega.DAL
 {
@@ -15,6 +16,8 @@ namespace Omega.DAL
         readonly CloudQueueClient _queueClient;
         readonly CloudQueue _normalQueue;
         readonly CloudQueue _priorityQueue;
+        readonly CloudBlobClient _blobClient;
+        readonly CloudBlobContainer _container;
 
         public EventGroupGateway(string connectionString)
         {
@@ -30,6 +33,38 @@ namespace Omega.DAL
             
             _priorityQueue = _queueClient.GetQueueReference("priorityqueue");
             _priorityQueue.CreateIfNotExistsAsync().Wait();
+
+            _blobClient = _storageAccount.CreateCloudBlobClient();
+            _container = _blobClient.GetContainerReference("mycontainer");
+            _container.CreateIfNotExistsAsync().Wait();
+        }
+
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime )
+        {
+            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime );
+
+            TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
+            await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
+        }
+        public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName )
+        {
+            EventGroup groupOmega = new EventGroup( groupGuid, userGuid, groupName );
+
+            TableOperation insertGroupOmegaOperation = TableOperation.Insert( groupOmega );
+            await _tableEventGroup.ExecuteAsync( insertGroupOmegaOperation );
+        }
+
+        public async Task DeleteEventGroupOmega(string eventId, string userGuid )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventId, userGuid );
+            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync( retrieveOperation );
+            EventGroup deleteEntity = (EventGroup) retrievedResult.Result;
+            
+            if( deleteEntity != null )
+            {
+                TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
+                await _tableEventGroup.ExecuteAsync( deleteOperation );
+            }
         }
 
         public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name, DateTime startTime)
@@ -58,7 +93,6 @@ namespace Omega.DAL
             if( batchOperation.Count != 0)
                 await _tableEventGroup.ExecuteBatchAsync(batchOperation);
         }
-
         public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
@@ -105,7 +139,6 @@ namespace Omega.DAL
                 await _tableEventGroup.ExecuteAsync(updateOperation);
             }
         }
-
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, user.RowKey);
@@ -132,13 +165,29 @@ namespace Omega.DAL
             TableResult retrievedGroupEvent = await _tableEventGroup.ExecuteAsync( retrieveOperation );
             return (EventGroup) retrievedGroupEvent.Result;
         }
+        public async Task<List<EventGroup>> RetrieveMembersFromGroupEvent(string idEventGroup )
+        {
+            List<EventGroup> membersFromEventGroup = new List<EventGroup>();
+            TableQuery<EventGroup> query = new TableQuery<EventGroup>()
+                .Where(TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, idEventGroup ));
+
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+            do
+            {
+                var queryResponse = await _tableEventGroup.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                tableContinuationToken = queryResponse.ContinuationToken;
+                membersFromEventGroup.AddRange( queryResponse.Results );
+            } while ( tableContinuationToken != null );
+
+            return membersFromEventGroup;
+        }
 
         public async Task InsertNormalQueue(string guid)
         {
             CloudQueueMessage message = new CloudQueueMessage(guid);
             await _normalQueue.AddMessageAsync(message);
         }
-
         public async Task InsertPriorityQueue(string guid)
         {
             CloudQueueMessage message = new CloudQueueMessage(guid);
@@ -157,7 +206,6 @@ namespace Omega.DAL
         {
             await _priorityQueue.DeleteMessageAsync(message);
         }
-
         public async Task DeleteMessageNormalQueue(CloudQueueMessage message)
         {
             await _normalQueue.DeleteMessageAsync(message);

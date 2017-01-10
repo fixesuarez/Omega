@@ -33,19 +33,26 @@ namespace Omega.Crawler
             WebRequest request = HttpWebRequest.Create(builder.ToString());
             request.Method = "GET";
             request.ContentType = "application/json";
-            using (WebResponse response = await request.GetResponseAsync())
-            using (Stream responseStream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(responseStream))
+            try
             {
-                string responseFromServer = reader.ReadToEnd();
-                JObject rss = JObject.Parse(responseFromServer);
-                if ((string)rss["tracks"]["total"] == "0")
+                using (WebResponse response = await request.GetResponseAsync())
+                using (Stream responseStream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(responseStream))
                 {
-                    return "";
+                    string responseFromServer = reader.ReadToEnd();
+                    JObject rss = JObject.Parse(responseFromServer);
+                    if ((string)rss["tracks"]["total"] == "0")
+                    {
+                        return "";
+                    }
+                    string rssId = (string)rss["tracks"]["items"][0]["id"];
+                    return rssId;
                 }
-                string rssId = (string)rss["tracks"]["items"][0]["id"];
-                return rssId;
+            } catch(WebException e)
+            {
+                return "";
             }
+            
         }
     }
 }
