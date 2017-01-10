@@ -65,7 +65,7 @@ namespace OmegaWebApp.Controllers
                 metadonnees.energy = ambiance.Energy;
                 metadonnees.instrumentalness = ambiance.Instrumentalness;
                 metadonnees.liveness = ambiance.Liveness;
-                metadonnees.loudness = ambiance.Loudness;
+                //metadonnees.loudness = ambiance.Loudness;
                 metadonnees.speechiness = ambiance.Speechiness;
                 metadonnees.popularity = ambiance.Popularity;
                 newAmbiance.Metadonnees = metadonnees;

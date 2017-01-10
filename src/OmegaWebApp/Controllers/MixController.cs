@@ -83,6 +83,11 @@ namespace OmegaWebApp.Controllers
                     && Compare(askedDonnees.valence, analysedSong.Valence, ratio))
                         if (!FilteredList.Contains(analysedSong.Id))
                         {
+                            track.DeezerId = analysedSong.DeezerId;
+                            if (string.IsNullOrEmpty(analysedSong.DeezerId))
+                            {
+                                track.DeezerId = null;
+                            } 
                             FilteredList.Add(analysedSong.Id);
                             filteredArray.Add(track);
                         }

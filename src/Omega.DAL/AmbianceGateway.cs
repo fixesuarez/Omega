@@ -95,7 +95,7 @@ namespace Omega.DAL
             MetaDonnees lounge = new MetaDonnees(null, null, null, "0.10", null, null, "0.2", null, "50", null);
             MetaDonnees energy = new MetaDonnees(null, "0.9", null, null, null, null, null, null, null, null);
             MetaDonnees dance = new MetaDonnees("0.9", "0.9", null, null, null, null, null, "1", null, null);
-            MetaDonnees mad = new MetaDonnees("0.9", "0.9", null, null, null, null, null, null, null, null);
+            MetaDonnees mad = new MetaDonnees(null, "0.9", null, null, null, null, null, null, null, null);
             string coverLounge = "http://park-place-hotel.com/assets/uploads/photo-gallery/beacon-lounge-horz.jpg";
             string coverEnergy = "http://www.lockheedmartin.com/content/dam/lockheed/data/corporate/photo/features/2015/energy-lightning.jpg";
             string coverDance = "https://wildlyfreewoman.files.wordpress.com/2011/04/creative-dance.jpg";

@@ -162,6 +162,21 @@ namespace OmegaWebApp
                 "playlist",                           // URL with parameters
                 new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
             );
+                routes.MapRoute(
+                "refresh1",                            // Route name
+                "mix",                           // URL with parameters
+                new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+            );
+                routes.MapRoute(
+                "refresh2",                            // Route name
+                "moods",                           // URL with parameters
+                new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+            );
+                routes.MapRoute(
+                "refresh3",                            // Route name
+                "events",                           // URL with parameters
+                new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+            );
 
                 routes.MapRoute(
                     name: "spa-fallback",

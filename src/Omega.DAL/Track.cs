@@ -20,6 +20,7 @@ namespace Omega.DAL
         public string Popularity { get; set; }
         public string Duration { get; set; }
         public string Cover { get; set; }
+        public string DeezerId { get; set; }
 
         public Track( string source, string playlistId, string trackId, string title, string albumName, string popularity, string duration, string cover )
         {
