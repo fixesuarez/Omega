@@ -26,10 +26,13 @@ namespace OmegaWebApp.Controllers
         [HttpPost( "UpdatePseudo" )]
         public async Task UpdatePseudo( string pseudo )
         {
-            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
-            User user = await _userService.FindUser( guid );
-            user.Pseudo = pseudo;
-            await _userService.UpdatePseudo( user );
+            if( pseudo != null && pseudo != string.Empty )
+            {
+                string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+                User user = await _userService.FindUser( guid );
+                user.Pseudo = pseudo;
+                await _userService.UpdatePseudo( user );
+            }
         }
     }
 }

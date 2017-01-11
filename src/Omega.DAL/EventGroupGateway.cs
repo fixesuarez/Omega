@@ -42,16 +42,30 @@ namespace Omega.DAL
         public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime )
         {
             EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime );
-
+            eventOmega.Owner = true;
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
         }
         public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName )
         {
             EventGroup groupOmega = new EventGroup( groupGuid, userGuid, groupName );
-
+            groupOmega.Owner = true;
             TableOperation insertGroupOmegaOperation = TableOperation.Insert( groupOmega );
             await _tableEventGroup.ExecuteAsync( insertGroupOmegaOperation );
+        }
+
+        public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
+        {
+            eventGroupOmega.Owner = false;
+            TableOperation insertEventGroupOmegaOperation = TableOperation.Insert( eventGroupOmega );
+            await _tableEventGroup.ExecuteAsync( insertEventGroupOmegaOperation );
+        }
+
+        public async Task<EventGroup> FindEventGroup( string idEventGroup, string guidUser )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( idEventGroup, guidUser );
+            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync( retrieveOperation );
+            return (EventGroup) retrievedResult.Result;
         }
 
         public async Task DeleteEventGroupOmega(string eventId, string userGuid )
@@ -60,7 +74,7 @@ namespace Omega.DAL
             TableResult retrievedResult = await _tableEventGroup.ExecuteAsync( retrieveOperation );
             EventGroup deleteEntity = (EventGroup) retrievedResult.Result;
             
-            if( deleteEntity != null )
+            if( deleteEntity != null && deleteEntity.Owner )
             {
                 TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
                 await _tableEventGroup.ExecuteAsync( deleteOperation );

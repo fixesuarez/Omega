@@ -35,7 +35,7 @@ namespace Omega.DAL
             tablePseudoIndex = tableClient.GetTableReference( "PseudoIndex" );
             tablePseudoIndex.CreateIfNotExistsAsync().Wait();
         }
-        
+
         public async Task CreateUser( User user )
         {
             if( user != null && user.Guid != null )
@@ -75,6 +75,12 @@ namespace Omega.DAL
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, guid );
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
             return (User)retrievedResult.Result;
+        }
+        public async Task<PseudoIndex> FindPseudoIndex( string pseudo )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, pseudo );
+            TableResult retrievedResult = await tableUserIndex.ExecuteAsync( retrieveOperation );
+            return (PseudoIndex) retrievedResult.Result;
         }
 
         public async Task<string> FindFacebookId( string guid )
@@ -174,6 +180,10 @@ namespace Omega.DAL
                 retrievedUser.Pseudo = u.Pseudo;
                 TableOperation updateOperation = TableOperation.Replace( retrievedUser );
                 await tableUser.ExecuteAsync( updateOperation );
+
+                PseudoIndex pseudoIndex = new PseudoIndex( u.Pseudo, u.Guid );
+                TableOperation insertOperation = TableOperation.Insert( pseudoIndex );
+                await tablePseudoIndex.ExecuteAsync( insertOperation );
             }
         }
 

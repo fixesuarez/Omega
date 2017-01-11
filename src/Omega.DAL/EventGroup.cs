@@ -1,8 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Omega.DAL
 {
@@ -39,5 +36,6 @@ namespace Omega.DAL
         public string UserId { get; set; }
         public string Type { get; set; }
         public string Cover { get; set; }
+        public bool Owner { get; set; }
     }
 }
