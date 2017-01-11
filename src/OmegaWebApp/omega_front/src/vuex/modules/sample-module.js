@@ -6,7 +6,7 @@ const state = {
   choice: 0,
   active: 'playlistsTab',
   text: '',
-  finalMix: '',
+  finalMix: [],
   playlistHelperModalActive: false,
   eventModalActive: false,
   moodsModalActive: false,
@@ -20,6 +20,7 @@ const state = {
   tempoMood: '',
   checkedPlaylists: [],
   playlists: [],
+  finalPlaylist: [],
   moodToInsert: '',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
@@ -114,6 +115,9 @@ const mutations = {
   [types.SENDMIX](state, payload) {
     state.finalMix = payload;
     state.currentTrack = state.finalMix[0];
+    for(var i=0; i<state.finalMix.length; i++){
+      state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
+    }
   }
 }
 
