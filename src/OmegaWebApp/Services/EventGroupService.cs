@@ -14,7 +14,12 @@ namespace OmegaWebApp.Services
             _eventGroupGateway = eventGroupGateway;
         }
 
+        public async Task<EventGroup> FindEventGroup( string idEventGroup, string userGuid )
         public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location )
+        {
+            return await _eventGroupGateway.FindEventGroup( idEventGroup, userGuid );
+        }
+
         {
             await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location );
         }
@@ -23,6 +28,11 @@ namespace OmegaWebApp.Services
             await _eventGroupGateway.CreateGroupOmega( groupGuid, userGuid, groupName );
         }
         
+        public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
+        {
+            await _eventGroupGateway.AddMemberToEventGroupOmega( eventGroupOmega );
+        }
+
         public async Task<List<EventGroup>> GetAllMembersFromEventGroup(string idEventGroup )
         {
             return await _eventGroupGateway.RetrieveMembersFromGroupEvent( idEventGroup );

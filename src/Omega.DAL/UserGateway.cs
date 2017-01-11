@@ -14,6 +14,7 @@ namespace Omega.DAL
         readonly CloudTableClient tableClient;
         readonly CloudTable tableUserIndex;
         readonly CloudTable tableUser;
+        readonly CloudTable tablePseudoIndex;
 
         public UserGateway( string connectionString )
         {
@@ -30,8 +31,11 @@ namespace Omega.DAL
 
             tableUserIndex = tableClient.GetTableReference( "UserIndex" );
             tableUserIndex.CreateIfNotExistsAsync().Wait();
+
+            tablePseudoIndex = tableClient.GetTableReference( "PseudoIndex" );
+            tablePseudoIndex.CreateIfNotExistsAsync().Wait();
         }
-        
+
         public async Task CreateUser( User user )
         {
             if( user != null && user.Guid != null )
@@ -71,6 +75,12 @@ namespace Omega.DAL
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, guid );
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
             return (User)retrievedResult.Result;
+        }
+        public async Task<PseudoIndex> FindPseudoIndex( string pseudo )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, pseudo );
+            TableResult retrievedResult = await tableUserIndex.ExecuteAsync( retrieveOperation );
+            return (PseudoIndex) retrievedResult.Result;
         }
 
         public async Task<string> FindFacebookId( string guid )
@@ -156,6 +166,35 @@ namespace Omega.DAL
             {
                 TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
                 await tableUser.ExecuteAsync( deleteOperation );
+            }
+        }
+
+        public async Task UpdatePseudo( User u )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, u.RowKey );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            if( retrievedUser != null )
+            {
+                if( retrievedUser.Pseudo != null || retrievedUser.Pseudo != string.Empty )
+                {
+                    TableOperation retrievePseudoIndexOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, retrievedUser.Pseudo );
+                    TableResult retrievedPseudoIndex = await tablePseudoIndex.ExecuteAsync( retrievePseudoIndexOperation );
+                    PseudoIndex deleteEntity = (PseudoIndex) retrievedResult.Result;
+
+                    if( deleteEntity != null )
+                    {
+                        TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
+                        await tablePseudoIndex.ExecuteAsync( deleteOperation );
+                    }
+                }
+                retrievedUser.Pseudo = u.Pseudo;
+                TableOperation updateOperation = TableOperation.Replace( retrievedUser );
+                await tableUser.ExecuteAsync( updateOperation );
+
+                PseudoIndex pseudoIndex = new PseudoIndex( u.Pseudo, u.Guid );
+                TableOperation insertOperation = TableOperation.Insert( pseudoIndex );
+                await tablePseudoIndex.ExecuteAsync( insertOperation );
             }
         }
 
@@ -264,7 +303,6 @@ namespace Omega.DAL
                 await tableUser.ExecuteAsync(updateOperation);
             }
         }
-
         public async Task UpdateUserEvents(string guid, List<Event> events)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
