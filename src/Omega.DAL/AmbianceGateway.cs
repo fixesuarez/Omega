@@ -22,7 +22,7 @@ namespace Omega.DAL
             _table = _tableClient.GetTableReference("Ambiance");
 
             // Create the table if it doesn't exist.
-            _table.CreateIfNotExistsAsync();
+            _table.CreateIfNotExistsAsync().Wait();
 
             Ambiance retrievedAmbiance = RetrieveAmbiance("allUser", "Lounge").Result;
             if (retrievedAmbiance == null)

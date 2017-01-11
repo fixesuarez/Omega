@@ -26,10 +26,10 @@ namespace Omega.DAL
             // Create the CloudTables objects that represent the different tables.
             tableUser = tableClient.GetTableReference( "User" );
             // Create the table if it doesn't exist.
-            tableUser.CreateIfNotExistsAsync();
+            tableUser.CreateIfNotExistsAsync().Wait() ;
 
             tableUserIndex = tableClient.GetTableReference( "UserIndex" );
-            tableUserIndex.CreateIfNotExistsAsync();
+            tableUserIndex.CreateIfNotExistsAsync().Wait();
         }
         
         public async Task CreateUser( User user )
@@ -111,6 +111,17 @@ namespace Omega.DAL
             User retrievedUser = (User) retrievedResult.Result;
             if( retrievedUser != null )
                 return retrievedUser.SpotifyAccessToken;
+            else
+                return null;
+        }
+
+        public async Task<string> FindSpotifyRefreshToken(string guid)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
+            TableResult retrievedResult = await tableUser.ExecuteAsync(retrieveOperation);
+            User retrievedUser = (User)retrievedResult.Result;
+            if (retrievedUser != null)
+                return retrievedUser.SpotifyRefreshToken;
             else
                 return null;
         }
@@ -225,6 +236,8 @@ namespace Omega.DAL
             // Execute the retrieve operation.
             TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
             User user = (User) retrievedResult.Result;
+            if( user == null )
+                return providers;
             if( user.DeezerId != null )
                 providers.Add( "Deezer" );
             if( user.SpotifyId != null )

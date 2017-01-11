@@ -20,7 +20,7 @@ namespace Omega.DAL
             _table = _tableClient.GetTableReference("CleanTrack");
 
             // Create the table if it doesn't exist.
-            _table.CreateIfNotExistsAsync();
+            _table.CreateIfNotExistsAsync().Wait();
         }
 
         public async Task<CleanTrack> GetSongCleanTrack(string trackIdSource)

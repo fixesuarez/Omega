@@ -18,10 +18,10 @@ namespace Omega.DAL
             _storageAccount = CloudStorageAccount.Parse( connectionString );
             _tableClient = _storageAccount.CreateCloudTableClient();
             _tableTrack = _tableClient.GetTableReference( "Track" );
-            _tableTrack.CreateIfNotExistsAsync();
+            _tableTrack.CreateIfNotExistsAsync().Wait();
             _queueClient = _storageAccount.CreateCloudQueueClient();
             _queue = _queueClient.GetQueueReference( "myqueue" );
-            _queue.CreateIfNotExistsAsync();
+            _queue.CreateIfNotExistsAsync().Wait();
         }
 
         public async Task InsertTrack( string source, string playlistId, string trackId, string title, string albumName, string popularity, string duration, string cover )
