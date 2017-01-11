@@ -114,6 +114,17 @@ namespace Omega.DAL
             else
                 return null;
         }
+
+        public async Task<string> FindSpotifyRefreshToken(string guid)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
+            TableResult retrievedResult = await tableUser.ExecuteAsync(retrieveOperation);
+            User retrievedUser = (User)retrievedResult.Result;
+            if (retrievedUser != null)
+                return retrievedUser.SpotifyRefreshToken;
+            else
+                return null;
+        }
         public async Task<string> FindDeezerAccessToken( string guid )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, guid );
