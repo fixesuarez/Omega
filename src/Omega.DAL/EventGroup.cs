@@ -16,7 +16,7 @@ namespace Omega.DAL
         }
 
         public EventGroup() { }
-        public EventGroup( string groupGuid, string userGuid, string groupName )
+        public EventGroup( string groupGuid, string userGuid, string groupName, string location )
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
@@ -24,8 +24,9 @@ namespace Omega.DAL
             StartTime = new DateTime();
             Type = "GroupOmega";
             Cover = string.Empty;
+            Location = location;
         }
-        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime )
+        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location )
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
@@ -33,6 +34,7 @@ namespace Omega.DAL
             StartTime = startTime;
             Type = "EventOmega";
             Cover = string.Empty;
+            Location = location;
         }
 
         public string Name { get; set; }
@@ -40,5 +42,6 @@ namespace Omega.DAL
         public string UserId { get; set; }
         public string Type { get; set; }
         public string Cover { get; set; }
+        public string Location { get; set; }
     }
 }

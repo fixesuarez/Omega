@@ -23,5 +23,6 @@ namespace Omega.DAL
         public string Name { get; set; }
 
         public DateTime StartTime { get; set; }
+        public string Location { get; set; }
     }
 }

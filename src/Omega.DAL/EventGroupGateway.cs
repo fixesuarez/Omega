@@ -39,16 +39,16 @@ namespace Omega.DAL
             _container.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location )
         {
-            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime );
+            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location );
 
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
         }
-        public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName )
+        public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName,string location )
         {
-            EventGroup groupOmega = new EventGroup( groupGuid, userGuid, groupName );
+            EventGroup groupOmega = new EventGroup( groupGuid, userGuid, groupName, location );
 
             TableOperation insertGroupOmegaOperation = TableOperation.Insert( groupOmega );
             await _tableEventGroup.ExecuteAsync( insertGroupOmegaOperation );
@@ -67,7 +67,7 @@ namespace Omega.DAL
             }
         }
 
-        public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name, DateTime startTime)
+        public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name, DateTime startTime, string location)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             EventGroup eventGroup;
@@ -83,11 +83,12 @@ namespace Omega.DAL
                     eventGroup.Cover = cover;
                     eventGroup.Name = name;
                     eventGroup.StartTime = startTime;
+                    eventGroup.Location = location;
                     batchOperation.Insert( eventGroup );
                 }
                 else
                 {
-                    await UpdateEventGroup(eventId, user, type, cover, name, startTime);
+                    await UpdateEventGroup(eventId, user, type, cover, name, startTime, location);
                 }
             }
             if( batchOperation.Count != 0)
@@ -129,7 +130,7 @@ namespace Omega.DAL
               //  await _tableEventGroup.ExecuteBatchAsync(batchOperation);
         }
 
-        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime)
+        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime, string location)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, user.RowKey);
             TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
@@ -143,6 +144,7 @@ namespace Omega.DAL
                 updateEntity.Cover = cover;
                 updateEntity.Name = name;
                 updateEntity.StartTime = startTime;
+                updateEntity.Location = location;
 
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
 
