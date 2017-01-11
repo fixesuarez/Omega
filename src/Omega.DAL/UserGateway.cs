@@ -14,6 +14,7 @@ namespace Omega.DAL
         readonly CloudTableClient tableClient;
         readonly CloudTable tableUserIndex;
         readonly CloudTable tableUser;
+        readonly CloudTable tablePseudoIndex;
 
         public UserGateway( string connectionString )
         {
@@ -30,6 +31,9 @@ namespace Omega.DAL
 
             tableUserIndex = tableClient.GetTableReference( "UserIndex" );
             tableUserIndex.CreateIfNotExistsAsync().Wait();
+
+            tablePseudoIndex = tableClient.GetTableReference( "PseudoIndex" );
+            tablePseudoIndex.CreateIfNotExistsAsync().Wait();
         }
         
         public async Task CreateUser( User user )
@@ -148,6 +152,31 @@ namespace Omega.DAL
             }
         }
 
+        public async Task UpdatePseudo( User u )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, u.RowKey );
+            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            if( retrievedUser != null )
+            {
+                if( retrievedUser.Pseudo != null || retrievedUser.Pseudo != string.Empty )
+                {
+                    TableOperation retrievePseudoIndexOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, retrievedUser.Pseudo );
+                    TableResult retrievedPseudoIndex = await tablePseudoIndex.ExecuteAsync( retrievePseudoIndexOperation );
+                    PseudoIndex deleteEntity = (PseudoIndex) retrievedResult.Result;
+
+                    if( deleteEntity != null )
+                    {
+                        TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
+                        await tablePseudoIndex.ExecuteAsync( deleteOperation );
+                    }
+                }
+                retrievedUser.Pseudo = u.Pseudo;
+                TableOperation updateOperation = TableOperation.Replace( retrievedUser );
+                await tableUser.ExecuteAsync( updateOperation );
+            }
+        }
+
         public async Task UpdateDeezerUser( User deezerUser )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, deezerUser.RowKey );
@@ -253,7 +282,6 @@ namespace Omega.DAL
                 await tableUser.ExecuteAsync(updateOperation);
             }
         }
-
         public async Task UpdateUserEvents(string guid, List<Event> events)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
