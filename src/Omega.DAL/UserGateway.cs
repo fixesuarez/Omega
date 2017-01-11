@@ -35,7 +35,7 @@ namespace Omega.DAL
             _tableUserIndex = _tableClient.GetTableReference( "UserIndex" );
             _tableUserIndex.CreateIfNotExistsAsync().Wait();
 
-            tablePseudoIndex = tableClient.GetTableReference( "PseudoIndex" );
+            tablePseudoIndex = _tableClient.GetTableReference( "PseudoIndex" );
             tablePseudoIndex.CreateIfNotExistsAsync().Wait();
             _queueClient = _storageAccount.CreateCloudQueueClient();
             _queue = _queueClient.GetQueueReference("queue");
@@ -85,7 +85,7 @@ namespace Omega.DAL
         public async Task<PseudoIndex> FindPseudoIndex( string pseudo )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, pseudo );
-            TableResult retrievedResult = await tableUserIndex.ExecuteAsync( retrieveOperation );
+            TableResult retrievedResult = await _tableUserIndex.ExecuteAsync( retrieveOperation );
             return (PseudoIndex) retrievedResult.Result;
         }
 
@@ -178,7 +178,7 @@ namespace Omega.DAL
         public async Task UpdatePseudo( User u )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, u.RowKey );
-            TableResult retrievedResult = await tableUser.ExecuteAsync( retrieveOperation );
+            TableResult retrievedResult = await _tableUser.ExecuteAsync( retrieveOperation );
             User retrievedUser = (User) retrievedResult.Result;
             if( retrievedUser != null )
             {
@@ -196,7 +196,7 @@ namespace Omega.DAL
                 }
                 retrievedUser.Pseudo = u.Pseudo;
                 TableOperation updateOperation = TableOperation.Replace( retrievedUser );
-                await tableUser.ExecuteAsync( updateOperation );
+                await _tableUser.ExecuteAsync( updateOperation );
 
                 PseudoIndex pseudoIndex = new PseudoIndex( u.Pseudo, u.Guid );
                 TableOperation insertOperation = TableOperation.Insert( pseudoIndex );
