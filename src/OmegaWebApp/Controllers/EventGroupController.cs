@@ -53,7 +53,7 @@ namespace OmegaWebApp.Controllers
                     }
                     else if( eventGroupOmega.Type == "EventOmega" )
                     {
-                        EventGroup eventOmega = new EventGroup( eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime );
+                        EventGroup eventOmega = new EventGroup( eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location );
                         await _eventGroupService.AddMemberToEventGroupOmega( eventOmega );
                     }
                 }
