@@ -8,6 +8,7 @@ using System;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using OmegaWebApp.Authentication;
+using System.Linq;
 
 namespace OmegaWebApp.Controllers
 {
@@ -83,17 +84,17 @@ namespace OmegaWebApp.Controllers
                     && Compare(askedDonnees.valence, analysedSong.Valence, ratio))
                         if (!FilteredList.Contains(analysedSong.Id))
                         {
-                            track.DeezerId = analysedSong.DeezerId;
                             if (string.IsNullOrEmpty(analysedSong.DeezerId))
                             {
-                                track.DeezerId = null;
-                            } 
+                                analysedSong.DeezerId = null;
+                            }
+                            track.DeezerId = analysedSong.DeezerId;
                             FilteredList.Add(analysedSong.Id);
                             filteredArray.Add(track);
                         }
                 }
             }
-            return filteredArray;
+            return filteredArray.Where(t=>t.DeezerId!=null ).ToList();
         }
 
         public static bool Compare(string asked, string analysed, double ratio)
