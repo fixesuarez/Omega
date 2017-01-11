@@ -12,6 +12,7 @@ namespace Omega.DAL
         {
             PartitionKey = eventId;
             RowKey = userGuid;
+            StartTime = new DateTime(1900, 1, 1);
         }
 
         public EventGroup() { }
@@ -20,7 +21,7 @@ namespace Omega.DAL
             PartitionKey = groupGuid;
             RowKey = userGuid;
             Name = groupName;
-            StartTime = new DateTime( 0001, 01, 01, 0, 0, 0, 0 );
+            StartTime = new DateTime();
             Type = "GroupOmega";
             Cover = string.Empty;
         }

@@ -96,27 +96,37 @@ namespace Omega.DAL
         public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
+            
             EventGroup eventGroup;
 
             foreach (User user in users)
             {
-                EventGroup e = await RetrieveGroupEvent(eventId, user.RowKey);
-                if (e == null)
+                eventGroup = await RetrieveGroupEvent(eventId, user.RowKey);
+                if (eventGroup == null)
                 {
                     eventGroup = new EventGroup(eventId, user.RowKey);
                     eventGroup.UserId = user.FacebookId;
                     eventGroup.Type = type;
                     eventGroup.Cover = cover;
                     eventGroup.Name = name;
-                    batchOperation.Insert(eventGroup);
+                    //batchOperation.Insert(eventGroup);
+                    TableOperation insert = TableOperation.Insert(eventGroup);
+                    try
+                    {
+                        await _tableEventGroup.ExecuteAsync(insert);
+                    }
+                    catch(Exception ex)
+                    {
+                        throw;
+                    }
                 }
                 else
                 {
                     await UpdateEventGroup(eventId, user, type, cover, name);
                 }
             }
-            if (batchOperation.Count != 0)
-                await _tableEventGroup.ExecuteBatchAsync(batchOperation);
+            //if (batchOperation.Count != 0)
+              //  await _tableEventGroup.ExecuteBatchAsync(batchOperation);
         }
 
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime)
