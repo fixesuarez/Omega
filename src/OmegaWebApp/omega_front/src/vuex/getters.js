@@ -13,6 +13,7 @@ export const text = state => state.sampleModule.text;
 export const enabledCriterias = state => state.sampleModule.enabledCriterias;
 export const authenticated = state => state.sampleModule.authenticated;
 export const currentMood = state => state.sampleModule.currentMood;
+export const currentEvent = state => state.sampleModule.currentEvent;
 export const currentPlaylist = state => state.sampleModule.currentPlaylist;
 export const currentTrack = state => state.sampleModule.currentTrack;
 export const tempoMood = state => state.sampleModule.tempoMood;

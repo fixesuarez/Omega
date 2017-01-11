@@ -53,7 +53,7 @@ export default {
 
 </script>
 
-<style>
+<!--<style>
 @font-face {
     font-family: 'montserrat-ultra-light';
     src:url('../assets/montserrat-ultra-light.otf');
@@ -123,4 +123,4 @@ export default {
   transform: scale(1.1);
 }
 
-</style>
+</style>-->

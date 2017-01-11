@@ -92,6 +92,11 @@ export const setCurrentMood = ({commit}, payload) => {
     commit(types.SETCURRENTMOOD, payload)
 }
 
+export const setCurrentEvent = ({commit}, payload) => {
+  
+    commit(types.SETCURRENTEVENT, payload)
+}
+
 export const setCurrentPlaylist = ({commit}, payload) => {
   
     commit(types.SETCURRENTPLAYLIST, payload)
