@@ -46,9 +46,9 @@ namespace Omega.DAL
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
         }
-        public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName,string location )
+        public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName )
         {
-            EventGroup groupOmega = new EventGroup( groupGuid, userGuid, groupName, location );
+            EventGroup groupOmega = new EventGroup( groupGuid, userGuid, groupName );
 
             TableOperation insertGroupOmegaOperation = TableOperation.Insert( groupOmega );
             await _tableEventGroup.ExecuteAsync( insertGroupOmegaOperation );
@@ -112,14 +112,7 @@ namespace Omega.DAL
                     eventGroup.Name = name;
                     //batchOperation.Insert(eventGroup);
                     TableOperation insert = TableOperation.Insert(eventGroup);
-                    try
-                    {
-                        await _tableEventGroup.ExecuteAsync(insert);
-                    }
-                    catch(Exception ex)
-                    {
-                        throw;
-                    }
+                    await _tableEventGroup.ExecuteAsync(insert);
                 }
                 else
                 {

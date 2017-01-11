@@ -16,15 +16,14 @@ namespace Omega.DAL
         }
 
         public EventGroup() { }
-        public EventGroup( string groupGuid, string userGuid, string groupName, string location )
+        public EventGroup( string groupGuid, string userGuid, string groupName )
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
             Name = groupName;
-            StartTime = new DateTime();
+            StartTime = new DateTime(1900, 1, 1);
             Type = "GroupOmega";
             Cover = string.Empty;
-            Location = location;
         }
         public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location )
         {
