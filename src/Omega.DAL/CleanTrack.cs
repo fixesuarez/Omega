@@ -8,6 +8,7 @@ namespace Omega.DAL
         {
             this.PartitionKey = string.Empty;
             this.RowKey = source + ":" + id;
+            this.DeezerId = null;
         }
 
         public CleanTrack() { }

@@ -14,9 +14,9 @@ namespace OmegaWebApp.Services
             _eventGroupGateway = eventGroupGateway;
         }
 
-        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime )
+        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location )
         {
-            await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime );
+            await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location );
         }
         public async Task CreateOmegaGroup( string groupGuid, string userGuid, string groupName )
         {

@@ -76,7 +76,7 @@ namespace Omega.FacebookCrawler
                 string accessToken = await _userGateway.FindFacebookAccessToken(guid);
                 FacebookClient fbClient = new FacebookClient(accessToken);
 
-                dynamic result = await fbClient.GetTaskAsync("/v2.8/me/events?fields=id,name,start_time,cover,attending{id,email,name}");
+                dynamic result = await fbClient.GetTaskAsync("/v2.8/me/events?fields=id,name,start_time,cover,place,attending{id,email,name}");
                 JObject eventsJson = JObject.FromObject(result);
                 JArray events = (JArray)eventsJson["data"];
                 //await _userGateway.UpdateUserEvents(guid, events);
@@ -100,6 +100,10 @@ namespace Omega.FacebookCrawler
                     {
                         string eventId = (string)_event["id"];
                         string eventName = (string)_event["name"];
+                        JToken eventLocationJToken = _event["place"];
+                        string eventLocation = null;
+                        if (eventLocationJToken != null)
+                            eventLocation = (string)_event["place"]["name"];
                         JToken eventCoverJToken = _event["cover"];
                         string eventCover = null;
                         if (eventCoverJToken != null)
@@ -128,10 +132,11 @@ namespace Omega.FacebookCrawler
                                 cleanEvent.Id = eventId;
                                 cleanEvent.Name = eventName;
                                 cleanEvent.StartTime = dateEvent;
+                                cleanEvent.Location = eventLocation;
                                 cleanEvents.Add(cleanEvent);
                             }
                         }
-                        await _eventGroupGateway.InsertEventGroup(eventId, eventAttendings, "event", eventCover, eventName, dateEvent);     
+                        await _eventGroupGateway.InsertEventGroup(eventId, eventAttendings, "event", eventCover, eventName, dateEvent, eventLocation);     
                     }                 
                 }
             }

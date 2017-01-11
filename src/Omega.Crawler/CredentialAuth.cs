@@ -36,6 +36,7 @@ namespace Omega.Crawler
 
         public async Task<string> GetAccessToken()
         {
+            //string ancientB64 = "YTY3MTI4NjA3ZmYyNGIxYTk4NWFiZjU0YWEzOTViY2Y6OTRkZjZhNzU5ZWIwNDU3M2JhMjBlNzUyNDljODI4ODk=""
             SpotifyToken token = new SpotifyToken();
 
             string postString = "grant_type=client_credentials";
