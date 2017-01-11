@@ -15,6 +15,7 @@ const state = {
   criterias: '',
   authenticated: false,
   currentMood: '',
+  currentEvent: '',
   currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
   currentTrack: '',
   tempoMood: '',
@@ -72,6 +73,9 @@ const mutations = {
   [types.SETCURRENTMOOD](state, payload) {
     state.currentMood = payload;
     state.currentMood.check = !state.currentMood.check;
+  },
+  [types.SETCURRENTEVENT](state, payload) {
+    state.currentEvent = payload;
   },
   [types.SETCURRENTPLAYLIST](state, payload) {
     state.currentPlaylist= payload;
