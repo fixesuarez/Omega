@@ -16,7 +16,7 @@
             {{p.Name}}
           </span>
           <span v-if="p.provider == 's'" class="sPlaylistBanner">
-            SPOTIFY
+            <img src="../assets/spotifyLogo.png">
           </span>
           <span v-if="p.provider == 'd'" class="dPlaylistBanner">
             DEEZER
@@ -244,12 +244,11 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 25px;
-  background: green;
-  border-radius: 0px 0px 2px 2px;
-  padding: 2px;
-  font-size: 13px;
-  font-family: 'Montserrat-ultra-light';
+}
+
+.sPlaylistBanner img {
+  height: 50px;
+  width: 50px;
 }
 
 .dPlaylistBanner {
