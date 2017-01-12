@@ -8,7 +8,7 @@
       <div class="playlistWrapper" id="playlistWrapper">
         <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
         <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
-        <span v-for="p in playlists" @click="selectPlaylist(p),setSPlayer(),setDPlayer()" id="spanPlaylist">
+        <div v-for="p in playlists" @click="selectPlaylist(p),setSPlayer(),setDPlayer()" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
@@ -21,7 +21,7 @@
           <span v-if="p.provider == 'd'" class="dPlaylistBanner">
             DEEZER
           </span>
-        </span>
+        </div>
       </div>
     </div>
 
@@ -188,18 +188,21 @@ export default {
   width: 100%;
   white-space: nowrap;
   overflow-x: auto;
+  position: relative;
 }
 
 #spanPlaylist {
   position: relative;
   transition: all .5s ease;
-  color: white;
+  color: white;  
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  margin: 10px;
 }
 
 .playlistImage {
   width: 200px;
-  margin-left: 10px;
-  margin-right: 10px;
   opacity: 0.5;
   box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
   transition: all .5s ease;
@@ -211,8 +214,6 @@ export default {
 
 .checkedImage {
   width: 200px;
-  margin-left: 10px;
-  margin-right: 10px;
   box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
   transition: all .5s ease;
 }
@@ -221,7 +222,7 @@ export default {
   position: absolute;
   width: 200px;
   height: 200px;
-  left: 10px;
+  left: 0;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
   opacity: 0;
   transition: all .5s ease;
@@ -241,8 +242,8 @@ export default {
 
 .sPlaylistBanner {
   position: absolute;
-  margin-top: 160px;
-  left: 5px;
+  bottom: 0;
+  left: 0;
   height: 25px;
   background: green;
   border-radius: 0px 0px 2px 2px;
@@ -253,8 +254,8 @@ export default {
 
 .dPlaylistBanner {
   position: absolute;
-  margin-top: 160px;
-  left: 5px;
+  bottom: 0;
+  left: 0;
   height: 25px;
   background: green;
   border-radius: 0px 0px 2px 2px;
