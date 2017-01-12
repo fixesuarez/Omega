@@ -5,10 +5,10 @@
 
     <!--Contains the top part of the playlist vue-->
     <div class="col-12 playlistContainer">  
+      <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
+      <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
       <div class="playlistWrapper" id="playlistWrapper">
-        <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
-        <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
-        <div v-for="p in playlists" @click="selectPlaylist(p),setSPlayer(),setDPlayer()" id="spanPlaylist">
+        <div v-for="p in playlists" @click="selectPlaylist(p), setSPlayer(), setDPlayer()" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
@@ -37,14 +37,8 @@
             <img v-bind:src="currentPlaylist.Cover">
           </div>
           <div class="tracks">
-            <span id="playlistTitle">{{currentPlaylist.Name}}</span><br>
-            <span id="playlistOwner">{{currentPlaylist.OwnerId}}</span><br>
-            <span id="tracksLength" v-if="currentPlaylist.Tracks != null">{{currentPlaylist.Tracks.length}} titres</span><br>
-            <!--<div v-for="track in currentPlaylist.Tracks" class="track" @click="currentTrack == track.id">
-              {{track.Title}}<br>
-            </div>-->
-            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="75%" frameborder="0" allowtransparency="true"></iframe>
-            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="100%" height="300"></iframe>
+            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="99%" frameborder="0" allowtransparency="true"></iframe>
+            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="100%" height="99%"></iframe>
           </div>
         </div>
       </div>
@@ -305,12 +299,18 @@ export default {
 
 .playlistAndTracks {
   height: 100%;
-  color: white;
+  margin-right: 10vh;
   float: right;
+  color: white;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: auto;
 }
 
 .currentPlaylistImage {
   height: 100%;
+  white-space: nowrap;
+  display: inline-block;
   float: left;
 }
 
@@ -324,6 +324,8 @@ export default {
   height: 100%;
   float: left;
   overflow-y: auto;
+  white-space: nowrap;
+  display: inline-block;
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
