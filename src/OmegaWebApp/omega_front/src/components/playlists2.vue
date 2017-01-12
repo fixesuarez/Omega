@@ -18,8 +18,8 @@
           <span v-if="p.provider == 's'" class="sPlaylistBanner">
             <img src="../assets/spotifyLogo.png">
           </span>
-          <span v-if="p.provider == 'd'" class="dPlaylistBanner">
-            DEEZER
+          <span v-if="p.provider == 'd'" class="sPlaylistBanner">
+            <img src="../assets/deezerLogo.png">
           </span>
         </div>
       </div>
@@ -44,7 +44,7 @@
               {{track.Title}}<br>
             </div>-->
             <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="75%" frameborder="0" allowtransparency="true"></iframe>
-            <iframe v-if="currentPlaylist.provider == 'd'" scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="100%" height="300"></iframe>
+            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="100%" height="300"></iframe>
           </div>
         </div>
       </div>
@@ -244,6 +244,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
+  height: 50px;
 }
 
 .sPlaylistBanner img {
@@ -374,20 +375,24 @@ export default {
 }
 
 @media screen and (max-height: 900px) {
-  .playlistImage, .checkedImage {
+  .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 180px;
+    height: 180px;
   }
+  
 }
 
 @media screen and (max-height: 800px) {
-  .playlistImage, .checkedImage {
+  .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 160px;
+    height: 160px;
   }
 }
 
 @media screen and (max-height: 700px) {
-  .playlistImage, .checkedImage {
+  .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 140px;
+    height: 140px;
   }
 }
 

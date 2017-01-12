@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 eventsGlobal">
     <div class="eventContainer">
-      <div class="event" v-for="event in localEvents">
+      <div class="event" v-for="event in events">
         <div id="eventCover">
           <img v-bind:src="event.Cover">
         </div>
@@ -17,10 +17,10 @@
             <span id="daysLeft">{{event.timeRemaining}}</span>
             jours
           </div>
-          <div class="selectEvent" v-if="event !== currentEvent" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
+          <div class="selectEvent" v-if="event.Id !== currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
             SELECT
           </div>
-          <div class="selectEvent selected" v-if="event == currentEvent" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
+          <div class="selectEvent selected" v-if="event.Id == currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
             SELECT
           </div>
         </div>
@@ -129,6 +129,10 @@
   transition: all 0.5s ease;
 }
 
+.selectEvent:hover {
+  background: #5CB85C;
+}
+
 .selected {
   transition: all 0.5s ease;
   background: #5CB85C;
@@ -176,7 +180,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showEventModal', 'requestAsync', 'setCurrentEvent', 'sendPlaylists']),
+    ...mapActions(['showEventModal', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
     loadEvents: async function() {
       this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
       for(var i = 0; i<this.localEvents.length; i++) {
@@ -233,6 +237,7 @@ export default {
         }
       }
       this.getRemainingTime();
+      this.sendEvents(this.localEvents);
     },
     loadEventsFromDB: async function(id) {
       this.eventId = id;
@@ -268,7 +273,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentEvent'])
+    ...mapGetters(['currentEvent', 'events'])
   },  
   created () {
     this.loadEvents()
