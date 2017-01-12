@@ -24,7 +24,7 @@ namespace PlaylistCrawler
         public async Task<SpotifyToken> TokenRefresh(string guid)
         {
             string grantType = "grant_type=refresh_token";
-            string refreshToken = await _userGateway.FindSpotifyRefreshToken(guid);
+            string refreshToken = "refresh_token=" + await _userGateway.FindSpotifyRefreshToken(guid);
             string postString = grantType + "&" + refreshToken;
 
             string url = "https://accounts.spotify.com/api/token";
