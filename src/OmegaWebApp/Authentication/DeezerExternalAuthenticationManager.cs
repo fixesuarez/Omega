@@ -51,19 +51,6 @@ namespace OmegaWebApp.Authentication
                     guid = userIndex.Guid;
             }
             return guid;
-            //if( context.AccessToken != null )
-            //{
-            //    User currentUser = new User();
-            //    currentUser.PartitionKey = string.Empty;
-            //    currentUser.RowKey = context.GetSpotifyOrDeezerEmail();
-            //    currentUser.DeezerId = context.GetId();
-            //    currentUser.DeezerAccessToken = context.AccessToken;
-            //    User retrievedUser = await _userService.FindUser( context.GetSpotifyOrDeezerEmail() );
-            //    if( retrievedUser == null )
-            //        await _userService.CreateUser( currentUser );
-            //    else if( retrievedUser.DeezerAccessToken != currentUser.DeezerAccessToken )
-            //        await _userService.UpdateDeezerUser( currentUser );
-            //}
         }
 
         public async Task CreateOrUpdateUserIndex( string provider, string apiId, string guid )

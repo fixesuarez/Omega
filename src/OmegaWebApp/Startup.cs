@@ -177,6 +177,11 @@ namespace OmegaWebApp
                 "events",                           // URL with parameters
                 new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
             );
+                routes.MapRoute(
+                "refresh4",                            // Route name
+                "groups",                           // URL with parameters
+                new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+            );
 
                 routes.MapRoute(
                     name: "spa-fallback",
