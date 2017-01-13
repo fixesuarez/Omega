@@ -101,11 +101,11 @@ export default {
     },
     scrollRight: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
-      document.getElementById('playlistWrapper').scrollLeft += scroll;
+      document.getElementById('playlistWrapper').scrollLeft += scroll+300;
     },
     scrollLeft: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
-      document.getElementById('playlistWrapper').scrollLeft -= scroll;
+      document.getElementById('playlistWrapper').scrollLeft -= scroll+300;
     },
     insertMood: async function() {
       this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.mood, function () {

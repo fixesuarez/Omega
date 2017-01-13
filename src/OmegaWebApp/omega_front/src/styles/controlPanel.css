@@ -208,7 +208,7 @@ nav.ambiancesTab .ambiancesTab{
 input[type="range"]{
   -webkit-appearance:none;
   width:200px;
-  height:6px;
+  height:16px;
   background: #171717;
   background-position:center;
   background-repeat:no-repeat;
@@ -218,7 +218,7 @@ input[type="range"]{
 input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   width:10px;
-  height:5px;
+  height:15px;
   background: red;
   position:relative;
   z-index:3;
