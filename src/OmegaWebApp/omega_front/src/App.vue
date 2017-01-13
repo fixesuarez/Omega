@@ -19,7 +19,7 @@
         <div class="col-4">&nbsp</div>
         <div class="col-1"><router-link to="/playlist"><span @click="showPlaylistHelperModal(true)"><img src="./assets/playlistsIcon.png"><br>playlists</span></router-link></div>
         <div class="col-1"><router-link to ="/events"><img src="./assets/eventIcon.png"><br>évènements</router-link></div>
-        <div class="col-1"><span><img src="./assets/groupIcon.png"><br>groupes</span></div>
+        <div class="col-1"><router-link to ="/groups"><img src="./assets/groupIcon.png"><br>groupes</router-link></div>
         <div class="col-1"><router-link to="/moods"><img src="./assets/moodIcon.png"><br>ambiances</router-link></div>
         <div class="col-4">&nbsp</div>
       </div>
@@ -33,6 +33,7 @@
   import playlist from './components/playlists2.vue'
   import moods from './components/moods2.vue'
   import events from './components/events2.vue'
+  import groups from './components/groups.vue'
   import Modal from './components/modal.vue'
   import { mapGetters, mapActions } from 'vuex'
   import AuthService from './services/AuthService'
@@ -101,7 +102,8 @@
     Modal,
     playlist,
     moods,
-    events
+    events,
+    groups
   },
   mounted () {
   }

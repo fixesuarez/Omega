@@ -11,12 +11,14 @@ const state = {
   eventModalActive: false,
   moodsModalActive: false,
   events: '',
+  groups: '',
   moods: '',
   enabledCriterias: false,
   criterias: '',
   authenticated: false,
   currentMood: '',
   currentEvent: '',
+  currentGroup: '',
   currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
   currentTrack: '',
   tempoMood: '',
@@ -63,6 +65,9 @@ const mutations = {
   [types.SENDEVENTS](state, payload) {
     state.events = payload;
   },
+  [types.SENDGROUPS](state, payload) {
+    state.groups = payload;
+  },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
   },
@@ -81,6 +86,9 @@ const mutations = {
   },
   [types.SETCURRENTEVENT](state, payload) {
     state.currentEvent = payload;
+  },
+  [types.SETCURRENTGROUP](state, payload) {
+    state.currentGroup = payload;
   },
   [types.SETCURRENTPLAYLIST](state, payload) {
     state.currentPlaylist= payload;
