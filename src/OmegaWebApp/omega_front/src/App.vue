@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="identity == true" class="col-12 navbarContainer">
+    <div v-if="identity != false" class="col-12 navbarContainer">
       <div class="col-12 appNavbar">
         <div class="col-4">
           <img src="./assets/triangleGrey.png" id="appLogo"><span class="appTitle"><span id="appRedText">o</span>mega</span>
@@ -92,7 +92,7 @@
     }
   },
   computed: {
-    ...mapGetters(['active', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity'])
+    ...mapGetters(['active','playlists', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity'])
   },
   name: 'app',
   components: {

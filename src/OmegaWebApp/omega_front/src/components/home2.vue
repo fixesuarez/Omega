@@ -20,6 +20,7 @@
 
 <script>
 import AuthService from '../services/AuthService'
+import { mapGetters, mapActions } from 'vuex'
 import Vue from 'vue'
 import $ from 'jquery'
 
@@ -35,14 +36,24 @@ export default {
     },
     onAuthenticated() {
     this.$router.replace('/playlist');
+    },
+    Authverif: function() {
+      if(this.identity == true){
+            this.$router.replace('/playlist');
+      }
     }
   },
   created() {
     AuthService.registerAuthenticatedCallback(this.onAuthenticated);
+    this.Authverif();
   },
   beforeDestroy() {
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
-  },  
+  },
+  computed: {
+    ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
+    
+  },
 }
 
 </script>

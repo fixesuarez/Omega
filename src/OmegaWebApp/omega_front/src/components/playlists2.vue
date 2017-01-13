@@ -57,7 +57,7 @@
           </br>
         </span>
         <br><span @click="startMix()"><router-link to="/mix">Mix</span>
-      </div>
+      </div> 
     </div>
 
     <PlaylistHelperModal v-if="playlistHelperModalActive == true"></PlaylistHelperModal>
@@ -118,6 +118,7 @@ export default {
        })
     },
     loadPlaylists: async function() {
+      this.SDplaylists = [];
       this.SDplaylists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
       this.SDplaylists.map(m => { this.$set(m, 'check', false); return m});
       this.sendPlaylists(this.SDplaylists);
