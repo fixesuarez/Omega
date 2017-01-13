@@ -1,7 +1,6 @@
 <template>
 <div id="Login">
     <div class="Cd">
-      <img id="Cd" src="../assets/cd.png">
     <img id="Logo" src="../assets/Logo2-grey.png">
     </div>
   <div id="FbPanel">

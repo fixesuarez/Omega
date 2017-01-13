@@ -117,6 +117,10 @@
   transition: all .5s ease;
 }
 
+.bottomCurrentMood:hover {
+  background: #5CB85C;
+}
+
 #dataBar {
   margin: 6px;
   width: 6px;
