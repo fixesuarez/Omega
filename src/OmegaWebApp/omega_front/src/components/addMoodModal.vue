@@ -103,15 +103,9 @@ export default {
       }
 
       if(this.moodCriterias[6].value == null) {
-        this.metadonnees.Loudness = this.moodCriterias[6].value
+        this.metadonnees.Popularity = this.moodCriterias[6].value;
       } else {
-        this.metadonnees.Loudness = (this.moodCriterias[6].value)/(-100)*60;
-      }
-
-      if(this.moodCriterias[7].value == null) {
-        this.metadonnees.Popularity = this.moodCriterias[7].value;
-      } else {
-        this.metadonnees.Popularity = this.moodCriterias[7].value/100;
+        this.metadonnees.Popularity = this.moodCriterias[6].value/100;
       }
       
       this.moodToCreate.metadonnees = this.metadonnees;

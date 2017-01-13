@@ -31,6 +31,8 @@ namespace Omega.DAL
         public string EventsId { get; set; }
         public string GroupsId { get; set; }
 
+        public string Pseudo { get; set; }
+
         public User() {}
     }
 }

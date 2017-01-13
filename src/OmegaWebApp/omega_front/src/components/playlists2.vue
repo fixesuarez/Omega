@@ -5,10 +5,10 @@
 
     <!--Contains the top part of the playlist vue-->
     <div class="col-12 playlistContainer">  
+      <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
+      <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
       <div class="playlistWrapper" id="playlistWrapper">
-        <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
-        <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
-        <span v-for="p in playlists" @click="selectPlaylist(p),setSPlayer(),setDPlayer()" id="spanPlaylist">
+        <div v-for="p in playlists" @click="selectPlaylist(p), setSPlayer(), setDPlayer()" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
@@ -16,12 +16,12 @@
             {{p.Name}}
           </span>
           <span v-if="p.provider == 's'" class="sPlaylistBanner">
-            SPOTIFY
+            <img src="../assets/spotifyLogo.png">
           </span>
-          <span v-if="p.provider == 'd'" class="dPlaylistBanner">
-            DEEZER
+          <span v-if="p.provider == 'd'" class="sPlaylistBanner">
+            <img src="../assets/deezerLogo.png">
           </span>
-        </span>
+        </div>
       </div>
     </div>
 
@@ -37,14 +37,8 @@
             <img v-bind:src="currentPlaylist.Cover">
           </div>
           <div class="tracks">
-            <span id="playlistTitle">{{currentPlaylist.Name}}</span><br>
-            <span id="playlistOwner">{{currentPlaylist.OwnerId}}</span><br>
-            <span id="tracksLength" v-if="currentPlaylist.Tracks != null">{{currentPlaylist.Tracks.length}} titres</span><br>
-            <!--<div v-for="track in currentPlaylist.Tracks" class="track" @click="currentTrack == track.id">
-              {{track.Title}}<br>
-            </div>-->
-            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="75%" frameborder="0" allowtransparency="true"></iframe>
-            <iframe v-if="currentPlaylist.provider == 'd'" scrolling="no" frameborder="0" allowTransparency="true" v-bind:src="DzPlayer" width="100%" height="300"></iframe>
+            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="99%" frameborder="0" allowtransparency="true"></iframe>
+            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="100%" height="99%"></iframe>
           </div>
         </div>
       </div>
@@ -189,18 +183,21 @@ export default {
   width: 100%;
   white-space: nowrap;
   overflow-x: auto;
+  position: relative;
 }
 
 #spanPlaylist {
   position: relative;
   transition: all .5s ease;
-  color: white;
+  color: white;  
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  margin: 10px;
 }
 
 .playlistImage {
   width: 200px;
-  margin-left: 10px;
-  margin-right: 10px;
   opacity: 0.5;
   box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
   transition: all .5s ease;
@@ -212,8 +209,6 @@ export default {
 
 .checkedImage {
   width: 200px;
-  margin-left: 10px;
-  margin-right: 10px;
   box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
   transition: all .5s ease;
 }
@@ -222,7 +217,7 @@ export default {
   position: absolute;
   width: 200px;
   height: 200px;
-  left: 10px;
+  left: 0;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
   opacity: 0;
   transition: all .5s ease;
@@ -242,20 +237,20 @@ export default {
 
 .sPlaylistBanner {
   position: absolute;
-  margin-top: 160px;
-  left: 5px;
-  height: 25px;
-  background: green;
-  border-radius: 0px 0px 2px 2px;
-  padding: 2px;
-  font-size: 13px;
-  font-family: 'Montserrat-ultra-light';
+  bottom: 0;
+  left: 0;
+  height: 50px;
+}
+
+.sPlaylistBanner img {
+  height: 50px;
+  width: 50px;
 }
 
 .dPlaylistBanner {
   position: absolute;
-  margin-top: 160px;
-  left: 5px;
+  bottom: 0;
+  left: 0;
   height: 25px;
   background: green;
   border-radius: 0px 0px 2px 2px;
@@ -305,12 +300,18 @@ export default {
 
 .playlistAndTracks {
   height: 100%;
-  color: white;
+  margin-right: 10vh;
   float: right;
+  color: white;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: auto;
 }
 
 .currentPlaylistImage {
   height: 100%;
+  white-space: nowrap;
+  display: inline-block;
   float: left;
 }
 
@@ -324,6 +325,8 @@ export default {
   height: 100%;
   float: left;
   overflow-y: auto;
+  white-space: nowrap;
+  display: inline-block;
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
@@ -375,20 +378,24 @@ export default {
 }
 
 @media screen and (max-height: 900px) {
-  .playlistImage, .checkedImage {
+  .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 180px;
+    height: 180px;
   }
+  
 }
 
 @media screen and (max-height: 800px) {
-  .playlistImage, .checkedImage {
+  .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 160px;
+    height: 160px;
   }
 }
 
 @media screen and (max-height: 700px) {
-  .playlistImage, .checkedImage {
+  .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 140px;
+    height: 140px;
   }
 }
 

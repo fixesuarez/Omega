@@ -8,11 +8,13 @@ export const playlistHelperModalActive = state => state.sampleModule.playlistHel
 export const eventModalActive = state => state.sampleModule.eventModalActive;
 export const moodsModalActive = state => state.sampleModule.moodsModalActive;
 export const moods = state => state.sampleModule.moods;
+export const events = state => state.sampleModule.events;
 export const criterias = state => state.sampleModule.criterias;
 export const text = state => state.sampleModule.text;
 export const enabledCriterias = state => state.sampleModule.enabledCriterias;
 export const authenticated = state => state.sampleModule.authenticated;
 export const currentMood = state => state.sampleModule.currentMood;
+export const currentEvent = state => state.sampleModule.currentEvent;
 export const currentPlaylist = state => state.sampleModule.currentPlaylist;
 export const currentTrack = state => state.sampleModule.currentTrack;
 export const tempoMood = state => state.sampleModule.tempoMood;

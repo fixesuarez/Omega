@@ -10,16 +10,18 @@ const state = {
   playlistHelperModalActive: false,
   eventModalActive: false,
   moodsModalActive: false,
+  events: '',
   moods: '',
   enabledCriterias: false,
   criterias: '',
   authenticated: false,
   currentMood: '',
+  currentEvent: '',
   currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
   currentTrack: '',
   tempoMood: '',
   checkedPlaylists: [],
-  playlists: [],
+  playlists: '',
   finalPlaylist: [],
   moodToInsert: '',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
@@ -58,6 +60,9 @@ const mutations = {
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
   },
+  [types.SENDEVENTS](state, payload) {
+    state.events = payload;
+  },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
   },
@@ -73,6 +78,9 @@ const mutations = {
   [types.SETCURRENTMOOD](state, payload) {
     state.currentMood = payload;
     state.currentMood.check = !state.currentMood.check;
+  },
+  [types.SETCURRENTEVENT](state, payload) {
+    state.currentEvent = payload;
   },
   [types.SETCURRENTPLAYLIST](state, payload) {
     state.currentPlaylist= payload;
@@ -103,7 +111,8 @@ const mutations = {
         payload[i].provider = payload[i].Tracks[0].RowKey.charAt(0);
       }
     }
-    state.playlists.push.apply(state.playlists, payload);
+    state.playlists = payload;
+    // state.playlists.push.apply(state.playlists, payload);
   },
   [types.MIX](state, payload) {
     state.mixToMix.AllPlaylists = state.checkedPlaylists;

@@ -67,6 +67,11 @@ export const sendMoods = ({commit}, payload) => {
     commit(types.SENDMOODS, payload)
 }
 
+export const sendEvents = ({commit}, payload) => {
+  
+    commit(types.SENDEVENTS, payload)
+}
+
 export const sendCriterias = ({commit}, payload) => {
   
     commit(types.SENDCRITERIAS, payload)
@@ -90,6 +95,11 @@ export const authenticate = ({commit}, payload) => {
 export const setCurrentMood = ({commit}, payload) => {
   
     commit(types.SETCURRENTMOOD, payload)
+}
+
+export const setCurrentEvent = ({commit}, payload) => {
+  
+    commit(types.SETCURRENTEVENT, payload)
 }
 
 export const setCurrentPlaylist = ({commit}, payload) => {
