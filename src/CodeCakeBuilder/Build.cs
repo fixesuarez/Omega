@@ -1,6 +1,4 @@
-﻿using System.IO.Compression;
-using System.IO;
-using Cake.Common.IO;
+﻿using Cake.Common.IO;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.NUnit;
@@ -15,6 +13,7 @@ namespace CodeCakeBuilder
     {
         public Build()
         {
+
             Task("Clean")
                 .Does(() =>
                 {
@@ -64,29 +63,17 @@ namespace CodeCakeBuilder
                     }
                 });
 
-            Task( "Unit-Tests" )
-                .IsDependentOn( "Build" )
-                .Does( () =>
-                 {
-                     var testProjects = Cake.GetDirectories( "./*.Tests" );
-                     foreach( var project in testProjects ) Cake.DotNetCoreRun( project.FullPath );
-                 } );
-
-            Task( "Create-Zip-To-Deploy" )
-                .IsDependentOn( "Unit-Tests" )
-                .Does( () =>
-                 {
-                     CopyPasteHelper.DirectoryCopy(".", "./CodeCakeBuilder/Release/OmegaProd", true);
-                     if( Cake.FileExists( "./CodeCakeBuilder/Release/OmegaProd.zip" ) )
-                         File.Delete( "./CodeCakeBuilder/Release/OmegaProd.zip" );
-                     ZipFile.CreateFromDirectory( "./CodeCakeBuilder/Release/OmegaProd", "./CodeCakeBuilder/Release/OmegaProd.zip" );
-                     Directory.Delete( "./CodeCakeBuilder/Release/OmegaProd", true );
-                 } );
+            Task("Unit-Tests")
+                .IsDependentOn("Build")
+                .Does(() =>
+                {
+                    var testProjects = Cake.GetDirectories("./*.Tests");
+                    foreach(var project in testProjects) Cake.DotNetCoreRun(project.FullPath);
+                });
 
             // The Default task for this script can be set here.
-            Task( "Default" )
-                .IsDependentOn( "Create-Zip-To-Deploy" );
-                //.IsDependentOn( "Create-Zip-To-Deploy" );
+            Task("Default")
+                .IsDependentOn("Unit-Tests");
         }
     }
 }
