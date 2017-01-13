@@ -37,8 +37,8 @@
             <img v-bind:src="currentPlaylist.Cover">
           </div>
           <div class="tracks">
-            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="99%" frameborder="0" allowtransparency="true"></iframe>
-            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="100%" height="99%"></iframe>
+            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="400px" height="99%" frameborder="0" allowtransparency="true"></iframe>
+            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="400px" height="99%"></iframe>
           </div>
         </div>
       </div>
@@ -300,7 +300,6 @@ export default {
 
 .playlistAndTracks {
   height: 100%;
-  margin-right: 10vh;
   float: right;
   color: white;
   display: inline-block;
@@ -321,7 +320,6 @@ export default {
 
 .tracks {
   min-width: 200px;
-  max-width: 300px;
   height: 100%;
   float: left;
   overflow-y: auto;
