@@ -67,6 +67,11 @@ export const sendMoods = ({commit}, payload) => {
     commit(types.SENDMOODS, payload)
 }
 
+export const sendEvents = ({commit}, payload) => {
+  
+    commit(types.SENDEVENTS, payload)
+}
+
 export const sendCriterias = ({commit}, payload) => {
   
     commit(types.SENDCRITERIAS, payload)

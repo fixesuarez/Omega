@@ -10,6 +10,7 @@ const state = {
   playlistHelperModalActive: false,
   eventModalActive: false,
   moodsModalActive: false,
+  events: '',
   moods: '',
   enabledCriterias: false,
   criterias: '',
@@ -20,7 +21,7 @@ const state = {
   currentTrack: '',
   tempoMood: '',
   checkedPlaylists: [],
-  playlists: [],
+  playlists: '',
   finalPlaylist: [],
   moodToInsert: '',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
@@ -58,6 +59,9 @@ const mutations = {
   },
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
+  },
+  [types.SENDEVENTS](state, payload) {
+    state.events = payload;
   },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
@@ -107,7 +111,8 @@ const mutations = {
         payload[i].provider = payload[i].Tracks[0].RowKey.charAt(0);
       }
     }
-    state.playlists.push.apply(state.playlists, payload);
+    state.playlists = payload;
+    // state.playlists.push.apply(state.playlists, payload);
   },
   [types.MIX](state, payload) {
     state.mixToMix.AllPlaylists = state.checkedPlaylists;

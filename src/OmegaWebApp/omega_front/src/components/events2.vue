@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 eventsGlobal">
     <div class="eventContainer">
-      <div class="event" v-for="event in localEvents">
+      <div class="event" v-for="event in events">
         <div id="eventCover">
           <img v-bind:src="event.Cover">
         </div>
@@ -17,10 +17,10 @@
             <span id="daysLeft">{{event.timeRemaining}}</span>
             jours
           </div>
-          <div class="selectEvent" v-if="event !== currentEvent" @click="setCurrentEvent(event)">
+          <div class="selectEvent" v-if="event.Id !== currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
             SELECT
           </div>
-          <div class="selectEvent selected" v-if="event == currentEvent" @click="setCurrentEvent(event)">
+          <div class="selectEvent selected" v-if="event.Id == currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
             SELECT
           </div>
         </div>
@@ -77,6 +77,7 @@
   overflow-wrap: break-word;
   white-space: normal;
   max-height: 60px;
+  width: 160px;
 }
 
 #eventLocation {
@@ -128,6 +129,10 @@
   transition: all 0.5s ease;
 }
 
+.selectEvent:hover {
+  background: #5CB85C;
+}
+
 .selected {
   transition: all 0.5s ease;
   background: #5CB85C;
@@ -175,7 +180,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showEventModal', 'requestAsync', 'setCurrentEvent']),
+    ...mapActions(['showEventModal', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
     loadEvents: async function() {
       this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
       for(var i = 0; i<this.localEvents.length; i++) {
@@ -232,14 +237,16 @@ export default {
         }
       }
       this.getRemainingTime();
+      this.sendEvents(this.localEvents);
     },
     loadEventsFromDB: async function(id) {
       this.eventId = id;
       await PlaylistApiService.getPlaylistsWithFacebook(this.eventId);
       // this.localEvents = await this.requestAsync(() => PlaylistApiService.getPlaylistsWithFacebook());
     },
-    getFacebookPlaylists: async function() {
-      this.facebookPlaylists = await PlaylistApiService.getPlaylistsWithFacebook(this.currentEventId);
+    getFacebookPlaylists: async function(id) {
+      this.facebookPlaylists = await PlaylistApiService.getPlaylistsWithFacebook(id);
+      this.sendPlaylists(this.facebookPlaylists);
     },
     getRemainingTime: function(month, day) {
       var today = new Date();
@@ -266,7 +273,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentEvent'])
+    ...mapGetters(['currentEvent', 'events'])
   },  
   created () {
     this.loadEvents()
