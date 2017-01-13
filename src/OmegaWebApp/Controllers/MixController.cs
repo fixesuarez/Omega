@@ -59,7 +59,7 @@ namespace OmegaWebApp.Controllers
             return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
         }
 
-        public async Task<List<Track>> PlaylistAnalyser(List<Playlist> playlists, MetaDonnees askedDonnees, double ratio = 20)
+        public async Task<List<Track>> PlaylistAnalyser(List<Playlist> playlists, MetaDonnees askedDonnees, double ratio = 10)
         {
             List<string> FilteredList = new List<string>();
             List<Track> filteredArray = new List<Track>();
