@@ -12,10 +12,10 @@
           <div class="remainingTime">
             
           </div>
-          <div class="selectGroup" v-if="group.id !== currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
+          <div class="selectGroup" v-if="group.Id !== currentGroup.Id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
             SELECT
           </div>
-          <div class="selectGroup selected" v-if="group.id == currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
+          <div class="selectGroup selected" v-if="group.Id == currentGroup.Id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
             SELECT
           </div>
         </div>
