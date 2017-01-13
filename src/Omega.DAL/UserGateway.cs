@@ -343,5 +343,11 @@ namespace Omega.DAL
         {
             await _queue.DeleteMessageAsync(message);
         }
+
+        public async Task InsertQueue(string guid)
+        {
+            CloudQueueMessage message = new CloudQueueMessage(guid);
+            await _queue.AddMessageAsync(message);
+        }
     }
 }
