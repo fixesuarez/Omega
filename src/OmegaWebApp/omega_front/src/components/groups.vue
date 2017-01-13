@@ -3,7 +3,7 @@
     <div class="groupContainer">
       <div class="group" v-for="group in groups">
         <div id="groupCover">
-          <img v-bind:src="group.cover.source">
+          <img v-bind:src="group.cover.source" v-if="group.cover !== undefined">
         </div>
         <div class="groupInfo">
           <span id="groupName">{{group.name}}</span>
