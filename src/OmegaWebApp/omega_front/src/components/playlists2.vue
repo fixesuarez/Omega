@@ -112,15 +112,13 @@ export default {
        })
     },
     loadPlaylists: async function() {
-      this.SDplaylists = [];
       this.SDplaylists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
-      this.SDplaylists.map(m => { this.$set(m, 'check', false); return m});
+      this.SDplaylists.map(m => { this.$set(m, 'check', true); return m});
       this.sendPlaylists(this.SDplaylists);
     },
     loadSpotifyPlaylist: async function() {
       var spplaylist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
       this.sPlaylists.push(spplaylist);
-      this.height = 'reussi';
     },
     loadDeezerPlaylist: async function() {
       var dzplaylist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
@@ -134,7 +132,7 @@ export default {
 
   },
   computed: {
-    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
+    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'currentEvent', 'currentGroup', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
   },
   created () {
     if(this.playlists.length === 0) {
@@ -142,9 +140,6 @@ export default {
       this.loadSpotifyPlaylist();
       this.loadDeezerPlaylist();
     } else {
-      this.loadSpotifyPlaylist();
-      this.loadDeezerPlaylist();
-      this.loadPlaylists();
     }
     this.getIdentity(true);
     this.showPlaylistHelperModal(true);
@@ -198,7 +193,7 @@ export default {
 
 .playlistImage {
   width: 200px;
-  opacity: 0.5;
+  filter: grayscale(100%);
   box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
   transition: all .5s ease;
 }

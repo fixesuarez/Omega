@@ -112,11 +112,19 @@ const mutations = {
   },
   [types.SENDPLAYLISTS](state, payload) {
     payload = payload.map(p => { p.provider = ''; return p })
+    state.checkedPlaylists = [];
     for(var i = 0; i < payload.length; i++) {
       if(payload[i].Tracks.length == 0) {
         payload[i].provider = 'd';
+        payload[i].check = false;
       } else {
         payload[i].provider = payload[i].Tracks[0].RowKey.charAt(0);
+        payload[i].check = true;
+      }
+      if(payload[i].check == true) {
+        state.checkedPlaylists.push(payload[i])
+      } else {
+        state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(payload[i]), 1)
       }
     }
     state.playlists = payload;
