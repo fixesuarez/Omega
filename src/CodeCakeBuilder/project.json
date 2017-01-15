@@ -18,6 +18,10 @@
   },
 
   "frameworks": {
-    "net451": {}
+    "net451": {
+      "frameworkAssemblies": {
+        "System.IO.Compression.FileSystem": "4.0.0.0"
+      }
+    }
   }
 }
