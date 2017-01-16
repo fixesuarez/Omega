@@ -19,7 +19,7 @@ const state = {
   currentMood: '',
   currentEvent: '',
   currentGroup: '',
-  currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
+  currentPlaylist: '',
   currentTrack: '',
   tempoMood: '',
   checkedPlaylists: [],
@@ -128,6 +128,7 @@ const mutations = {
       }
     }
     state.playlists = payload;
+    state.currentPlaylist = state.playlists[0];
     // state.playlists.push.apply(state.playlists, payload);
   },
   [types.MIX](state, payload) {

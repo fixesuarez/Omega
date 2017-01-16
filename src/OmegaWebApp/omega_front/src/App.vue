@@ -16,12 +16,11 @@
         </div>
       </div>
       <div class="col-12 appControlPanel">
-        <div class="col-4">&nbsp</div>
-        <div class="col-1"><router-link to="/playlist"><span @click="showPlaylistHelperModal(true)"><img src="./assets/playlistsIcon.png"><br>playlists</span></router-link></div>
-        <div class="col-1"><router-link to ="/events"><img src="./assets/eventIcon.png"><br>évènements</router-link></div>
-        <div class="col-1"><router-link to ="/groups"><img src="./assets/groupIcon.png"><br>groupes</router-link></div>
-        <div class="col-1"><router-link to="/moods"><img src="./assets/moodIcon.png"><br>ambiances</router-link></div>
-        <div class="col-4">&nbsp</div>
+        <div><router-link to="/playlist"><span @click="showPlaylistHelperModal(true)"><img src="./assets/playlistsIcon.png"><br>playlists</span></router-link></div>
+        <div><router-link to ="/events"><span><img src="./assets/eventIcon.png"><br>évènements</router-link></span></div>
+        <div><router-link to ="/groups"><span><img src="./assets/groupIcon.png"><br>groupes</router-link></span></div>
+        <div><router-link to="/moods"><span><img src="./assets/moodIcon.png"><br>ambiances</router-link></span></div>
+        <div><router-link to="/mix"><span><img src="./assets/MixLogo.png" id="mixImage"><br>mix</router-link></span></div>
       </div>
     </div>
     <router-view></router-view>

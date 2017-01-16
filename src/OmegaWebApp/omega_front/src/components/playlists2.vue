@@ -12,7 +12,6 @@
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
-            <img src="https://cdn4.iconfinder.com/data/icons/flat-black/512/menu.png" id="settingsImage">
             {{p.Name}}
           </span>
           <span v-if="p.provider == 's'" class="sPlaylistBanner">
@@ -33,13 +32,9 @@
 
       <div class="col-7 leftBottom">
         <div class="playlistAndTracks">
-          <div class="currentPlaylistImage">
-            <img v-bind:src="currentPlaylist.Cover">
-          </div>
-          <div class="tracks">
-            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="400px" height="99%" frameborder="0" allowtransparency="true"></iframe>
-            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="400px" height="99%"></iframe>
-          </div>
+          <img v-bind:src="currentPlaylist.Cover" id="currentPlaylistCover">
+          <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="400px" height="99%" frameborder="0" allowtransparency="true"></iframe>
+          <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="400px" height="99%"></iframe>
         </div>
       </div>
 
@@ -219,7 +214,6 @@ export default {
   font-family: 'Montserrat-ultra-light';
   font-size: 14px;
   text-align: center;
-  overflow: hidden;
   text-transform: uppercase;
   text-overflow: ellipsis;
 }
@@ -299,17 +293,10 @@ export default {
   color: white;
   display: inline-block;
   white-space: nowrap;
-  overflow: auto;
+  overflow: hidden;
 }
 
-.currentPlaylistImage {
-  height: 100%;
-  white-space: nowrap;
-  display: inline-block;
-  float: left;
-}
-
-.currentPlaylistImage img {
+#currentPlaylistCover {
   height: 100%;
 }
 
@@ -317,11 +304,9 @@ export default {
   min-width: 200px;
   height: 100%;
   float: left;
-  overflow-y: auto;
   white-space: nowrap;
   display: inline-block;
   overflow-x: hidden;
-  text-overflow: ellipsis;
 }
 
 .track {
