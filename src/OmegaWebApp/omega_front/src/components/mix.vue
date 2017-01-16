@@ -1,16 +1,16 @@
 <template>
-  <div> 
-       
-    <span v-for="track in finalMix" @click="selectTrack(track)" >
-      <img v-if="track.deezerId != null" v-bind:src="track.cover" height="50" width="50">
-    </span>
+  <div class="col-12 mixGlobal"> 
+    <div class="trackContainer">
+      <div v-for="track in finalMix" @click="selectTrack(track)" >
+        <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
+      </div>
+      <div id="dz-root">
+        &nbsp
+      </div>
+      <button id="dzmix" @click="setDeezerPlayer(),PlayRandom()">Set</button>
+    </div>
+  </div>
   
-<div id="dz-root"></div>
-  <button id="dzmix" @click="setDeezerPlayer(),PlayRandom()"><img id="imgmix" src="../assets/triangleGrey.png"></button>
-
-    
- </div>
-    
 </template>
 
 <script>
@@ -18,39 +18,32 @@ import { mapGetters, mapActions } from 'vuex'
 import $ from 'jquery'
 
 export default {
-      data () {
+  data () {
     return {
       DzPlayer: ''
-  
-      }
+    }
   },
   computed: {
-      ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
-      
-    },
-    mounted () {
-
-      
-      DZ.init({
-        appId  : '176241',
-        channelUrl : 'http://localhost:5000/mix',
-        player: {
-          container: 'dz-root',
-          width : 350,
-          height : 350,
-          playlist: false,
-          shuffle: true,
-          onload :
-          function DzPlay (){
-           
-            DZ.player.playTracks([139438215]);            
-            DZ.player.play;
-            DZ.player.setShuffle(true);
-
-          }
+    ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
+  },
+  mounted () {
+    DZ.init({
+      appId  : '176241',
+      channelUrl : 'http://localhost:5000/mix',
+      player: {
+        container: 'dz-root',
+        width : 1915,
+        height : 90,
+        playlist: false,
+        shuffle: true,
+        onload :
+        function DzPlay () {
+          DZ.player.playTracks([139438215]);            
+          DZ.player.play;
+          DZ.player.setShuffle(true);
         }
-      });
-          
+      }
+    });
   },
   methods: {
     ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix']),
@@ -65,32 +58,28 @@ export default {
     PlayRandom: function() {
       DZ.player.setShuffle(true)
     }
-
-
   },
   created () {
-    
-    
   }
-  
 }
 </script>
 
 <style>
-#dzmix {
-  width: 20vh;
-  height: 20vh;
-  margin-left:166vh;
+.mixGlobal {
+  height: 72vh;
+  background: #0e1014;
+  color: white;
   position: relative;
 }
 
-#imgmix {
-  width: 62px;
-  height: 62px;
-  background-color: grey;
-  
+#imageTrack {
+  height: 50px;
+  width: 50px;
+  float: left;
 }
+
 #dz-root {
-  margin-left: 10%;
+  position: absolute;
+  bottom: 110px;
 }
 </style>
