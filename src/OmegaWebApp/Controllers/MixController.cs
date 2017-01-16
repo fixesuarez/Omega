@@ -56,16 +56,21 @@ namespace OmegaWebApp.Controllers
             metadonnes.speechiness = ambiance.Speechiness;
             metadonnes.valence = ambiance.Valence;
             metadonnes.energy = ambiance.Energy;
-            return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
+
+            if (playlists.AmbianceName == "Lounge" || playlists.AmbianceName == "Energy" || playlists.AmbianceName == "Mad" || playlists.AmbianceName == "Dance")
+            {
+                return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes);
+            }
+            return await PlaylistAnalyser(playlists.AllPlaylists, metadonnes, 10);
         }
 
-        public async Task<List<Track>> PlaylistAnalyser(List<Playlist> playlists, MetaDonnees askedDonnees, double ratio = 10)
+        public async Task<List<Track>> PlaylistAnalyser(List<Playlist> playlists, MetaDonnees askedDonnees, double ratio)
         {
             List<string> FilteredList = new List<string>();
             List<Track> filteredArray = new List<Track>();
             List<CleanTrack> cleanTracks = new List<CleanTrack>();
             string trackIdSource;
-     
+
             foreach (var playlistArray in playlists)
             {
                 foreach (var track in playlistArray.Tracks)
@@ -82,6 +87,7 @@ namespace OmegaWebApp.Controllers
                     && Compare(askedDonnees.speechiness, analysedSong.Speechiness, ratio)
                     && Compare(askedDonnees.tempo, analysedSong.Tempo, ratio)
                     && Compare(askedDonnees.valence, analysedSong.Valence, ratio))
+                    {
                         if (!FilteredList.Contains(analysedSong.Id))
                         {
                             if (string.IsNullOrEmpty(analysedSong.DeezerId))
@@ -90,17 +96,64 @@ namespace OmegaWebApp.Controllers
                             }
                             track.DeezerId = analysedSong.DeezerId;
                             track.Popularity = analysedSong.Popularity;
-                            if(analysedSong.Popularity != null)
+                            if (analysedSong.Popularity != null)
                             {
                                 FilteredList.Add(analysedSong.Id);
                                 filteredArray.Add(track);
-                            }  
+                            }
                         }
+                    }
                 }
             }
 
             filteredArray = filteredArray.OrderByDescending(o => o.Popularity).ToList();
             return filteredArray.Where(t=>t.DeezerId!=null ).ToList();
+        }
+
+        public async Task<List<Track>> PlaylistAnalyser(List<Playlist> playlists, MetaDonnees askedDonnees)
+        {
+            List<string> FilteredList = new List<string>();
+            List<Track> filteredArray = new List<Track>();
+            List<CleanTrack> cleanTracks = new List<CleanTrack>();
+            string trackIdSource;
+
+            foreach (var playlistArray in playlists)
+            {
+                foreach (var track in playlistArray.Tracks)
+                {
+                    trackIdSource = track.RowKey.Substring(0, 2) + track.TrackId;
+                    CleanTrack analysedSong = await _cleanTrackService.GetSongCleanTrack(trackIdSource);
+                    if (Compare(askedDonnees.accousticness, analysedSong.Acousticness)
+                    && Compare(askedDonnees.danceability, analysedSong.Danceability)
+                    && Compare(askedDonnees.energy, analysedSong.Energy)
+                    && Compare(askedDonnees.instrumentalness, analysedSong.Instrumentalness)
+                    && Compare(askedDonnees.liveness, analysedSong.Liveness)
+                    && Compare(askedDonnees.loudness, analysedSong.Loudness)
+                    && Compare(askedDonnees.mode, analysedSong.Mode)
+                    && Compare(askedDonnees.speechiness, analysedSong.Speechiness)
+                    && Compare(askedDonnees.tempo, analysedSong.Tempo)
+                    && Compare(askedDonnees.valence, analysedSong.Valence))
+                    {
+                        if (!FilteredList.Contains(analysedSong.Id))
+                        {
+                            if (string.IsNullOrEmpty(analysedSong.DeezerId))
+                            {
+                                analysedSong.DeezerId = null;
+                            }
+                            track.DeezerId = analysedSong.DeezerId;
+                            track.Popularity = analysedSong.Popularity;
+                            if (analysedSong.Popularity != null)
+                            {
+                                FilteredList.Add(analysedSong.Id);
+                                filteredArray.Add(track);
+                            }
+                        }
+                    }
+                }
+            }
+
+            filteredArray = filteredArray.OrderByDescending(o => o.Popularity).ToList();
+            return filteredArray.Where(t => t.DeezerId != null).ToList();
         }
 
         public static bool Compare(string asked, string analysed, double ratio)
@@ -113,6 +166,26 @@ namespace OmegaWebApp.Controllers
 
             return (string.IsNullOrEmpty(asked) || string.IsNullOrEmpty(analysed) || double.Parse(analysed) < 0 || double.Parse(asked) == 0
                 || (Double.Parse(analysed) > Double.Parse(asked) - ratio && Double.Parse(analysed) < Double.Parse(asked) + ratio));
+        }
+
+        public static bool Compare(string asked, string analysed)
+        {
+            if (asked != null) asked = asked.Replace(".", ",");
+            if (analysed != null) analysed = analysed.Replace(".", ",");
+
+            if (string.IsNullOrEmpty(asked) || string.IsNullOrEmpty(analysed))
+            {
+                return true;
+            } else if(Double.Parse(asked) >= 0.5)
+            {
+                return Double.Parse(analysed) > Double.Parse(asked);
+            }else if(Double.Parse(asked) < 0.5)
+            {
+                return (Double.Parse(analysed) < Double.Parse(asked));
+            } else
+            {
+                return true;
+            }
         }
     }
 }
