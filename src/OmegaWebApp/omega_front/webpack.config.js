@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-var wwwroot = "../../wwwroot";
+var wwwroot = "../wwwroot";
 module.exports = {
   entry: './src/main.js',
   output: {
