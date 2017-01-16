@@ -89,11 +89,17 @@ namespace OmegaWebApp.Controllers
                                 analysedSong.DeezerId = null;
                             }
                             track.DeezerId = analysedSong.DeezerId;
-                            FilteredList.Add(analysedSong.Id);
-                            filteredArray.Add(track);
+                            track.Popularity = analysedSong.Popularity;
+                            if(analysedSong.Popularity != null)
+                            {
+                                FilteredList.Add(analysedSong.Id);
+                                filteredArray.Add(track);
+                            }  
                         }
                 }
             }
+
+            filteredArray = filteredArray.OrderByDescending(o => o.Popularity).ToList();
             return filteredArray.Where(t=>t.DeezerId!=null ).ToList();
         }
 
