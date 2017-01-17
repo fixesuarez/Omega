@@ -20,7 +20,7 @@
         <div><router-link to ="/events"><span><img src="./assets/eventIcon.png"><br>évènements</router-link></span></div>
         <div><router-link to ="/groups"><span><img src="./assets/groupIcon.png"><br>groupes</router-link></span></div>
         <div><router-link to="/moods"><span><img src="./assets/moodIcon.png"><br>ambiances</router-link></span></div>
-        <div><router-link to="/mix"><span><img src="./assets/MixLogo.png" id="mixImage"><br>mix</router-link></span></div>
+        <div><router-link to="/mix"><span @click="startMix()"><img src="./assets/MixLogo.png" id="mixImage"><br>mix</router-link></span></div>
       </div>
     </div>
     <router-view></router-view>
@@ -34,6 +34,7 @@
   import events from './components/events2.vue'
   import groups from './components/groups.vue'
   import Modal from './components/modal.vue'
+  import MixService from './services/MixService'
   import { mapGetters, mapActions } from 'vuex'
   import AuthService from './services/AuthService'
   import Vue from 'vue'
@@ -71,7 +72,7 @@
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods']),
+    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -90,10 +91,15 @@
     loadMoods: async function() {
       var data = await this.requestAsync(() => MoodService.getMoods());
       this.sendMoods(data);
+    },
+    startMix: async function() {
+      this.mix();
+      var mix = await MixService.mix(this.mixToMix);
+      this.sendMix(mix);
     }
   },
   computed: {
-    ...mapGetters(['active','playlists', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity'])
+    ...mapGetters(['active','playlists', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
   },
   name: 'app',
   components: {

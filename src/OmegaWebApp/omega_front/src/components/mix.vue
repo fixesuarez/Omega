@@ -1,13 +1,12 @@
 <template>
   <div class="col-12 mixGlobal"> 
     <div class="trackContainer">
-      <div v-for="track in finalMix" @click="selectTrack(track)" class="singleTrack">
+      <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack()" class="singleTrack">
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
       
     </div>
-    <button id="dzmix" @click="setDeezerPlayer(),PlayRandom()">Set</button>
     <div id="dz-root">
       &nbsp
     </div>
@@ -53,9 +52,6 @@ export default {
     ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
-    },
-    AddNextSong: function() {
-      this.addNextTrack();
     }
   },
   created () {  
@@ -78,6 +74,8 @@ export default {
   overflow-y: auto;
   padding: 100px;
   padding-top: 0px;
+  margin: 0 auto;
+  display: table;
 }
 
 .singleTrack {

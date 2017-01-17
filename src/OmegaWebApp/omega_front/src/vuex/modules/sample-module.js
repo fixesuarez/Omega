@@ -166,13 +166,7 @@ const mutations = {
       console.log("fini");
        DZ.player.playTracks(state.finalPlaylist);
     });
-
-  
-
-
-
-  },
-  
+  }
 }
 
 export default {
