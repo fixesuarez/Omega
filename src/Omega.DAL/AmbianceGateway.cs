@@ -61,8 +61,6 @@ namespace Omega.DAL
                 mood.Energy = metaDonnees.energy;
                 mood.Instrumentalness = metaDonnees.instrumentalness;
                 mood.Liveness = metaDonnees.liveness;
-                mood.Loudness = metaDonnees.loudness;
-                mood.Mode = metaDonnees.mode;
                 mood.Speechiness = metaDonnees.speechiness;
                 mood.Popularity = metaDonnees.popularity;
                 TableOperation insertOperation = TableOperation.Insert(mood);

@@ -18,10 +18,12 @@ namespace OmegaWebApp.Controllers
     {
         readonly AmbianceService _ambianceService;
         readonly CleanTrackService _cleanTrackService;
-        public MixController(AmbianceService ambianceService, CleanTrackService cleanTrackService)
+        readonly MixService _mixService;
+        public MixController(AmbianceService ambianceService, CleanTrackService cleanTrackService, MixService mixService)
         {
             _ambianceService = ambianceService;
             _cleanTrackService = cleanTrackService;
+            _mixService = mixService;
         }
 
         public class Playlists
@@ -29,6 +31,27 @@ namespace OmegaWebApp.Controllers
             public string AmbianceName { get; set; }
 
             public List<Playlist> AllPlaylists { get; set; }
+        }
+
+        [HttpPost("CreateMix")]
+        public async Task CreateMix([FromBody]Mix mix)
+        {
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            await _mixService.InsertMix(mix, guid);
+        }
+
+        [HttpPost("RetrieveMix")]
+        public async Task RetrieveMix([FromBody]string name)
+        {
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            await _mixService.RetrieveMix(name, guid);
+        }
+
+        [HttpPost("DeleteMix")]
+        public async Task DeleteMix([FromBody]string name)
+        {
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            await _mixService.DeleteMix(name, guid);
         }
 
         [HttpPost("MixPlaylist")]
@@ -162,7 +185,6 @@ namespace OmegaWebApp.Controllers
                 ratio = ratio / 100;
             if (asked != null) asked = asked.Replace(".", ",");
             if (analysed != null) analysed = analysed.Replace(".", ",");
-            //if (double.Parse(analysed) < 0) analysed = (double.Parse(analysed) *(-1)).ToString();
 
             return (string.IsNullOrEmpty(asked) || string.IsNullOrEmpty(analysed) || double.Parse(analysed) < 0 || double.Parse(asked) == 0
                 || (Double.Parse(analysed) > Double.Parse(asked) - ratio && Double.Parse(analysed) < Double.Parse(asked) + ratio));

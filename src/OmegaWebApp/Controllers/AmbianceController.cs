@@ -41,10 +41,10 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpPost("DeleteAmbiance")]
-        public async Task DeleteAmbiance(Mood ambiance)
+        public async Task DeleteAmbiance(string name)
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
-            await _ambianceService.DeleteAmbiance(guid, Mood.StringifyMood(ambiance));
+            await _ambianceService.DeleteAmbiance(guid, name);
         }
 
         [HttpGet("RetrieveAllUserAmbiance")]
