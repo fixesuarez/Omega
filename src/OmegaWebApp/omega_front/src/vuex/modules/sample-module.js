@@ -23,6 +23,7 @@ const state = {
   checkedPlaylists: [],
   playlists: '',
   finalPlaylist: [],
+  nextTrack: [],
   moodToInsert: '',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
@@ -100,7 +101,7 @@ const mutations = {
     }
   },
   [types.SELECTTRACK](state, payload) {
-    state.currentTrack = payload;
+    state.currentTrack = payload.deezerId;
   },
   [types.SENDPLAYLISTS](state, payload) {
     payload = payload.map(p => { p.provider = ''; return p })
@@ -124,10 +125,37 @@ const mutations = {
   [types.SENDMIX](state, payload) {
     state.finalMix = payload;
     state.currentTrack = state.finalMix[0];
+
     for(var i=0; i<state.finalMix.length; i++){
       state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
     }
-  }
+    DZ.player.playTracks(state.finalPlaylist);
+  },
+  [types.ADDNEXTTRACK](state, payload) {
+    state.nextTrack= [];
+    var x = state.finalPlaylist.indexOf(Number(state.currentTrack));
+    state.nextTrack.push(Number(state.currentTrack));
+    for(var i=x+1; i<state.finalPlaylist.length; i++){
+      state.nextTrack.push(state.finalPlaylist[i])
+    }
+    for(var y=0; y<x; y++) {
+      state.nextTrack.push(Number(state.finalPlaylist[y]))
+    }
+    state.finalPlaylist = [];
+    Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);
+    var end = false;
+          console.log(end);
+    DZ.Event.subscribe('track_end', function(evt_name){
+      console.log("fini");
+       DZ.player.playTracks(state.finalPlaylist);
+    });
+
+  
+
+
+
+  },
+  
 }
 
 export default {

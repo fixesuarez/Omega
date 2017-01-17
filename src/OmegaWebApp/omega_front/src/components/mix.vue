@@ -1,76 +1,68 @@
 <template>
   <div> 
        
-    <span v-for="track in finalMix" @click="selectTrack(track)" >
-      <img v-if="track.deezerId != null" v-bind:src="track.cover" height="50" width="50">
+    <span v-for="track in finalMix" @click="selectTrack(track),AddNextSong(track)" >
+      <img id="CoverMix" v-if="track.deezerId != null" v-bind:src="track.cover">
     </span>
-  
-<div id="dz-root"></div>
-  <button id="dzmix" @click="setDeezerPlayer(),PlayRandom()"><img id="imgmix" src="../assets/triangleGrey.png"></button>
 
+<div id="dz-root"></div>
+  <button id="dzmix" @click="setDeezerPlayer()"><img id="imgmix" src="../assets/triangleGrey.png"></button>
+  <button  @click="test()">test</button>
+   
+</div>
     
- </div>
+
     
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import $ from 'jquery'
-
+import $ from 'jquery'	
+ 
 export default {
       data () {
     return {
-      DzPlayer: ''
-  
+      DzPlayer: ['136336110','65938270','3129782']
       }
   },
   computed: {
       ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
-      
     },
     mounted () {
-
-      
       DZ.init({
         appId  : '176241',
         channelUrl : 'http://localhost:5000/mix',
         player: {
           container: 'dz-root',
-          width : 350,
-          height : 350,
-          playlist: false,
-          shuffle: true,
-          onload :
-          function DzPlay (){
-           
-            DZ.player.playTracks([139438215]);            
-            DZ.player.play;
-            DZ.player.setShuffle(true);
+          width : 800,
+          height : 90,
+          //playlist: false,
+          //shuffle: true,
+          onload: function() {
+            DZ.Event.subscribe('track_end', function(evt_name){
+              console.log("track is end",DZ.player.getCurrentIndex());
 
+            });
           }
         }
-      });
-          
+      }); 
+      DZ.Event.subscribe('current_track', function(track, evt_name){
+	console.log("Currently playing track", track);
+});
   },
   methods: {
-    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix']),
-    setDPlayer: function() {
-    var player = 'https://www.deezer.com/plugins/player?format=classic&autoplay=true&playlist=false&width=350&height=350&color=007FEB&layout=dark&size=small&type=tracks&id='+ this.currentTrack.deezerId +'&app_id=176241';
-      console.log(this.currentTrack);
-      this.DzPlayer = player;
-    },
+    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack']),
     setDeezerPlayer: function() {
-      DZ.player.playTracks(this.finalPlaylist)
+      DZ.player.playTracks(this.finalPlaylist);
     },
-    PlayRandom: function() {
-      DZ.player.setShuffle(true)
+    AddNextSong: function() {
+      this.addNextTrack();
     }
 
 
   },
-  created () {
-    
-    
+  created () {  
+
   }
   
 }
@@ -90,7 +82,21 @@ export default {
   background-color: grey;
   
 }
+#CoverMix {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  
+}
 #dz-root {
   margin-left: 10%;
+}
+#nextTrack {
+  color:white;
+  background-color: black;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  z-index: 1;
 }
 </style>
