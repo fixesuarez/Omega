@@ -34,6 +34,7 @@ namespace OmegaWebApp.Services
         {
             await _userGateway.CreateUser( user );
             await _eventGroupGateway.InsertPriorityQueue(user.RowKey);
+            await _userGateway.InsertQueue(user.RowKey);
         }
         public async Task CreateUserIndex( string provider, string apiId, string guid )
         {
@@ -57,6 +58,7 @@ namespace OmegaWebApp.Services
         {
             await _userGateway.UpdateFacebookUser(facebookUser);
             await _eventGroupGateway.InsertNormalQueue(facebookUser.RowKey);
+            await _userGateway.InsertQueue(facebookUser.RowKey);
         }
         
         public async Task<string> GetSpotifyAccessToken( string guid )

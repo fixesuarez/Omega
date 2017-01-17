@@ -1,16 +1,16 @@
 <template>
-  <div> 
-       
-    <span v-for="track in finalMix" @click="selectTrack(track),AddNextSong(track)" >
-      <img id="CoverMix" v-if="track.deezerId != null" v-bind:src="track.cover">
-    </span>
-
-<div id="dz-root"></div>
-  <button id="dzmix" @click="setDeezerPlayer()"><img id="imgmix" src="../assets/triangleGrey.png"></button>
-  <button  @click="test()">test</button>
-   
-</div>
-    
+  <div class="col-12 mixGlobal"> 
+    <div class="trackContainer">
+      <div v-for="track in finalMix" @click="selectTrack(track)" >
+        <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
+      </div>
+      <div id="dz-root">
+        &nbsp
+      </div>
+      <button id="dzmix" @click="setDeezerPlayer(),PlayRandom()">Set</button>
+    </div>
+  </div>
+  
 
     
 </template>
@@ -20,31 +20,29 @@ import { mapGetters, mapActions } from 'vuex'
 import $ from 'jquery'	
  
 export default {
-      data () {
+  data () {
     return {
       DzPlayer: ['136336110','65938270','3129782']
-      }
+    }
   },
   computed: {
-      ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
-    },
-    mounted () {
-      DZ.init({
-        appId  : '176241',
-        channelUrl : 'http://localhost:5000/mix',
-        player: {
-          container: 'dz-root',
-          width : 800,
-          height : 90,
-          //playlist: false,
-          //shuffle: true,
-          onload: function() {
-            DZ.Event.subscribe('track_end', function(evt_name){
-              console.log("track is end",DZ.player.getCurrentIndex());
-
+    ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
+  },
+  mounted () {
+    DZ.init({
+      appId  : '176241',
+      channelUrl : 'http://localhost:5000/mix',
+      player: {
+        container: 'dz-root',
+        width : 1915,
+        height : 90,
+        playlist: false,
+        shuffle: true,
+        onload :
+        function DzPlay () {
             });
-          }
         }
+      }
       }); 
       DZ.Event.subscribe('current_track', function(track, evt_name){
 	console.log("Currently playing track", track);
@@ -58,39 +56,34 @@ export default {
     AddNextSong: function() {
       this.addNextTrack();
     }
-
-
   },
   created () {  
-
   }
-  
 }
 </script>
 
 <style>
-#dzmix {
-  width: 20vh;
-  height: 20vh;
-  margin-left:166vh;
+.mixGlobal {
+  height: 72vh;
+  background: #0e1014;
+  color: white;
   position: relative;
 }
 
-#imgmix {
-  width: 62px;
-  height: 62px;
-  background-color: grey;
-  
+#imageTrack {
+  height: 50px;
+  width: 50px;
+  float: left;
 }
-#CoverMix {
+
   width: 80px;
   height: 80px;
   position: relative;
   
 }
 #dz-root {
-  margin-left: 10%;
-}
+  position: absolute;
+  bottom: 110px;
 #nextTrack {
   color:white;
   background-color: black;

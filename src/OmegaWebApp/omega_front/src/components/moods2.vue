@@ -17,12 +17,12 @@
           </span><br>
           <span id="dataLetter">D E S A I L P</span>
         </div>
-        <div class="bottomCurrentMood" v-if="currentMood != mood">
+        <div class="bottomCurrentMood" v-if="currentMood.rowKey !== mood.rowKey">
           <div class="selectMood" @click="setCurrentMood(mood)">
             SELECT
           </div>
         </div>
-        <div class="bottomCurrentMood green" v-if="currentMood == mood">
+        <div class="bottomCurrentMood green" v-if="currentMood.rowKey == mood.rowKey">
           <div class="selectMood" @click="setCurrentMood(mood)">
             SELECT
           </div>

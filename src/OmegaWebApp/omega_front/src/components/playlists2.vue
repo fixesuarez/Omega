@@ -12,7 +12,6 @@
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <span class="imageOverlay">
-            <img src="https://cdn4.iconfinder.com/data/icons/flat-black/512/menu.png" id="settingsImage">
             {{p.Name}}
           </span>
           <span v-if="p.provider == 's'" class="sPlaylistBanner">
@@ -33,13 +32,9 @@
 
       <div class="col-7 leftBottom">
         <div class="playlistAndTracks">
-          <div class="currentPlaylistImage">
-            <img v-bind:src="currentPlaylist.Cover">
-          </div>
-          <div class="tracks">
-            <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="100%" height="99%" frameborder="0" allowtransparency="true"></iframe>
-            <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="100%" height="99%"></iframe>
-          </div>
+          <img v-bind:src="currentPlaylist.Cover" id="currentPlaylistCover">
+          <iframe v-if="currentPlaylist.provider == 's'" v-bind:src="sPlayer" width="400px" height="99%" frameborder="0" allowtransparency="true"></iframe>
+          <iframe v-if="currentPlaylist.provider == 'd'" v-bind:src="DzPlayer" scrolling="no" frameborder="0" allowTransparency="true"  width="400px" height="99%"></iframe>
         </div>
       </div>
 
@@ -97,26 +92,24 @@ export default {
     },
     scrollRight: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
-      document.getElementById('playlistWrapper').scrollLeft += scroll;
+      document.getElementById('playlistWrapper').scrollLeft += scroll + 300;
     },
     scrollLeft: function() {
       var scroll = document.getElementById('spanPlaylist').offsetWidth;
-      document.getElementById('playlistWrapper').scrollLeft -= scroll;
+      document.getElementById('playlistWrapper').scrollLeft -= scroll + 300;
     },
     insertMood: async function() {
       this.$http.post('http://localhost:5000/api/Ambiance/InsertAmbiance', this.mood, function () {
        })
     },
     loadPlaylists: async function() {
-      this.SDplaylists = [];
       this.SDplaylists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
-      this.SDplaylists.map(m => { this.$set(m, 'check', false); return m});
+      this.SDplaylists.map(m => { this.$set(m, 'check', true); return m});
       this.sendPlaylists(this.SDplaylists);
     },
     loadSpotifyPlaylist: async function() {
       var spplaylist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
       this.sPlaylists.push(spplaylist);
-      this.height = 'reussi';
     },
     loadDeezerPlaylist: async function() {
       var dzplaylist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
@@ -130,7 +123,7 @@ export default {
 
   },
   computed: {
-    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
+    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'currentEvent', 'currentGroup', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
   },
   created () {
     if(this.playlists.length === 0) {
@@ -138,9 +131,6 @@ export default {
       this.loadSpotifyPlaylist();
       this.loadDeezerPlaylist();
     } else {
-      this.loadSpotifyPlaylist();
-      this.loadDeezerPlaylist();
-      this.loadPlaylists();
     }
     this.getIdentity(true);
     this.showPlaylistHelperModal(true);
@@ -194,7 +184,7 @@ export default {
 
 .playlistImage {
   width: 200px;
-  opacity: 0.5;
+  filter: grayscale(100%);
   box-shadow: 0px 0px 24px 1px rgba(0,0,0,1);
   transition: all .5s ease;
 }
@@ -220,7 +210,6 @@ export default {
   font-family: 'Montserrat-ultra-light';
   font-size: 14px;
   text-align: center;
-  overflow: hidden;
   text-transform: uppercase;
   text-overflow: ellipsis;
 }
@@ -296,35 +285,24 @@ export default {
 
 .playlistAndTracks {
   height: 100%;
-  margin-right: 10vh;
   float: right;
   color: white;
   display: inline-block;
   white-space: nowrap;
-  overflow: auto;
+  overflow: hidden;
 }
 
-.currentPlaylistImage {
-  height: 100%;
-  white-space: nowrap;
-  display: inline-block;
-  float: left;
-}
-
-.currentPlaylistImage img {
+#currentPlaylistCover {
   height: 100%;
 }
 
 .tracks {
   min-width: 200px;
-  max-width: 300px;
   height: 100%;
   float: left;
-  overflow-y: auto;
   white-space: nowrap;
   display: inline-block;
   overflow-x: hidden;
-  text-overflow: ellipsis;
 }
 
 .track {

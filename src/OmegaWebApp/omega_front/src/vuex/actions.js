@@ -72,6 +72,11 @@ export const sendEvents = ({commit}, payload) => {
     commit(types.SENDEVENTS, payload)
 }
 
+export const sendGroups = ({commit}, payload) => {
+  
+    commit(types.SENDGROUPS, payload)
+}
+
 export const sendCriterias = ({commit}, payload) => {
   
     commit(types.SENDCRITERIAS, payload)
@@ -100,6 +105,11 @@ export const setCurrentMood = ({commit}, payload) => {
 export const setCurrentEvent = ({commit}, payload) => {
   
     commit(types.SETCURRENTEVENT, payload)
+}
+
+export const setCurrentGroup = ({commit}, payload) => {
+  
+    commit(types.SETCURRENTGROUP, payload)
 }
 
 export const setCurrentPlaylist = ({commit}, payload) => {

@@ -12,7 +12,7 @@ class FacebookApiService {
         return await getAsync(endpoint, 'RetrieveUserEvents', AuthService.accessToken);
     }
     async getFacebookGroups() {
-        return await getAsync(endpoint, 'Events', AuthService.accessToken);
+        return await getAsync(endpoint, 'RetrieveUserGroups', AuthService.accessToken);
     }
 }
 

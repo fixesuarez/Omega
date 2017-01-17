@@ -40,6 +40,10 @@ namespace PlaylistCrawler
                 {
                     string responseFromServer = reader.ReadToEnd();
                     var token = JsonConvert.DeserializeObject<SpotifyToken>(responseFromServer);
+                    if(!string.IsNullOrEmpty(token.refresh_token))
+                    {
+                        await _userGateway.UpdateSpotifyRefreshToken(guid, token.refresh_token);
+                    }
                     return token;
                 }
             }
@@ -48,42 +52,42 @@ namespace PlaylistCrawler
         public async Task GetSpotifyPlaylist(string guid)
         {
             string accessToken = TokenRefresh(guid).Result.access_token;
-
+            if (!string.IsNullOrEmpty(accessToken)) {
             using (HttpClient client = new HttpClient())
             {
                 HttpRequestHeaders headers = client.DefaultRequestHeaders;
                 headers.Add("Authorization", string.Format("Bearer {0}", accessToken));
                 HttpResponseMessage message = await client.GetAsync("https://api.spotify.com/v1/me/playlists");
 
-                using (Stream responseStreamAllPlaylists = await message.Content.ReadAsStreamAsync())
-                using (StreamReader readerAllPlaylists = new StreamReader(responseStreamAllPlaylists))
-                {
-                    string allplaylist;
-
-                    string allPlaylistsString = readerAllPlaylists.ReadToEnd();
-
-                    JObject allPlaylistsJson = JObject.Parse(allPlaylistsString);
-                    JArray allPlaylistsArray = (JArray)allPlaylistsJson["items"];
-                    List<Playlist> listOfPlaylists = new List<Playlist>();
-
-                    for (int i = 0; i < allPlaylistsArray.Count; i++)
+                    using (Stream responseStreamAllPlaylists = await message.Content.ReadAsStreamAsync())
+                    using (StreamReader readerAllPlaylists = new StreamReader(responseStreamAllPlaylists))
                     {
-                        var playlist = allPlaylistsArray[i];
+                        string allplaylist;
 
-                        string requestTracksInPlaylist = (string)playlist["tracks"]["href"];
+                        string allPlaylistsString = readerAllPlaylists.ReadToEnd();
 
-                        string idOwner = (string)playlist["owner"]["id"];
-                        string name = (string)playlist["name"];
-                        string idPlaylist = (string)playlist["id"];
-                        string coverPlaylist = (string)playlist["images"][0]["url"];
+                        JObject allPlaylistsJson = JObject.Parse(allPlaylistsString);
+                        JArray allPlaylistsArray = (JArray)allPlaylistsJson["items"];
+                        List<Playlist> listOfPlaylists = new List<Playlist>();
 
-                        Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist);
-                        await _playlistGateway.InsertPlaylist(p);
-                        listOfPlaylists.Add(p);
+                        for (int i = 0; i < allPlaylistsArray.Count; i++)
+                        {
+                            var playlist = allPlaylistsArray[i];
+
+                            string requestTracksInPlaylist = (string)playlist["tracks"]["href"];
+
+                            string idOwner = (string)playlist["owner"]["id"];
+                            string name = (string)playlist["name"];
+                            string idPlaylist = (string)playlist["id"];
+                            string coverPlaylist = (string)playlist["images"][0]["url"];
+
+                            Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist);
+                            await _playlistGateway.InsertPlaylist(p);
+                            listOfPlaylists.Add(p);
+                        }
+                        allplaylist = JsonConvert.SerializeObject(listOfPlaylists);
+                        JToken playlistsJson = JToken.Parse(allplaylist);
                     }
-                    allplaylist = JsonConvert.SerializeObject(listOfPlaylists);
-                    JToken playlistsJson = JToken.Parse(allplaylist);
-                    //return playlistsJson;
                 }
             }
         }

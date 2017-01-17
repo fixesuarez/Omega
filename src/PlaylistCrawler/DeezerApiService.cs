@@ -21,7 +21,7 @@ namespace PlaylistCrawler
             _playlistGateway = playlistGateway;
             _userGateway = userGateway;
         }
-        public async Task<JToken> GetAllDeezerPlaylists(string guid)
+        public async Task GetAllDeezerPlaylists(string guid)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -40,30 +40,32 @@ namespace PlaylistCrawler
                     string allplaylist;
 
                     string allPlaylistsString = reader.ReadToEnd();
-                    allPlaylistsJson = JObject.Parse(allPlaylistsString);
-                    JArray allPlaylistsArray = (JArray)allPlaylistsJson["data"];
 
-                    List<Playlist> listOfPlaylists = new List<Playlist>();
-
-                    for (int i = 0; i < allPlaylistsArray.Count; i++)
+                        allPlaylistsJson = JObject.Parse(allPlaylistsString);
+                        JArray allPlaylistsArray = (JArray)allPlaylistsJson["data"];
+                    if (allPlaylistsArray != null)
                     {
-                        var playlist = allPlaylistsArray[i];
+                        List<Playlist> listOfPlaylists = new List<Playlist>();
 
-                        string requestTracksInPlaylist = (string)playlist["tracklist"];
-                        requestTracksInPlaylist = requestTracksInPlaylist.Replace("https", "http");
+                        for (int i = 0; i < allPlaylistsArray.Count; i++)
+                        {
+                            var playlist = allPlaylistsArray[i];
 
-                        string idOwner = (string)playlist["creator"]["id"];
-                        string name = (string)playlist["title"];
-                        string idPlaylist = (string)playlist["id"];
-                        string coverPlaylist = (string)playlist["picture"];
+                            string requestTracksInPlaylist = (string)playlist["tracklist"];
+                            requestTracksInPlaylist = requestTracksInPlaylist.Replace("https", "http");
 
-                        Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist);
-                        await _playlistGateway.InsertPlaylist(p);
-                        listOfPlaylists.Add(p);
+                            string idOwner = (string)playlist["creator"]["id"];
+                            string name = (string)playlist["title"];
+                            string idPlaylist = (string)playlist["id"];
+                            string coverPlaylist = (string)playlist["picture"];
+
+                            Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist);
+                            await _playlistGateway.InsertPlaylist(p);
+                            listOfPlaylists.Add(p);
+                        }
+                        allplaylist = JsonConvert.SerializeObject(listOfPlaylists);
+                        JToken playlistsJson = JToken.Parse(allplaylist);
                     }
-                    allplaylist = JsonConvert.SerializeObject(listOfPlaylists);
-                    JToken playlistsJson = JToken.Parse(allplaylist);
-                    return playlistsJson;
                 }
             }
         }

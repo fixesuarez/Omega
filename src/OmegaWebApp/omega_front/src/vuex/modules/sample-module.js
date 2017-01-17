@@ -11,13 +11,15 @@ const state = {
   eventModalActive: false,
   moodsModalActive: false,
   events: '',
+  groups: '',
   moods: '',
   enabledCriterias: false,
   criterias: '',
   authenticated: false,
   currentMood: '',
   currentEvent: '',
-  currentPlaylist: {image: 'http://image.noelshack.com/fichiers/2016/48/1480455060-omegacover.png'},
+  currentGroup: '',
+  currentPlaylist: '',
   currentTrack: '',
   tempoMood: '',
   checkedPlaylists: [],
@@ -64,6 +66,9 @@ const mutations = {
   [types.SENDEVENTS](state, payload) {
     state.events = payload;
   },
+  [types.SENDGROUPS](state, payload) {
+    state.groups = payload;
+  },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
   },
@@ -82,6 +87,9 @@ const mutations = {
   },
   [types.SETCURRENTEVENT](state, payload) {
     state.currentEvent = payload;
+  },
+  [types.SETCURRENTGROUP](state, payload) {
+    state.currentGroup = payload;
   },
   [types.SETCURRENTPLAYLIST](state, payload) {
     state.currentPlaylist= payload;
@@ -105,14 +113,23 @@ const mutations = {
   },
   [types.SENDPLAYLISTS](state, payload) {
     payload = payload.map(p => { p.provider = ''; return p })
+    state.checkedPlaylists = [];
     for(var i = 0; i < payload.length; i++) {
       if(payload[i].Tracks.length == 0) {
         payload[i].provider = 'd';
+        payload[i].check = false;
       } else {
         payload[i].provider = payload[i].Tracks[0].RowKey.charAt(0);
+        payload[i].check = true;
+      }
+      if(payload[i].check == true) {
+        state.checkedPlaylists.push(payload[i])
+      } else {
+        state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(payload[i]), 1)
       }
     }
     state.playlists = payload;
+    state.currentPlaylist = state.playlists[0];
     // state.playlists.push.apply(state.playlists, payload);
   },
   [types.MIX](state, payload) {

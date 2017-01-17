@@ -343,5 +343,25 @@ namespace Omega.DAL
         {
             await _queue.DeleteMessageAsync(message);
         }
+
+        public async Task InsertQueue(string guid)
+        {
+            CloudQueueMessage message = new CloudQueueMessage(guid);
+            await _queue.AddMessageAsync(message);
+        }
+
+        public async Task UpdateSpotifyRefreshToken(string guid, string refreshToken)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
+            TableResult retrievedResult = await _tableUser.ExecuteAsync(retrieveOperation);
+            User retrievedUser = (User)retrievedResult.Result;
+
+            if(retrievedUser != null)
+            {
+                retrievedUser.SpotifyRefreshToken = refreshToken;
+                TableOperation updateOperation = TableOperation.Replace(retrievedUser);
+                await _tableUser.ExecuteAsync(updateOperation);
+            }
+        }
     }
 }

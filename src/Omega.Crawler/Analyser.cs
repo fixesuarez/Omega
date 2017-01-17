@@ -18,13 +18,16 @@ namespace Omega.Crawler
             else if (source == "d")
             {
                 Track dm = await c.GetDeezerConnect().Connect(trackId);
-                string spotifyId = await c.GetSpotifycation().Search(dm.Title, dm.Artist, dm.AlbumName);
-                if (spotifyId != "")
+                if(dm != null)
                 {
-                    MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(spotifyId);
-                    await Task.Delay(500);
-                    Track track = await c.GetGetATrack().GetTrackSpotify(spotifyId);
-                    c.GetRequests().AddSongCleanTrack(meta, track.Artist, trackId, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
+                    string spotifyId = await c.GetSpotifycation().Search(dm.Title, dm.Artist, dm.AlbumName);
+                    if (spotifyId != "")
+                    {
+                        MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(spotifyId);
+                        await Task.Delay(500);
+                        Track track = await c.GetGetATrack().GetTrackSpotify(spotifyId);
+                        c.GetRequests().AddSongCleanTrack(meta, track.Artist, trackId, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
+                    }
                 }
             }
         }
@@ -42,14 +45,17 @@ namespace Omega.Crawler
             else if (source == "d")
             {
                 Track dm = await c.GetDeezerConnect().Connect(trackId);
-                string spotifyId = await c.GetSpotifycation().Search(dm.Title, dm.Artist, dm.AlbumName);
-                //Thread.Sleep(1000);
-                await Task.Delay(500);
-                if (spotifyId != "")
+                if(dm != null)
                 {
-                    MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(spotifyId);
-                    Track track = await c.GetGetATrack().GetTrackSpotify(spotifyId);
-                    c.GetRequests().UpdateCleanTrack(meta, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"], track.Artist);
+                    string spotifyId = await c.GetSpotifycation().Search(dm.Title, dm.Artist, dm.AlbumName);
+                    //Thread.Sleep(1000);
+                    await Task.Delay(500);
+                    if (spotifyId != "")
+                    {
+                        MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(spotifyId);
+                        Track track = await c.GetGetATrack().GetTrackSpotify(spotifyId);
+                        c.GetRequests().UpdateCleanTrack(meta, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"], track.Artist);
+                    }
                 }
             }
         }
