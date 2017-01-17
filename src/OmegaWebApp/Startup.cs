@@ -59,6 +59,7 @@ namespace OmegaWebApp
             services.AddSingleton<TokenService>();
             services.AddSingleton<AmbianceService>();
             services.AddSingleton<CleanTrackService>();
+            services.AddSingleton<MixService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
