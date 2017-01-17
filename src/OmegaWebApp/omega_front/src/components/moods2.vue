@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-      <div class="currentMood addMood" @click="showMoodsModal(true)">
+      <!--<div class="currentMood addMood" @click="showMoodsModal(true)">
         <div class="topCurrentMood">
         </div>
         <div class="middleCurrentMood addMood" @click="showMoodsModal(true)">
@@ -37,9 +37,11 @@
         <div class="bottomCurrentMood addMood" @click="showMoodsModal(true)">
           &nbsp
         </div>
-      </div>
+      </div>-->
     </div>
-   
+    <div class="addMood">
+      <img src="../assets/plus.png" id="plusMood" @click="showMoodsModal(true)">
+    </div>
     <moodModal v-if="moodsModalActive == true"><moodmodal>
   </div>
 </template>
@@ -54,7 +56,7 @@
 
 .moodContainer {
   padding-left: 40px;
-  height: 500px;
+  height: 400px;
   white-space: nowrap;
   display: inline-block;
   text-align: center;
@@ -128,14 +130,12 @@
 }
 
 .addMood {
-  background: silver;
-  font-family: 'Montserrat-Ultra-Light';
-  color: #0e1014;
-  cursor: pointer;
+  text-align: center;
 }
 
 #plusMood {
-  height: 120px;
+  margin-top: 20px;
+  height: 100px;
 }
 
 #dataLetter {
@@ -146,7 +146,6 @@
 
 .green {
   transition: all .8s ease;
-  background: #5CB85C;
 }
 
 </style>
@@ -173,7 +172,7 @@ export default {
         { label: 'Loudness', value: null},
         { label: 'Popularity', value: null}
       ],
-      metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Speechiness': null, 'Liveness': null, 'Loudness': null, 'Popularity': null},
+      metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Speechiness': null, 'Liveness': null, 'Popularity': null},
       localMoods: [
       { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', 'metadonnees': {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''} },
       { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png','metadonnees': {'Accousticness': '0.48', 'Danceability': '0.72', 'Energy': '0.84', 'Instrumentalness': '0.84', 'Liveness': '0.41', 'Loudness': '-44', 'Mode': '0', 'Popularity': '78'} },
