@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 mixGlobal"> 
     <div class="trackContainer">
-      <div v-for="track in finalMix" @click="selectTrack(track)" >
+      <div v-for="track in finalMix" @click="selectTrack(track),AddNextSong()" >
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
       </div>
       <div id="dz-root">
@@ -38,15 +38,12 @@ export default {
         height : 90,
         playlist: false,
         shuffle: true,
-        onload :
-        function DzPlay () {
-            });
-        }
+        onload : function(){}
       }
-      }); 
-      DZ.Event.subscribe('current_track', function(track, evt_name){
-	console.log("Currently playing track", track);
-});
+    }); 
+    DZ.Event.subscribe('current_track', function(track, evt_name){
+	    console.log("Currently playing track", track);
+    });
   },
   methods: {
     ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack']),
@@ -76,14 +73,11 @@ export default {
   float: left;
 }
 
-  width: 80px;
-  height: 80px;
-  position: relative;
-  
-}
 #dz-root {
   position: absolute;
   bottom: 110px;
+}
+
 #nextTrack {
   color:white;
   background-color: black;
