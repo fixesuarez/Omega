@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(wwwroot, './dist'),
-    publicPath: 'http://localhost:8080/dist/',
+    publicPath: 'dist/',
     filename: 'omega-front.js'
   },
   module: {

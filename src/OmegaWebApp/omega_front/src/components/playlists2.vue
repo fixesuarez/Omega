@@ -41,10 +41,6 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-        <span v-for="track in finalMix">
-          {{track.title}}
-          </br>
-        </span>
         <br><span @click="startMix()"><router-link to="/mix">Mix</span>
       </div> 
     </div>

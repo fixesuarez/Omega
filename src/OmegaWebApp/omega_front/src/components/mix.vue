@@ -13,16 +13,18 @@
     </div>
   </div>
   
+
+    
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import $ from 'jquery'
-
+import $ from 'jquery'	
+ 
 export default {
   data () {
     return {
-      DzPlayer: ''
+      DzPlayer: ['136336110','65938270','3129782']
     }
   },
   computed: {
@@ -38,30 +40,24 @@ export default {
         height : 90,
         playlist: false,
         shuffle: true,
-        onload :
-        function DzPlay () {
+        onload : function(){}
           DZ.player.playTracks([]);            
-          DZ.player.play;
-          DZ.player.setShuffle(true);
-        }
       }
+    }); 
+    DZ.Event.subscribe('current_track', function(track, evt_name){
+	    console.log("Currently playing track", track);
     });
   },
   methods: {
-    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix']),
-    setDPlayer: function() {
-    var player = 'https://www.deezer.com/plugins/player?format=classic&autoplay=true&playlist=false&width=350&height=350&color=007FEB&layout=dark&size=small&type=tracks&id='+ this.currentTrack.deezerId +'&app_id=176241';
-      console.log(this.currentTrack);
-      this.DzPlayer = player;
-    },
+    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack']),
     setDeezerPlayer: function() {
-      DZ.player.playTracks(this.finalPlaylist)
+      DZ.player.playTracks(this.finalPlaylist);
     },
-    PlayRandom: function() {
-      DZ.player.setShuffle(true)
+    AddNextSong: function() {
+      this.addNextTrack();
     }
   },
-  created () {
+  created () {  
   }
 }
 </script>
@@ -113,5 +109,14 @@ export default {
 #dz-root {
   position: absolute;
   bottom: 110px;
+}
+
+#nextTrack {
+  color:white;
+  background-color: black;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  z-index: 1;
 }
 </style>
