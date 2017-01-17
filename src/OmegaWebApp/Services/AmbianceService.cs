@@ -24,18 +24,15 @@ namespace OmegaWebApp.Services
             metadonnees.danceability = (string)rss["Metadonnees"]["danceability"];
             metadonnees.instrumentalness = (string)rss["Metadonnees"]["instrumentalness"];
             metadonnees.liveness = (string)rss["Metadonnees"]["liveness"];
-            metadonnees.loudness = (string)rss["Metadonnees"]["loudness"];
-            metadonnees.mode = (string)rss["Metadonnees"]["mode"];
             metadonnees.popularity = (string)rss["Metadonnees"]["popularity"];
             metadonnees.speechiness = (string)rss["Metadonnees"]["speechiness"];
-            metadonnees.valence = (string)rss["Metadonnees"]["valence"];
+            metadonnees.energy = (string)rss["Metadonnees"]["energy"];
             await _ambianceGateway.InsertAmbiance(user, name,cover, metadonnees);
         }
 
-        public async Task DeleteAmbiance(string user, string ambiance)
+        public async Task DeleteAmbiance(string user, string ambianceName)
         {
-            JObject rss = JObject.Parse(ambiance);
-            await _ambianceGateway.DeleteAmbiance(user, (string)rss["name"]);
+            await _ambianceGateway.DeleteAmbiance(user, ambianceName);
         }
 
         public async Task<Ambiance> RetrieveAmbiance(string user, string ambiance)
