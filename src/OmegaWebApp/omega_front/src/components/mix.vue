@@ -38,7 +38,9 @@ export default {
         height : 90,
         playlist: false,
         shuffle: true,
-        onload : function(){}
+        onload : function(){
+          console.log(DZ.player.getCurrentIndex());
+        }
       }
     }); 
     DZ.Event.subscribe('current_track', function(track, evt_name){
