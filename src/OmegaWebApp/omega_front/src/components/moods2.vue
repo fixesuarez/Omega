@@ -146,6 +146,7 @@
 
 .green {
   transition: all .8s ease;
+  background: #5CB85C;
 }
 
 </style>
