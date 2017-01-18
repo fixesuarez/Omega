@@ -11,9 +11,12 @@ namespace Omega.Crawler
             {
                 MetaDonnees meta = await c.GetCredentialAuth().TrackMetadonnee(trackId);
                 await Task.Delay(500);
-                Track track = await c.GetGetATrack().GetTrackSpotify(trackId);
-                string deezerId = await c.SpotifyToDeezer().GetDeezerId(track.Title, track.Artist);
-                c.GetRequests().AddSongCleanTrack(meta, track.Artist, deezerId, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
+                if(meta.popularity != null)
+                {
+                    Track track = await c.GetGetATrack().GetTrackSpotify(trackId);
+                    string deezerId = await c.SpotifyToDeezer().GetDeezerId(track.Title, track.Artist);
+                    c.GetRequests().AddSongCleanTrack(meta, track.Artist, deezerId, trackId, track.Title, source, track.AlbumName, track.Popularity, c.Config()["data:azure:ConnectionString"]);
+                }
             }
             else if (source == "d")
             {
