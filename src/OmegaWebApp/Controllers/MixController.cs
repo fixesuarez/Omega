@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using OmegaWebApp.Authentication;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace OmegaWebApp.Controllers
 {
@@ -36,7 +37,7 @@ namespace OmegaWebApp.Controllers
         public class ReceivedMix
         {
             public string name { get; set; }
-            public string playlist { get; set; }
+            public List<Track> playlist { get; set; }
         }
 
         [HttpPost("CreateMix")]
@@ -44,6 +45,7 @@ namespace OmegaWebApp.Controllers
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
             Mix tmpMix = new Mix(mix.name, guid);
+            tmpMix.playlist = JsonConvert.SerializeObject(mix.playlist);
             await _mixService.InsertMix(tmpMix, guid);
         }
 

@@ -30,7 +30,7 @@ namespace Omega.DAL
 
         public async Task InsertMix(Mix mix, string guid)
         {
-            if(await RetrieveMix(mix.PartitionKey, guid) != null)
+            if(await RetrieveMix(mix.PartitionKey, guid) == null)
             {
                 TableOperation insert = TableOperation.Insert(mix);
                 await _tableMixTable.ExecuteAsync(insert);
