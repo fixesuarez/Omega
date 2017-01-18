@@ -33,11 +33,18 @@ namespace OmegaWebApp.Controllers
             public List<Playlist> AllPlaylists { get; set; }
         }
 
+        public class ReceivedMix
+        {
+            public string name { get; set; }
+            public string playlist { get; set; }
+        }
+
         [HttpPost("CreateMix")]
-        public async Task CreateMix([FromBody]Mix mix)
+        public async Task CreateMix([FromBody]ReceivedMix mix)
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
-            await _mixService.InsertMix(mix, guid);
+            Mix tmpMix = new Mix(mix.name, guid);
+            await _mixService.InsertMix(tmpMix, guid);
         }
 
         [HttpPost("RetrieveMix")]
