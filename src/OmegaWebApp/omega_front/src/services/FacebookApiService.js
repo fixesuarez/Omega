@@ -14,6 +14,9 @@ class FacebookApiService {
     async getFacebookGroups() {
         return await getAsync(endpoint, 'RetrieveUserGroups', AuthService.accessToken);
     }
+    async createEvent() {
+        return await getAsync(endpoint, 'CreateEvent', AuthService.accessToken);
+    }
 }
 
 export default new FacebookApiService()

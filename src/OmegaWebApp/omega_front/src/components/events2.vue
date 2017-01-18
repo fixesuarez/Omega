@@ -18,14 +18,17 @@
             jours
           </div>
           <div class="selectEvent" v-if="event.Id !== currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
-            SELECT
+            SÉLECTIONNER
           </div>
           <div class="selectEvent selected" v-if="event.Id == currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
-            SELECT
+            SÉLECTIONNER
           </div>
         </div>
       </div>
     </div>
+    <img src="../assets/plus.png" id="plusMood" @click="showEventModal(true)">
+
+    <addEventModal v-if="eventModalActive == true"></addEventModal>
   </div>
 </template>
 
@@ -88,7 +91,7 @@
   overflow-wrap: break-word;
   white-space: normal;
   font-size: 12px;
-  color: #5AD0D4;
+  color: #FCB42A;
   width: 150px;
 }
 
@@ -103,7 +106,7 @@
   font-family: 'Montserrat-Regular';
   font-size: 30px;
   font-weight: bold;
-  color: #B8EDF3;
+  color: #FCB42A;
 }
 
 #eventMonth {
@@ -117,7 +120,7 @@
   width: 100%;
   height: 40px;
   margin: inherit;
-  background: #B8EDF3;
+  background: #D9534F;
   bottom: 0;
   left: 0;
   text-align: center;
@@ -164,6 +167,7 @@ import { mapGetters, mapActions } from 'vuex'
 import FacebookApiService from '../services/FacebookApiService'
 import PlaylistApiService from '../services/PlaylistApiService'
 import AuthService from '../services/AuthService'
+import addEventModal from '../components/addEventModal.vue'
 
 
 export default {
@@ -267,16 +271,16 @@ export default {
         var date = new Date(today.getFullYear(), this.localEvents[i].MonthNum, this.localEvents[i].Day)
         this.localEvents[i].timeRemaining = Math.ceil((date.getTime()-today.getTime())/(one_day))
       }
-
-
-
     }
   },
   computed: {
-    ...mapGetters(['currentEvent', 'events'])
+    ...mapGetters(['currentEvent', 'events', 'eventModalActive'])
   },  
   created () {
     this.loadEvents()
+  },
+  components: {
+    addEventModal
   }
 }
 
