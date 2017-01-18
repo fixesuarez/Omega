@@ -9,6 +9,8 @@
               <br>
               <span id="smallText">Nom : <input type="text" v-model="moodName"><br><span>
               <span id="smallText">Image : <input type="text" v-model="moodCover"></span>
+              <input type="file" name="image">
+              {{input}}
               <br><br>
               <span class="allCriterias" v-for="data in moodCriterias">
                 <input v-if="data.value !== null" type="range" v-model="data.value" id="singleCriteria" v-bind:class="{active: data.value == null}"><span v-if="data.value !== null" id="criteriaValue">{{data.value}}</span>
@@ -34,6 +36,7 @@ import MoodService from '../services/MoodService'
 export default {
   data () {
     return {
+      input: '',
       moodCover: '',
       moodName: '',
       moodCriterias: [

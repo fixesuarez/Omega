@@ -19,12 +19,12 @@
         </div>
         <div class="bottomCurrentMood" v-if="currentMood.rowKey !== mood.rowKey">
           <div class="selectMood" @click="setCurrentMood(mood)">
-            SELECT
+            SÉLECTIONNER
           </div>
         </div>
         <div class="bottomCurrentMood green" v-if="currentMood.rowKey == mood.rowKey">
           <div class="selectMood" @click="setCurrentMood(mood)">
-            SELECT
+            SÉLECTIONNER
           </div>
         </div>
       </div>

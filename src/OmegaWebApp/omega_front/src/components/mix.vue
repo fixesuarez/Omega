@@ -5,7 +5,6 @@
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
-      
     </div>
     <div id="dz-root">
       &nbsp
@@ -106,6 +105,7 @@ export default {
 }
 
 #dz-root {
+  width: 100%;
   position: absolute;
   bottom: 110px;
 }

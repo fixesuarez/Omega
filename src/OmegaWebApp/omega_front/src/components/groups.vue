@@ -10,13 +10,12 @@
           <div class="groupDateTime">
           </div>
           <div class="remainingTime">
-            
           </div>
           <div class="selectGroup" v-if="group.id !== currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
-            SELECT
+            SÉLECTIONNER
           </div>
           <div class="selectGroup selected" v-if="group.id == currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
-            SELECT
+            SÉLECTIONNER
           </div>
         </div>
       </div>
@@ -83,7 +82,7 @@
   overflow-wrap: break-word;
   white-space: normal;
   font-size: 12px;
-  color: #5AD0D4;
+  color: #FCB42A;
   width: 150px;
 }
 
@@ -98,7 +97,7 @@
   font-family: 'Montserrat-Regular';
   font-size: 30px;
   font-weight: bold;
-  color: #B8EDF3;
+  color: #FCB42A;
 }
 
 #groupMonth {
@@ -112,7 +111,7 @@
   width: 100%;
   height: 40px;
   margin: inherit;
-  background: #B8EDF3;
+  background: #CD5C50;
   bottom: 0;
   left: 0;
   text-align: center;

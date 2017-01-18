@@ -3,7 +3,7 @@
     <div v-if="identity != false" class="col-12 navbarContainer">
       <div class="col-12 appNavbar">
         <div class="col-4">
-          <img src="./assets/triangleGrey.png" id="appLogo"><span class="appTitle"><span id="appRedText">o</span>mega</span>
+          <router-link to="/playlist"><img src="./assets/triangleGrey.png" id="appLogo"></router-link><span class="appTitle"><span id="appRedText">o</span>mega</span>
         </div>
         <div class="col-4 appProviders">
 
