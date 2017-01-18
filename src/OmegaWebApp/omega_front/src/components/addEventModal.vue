@@ -8,14 +8,21 @@
             <div class="addEventModal">
               <span id="eventTitle">CRÉER UN évènement OMEGA</span><br>
               <br>
-              <span id="smallText">Nom : <input type="text" v-model="eventName"><br><span>
+              <div class="newEventInfos">
+                <span id="smallText">Nom : <input type="text" v-model="eventName"><br><span>
+                <input type="file" name="image" @change="upload">
+                <span id="smallText">Lieu : <input type="text" v-model="eventLocation"><br><span>
+              </div>
+              <div class="newEvent">
+                <div class="newEventCover">
+                  <img :src="eventCover">
+                </div>
+                <div class="newEventInfo">
+                  <span id="newEventName">{{eventName}}</span>
+                  <span id="newEventLocation">{{eventLocation}}</span>
+                </div>
+              </div>
 
-
-              <input type="file" name="image" @change="upload">
-              <img :src="eventCover" id="eventCover">
-
-
-              <br><br>
               <button @click="createEvent({eventName, eventCover, eventLocation, eventStartTime})">Créer</button>
             </div>
           </div>
@@ -36,9 +43,9 @@ import FacebookApiService from '../services/FacebookApiService'
 export default {
   data () {
     return {
-      eventName: '',
-      eventCover: '',
-      eventLocation: '',
+      eventName: 'Nom',
+      eventCover: 'Image',
+      eventLocation: 'Lieu',
       eventStartTime: '',
       eventCriterias: [
         { label: 'Accousticness', value: null},
@@ -83,8 +90,8 @@ export default {
       var data = await this.requestAsync(() => EventService.getEvents());
       this.sendEvents(data);
     },
-    createEvent: async function() {
-      var result = FacebookApiService.createEvent(this.input);
+    createEvent: async function(event) {
+      var result = FacebookApiService.createEvent(event);
     },
     createLocalEvent: async function(item) {
       this.eventToCreate.cover = this.eventCover;
@@ -176,7 +183,7 @@ export default {
 .eventModal-container {
   margin-bottom: 100px;
   margin-left: 20%;
-  height: 350px;
+  height: 450px;
   width: 400px;
   background-color: #191B27;
   border-radius: 2px;
@@ -187,7 +194,6 @@ export default {
 }
 
 .addEventModal {
-  text-align: center;
 }
 
 .allCriterias {
@@ -202,6 +208,29 @@ export default {
   height: 100%;
   padding: 20px;
   width: 100%;
+}
+
+.newEvent {
+  width: 350px;
+  height: 200px;
+  background: red;
+}
+
+.newEventCover {
+  float: left; 
+  width: 100px;
+  height: 100%;
+}
+
+.newEventCover img {
+  height: 100%;
+}
+
+.newEventInfo {
+  width: 250px;
+  height: 100%;
+  float: left;
+  text-align: left;
 }
 
 .modalClose {
