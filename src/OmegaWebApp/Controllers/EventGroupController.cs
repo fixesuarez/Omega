@@ -4,6 +4,8 @@ using OmegaWebApp.Authentication;
 using Omega.DAL;
 using System.Threading.Tasks;
 using OmegaWebApp.Services;
+using OmegaWebApp.Mappers;
+using System;
 
 namespace OmegaWebApp.Controllers
 {
@@ -33,6 +35,14 @@ namespace OmegaWebApp.Controllers
             string guid = User.FindFirst("www.omega.com:guid").Value;
             User user = await _userService.FindUser(guid);
             return user.GroupsId;
+        }
+
+        [HttpPost( "CreateEvent" )]
+        public async Task CreateOmegaEvent([FromBody] EventMapper e)
+        {
+            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+            string guidEvent = Guid.NewGuid().ToString();
+            await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.eventCover );
         }
 
         [HttpPost( "AddMember" )]

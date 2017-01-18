@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Omega.DAL
 {
@@ -39,15 +41,26 @@ namespace Omega.DAL
             // Create the blob client.
             _blobClient = _storageAccount.CreateCloudBlobClient();
             // Retrieve reference to a previously created container.
-            _container = _blobClient.GetContainerReference( "images-eventGroup" );
+            _container = _blobClient.GetContainerReference( "images-eventgroup" );
             // Create the container if it doesn't already exist.
             _container.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, string pathImage )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, IFormFile eventImage )
         {
             _blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
-            using( var fileStream = System.IO.File.OpenRead( pathImage ) )
+
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+            
+            if( eventImage.Length > 0 )
+            {
+                using( var stream = new FileStream( filePath, FileMode.Create ) )
+                {
+                    await eventImage.CopyToAsync( stream );
+                }
+            }
+            using( var fileStream = System.IO.File.OpenRead( filePath ) )
             {
                 await _blockBlob.UploadFromStreamAsync( fileStream );
             }

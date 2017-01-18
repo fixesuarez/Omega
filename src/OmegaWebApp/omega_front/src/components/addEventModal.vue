@@ -46,7 +46,7 @@ export default {
       eventName: 'Nom',
       eventCover: 'Image',
       eventLocation: 'Lieu',
-      eventStartTime: '',
+      eventStartTime: null,
       eventCriterias: [
         { label: 'Accousticness', value: null},
         { label: 'Danceability', value: null},
