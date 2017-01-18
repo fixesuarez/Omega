@@ -1,4 +1,4 @@
-import { getAsync } from '../helpers/apiHelper'
+import { getAsync, postAsync } from '../helpers/apiHelper'
 import AuthService from './AuthService'
 
 const endpoint = "/api/EventGroup";
@@ -14,8 +14,8 @@ class FacebookApiService {
     async getFacebookGroups() {
         return await getAsync(endpoint, 'RetrieveUserGroups', AuthService.accessToken);
     }
-    async createEvent() {
-        return await getAsync(endpoint, 'CreateEvent', AuthService.accessToken);
+    async createEvent(event) {
+        return await postAsync(endpoint, 'CreateEvent', AuthService.accessToken, event);
     }
 }
 
