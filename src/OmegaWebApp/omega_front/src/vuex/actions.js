@@ -62,6 +62,11 @@ export const showMoodsModal = ({commit}, payload) => {
     commit(types.SHOWMOODSMODAL, payload)
 }
 
+export const showMixModal = ({commit}, payload) => {
+  
+    commit(types.SHOWMIXMODAL, payload)
+}
+
 export const sendMoods = ({commit}, payload) => {
   
     commit(types.SENDMOODS, payload)
@@ -140,6 +145,11 @@ export const sendPlaylists = ({commit}, payload) => {
 export const insertMood = ({commit}, payload) => {
     
     commit(types.INSERTMOOD, payload)
+}
+
+export const insertMix = ({commit}, payload) => {
+    
+    commit(types.INSERTMIX, payload)
 }
 
 export const mix = ({commit}, payload) => {

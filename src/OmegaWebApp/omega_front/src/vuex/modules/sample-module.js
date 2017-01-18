@@ -1,6 +1,7 @@
 import * as types from '../mutation-types'
 
 const state = {
+  loading: false,
   count: 0,
   nb: 3,
   choice: 0,
@@ -8,6 +9,7 @@ const state = {
   text: '',
   finalMix: [],
   playlistHelperModalActive: false,
+  mixModalActive: false,
   eventModalActive: false,
   moodsModalActive: false,
   events: '',
@@ -105,6 +107,9 @@ const mutations = {
   },
   [types.INSERTMOOD](state, payload) {
     state.moodToInsert= payload;
+  },
+  [types.INSERTMIX](state, payload) {
+    state.mixToInsert= payload;
   },
   [types.SELECTPLAYLIST](state, playlist) {
     state.currentPlaylist = playlist;

@@ -15,7 +15,7 @@ class MixService {
     async getMix() {
         return await getAsync(endpoint, 'RetrieveMix', AuthService.accessToken);
     }
-    async createMix(mix) {
+    async SaveMix(mix) {
         return await postAsync(endpoint, 'CreateMix', AuthService.accessToken, mix);
     }
 }

@@ -5,10 +5,13 @@
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
-      
+         <div class="addMix">
+      <img src="../assets/plus.png" id="plusMood" @click="showMixModal(true)">
     </div>
-    <div id="dz-root">
-      &nbsp
+    <mixModal v-if="mixModalActive == true"><mixModal>
+    </div>
+    <div id="dz-root" style="width: 100%; height: 10vh;">
+    
     </div>
   </div>
   
@@ -18,6 +21,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import mixModal from '../components/saveMixModal.vue'
+import MixService from '../services/MoodService'
+
+
 import $ from 'jquery'	
  
 export default {
@@ -27,7 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
+    ...mapGetters(['mixModalActive', 'finalMix', 'identity', 'currentTrack','finalPlaylist','loading'])
   },
   mounted () {
     DZ.init({
@@ -35,8 +42,6 @@ export default {
       channelUrl : 'http://localhost:5000/mix',
       player: {
         container: 'dz-root',
-        width : 1915,
-        height : 90,
         playlist: false,
         shuffle: true,
         onload : function(){
@@ -49,12 +54,15 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack']),
+    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack','showMixModal']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
     }
   },
   created () {  
+  },
+  components: {
+     mixModal
   }
 }
 </script>
@@ -108,6 +116,9 @@ export default {
 #dz-root {
   position: absolute;
   bottom: 110px;
+  width: 100%;
+  height: 10vh;
+  background-color: red;
 }
 
 #nextTrack {
