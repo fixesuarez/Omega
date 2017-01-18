@@ -16,8 +16,10 @@ namespace Omega.DAL
         readonly CloudQueueClient _queueClient;
         readonly CloudQueue _normalQueue;
         readonly CloudQueue _priorityQueue;
+
         readonly CloudBlobClient _blobClient;
         readonly CloudBlobContainer _container;
+        CloudBlockBlob _blockBlob;
 
         public EventGroupGateway(string connectionString)
         {
@@ -34,13 +36,22 @@ namespace Omega.DAL
             _priorityQueue = _queueClient.GetQueueReference("priorityqueue");
             _priorityQueue.CreateIfNotExistsAsync().Wait();
 
+            // Create the blob client.
             _blobClient = _storageAccount.CreateCloudBlobClient();
-            _container = _blobClient.GetContainerReference("mycontainer");
+            // Retrieve reference to a previously created container.
+            _container = _blobClient.GetContainerReference( "images-eventGroup" );
+            // Create the container if it doesn't already exist.
             _container.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, string pathImage )
         {
+            _blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
+            using( var fileStream = System.IO.File.OpenRead( pathImage ) )
+            {
+                await _blockBlob.UploadFromStreamAsync( fileStream );
+            }
+
             EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location );
             eventOmega.Owner = true;
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );

@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -9,20 +10,31 @@ namespace Omega.DAL
     public class AmbianceGateway
     {
         CloudStorageAccount _storageAccount;
+
         CloudTableClient _tableClient;
         CloudTable _table;
+
+        CloudBlobClient _blobClient;
+        CloudBlobContainer _container;
+        CloudBlockBlob blockBlob;
+
         public AmbianceGateway(string connectionString)
         {
             _storageAccount = CloudStorageAccount.Parse(connectionString);
 
             // Create the table client.
             _tableClient = _storageAccount.CreateCloudTableClient();
-
             // Retrieve a reference to the table.
             _table = _tableClient.GetTableReference("Ambiance");
-
             // Create the table if it doesn't exist.
             _table.CreateIfNotExistsAsync().Wait();
+
+            // Create the blob client.
+            _blobClient = _storageAccount.CreateCloudBlobClient();
+            // Retrieve reference to a previously created container.
+            _container = _blobClient.GetContainerReference( "images-mood" );
+            // Create the container if it doesn't already exist.
+            _container.CreateIfNotExistsAsync().Wait();
 
             Ambiance retrievedAmbiance = RetrieveAmbiance("allUser", "Lounge").Result;
             if (retrievedAmbiance == null)
