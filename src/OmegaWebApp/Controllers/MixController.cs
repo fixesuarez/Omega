@@ -50,10 +50,17 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet("RetrieveMix")]
-        public async Task RetrieveMix([FromBody]string name)
+        public async Task RetrieveOneMix([FromBody]string name)
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
             await _mixService.RetrieveMix(name, guid);
+        }
+
+        [HttpGet("RetrieveAllMixUser")]
+        public async Task<List<Mix>> RetrieveAllMixUser()
+        {
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            return await _mixService.RetrieveAllMixUser(guid);
         }
 
         [HttpPost("DeleteMix")]

@@ -10,8 +10,8 @@ namespace Omega.DAL
     {
         public Mix(string name, string userGuid)
         {
-            PartitionKey = name;
-            RowKey = userGuid;
+            PartitionKey = userGuid;
+            RowKey = name;
         }
 
         public Mix() { }
