@@ -125,9 +125,10 @@
   left: 0;
   text-align: center;
   font-family: 'Montserrat-Regular';
-  font-size: 22px;
+  font-size: 16px;
+  letter-spacing: 1px;
   color: #fff;
-  padding-top: 5px;
+  padding-top: 10px;
   cursor: pointer;
   transition: all 0.5s ease;
 }

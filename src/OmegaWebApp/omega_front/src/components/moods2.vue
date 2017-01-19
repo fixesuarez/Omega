@@ -3,10 +3,11 @@
     <div class="col-12 moodContainer">
       <div class="currentMood" v-for="mood in moods">
         <div class="topCurrentMood">
-          <img v-bind:src="mood.cover">
+          <img v-bind:src="mood.cover" v-if="mood.cover !== undefined">
+          <!--<img src="../assets/moodNoCover.png" v-else>-->
           <span id="currentMoodName">{{mood.rowKey}}</span>
           <span v-if="mood.rowKey == 'Dance' || mood.rowKey == 'Energy' || mood.rowKey == 'Lounge' || mood.rowKey == 'Mad'"></span>
-          <span id="deleteMood" v-else></span>
+          <span id="deleteMood" @click="deleteMood(mood.rowKey)" v-else></span>
         </div>
         <div class="middleCurrentMood">
           <span v-for="data in mood.metadonnees">
@@ -26,13 +27,13 @@
             <div id="popularity">P<span id="pOverlay"><span id="dataTitle">Popularity</span><br> définit la popularité des musiques</span></div>
           </span>
         </div>
-        <div class="bottomCurrentMood" v-if="currentMood.rowKey !== mood.rowKey">
-          <div class="selectMood" @click="setCurrentMood(mood)">
+        <div class="bottomCurrentMood" v-if="currentMood.rowKey !== mood.rowKey" @click="setCurrentMood(mood)">
+          <div class="selectMood">
             SÉLECTIONNER
           </div>
         </div>
-        <div class="bottomCurrentMood green" v-if="currentMood.rowKey == mood.rowKey">
-          <div class="selectMood" @click="setCurrentMood(mood)">
+        <div class="bottomCurrentMood green" v-if="currentMood.rowKey == mood.rowKey" @click="setCurrentMood(mood)">
+          <div class="selectMood">
             SÉLECTIONNER
           </div>
         </div>
@@ -160,6 +161,7 @@
 #plusMood {
   margin-top: 20px;
   height: 100px;
+  cursor: pointer;
 }
 
 #dataLetter {
@@ -354,19 +356,12 @@ export default {
         { label: 'Popularity', value: null}
       ],
       metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Speechiness': null, 'Liveness': null, 'Popularity': null},
-      localMoods: [
-      { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', 'metadonnees': {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''} },
-      { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png','metadonnees': {'Accousticness': '0.48', 'Danceability': '0.72', 'Energy': '0.84', 'Instrumentalness': '0.84', 'Liveness': '0.41', 'Loudness': '-44', 'Mode': '0', 'Popularity': '78'} },
-      { label: 'Dance', image: 'http://image.noelshack.com/fichiers/2016/24/1465931498-moodsport.png', 'metadonnees': {'Accousticness': '0.95', 'Danceability': '0.52', 'Energy': '0.84', 'Instrumentalness': '0.24', 'Liveness': '0.91', 'Loudness': '-44', 'Mode': '1', 'Popularity': '18'} },
-      { label: 'Mad', image: 'http://image.noelshack.com/fichiers/2016/24/1465931510-moodwork.png', 'metadonnees': {'Accousticness': '0.25', 'Danceability': '0.32', 'Energy': '0.84', 'Instrumentalness': '0.04', 'Liveness': '0.61', 'Loudness': '-44', 'Mode': '1', 'Popularity': '02'} }],
       data: '',
       moodToCreate: {
         'cover': null,
         'name': null, 
         'metadonnees': null
-      },
-      mood: {'cover': 'http://www.firstredeemer.org/wp-content/uploads/girl-backpack-thinking-sunset-field-fence-.jpg', 'name': 'Heyyy', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
-      
+      }
     }
   },
   methods: {
@@ -375,6 +370,11 @@ export default {
     loadMoods: async function() {
       var data = await this.requestAsync(() => MoodService.getMoods());
       this.sendMoods(data);
+    },
+    deleteMood: async function(mood) {
+      var name = JSON.stringify(mood);
+      var data = MoodService.deleteMood(name);
+      this.loadMoods();
     },
     createLocalMood: async function(item) {
       this.moodToCreate.cover = this.moodCover;

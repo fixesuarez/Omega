@@ -27,7 +27,7 @@
               </span><br>
             </div>
           </div>
-          <div class="moodModalClose" @click="createLocalMood({moodCriterias, moodName, moodCover}), showMoodsModal(false), loadMoods()">
+          <div class="moodModalClose" @click="createLocalMood({moodCriterias, moodName, moodCover}), showMoodsModal(false)">
             créer <img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
@@ -121,7 +121,8 @@ export default {
       
       this.moodToCreate.metadonnees = this.metadonnees;
       this.insertMood(this.moodToCreate);
-      var result = MoodService.createMood(this.moodToCreate);
+      var result = await MoodService.createMood(this.moodToCreate);
+      this.loadMoods();
     }
   },
   computed: {

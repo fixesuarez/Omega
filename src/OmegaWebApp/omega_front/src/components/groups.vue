@@ -118,14 +118,15 @@
   width: 100%;
   height: 40px;
   margin: inherit;
-  background: #CD5C50;
+  background: #D9534F;
   bottom: 0;
   left: 0;
   text-align: center;
   font-family: 'Montserrat-Regular';
-  font-size: 22px;
+  letter-spacing: 1px;
+  font-size: 16px;
   color: #fff;
-  padding-top: 5px;
+  padding-top: 10px;
   cursor: pointer;
   transition: all 0.5s ease;
 }
