@@ -10,7 +10,7 @@
     </div>
     <mixModal v-if="mixModalActive == true"><mixModal>
     </div>
-    <div id="dz-root" style="width: 100%; height: 10vh;">
+    <div id="dz-root">
     
     </div>
   </div>
@@ -45,6 +45,8 @@ export default {
       channelUrl : 'http://localhost:5000/mix',
       player: {
         container: 'dz-root',
+        height:90,
+        width:1350,
         playlist: false,
         shuffle: true,
         onload : function(){
