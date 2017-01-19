@@ -19,5 +19,7 @@ namespace Omega.DAL
         public string mood { get; set; }
 
         public string playlist { get; set; }
+
+        public List<Track> ParsedPlaylist { get; set; }
     }
 }
