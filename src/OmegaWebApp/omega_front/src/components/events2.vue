@@ -75,8 +75,8 @@
   text-transform: uppercase;
   font-size: 24px; 
   text-overflow: ellipsis; 
-  display: block; 
   overflow: hidden; 
+  display: block; 
   overflow-wrap: break-word;
   white-space: normal;
   max-height: 60px;
