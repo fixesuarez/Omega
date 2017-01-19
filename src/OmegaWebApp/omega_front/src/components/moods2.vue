@@ -5,7 +5,8 @@
         <div class="topCurrentMood">
           <img v-bind:src="mood.cover">
           <span id="currentMoodName">{{mood.rowKey}}</span>
-          <span id="deleteMood">X</span>
+          <span v-if="mood.rowKey == 'Dance' || mood.rowKey == 'Energy' || mood.rowKey == 'Lounge' || mood.rowKey == 'Mad'"></span>
+          <span id="deleteMood" v-else><img src="../assets/closedTrash.png"></span>
         </div>
         <div class="middleCurrentMood">
           <span v-for="data in mood.metadonnees">
@@ -100,6 +101,11 @@
   right: 0;
   position: absolute;
   color: white;
+}
+
+#deleteMood img {
+  width: 16px;
+  height: 20px;
 }
 
 .middleCurrentMood {
