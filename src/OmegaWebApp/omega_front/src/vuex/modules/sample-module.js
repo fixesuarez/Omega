@@ -151,8 +151,25 @@ const mutations = {
   [types.GETIDENTITY](state, payload) {
     state.identity = payload;
   },
-    [types.RETRIEVEMIX](state, payload) {
+  [types.RETRIEVEMIX](state, payload) {
     state.allMix = payload;
+  },
+  [types.PLAYOLDMIX](state, payload) {
+    state.finalMix = [];
+    var a = state.allMix.indexOf(payload);
+   for(var i=0; i<state.allMix[a].parsedPlaylist.length; i++){
+      state.finalMix.push(state.allMix[a].parsedPlaylist[i])
+    }
+        state.finalPlaylist = [];
+       state.currentTrack = state.finalMix[0];
+
+    for(var i=0; i<state.finalMix.length; i++){
+      state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
+    }
+    DZ.player.playTracks(state.finalPlaylist);
+    //state.finalMix = state.allMix.parsedPlaylist;
+    //state.allMix.parsedPlaylist = state.finalMix;
+    //state.finalMix.push(state.allMix.parsedPlaylist)
   },
   [types.SENDMIX](state, payload) {
     state.finalPlaylist = [];

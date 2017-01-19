@@ -77,6 +77,11 @@ export const retrieveMix = ({commit}, payload) => {
     commit(types.RETRIEVEMIX, payload)
 }
 
+export const playOldMix = ({commit}, payload) => {
+  
+    commit(types.PLAYOLDMIX, payload)
+}
+
 export const sendEvents = ({commit}, payload) => {
   
     commit(types.SENDEVENTS, payload)

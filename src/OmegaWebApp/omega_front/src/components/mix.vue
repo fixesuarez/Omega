@@ -6,8 +6,12 @@
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
          <div class="addMix">
-      <img src="../assets/plus.png" id="plusMood" @click="showMixModal(true)">
+      <img src="../assets/plus.png" id="plusMood" @click="showMixModal(true)">     
     </div>
+    <div v-for="mix in allMix" @click="playOldMix(mix)">
+      <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack">
+        <p>{{mix.rowKey}}<br></p>
+      </div>
     <mixModal v-if="mixModalActive == true"><mixModal>
     </div>
     <div id="dz-root">
@@ -59,7 +63,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['setCurrentTrack', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
+    ...mapActions(['setCurrentTrack','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
     },

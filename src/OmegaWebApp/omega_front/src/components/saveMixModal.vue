@@ -10,7 +10,7 @@
               <span id="smallText">Nom : <input type="text" style="color: white;" v-model="name"><br><span>
               <br><br>
     
-              <button @click="saveMix({name, playlist})">Sauvegarder</button>
+              <button @click="saveMix({name, playlist}),showMixModal(false)">Sauvegarder</button>
             </div>
           </div>
           <div class="modalClose" @click="showMixModal(false)">

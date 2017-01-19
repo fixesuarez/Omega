@@ -32,4 +32,6 @@ export const GETIDENTITY = 'GETIDENTITY'
 export const SENDMIX = 'SENDMIX'
 export const ADDNEXTTRACK = 'ADDNEXTTRACK'
 export const RETRIEVEMIX = 'RETRIEVEMIX'
+export const PLAYOLDMIX = 'PLAYOLDMIX'
+
 
