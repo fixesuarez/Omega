@@ -72,6 +72,11 @@ export const sendMoods = ({commit}, payload) => {
     commit(types.SENDMOODS, payload)
 }
 
+export const retrieveMix = ({commit}, payload) => {
+  
+    commit(types.RETRIEVEMIX, payload)
+}
+
 export const sendEvents = ({commit}, payload) => {
   
     commit(types.SENDEVENTS, payload)

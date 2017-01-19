@@ -8,6 +8,7 @@ const state = {
   active: 'playlistsTab',
   text: '',
   finalMix: [],
+  allMix: '',
   playlistHelperModalActive: false,
   mixModalActive: false,
   eventModalActive: false,
@@ -149,6 +150,9 @@ const mutations = {
   },
   [types.GETIDENTITY](state, payload) {
     state.identity = payload;
+  },
+    [types.RETRIEVEMIX](state, payload) {
+    state.allMix = payload;
   },
   [types.SENDMIX](state, payload) {
     state.finalPlaylist = [];

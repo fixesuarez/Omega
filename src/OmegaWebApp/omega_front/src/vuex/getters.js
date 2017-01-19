@@ -30,3 +30,5 @@ export const identity = state => state.sampleModule.identity;
 export const finalMix = state => state.sampleModule.finalMix;
 export const finalPlaylist = state => state.sampleModule.finalPlaylist;
 export const nextTrack = state => state.sampleModule.nextTrack;
+export const allMix = state => state.sampleModule.allMix;
+

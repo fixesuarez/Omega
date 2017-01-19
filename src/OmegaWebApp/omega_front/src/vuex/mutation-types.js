@@ -31,3 +31,5 @@ export const MIX = 'MIX'
 export const GETIDENTITY = 'GETIDENTITY'
 export const SENDMIX = 'SENDMIX'
 export const ADDNEXTTRACK = 'ADDNEXTTRACK'
+export const RETRIEVEMIX = 'RETRIEVEMIX'
+

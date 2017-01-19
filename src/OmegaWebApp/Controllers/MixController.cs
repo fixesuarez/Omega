@@ -49,7 +49,7 @@ namespace OmegaWebApp.Controllers
             await _mixService.InsertMix(tmpMix, guid);
         }
 
-        [HttpPost("RetrieveMix")]
+        [HttpGet("RetrieveMix")]
         public async Task RetrieveMix([FromBody]string name)
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;

@@ -22,7 +22,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import mixModal from '../components/saveMixModal.vue'
-import MixService from '../services/MoodService'
+import MixService from '../services/MixService'
+import AuthService from '../services/AuthService'
 
 
 import $ from 'jquery'	
@@ -30,11 +31,13 @@ import $ from 'jquery'
 export default {
   data () {
     return {
-      DzPlayer: ['136336110','65938270','3129782']
+      DzPlayer: ['136336110','65938270','3129782'],
+      mix: [],
+      data: '',
     }
   },
   computed: {
-    ...mapGetters(['mixModalActive', 'finalMix', 'identity', 'currentTrack','finalPlaylist','loading'])
+    ...mapGetters(['mixModalActive', 'finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix'])
   },
   mounted () {
     DZ.init({
@@ -54,12 +57,17 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack','showMixModal']),
+    ...mapActions(['setCurrentTrack', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
-    }
+    },
+    loadMix: async function() {
+      var data = await this.requestAsync(() => MixService.getMix());
+      this.retrieveMix(data);
+    },
   },
   created () {  
+    this.loadMix()
   },
   components: {
      mixModal
