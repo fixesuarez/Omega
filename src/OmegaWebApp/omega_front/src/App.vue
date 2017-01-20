@@ -93,13 +93,17 @@
       this.sendMoods(data);
     },
     startMix: async function() {
-      this.mix();
-      var mix = await MixService.mix(this.mixToMix);
-      this.sendMix(mix);
+      if(this.currentMood != "") {
+        this.mix();
+        var mix = await MixService.mix(this.mixToMix);
+        this.sendMix(mix);
+      } else {
+        console.log("Mood or playlist is null");
+      }
     }
   },
   computed: {
-    ...mapGetters(['active','playlists', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
+    ...mapGetters(['active','playlists','currentMood','checkedPlaylists', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
   },
   name: 'app',
   components: {
