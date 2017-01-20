@@ -4,19 +4,21 @@
       <div class="group" v-for="group in groups">
         <div id="groupCover">
           <img v-bind:src="group.cover.source" v-if="group.cover !== undefined">
+          <img src="../assets/groupNoCover.png" v-if="group.cover == undefined">
         </div>
         <div class="groupInfo">
           <span id="groupName">{{group.name}}</span>
-          <div class="groupDateTime">
-          </div>
-          <div class="remainingTime">
-            
+          <span id="membersLabel">membres du groupe</span>
+          <div class="groupMembers">
+            <span v-for="member in group.members.data">
+              {{member.name}}<br>
+            </span>
           </div>
           <div class="selectGroup" v-if="group.id !== currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
-            SELECT
+            SÉLECTIONNER
           </div>
           <div class="selectGroup selected" v-if="group.id == currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
-            SELECT
+            SÉLECTIONNER
           </div>
         </div>
       </div>
@@ -52,6 +54,10 @@
   float: left;
 }
 
+#groupCover img {
+  height: 100%;
+}
+
 .groupInfo {
   float: left;
   padding-top: 30px;
@@ -83,7 +89,7 @@
   overflow-wrap: break-word;
   white-space: normal;
   font-size: 12px;
-  color: #5AD0D4;
+  color: #FCB42A;
   width: 150px;
 }
 
@@ -98,7 +104,7 @@
   font-family: 'Montserrat-Regular';
   font-size: 30px;
   font-weight: bold;
-  color: #B8EDF3;
+  color: #FCB42A;
 }
 
 #groupMonth {
@@ -112,14 +118,15 @@
   width: 100%;
   height: 40px;
   margin: inherit;
-  background: #B8EDF3;
+  background: #D9534F;
   bottom: 0;
   left: 0;
   text-align: center;
   font-family: 'Montserrat-Regular';
-  font-size: 22px;
+  letter-spacing: 1px;
+  font-size: 16px;
   color: #fff;
-  padding-top: 5px;
+  padding-top: 10px;
   cursor: pointer;
   transition: all 0.5s ease;
 }
@@ -152,6 +159,28 @@
   color: black;
 }
 
+.groupMembers {
+  height: 50%;
+  width: 70%;
+  padding: 10px;
+  position: absolute;
+  margin-left: 20px;
+  font-family: 'Montserrat-Regular';
+  margin-top: 25px;
+  font-size: 14px;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
+
+#membersLabel {
+  font-family: 'Montserrat-Ultra-Light';
+  font-size: 12px;
+  color: silver;
+  margin-top: 20px;
+  position: absolute;
+  z-index: 2;
+  margin-left: 10px;
+}
 </style>
 
 <script>

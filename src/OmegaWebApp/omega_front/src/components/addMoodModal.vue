@@ -3,22 +3,32 @@
     <div class="moodModal-mask">
       <div class="moodModal-wrapper">
         <div class="moodModal-container">
+          <span id="closeModal" @click="showMoodsModal(false)">X</span>
           <div class="addMoodText">
             <div class="addMoodModal">
               <span id="moodTitle">NOUVELLE AMBIANCE</span><br>
               <br>
               <span id="smallText">Nom : <input type="text" v-model="moodName"><br><span>
               <span id="smallText">Image : <input type="text" v-model="moodCover"></span>
+              <!--<input type="file" name="image">-->
               <br><br>
+              <span id="aDataLetter">
+                <div id="danceability">D<span id="dOverlay"><span id="dataTitle">Danceability</span><br> définit le caractère dansant des musiques</span></div>
+                <div id="energy">E<span id="eOverlay"><span id="dataTitle">Energy</span><br> définit le caractère energique des musiques</span></div>
+                <div id="speechiness">S<span id="sOverlay"><span id="dataTitle">Speechiness</span><br> définit le taux de paroles des musiques</span></div>
+                <div id="accousticness">A<span id="aOverlay"><span id="dataTitle">Accousticness</span><br> définit le caractère acoustic des musiques</span></div>
+                <div id="instrumentalness">I<span id="iOverlay"><span id="dataTitle">Instrumentalness</span><br> définit le taux d'instrumentale des musiques</span></div>
+                <div id="liveness">L<span id="lOverlay"><span id="dataTitle">Liveness</span><br> définit la présence de live dans les musiques</span></div>
+                <div id="popularity">P<span id="pOverlay"><span id="dataTitle">Popularity</span><br> définit la popularité des musiques</span></div>
+              </span>
               <span class="allCriterias" v-for="data in moodCriterias">
                 <input v-if="data.value !== null" type="range" v-model="data.value" id="singleCriteria" v-bind:class="{active: data.value == null}"><span v-if="data.value !== null" id="criteriaValue">{{data.value}}</span>
                 <input v-if="data.value == null" type="range" v-model="data.value" id="singleCriteria"><span v-if="data.value == null" id="criteriaValue">{{data.value}}</span>
               </span><br>
-              <button @click="createLocalMood({moodCriterias, moodName, moodCover})">Créer</button>
             </div>
           </div>
-          <div class="modalClose" @click="showMoodsModal(false)">
-            FERMER <img src="../assets/arrow.png">
+          <div class="moodModalClose" @click="createLocalMood({moodCriterias, moodName, moodCover}), showMoodsModal(false)">
+            créer <img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
@@ -34,6 +44,7 @@ import MoodService from '../services/MoodService'
 export default {
   data () {
     return {
+      input: '',
       moodCover: '',
       moodName: '',
       moodCriterias: [
@@ -110,7 +121,8 @@ export default {
       
       this.moodToCreate.metadonnees = this.metadonnees;
       this.insertMood(this.moodToCreate);
-      var result = MoodService.createMood(this.moodToCreate);
+      var result = await MoodService.createMood(this.moodToCreate);
+      this.loadMoods();
     }
   },
   computed: {
@@ -145,15 +157,13 @@ export default {
 
 .moodModal-wrapper {
   position: absolute;
-  top: 35%;
-  left: 30%;
+  top: 30%;
+  left: 35%;
   display: table-cell;
 }
 
 .moodModal-container {
-  margin-bottom: 100px;
-  margin-left: 20%;
-  height: 350px;
+  height: 300px;
   width: 300px;
   background-color: #191B27;
   border-radius: 2px;
@@ -168,6 +178,7 @@ export default {
 }
 
 .allCriterias {
+  float: left;
 }
 
 #criteriaValue {
@@ -181,8 +192,8 @@ export default {
   width: 100%;
 }
 
-.modalClose {
-  width: 180px;
+.moodModalClose {
+  width: 120px;
   padding: 10px;
   background: #de002b;
   color: black;
@@ -191,7 +202,7 @@ export default {
   text-transform: uppercase;
 }
 
-.modalClose img {
+.moodModalClose img {
   margin-left: 6px;
   width: 25px;
 }
@@ -204,11 +215,39 @@ export default {
   font-size: 14px;
 }
 
+#singleCriteria {
+  background: silver;
+}
+
+#aDataLetter {
+  width: 20px;
+  color: #fff;
+  font-family: 'Montserrat-Ultra-Light';
+  display: table;
+  float: left;
+  margin-right: 10px;
+}
+
+#aDataLetter :not(#dataTitle) {
+  margin-left: 20px;
+  z-index: 9999;
+}
+
+#closeModal {
+  position: absolute;
+  right: 7px;
+  top: 7px;
+  color: white;
+  font-family: 'Montserrat-Ultra-Light';
+  cursor: pointer
+}
+
 input[type="text"] {
   border: 0;
   border-bottom: 1px solid silver;
   width: auto;
   background: #191B27;
+  color: white;
 }
 
 .moodModal-enter {

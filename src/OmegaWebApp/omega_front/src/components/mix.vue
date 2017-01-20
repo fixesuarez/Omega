@@ -128,6 +128,7 @@ export default {
 }
 
 #dz-root {
+  width: 100%;
   position: absolute;
   bottom: 110px;
   width: 100%;
