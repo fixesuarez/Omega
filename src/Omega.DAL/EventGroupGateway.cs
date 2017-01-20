@@ -60,7 +60,7 @@ namespace Omega.DAL
                     await eventImage.CopyToAsync( stream );
                 }
             }
-            using( var fileStream = System.IO.File.OpenRead( filePath ) )
+            using( var fileStream = File.OpenRead( filePath ) )
             {
                 await _blockBlob.UploadFromStreamAsync( fileStream );
             }

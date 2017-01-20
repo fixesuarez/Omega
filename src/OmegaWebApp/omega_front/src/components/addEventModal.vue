@@ -10,7 +10,9 @@
               <br>
               <div class="newEventInfos">
                 <span id="smallText">Nom : <input type="text" v-model="eventName"><br><span>
-                <input type="file" name="image" @change="upload">
+                <form method="post" enctype="multipart/form-data" asp-controller="CreateEvent" asp-action="Index">
+                 <input type="file" name="image" @change="upload">
+                </form>
                 <span id="smallText">Lieu : <input type="text" v-model="eventLocation"><br><span>
               </div>
               <div class="newEvent">

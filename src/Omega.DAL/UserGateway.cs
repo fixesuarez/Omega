@@ -89,6 +89,17 @@ namespace Omega.DAL
             return (PseudoIndex) retrievedResult.Result;
         }
 
+        public async Task<string> FindUserPseudo( string guid )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, guid );
+            TableResult retrievedResult = await _tableUserIndex.ExecuteAsync( retrieveOperation );
+            User retrievedUser = (User) retrievedResult.Result;
+            if( retrievedUser != null )
+                return retrievedUser.Pseudo;
+            else
+                return null;
+        }
+
         public async Task<string> FindFacebookId( string guid )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, guid );

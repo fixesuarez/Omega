@@ -8,10 +8,10 @@ namespace OmegaWebApp.Mappers
 {
     public class EventMapper
     {
-        public string eventName { get; set; }
         public IFormFile eventCover { get; set; }
         public string eventLocation { get; set; }
-        public DateTime eventStartTime { get; set; }
+        public string eventName { get; set; }
+        public DateTime? eventStartTime { get; set; }
 
         public EventMapper() { }
     }

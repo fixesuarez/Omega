@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using OmegaWebApp.Services;
 using OmegaWebApp.Mappers;
 using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace OmegaWebApp.Controllers
 {
@@ -40,9 +42,10 @@ namespace OmegaWebApp.Controllers
         [HttpPost( "CreateEvent" )]
         public async Task CreateOmegaEvent([FromBody] EventMapper e)
         {
+            IFormFile tmp = e.eventCover;
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             string guidEvent = Guid.NewGuid().ToString();
-            await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.eventCover );
+            await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, tmp );
         }
 
         [HttpPost( "AddMember" )]
