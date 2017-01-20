@@ -372,8 +372,7 @@ export default {
       this.sendMoods(data);
     },
     deleteMood: async function(mood) {
-      var name = JSON.stringify(mood);
-      var data = MoodService.deleteMood(name);
+      var data = MoodService.deleteMood(mood);
       this.loadMoods();
     },
     createLocalMood: async function(item) {
