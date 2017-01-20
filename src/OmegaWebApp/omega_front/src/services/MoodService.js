@@ -15,6 +15,9 @@ class MoodService {
     async createMood(mood) {
         return await postAsync(endpoint, 'InsertAmbiance', AuthService.accessToken, mood);
     }
+    async deleteMood(mood) {
+        return await postAsync(endpoint, 'DeleteAmbiance', AuthService.accessToken, mood);
+    }
 }
 
 export default new MoodService()

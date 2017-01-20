@@ -41,7 +41,7 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpPost("DeleteAmbiance")]
-        public async Task DeleteAmbiance(string name)
+        public async Task DeleteAmbiance([FromBody]string name)
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
             await _ambianceService.DeleteAmbiance(guid, name);

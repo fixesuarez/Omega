@@ -3,9 +3,11 @@
     <div class="col-12 moodContainer">
       <div class="currentMood" v-for="mood in moods">
         <div class="topCurrentMood">
-          <img v-bind:src="mood.cover">
+          <img v-bind:src="mood.cover" v-if="mood.cover !== undefined">
+          <!--<img src="../assets/moodNoCover.png" v-else>-->
           <span id="currentMoodName">{{mood.rowKey}}</span>
-          <span id="deleteMood">X</span>
+          <span v-if="mood.rowKey == 'Dance' || mood.rowKey == 'Energy' || mood.rowKey == 'Lounge' || mood.rowKey == 'Mad'"></span>
+          <span id="deleteMood" @click="deleteMood(mood.rowKey)" v-else></span>
         </div>
         <div class="middleCurrentMood">
           <span v-for="data in mood.metadonnees">
@@ -15,15 +17,23 @@
             <img v-if="data < 0" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*150)/(-60) +'px'}">
             <img v-if="data == '' || data == null" src="../assets/bar.png" id="dataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
           </span><br>
-          <span id="dataLetter">D E S A I L P</span>
+          <span id="dataLetter">
+            <div id="danceability">D<span id="dOverlay"><span id="dataTitle">Danceability</span><br> définit le caractère dansant des musiques</span></div>
+            <div id="energy">E<span id="eOverlay"><span id="dataTitle">Energy</span><br> définit le caractère energique des musiques</span></div>
+            <div id="speechiness">S<span id="sOverlay"><span id="dataTitle">Speechiness</span><br> définit le taux de paroles des musiques</span></div>
+            <div id="accousticness">A<span id="aOverlay"><span id="dataTitle">Accousticness</span><br> définit le caractère acoustic des musiques</span></div>
+            <div id="instrumentalness">I<span id="iOverlay"><span id="dataTitle">Instrumentalness</span><br> définit le taux d'instrumentale des musiques</span></div>
+            <div id="liveness">L<span id="lOverlay"><span id="dataTitle">Liveness</span><br> définit la présence de live dans les musiques</span></div>
+            <div id="popularity">P<span id="pOverlay"><span id="dataTitle">Popularity</span><br> définit la popularité des musiques</span></div>
+          </span>
         </div>
-        <div class="bottomCurrentMood" v-if="currentMood.rowKey !== mood.rowKey">
-          <div class="selectMood" @click="setCurrentMood(mood)">
+        <div class="bottomCurrentMood" v-if="currentMood.rowKey !== mood.rowKey" @click="setCurrentMood(mood)">
+          <div class="selectMood">
             SÉLECTIONNER
           </div>
         </div>
-        <div class="bottomCurrentMood green" v-if="currentMood.rowKey == mood.rowKey">
-          <div class="selectMood" @click="setCurrentMood(mood)">
+        <div class="bottomCurrentMood green" v-if="currentMood.rowKey == mood.rowKey" @click="setCurrentMood(mood)">
+          <div class="selectMood">
             SÉLECTIONNER
           </div>
         </div>
@@ -94,12 +104,26 @@
 
 #deleteMood {
   padding-left: 10px;
-  top: 0;
+  top: 5px;
   padding: 5px;
   cursor: pointer;
-  right: 0;
+  right: 5px;
   position: absolute;
   color: white;
+  width: 16px;
+  height: 20px;
+  background-image: url("../assets/closedTrash.png");
+  background-size: 16px 20px;
+  transition: all .3s ease;
+}
+
+#deleteMood:hover {
+  background-image: url("../assets/oppenedTrash.png");
+}
+
+#deleteMood img {
+  width: 16px;
+  height: 20px;
 }
 
 .middleCurrentMood {
@@ -111,9 +135,10 @@
 .bottomCurrentMood {
   height: 40px;
   background: #D9534F;
-  letter-spacing: 4px;
   color: #fff;
-  font-family: 'Montserrat-Ultra-Light';
+  font-family: 'Montserrat-Regular';
+  letter-spacing: 1px;
+  font-size: 16px;
   padding: 10px;
   cursor: pointer;
   transition: all .5s ease;
@@ -136,13 +161,170 @@
 #plusMood {
   margin-top: 20px;
   height: 100px;
+  cursor: pointer;
 }
 
 #dataLetter {
-  letter-spacing: 4px;
   color: #0e1014;
   font-family: 'Montserrat-Ultra-Light';
+  margin: 0 auto;
+  display: table;
 }
+
+#dataLetter div {
+  margin-left: 6px;
+  margin-right: 6px;
+  float: left;
+  cursor: pointer;
+}
+
+#dataTitle {
+  color: #de002b;
+  font-family: 'Montserrat-Regular';
+  font-size: 14px;
+}
+
+#dOverlay {
+  font-family: 'Montserrat-Ultra-Light';
+  visibility: hidden;
+  position: absolute;
+  background: #191B27;
+  z-index: 2;
+  width: 200px;
+  display: block; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  color: white;
+  font-size: 12px;
+  padding: 7px;
+}
+
+#eOverlay {
+  font-family: 'Montserrat-Ultra-Light';
+  visibility: hidden;
+  position: absolute;
+  background: #191B27;
+  z-index: 2;
+  width: 200px;
+  display: block; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  color: white;
+  font-size: 12px;
+  padding: 7px;
+}
+
+#sOverlay {
+  font-family: 'Montserrat-Ultra-Light';
+  visibility: hidden;
+  position: absolute;
+  background: #191B27;
+  z-index: 2;
+  width: 200px;
+  display: block; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  color: white;
+  font-size: 12px;
+  padding: 7px;
+}
+
+#aOverlay {
+  font-family: 'Montserrat-Ultra-Light';
+  visibility: hidden;
+  position: absolute;
+  background: #191B27;
+  z-index: 2;
+  width: 200px;
+  display: block; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  color: white;
+  font-size: 12px;
+  padding: 7px;
+}
+
+#iOverlay {
+  font-family: 'Montserrat-Ultra-Light';
+  visibility: hidden;
+  position: absolute;
+  background: #191B27;
+  z-index: 2;
+  width: 200px;
+  display: block; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  color: white;
+  font-size: 12px;
+  padding: 7px;
+}
+
+#lOverlay {
+  font-family: 'Montserrat-Ultra-Light';
+  visibility: hidden;
+  position: absolute;
+  background: #191B27;
+  z-index: 2;
+  width: 200px;
+  display: block; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  color: white;
+  font-size: 12px;
+  padding: 7px;
+}
+
+#pOverlay {
+  font-family: 'Montserrat-Ultra-Light';
+  visibility: hidden;
+  position: absolute;
+  background: #191B27;
+  z-index: 2;
+  width: 200px;
+  display: block; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  color: white;
+  font-size: 12px;
+  padding: 7px;
+}
+
+
+#danceability:hover > #dOverlay {
+  visibility: visible;
+}
+
+#energy:hover > #eOverlay {
+  visibility: visible;
+}
+
+#speechiness:hover > #sOverlay {
+  visibility: visible;
+}
+
+#accousticness:hover > #aOverlay {
+  visibility: visible;
+}
+
+#instrumentalness:hover > #iOverlay {
+  visibility: visible;
+}
+
+#liveness:hover > #lOverlay {
+  visibility: visible;
+}
+
+#popularity:hover > #pOverlay {
+  visibility: visible;
+}
+
 
 .green {
   transition: all .8s ease;
@@ -174,19 +356,12 @@ export default {
         { label: 'Popularity', value: null}
       ],
       metadonnees: {'Accousticness': null, 'Danceability': null, 'Energy': null, 'Instrumentalness': null, 'Speechiness': null, 'Liveness': null, 'Popularity': null},
-      localMoods: [
-      { label: 'Lounge', image: 'http://image.noelshack.com/fichiers/2016/23/1465756669-party.png', 'metadonnees': {'Accousticness': '0.11', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '', 'Mode': '1', 'Popularity': ''} },
-      { label: 'Energy', image: 'http://image.noelshack.com/fichiers/2016/24/1465931485-moodchill.png','metadonnees': {'Accousticness': '0.48', 'Danceability': '0.72', 'Energy': '0.84', 'Instrumentalness': '0.84', 'Liveness': '0.41', 'Loudness': '-44', 'Mode': '0', 'Popularity': '78'} },
-      { label: 'Dance', image: 'http://image.noelshack.com/fichiers/2016/24/1465931498-moodsport.png', 'metadonnees': {'Accousticness': '0.95', 'Danceability': '0.52', 'Energy': '0.84', 'Instrumentalness': '0.24', 'Liveness': '0.91', 'Loudness': '-44', 'Mode': '1', 'Popularity': '18'} },
-      { label: 'Mad', image: 'http://image.noelshack.com/fichiers/2016/24/1465931510-moodwork.png', 'metadonnees': {'Accousticness': '0.25', 'Danceability': '0.32', 'Energy': '0.84', 'Instrumentalness': '0.04', 'Liveness': '0.61', 'Loudness': '-44', 'Mode': '1', 'Popularity': '02'} }],
       data: '',
       moodToCreate: {
         'cover': null,
         'name': null, 
         'metadonnees': null
-      },
-      mood: {'cover': 'http://www.firstredeemer.org/wp-content/uploads/girl-backpack-thinking-sunset-field-fence-.jpg', 'name': 'Heyyy', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
-      
+      }
     }
   },
   methods: {
@@ -195,6 +370,10 @@ export default {
     loadMoods: async function() {
       var data = await this.requestAsync(() => MoodService.getMoods());
       this.sendMoods(data);
+    },
+    deleteMood: async function(mood) {
+      var data = MoodService.deleteMood(mood);
+      this.loadMoods();
     },
     createLocalMood: async function(item) {
       this.moodToCreate.cover = this.moodCover;
