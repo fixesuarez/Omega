@@ -193,11 +193,11 @@ namespace Omega.DAL
             User retrievedUser = (User) retrievedResult.Result;
             if( retrievedUser != null )
             {
-                if( retrievedUser.Pseudo != null || retrievedUser.Pseudo != string.Empty )
+                if( retrievedUser.Pseudo != null && retrievedUser.Pseudo != string.Empty )
                 {
                     TableOperation retrievePseudoIndexOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, retrievedUser.Pseudo );
                     TableResult retrievedPseudoIndex = await tablePseudoIndex.ExecuteAsync( retrievePseudoIndexOperation );
-                    PseudoIndex deleteEntity = (PseudoIndex) retrievedResult.Result;
+                    PseudoIndex deleteEntity = (PseudoIndex) retrievedPseudoIndex.Result;
 
                     if( deleteEntity != null )
                     {
