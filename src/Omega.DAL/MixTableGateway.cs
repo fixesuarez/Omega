@@ -51,12 +51,14 @@ namespace Omega.DAL
 
         public async Task DeleteMix(string name, string guid)
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<Mix>(name, guid);
+            TableOperation retrieveOperation = TableOperation.Retrieve<Mix>(guid, name);
             TableResult retrievedMix = await _tableMixTable.ExecuteAsync(retrieveOperation);
-            if(retrievedMix != null)
+            Mix deleteEntity = (Mix)retrievedMix.Result;
+
+            if (deleteEntity != null)
             {
-                Mix deleteEntity = (Mix)retrievedMix.Result;
                 TableOperation delete = TableOperation.Delete(deleteEntity);
+                await _tableMixTable.ExecuteAsync(delete);
             }
         }
 

@@ -18,6 +18,9 @@ class MixService {
     async SaveMix(mix) {
         return await postAsync(endpoint, 'CreateMix', AuthService.accessToken, mix);
     }
+    async deleteMix(mix) {
+        return await postAsync(endpoint, 'DeleteMix', AuthService.accessToken, mix);
+    }
 }
 
 export default new MixService()

@@ -1,9 +1,5 @@
 <template>
   <div class="col-12 playlistGlobal">
-    <!--<button type="button" @click="loadSpotifyPlaylist(),loadDeezerPlaylist()">Refresh Playlist</button>-->
-    <!--<button type="button" @click="loadPlaylists()">show Playlist</button>-->
-
-    <!--Contains the top part of the playlist vue-->
     <div class="col-12 playlistContainer">  
       <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
       <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
@@ -41,11 +37,46 @@
       <!--Right-->
       
       <div class="col-5 rightBottom">
-        <br><span @click="startMix()"><router-link to="/mix">Mix</span>
-      </div> 
+        <div class="pCurrentMood" v-if="currentMood !== ''">
+          <div class="pTopCurrentMood">
+            <img v-bind:src="currentMood.cover">
+            <span id="pCurrentMoodName">{{currentMood.rowKey}}</span>
+            <span id="deleteMood">X</span>
+          </div>
+          <div class="pMiddleCurrentMood">
+            <span v-for="data in currentMood.metadonnees">
+              <img v-if="data < 1 && data > 0" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: 150*data +'px'}">
+              <img v-if="data <= 100 && data > 1" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: data*1.5 +'px'}">
+              <img v-if="data == 1 || data == 0 && data != ''" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: (data*75)+75 +'px'}">
+              <img v-if="data < 0" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: (data*150)/(-60) +'px'}">
+              <img v-if="data == '' || data == null" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
+            </span><br>
+            <span id="dataLetter">D E S A I L P</span>
+          </div>
+        </div>
+        <div class="pCurrentEvent" v-if="currentEvent !== ''">
+          <div id="pEventCover">
+            <img v-bind:src="currentEvent.Cover">
+          </div>
+          <div class="pEventInfo">
+            <span id="pEventName">{{currentEvent.Name}}</span>
+            <span id="pEventLocation">{{currentEvent.Location}}</span>
+            <div class="pEventDateTime">
+              <span id="pEventDay">{{currentEvent.Day}}</span><br>
+              <span id="pEventMonth">{{currentEvent.Month}}</span>
+            </div>
+            <div class="pRemainingTime">
+              <span id="pTempsRestant">temps restant</span><br>
+              <span id="pDaysLeft">{{currentEvent.timeRemaining}}</span>
+              jours
+            </div>
+          </div>
+        </div> 
+      </div>
+      
     </div>
 
-    <PlaylistHelperModal v-if="playlistHelperModalActive == true"></PlaylistHelperModal>
+    <PlaylistHelperModal v-if="playlistHelperModalActive == true && playlists.length == 0"></PlaylistHelperModal>
     <EventModal v-if="eventModalActive == true"></EventModal>
     <MoodsModal v-if="moodsModalActive == true"><MoodsModal>
   </div>
@@ -347,9 +378,152 @@ export default {
 
 .rightBottom {
   height: 100%;
+  padding: 10px;
   background: #12161e;
+  font-family: 'Montserrat-Ultra-Light';
+  color: white;
+  display: inline-block;
+  white-space: nowrap;
+  position: relative;
+}
+
+.pCurrentMood {
+  height: 100%;
+  width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.pTopCurrentMood {
+  height: 33%;
+  overflow: hidden;
+  position: relative;
+}
+
+.pTopCurrentMood img {
+  width: 100%;
+  filter: brightness(50%);
+}
+
+#pCurrentMoodName {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  font-family: 'Montserrat-Ultra-Light';
   color: white;
 }
+
+#pDeleteMood {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.pMiddleCurrentMood {
+  height: 67%;
+  text-align: center;
+  background: white;
+}
+
+#pDataBar {
+  margin: 6px;
+  width: 6px;
+  margin-top: 30px;
+}
+
+.pCurrentEvent {
+  width: 220px;
+  background: #fff;
+  white-space: nowrap;
+  display: inline-block;
+  height: 100%;
+  text-overflow: ellipsis;
+  text-align: left;
+  float: left;
+  margin-right: 10px;
+}
+
+#pEventCover {
+  width: 100%;  
+  height: 33%;
+  overflow: hidden;
+}
+
+.pEventInfo {
+  float: left;
+  padding-top: 30px;
+  padding-left: 20px;
+  color: black;
+  width: 220px;
+  position: relative;
+  height: 67%;
+}
+
+#pEventName {
+  font-family: 'Montserrat-Regular';
+  text-transform: uppercase;
+  font-size: 24px; 
+  text-overflow: ellipsis; 
+  display: block; 
+  overflow: hidden; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-height: 60px;
+  width: 160px;
+}
+
+#pEventLocation {
+  font-family: 'Montserrat-Regular';
+  text-overflow: ellipsis; 
+  display: block; 
+  overflow: hidden; 
+  overflow-wrap: break-word;
+  white-space: normal;
+  font-size: 12px;
+  color: #FCB42A;
+  width: 150px;
+}
+
+.pEventDateTime {
+  position: absolute;
+  top: 27px;
+  right: 20px;
+  text-align: center;
+}
+
+#pEventDay {
+  font-family: 'Montserrat-Regular';
+  font-size: 30px;
+  font-weight: bold;
+  color: #FCB42A;
+}
+
+#pEventMonth {
+  font-size: 14px;
+  font-family: 'Montserrat-Ultra-Light';
+  text-transform: uppercase;
+}
+
+.pRemainingTime {
+  margin-top: 60px;
+  color: silver;
+  position: absolute;
+  bottom: 100px;
+}
+
+#pTempsRestant {
+  font-family: 'Montserrat-Ultra-Light';
+  font-size: 12px;
+}
+
+#pDaysLeft {
+  font-family: 'Montserrat-Ultra-Light';
+  font-size: 26px;
+  margin-left: 20px;
+  color: black;
+}
+
 
 @media screen and (max-height: 900px) {
   .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {

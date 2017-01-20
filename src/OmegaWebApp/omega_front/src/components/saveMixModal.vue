@@ -14,7 +14,7 @@
             </div>
           </div>
           <div class="modalClose" @click="showMixModal(false)">
-            FERMER <img src="../assets/arrow.png">
+            FERMER <img src="../assets/arrow.png" >
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
