@@ -94,7 +94,6 @@
     },
     startMix: async function() {
       if(this.currentMood != "") {
-        debugger
         this.mix();
         var mix = await MixService.mix(this.mixToMix);
         this.sendMix(mix);
