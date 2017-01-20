@@ -12,7 +12,9 @@
           <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">RODOLPHE WACHTER</span>
+          <img src="./assets/profile.png"  @click="showPseudoModal(true)" id="appProfile"><span  class="appProfileText">{{this.Pseudo}}</span>
+                  <pseudoModal v-if="pseudoModalActive == true"><pseudoModal>      
+  
         </div>
       </div>
       <div class="col-12 appControlPanel">
@@ -33,6 +35,7 @@
   import moods from './components/moods2.vue'
   import events from './components/events2.vue'
   import groups from './components/groups.vue'
+  import pseudoModal from './components/pseudoModal.vue'
   import Modal from './components/modal.vue'
   import MixService from './services/MixService'
   import { mapGetters, mapActions } from 'vuex'
@@ -72,7 +75,7 @@
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
+    ...mapActions(['showPlaylistHelperModal','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -103,7 +106,7 @@
     }
   },
   computed: {
-    ...mapGetters(['active','playlists','currentMood','checkedPlaylists', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
+    ...mapGetters(['active','Pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
   },
   name: 'app',
   components: {
@@ -112,7 +115,8 @@
     playlist,
     moods,
     events,
-    groups
+    groups,
+    pseudoModal
   },
   mounted () {
   }

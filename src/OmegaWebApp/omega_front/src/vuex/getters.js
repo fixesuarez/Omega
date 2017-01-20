@@ -8,6 +8,7 @@ export const playlistHelperModalActive = state => state.sampleModule.playlistHel
 export const eventModalActive = state => state.sampleModule.eventModalActive;
 export const moodsModalActive = state => state.sampleModule.moodsModalActive;
 export const mixModalActive = state => state.sampleModule.mixModalActive;
+export const pseudoModalActive = state => state.sampleModule.pseudoModalActive;
 export const moods = state => state.sampleModule.moods;
 export const events = state => state.sampleModule.events;
 export const groups = state => state.sampleModule.groups;
@@ -31,4 +32,6 @@ export const finalMix = state => state.sampleModule.finalMix;
 export const finalPlaylist = state => state.sampleModule.finalPlaylist;
 export const nextTrack = state => state.sampleModule.nextTrack;
 export const allMix = state => state.sampleModule.allMix;
+export const pseudo = state => state.sampleModule.pseudo;
+
 

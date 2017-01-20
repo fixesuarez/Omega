@@ -8,6 +8,7 @@
 /// <reference path="../omega_front/src/services/mixservice.js" />
 /// <reference path="../omega_front/src/services/moodservice.js" />
 /// <reference path="../omega_front/src/services/playlistapiservice.js" />
+/// <reference path="../omega_front/src/services/pseudoservice.js" />
 /// <reference path="../omega_front/src/services/spotifyapiservice.js" />
 /// <reference path="../omega_front/src/vuex/actions.js" />
 /// <reference path="../omega_front/src/vuex/getters.js" />

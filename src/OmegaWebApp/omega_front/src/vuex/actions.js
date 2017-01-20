@@ -67,6 +67,11 @@ export const showMixModal = ({commit}, payload) => {
     commit(types.SHOWMIXMODAL, payload)
 }
 
+export const showPseudoModal = ({commit}, payload) => {
+  
+    commit(types.SHOWPSEUDOMODAL, payload)
+}
+
 export const sendMoods = ({commit}, payload) => {
   
     commit(types.SENDMOODS, payload)
@@ -157,6 +162,12 @@ export const insertMood = ({commit}, payload) => {
     commit(types.INSERTMOOD, payload)
 }
 
+export const insertPseudo = ({commit}, payload) => {
+    
+    commit(types.INSERTPSEUDO, payload)
+}
+
+
 export const insertMix = ({commit}, payload) => {
     
     commit(types.INSERTMIX, payload)
@@ -170,6 +181,11 @@ export const mix = ({commit}, payload) => {
 export const getIdentity = ({commit}, payload) => {
     
     commit(types.GETIDENTITY, payload)
+}
+
+export const getPseudo = ({commit}, payload) => {
+    
+    commit(types.GETPSEUDO, payload)
 }
 
 export const sendMix = ({commit}, payload) => {

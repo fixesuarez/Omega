@@ -10,11 +10,13 @@ const state = {
   finalMix: [],
   allMix: '',
   playlistHelperModalActive: false,
-  mixModalActive: false,
+  pseudoModalActive: false,
+  mixModalActive: false,  
   eventModalActive: false,
   moodsModalActive: false,
   events: '',
   groups: '',
+  pseudo: '',
   moods: '',
   enabledCriterias: false,
   criterias: '',
@@ -65,6 +67,9 @@ const mutations = {
   },
  [types.SHOWMIXMODAL](state, payload) {
     state.mixModalActive = payload;
+  },
+  [types.SHOWPSEUDOMODAL](state, payload) {
+    state.pseudoModalActive = payload;
   },
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
@@ -153,6 +158,9 @@ const mutations = {
   },
   [types.RETRIEVEMIX](state, payload) {
     state.allMix = payload;
+  },
+  [types.GETPSEUDO](state, payload) {
+    state.pseudo = payload;
   },
   [types.PLAYOLDMIX](state, payload) {
     state.finalMix = [];
