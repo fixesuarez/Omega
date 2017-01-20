@@ -150,6 +150,7 @@ namespace OmegaWebApp
                     OnCreatingTicket = deezerAuthenticationEvents.OnCreatingTicket
                 };
                 o.Scope.Add( "basic_access" );
+                o.Scope.Add( "offline_access" );
                 o.Scope.Add( "email" );
             } );
 

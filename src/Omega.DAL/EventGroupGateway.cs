@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Omega.DAL
 {
@@ -16,8 +18,10 @@ namespace Omega.DAL
         readonly CloudQueueClient _queueClient;
         readonly CloudQueue _normalQueue;
         readonly CloudQueue _priorityQueue;
+
         readonly CloudBlobClient _blobClient;
         readonly CloudBlobContainer _container;
+        CloudBlockBlob _blockBlob;
 
         public EventGroupGateway(string connectionString)
         {
@@ -34,13 +38,33 @@ namespace Omega.DAL
             _priorityQueue = _queueClient.GetQueueReference("priorityqueue");
             _priorityQueue.CreateIfNotExistsAsync().Wait();
 
+            // Create the blob client.
             _blobClient = _storageAccount.CreateCloudBlobClient();
-            _container = _blobClient.GetContainerReference("mycontainer");
+            // Retrieve reference to a previously created container.
+            _container = _blobClient.GetContainerReference( "images-eventgroup" );
+            // Create the container if it doesn't already exist.
             _container.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, IFormFile eventImage )
         {
+            _blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
+
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+            
+            if( eventImage.Length > 0 )
+            {
+                using( var stream = new FileStream( filePath, FileMode.Create ) )
+                {
+                    await eventImage.CopyToAsync( stream );
+                }
+            }
+            using( var fileStream = File.OpenRead( filePath ) )
+            {
+                await _blockBlob.UploadFromStreamAsync( fileStream );
+            }
+
             EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location );
             eventOmega.Owner = true;
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );

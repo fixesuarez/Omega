@@ -1,4 +1,5 @@
-﻿using Omega.DAL;
+﻿using Microsoft.AspNetCore.Http;
+using Omega.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,9 @@ namespace OmegaWebApp.Services
             return await _eventGroupGateway.FindEventGroup( idEventGroup, userGuid );
         }
 
-        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location )
+        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location, IFormFile image )
         {
-            await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location );
+            await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location, image );
         }
         public async Task CreateOmegaGroup( string groupGuid, string userGuid, string groupName )
         {
