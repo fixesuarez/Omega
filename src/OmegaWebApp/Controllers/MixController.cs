@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using OmegaWebApp.Authentication;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace OmegaWebApp.Controllers
 {
@@ -33,18 +34,32 @@ namespace OmegaWebApp.Controllers
             public List<Playlist> AllPlaylists { get; set; }
         }
 
-        [HttpPost("CreateMix")]
-        public async Task CreateMix([FromBody]Mix mix)
+        public class ReceivedMix
         {
-            string guid = User.FindFirst("www.omega.com:guid").Value;
-            await _mixService.InsertMix(mix, guid);
+            public string name { get; set; }
+            public List<Track> playlist { get; set; }
         }
 
-        [HttpPost("RetrieveMix")]
-        public async Task RetrieveMix([FromBody]string name)
+        [HttpPost("CreateMix")]
+        public async Task CreateMix([FromBody]ReceivedMix mix)
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
-            await _mixService.RetrieveMix(name, guid);
+            Mix tmpMix = new Mix(mix.name, guid);
+            tmpMix.playlist = JsonConvert.SerializeObject(mix.playlist);
+            await _mixService.InsertMix(tmpMix, guid);
+        }
+
+        [HttpGet("RetrieveAllMixUser")]
+        public async Task<List<Mix>> RetrieveAllMixUser()
+        {
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            List<Mix> mixs = await _mixService.RetrieveAllMixUser(guid);
+            foreach(Mix mix in mixs)
+            {
+                mix.ParsedPlaylist = JsonConvert.DeserializeObject<List<Track>>(mix.playlist);
+                mix.playlist = null;
+            }
+            return mixs;
         }
 
         [HttpPost("DeleteMix")]

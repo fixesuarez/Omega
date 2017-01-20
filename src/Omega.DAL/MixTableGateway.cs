@@ -30,7 +30,7 @@ namespace Omega.DAL
 
         public async Task InsertMix(Mix mix, string guid)
         {
-            if(await RetrieveMix(mix.PartitionKey, guid) != null)
+            if(await RetrieveMix(mix.PartitionKey, guid) == null)
             {
                 TableOperation insert = TableOperation.Insert(mix);
                 await _tableMixTable.ExecuteAsync(insert);
@@ -46,6 +46,24 @@ namespace Omega.DAL
                 Mix deleteEntity = (Mix)retrievedMix.Result;
                 TableOperation delete = TableOperation.Delete(deleteEntity);
             }
+        }
+
+        public async Task<List<Mix>> RetrieveAllMixUser(string userName)
+        {
+            List<Mix> mixs = new List<Mix>();
+            TableQuery<Mix> query = new TableQuery<Mix>()
+                    .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, userName));
+
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+            do
+            {
+                var queryResponse = await _tableMixTable.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                tableContinuationToken = queryResponse.ContinuationToken;
+                mixs.AddRange(queryResponse.Results);
+            } while (tableContinuationToken != null);
+
+            return mixs;
         }
     }
 }

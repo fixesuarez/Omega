@@ -14,9 +14,9 @@ namespace OmegaWebApp.Services
             _mixTableGateway = mixTableGateway;
         }
 
-        public async Task<Mix> RetrieveMix(string name, string guid)
+        public async Task<List<Mix>> RetrieveAllMixUser(string guid)
         {
-            return await _mixTableGateway.RetrieveMix(name, guid);
+            return await _mixTableGateway.RetrieveAllMixUser(guid);
         }
 
         public async Task InsertMix(Mix mix, string guid)

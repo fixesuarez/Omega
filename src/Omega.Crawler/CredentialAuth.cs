@@ -20,7 +20,6 @@ namespace Omega.Crawler
             {
                 HttpRequestHeaders headers = client.DefaultRequestHeaders;
                 headers.Add("Authorization", string.Format("Bearer {0}", token));
-                //headers.Add("content-type", "application/json");
                 HttpResponseMessage message = await client.GetAsync("https://api.spotify.com/v1/audio-features/" + songId);
 
                 using (Stream responseStream = await message.Content.ReadAsStreamAsync())
@@ -36,7 +35,6 @@ namespace Omega.Crawler
 
         public async Task<string> GetAccessToken()
         {
-            //string ancientB64 = "YTY3MTI4NjA3ZmYyNGIxYTk4NWFiZjU0YWEzOTViY2Y6OTRkZjZhNzU5ZWIwNDU3M2JhMjBlNzUyNDljODI4ODk=""
             SpotifyToken token = new SpotifyToken();
 
             string postString = "grant_type=client_credentials";

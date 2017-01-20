@@ -5,10 +5,17 @@
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
-      
+         <div class="addMix">
+      <img src="../assets/plus.png" id="plusMood" @click="showMixModal(true)">     
+    </div>
+    <div v-for="mix in allMix" @click="playOldMix(mix)">
+      <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack">
+        <p>{{mix.rowKey}}<br></p>
+      </div>
+    <mixModal v-if="mixModalActive == true"><mixModal>
     </div>
     <div id="dz-root">
-      &nbsp
+    
     </div>
   </div>
   
@@ -18,16 +25,23 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import mixModal from '../components/saveMixModal.vue'
+import MixService from '../services/MixService'
+import AuthService from '../services/AuthService'
+
+
 import $ from 'jquery'	
  
 export default {
   data () {
     return {
-      DzPlayer: ['136336110','65938270','3129782']
+      DzPlayer: ['136336110','65938270','3129782'],
+      mix: [],
+      data: '',
     }
   },
   computed: {
-    ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
+    ...mapGetters(['mixModalActive', 'finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix'])
   },
   mounted () {
     DZ.init({
@@ -35,8 +49,8 @@ export default {
       channelUrl : 'http://localhost:5000/mix',
       player: {
         container: 'dz-root',
-        width : 1915,
-        height : 90,
+        height:90,
+        width:1350,
         playlist: false,
         shuffle: true,
         onload : function(){
@@ -49,12 +63,20 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['setCurrentTrack', 'selectTrack','mixToMix','sendMix','mix','addNextTrack']),
+    ...mapActions(['setCurrentTrack','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
-    }
+    },
+    loadMix: async function() {
+      var data = await this.requestAsync(() => MixService.getMix());
+      this.retrieveMix(data);
+    },
   },
   created () {  
+    this.loadMix()
+  },
+  components: {
+     mixModal
   }
 }
 </script>
@@ -108,6 +130,9 @@ export default {
 #dz-root {
   position: absolute;
   bottom: 110px;
+  width: 100%;
+  height: 10vh;
+  background-color: red;
 }
 
 #nextTrack {

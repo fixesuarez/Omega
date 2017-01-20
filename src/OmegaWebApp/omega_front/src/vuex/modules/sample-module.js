@@ -1,13 +1,16 @@
 import * as types from '../mutation-types'
 
 const state = {
+  loading: false,
   count: 0,
   nb: 3,
   choice: 0,
   active: 'playlistsTab',
   text: '',
   finalMix: [],
+  allMix: '',
   playlistHelperModalActive: false,
+  mixModalActive: false,
   eventModalActive: false,
   moodsModalActive: false,
   events: '',
@@ -60,8 +63,14 @@ const mutations = {
   [types.SHOWMOODSMODAL](state, payload) {
     state.moodsModalActive = payload;
   },
+ [types.SHOWMIXMODAL](state, payload) {
+    state.mixModalActive = payload;
+  },
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
+  },
+  [types.SENDMIX](state, payload) {
+    state.mix = payload;
   },
   [types.SENDEVENTS](state, payload) {
     state.events = payload;
@@ -99,6 +108,9 @@ const mutations = {
   },
   [types.INSERTMOOD](state, payload) {
     state.moodToInsert= payload;
+  },
+  [types.INSERTMIX](state, payload) {
+    state.mixToInsert= payload;
   },
   [types.SELECTPLAYLIST](state, playlist) {
     state.currentPlaylist = playlist;
@@ -139,7 +151,28 @@ const mutations = {
   [types.GETIDENTITY](state, payload) {
     state.identity = payload;
   },
+  [types.RETRIEVEMIX](state, payload) {
+    state.allMix = payload;
+  },
+  [types.PLAYOLDMIX](state, payload) {
+    state.finalMix = [];
+    var a = state.allMix.indexOf(payload);
+   for(var i=0; i<state.allMix[a].parsedPlaylist.length; i++){
+      state.finalMix.push(state.allMix[a].parsedPlaylist[i])
+    }
+        state.finalPlaylist = [];
+       state.currentTrack = state.finalMix[0];
+
+    for(var i=0; i<state.finalMix.length; i++){
+      state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
+    }
+    DZ.player.playTracks(state.finalPlaylist);
+    //state.finalMix = state.allMix.parsedPlaylist;
+    //state.allMix.parsedPlaylist = state.finalMix;
+    //state.finalMix.push(state.allMix.parsedPlaylist)
+  },
   [types.SENDMIX](state, payload) {
+    state.finalPlaylist = [];
     state.finalMix = payload;
     state.currentTrack = state.finalMix[0];
 
@@ -149,6 +182,7 @@ const mutations = {
     DZ.player.playTracks(state.finalPlaylist);
   },
   [types.ADDNEXTTRACK](state, payload) {
+    var a = DZ.player.getCurrentIndex();   
     state.nextTrack= [];
     var x = state.finalPlaylist.indexOf(Number(state.currentTrack));
     state.nextTrack.push(Number(state.currentTrack));
@@ -159,13 +193,12 @@ const mutations = {
       state.nextTrack.push(Number(state.finalPlaylist[y]))
     }
     state.finalPlaylist = [];
-    Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);
-    var end = false;
-          console.log(end);
+    Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);   
     DZ.Event.subscribe('track_end', function(evt_name){
       console.log("fini");
        DZ.player.playTracks(state.finalPlaylist);
     });
+
   }
 }
 
