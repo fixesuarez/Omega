@@ -27,7 +27,7 @@
               </span><br>
             </div>
           </div>
-          <div class="moodModalClose" @click="createLocalMood({moodCriterias, moodName, moodCover}), showMoodsModal(false)">
+          <div v-if="moodName != ''" class="moodModalClose" @click="createLocalMood({moodCriterias, moodName, moodCover}), showMoodsModal(false)">
             créer <img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
