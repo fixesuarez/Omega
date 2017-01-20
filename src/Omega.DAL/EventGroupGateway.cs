@@ -133,8 +133,6 @@ namespace Omega.DAL
                     await UpdateEventGroup(eventId, user, type, cover, name);
                 }
             }
-            //if (batchOperation.Count != 0)
-              //  await _tableEventGroup.ExecuteBatchAsync(batchOperation);
         }
 
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime, string location)
