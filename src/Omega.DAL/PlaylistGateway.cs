@@ -34,6 +34,14 @@ namespace Omega.DAL
                 batchOperation.Insert( p );
                 await _tablePlaylist.ExecuteBatchAsync( batchOperation );
             }
+            else if(retrievedResult.Result != null)
+            {
+                Playlist updateEntity = (Playlist)retrievedResult.Result;
+                updateEntity.Cover = p.Cover;
+                updateEntity.Name = p.Name;
+                TableOperation updateOperation = TableOperation.Replace(updateEntity);
+                await _tablePlaylist.ExecuteAsync(updateOperation);
+            }
         }
         
         public async Task<List<Playlist>> RetrieveAllPlaylistsFromUser( string spotifyId, string deezerId )
