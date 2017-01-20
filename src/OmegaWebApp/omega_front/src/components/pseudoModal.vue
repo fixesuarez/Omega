@@ -29,9 +29,7 @@ export default {
   data () {
     return {
       pseudo:'',
-      pseudoToSave: {
-        'pseudo': null
-      },
+      pseudoToSave:''   
     }
   },
   methods: {
@@ -42,8 +40,8 @@ export default {
       this.sendMoods(data);
     },*/
     savePseudo: async function(item) {
-      this.pseudoToSave.pseudo = this.pseudo;
-      this.insertPseudo(this.pseudoToSave);
+      this.pseudoToSave= this.pseudo;
+     // this.insertPseudo(this.pseudoToSave);
       var result = PseudoService.SavePseudo(this.pseudoToSave);
     }
   },
