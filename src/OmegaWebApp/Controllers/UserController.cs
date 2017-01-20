@@ -27,7 +27,7 @@ namespace OmegaWebApp.Controllers
         [HttpPost( "UpdatePseudo" )]
         public async Task UpdatePseudo( [FromBody]string pseudo )
         {
-            if( pseudo != null && pseudo != string.Empty )
+            if( !string.IsNullOrWhiteSpace(pseudo ) )
             {
                 string guid = User.FindFirst( "www.omega.com:guid" ).Value;
                 User user = await _userService.FindUser( guid );
