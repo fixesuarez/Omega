@@ -1,26 +1,24 @@
 <template>
-  <div class="col-12 mixGlobal"> 
+  <div class="col-12 mixGlobal" id="mixGlobal"> 
     <div class="trackContainer">
       <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack()" class="singleTrack">
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
+        <img src="../assets/playbutton.gif" v-if="track == currentTrack" id="imageTrackOverlay">
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
-         <div class="addMix">
-      <span id="plusMood" @click="showMixModal(true)" v-if="finalMix.length != 0">SAVE</span>     
-    </div>
-    <div v-for="mix in allMix">
-    <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack" @click="playOldMix(mix)">
-      <span id="deleteMix" @click="deleteMix(mix.rowKey)"></span>
+      <div class="addMix">
+        <span id="plusMood" @click="showMixModal(true)" v-if="finalMix.length != 0">SAVE</span>     
+      </div>
+      <div v-for="mix in allMix">
+        <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack" @click="playOldMix(mix)">
+        <span id="deleteMix" @click="deleteMix(mix.rowKey)"></span>
         <p>{{mix.rowKey}}<br></p>
       </div>           
-    <mixModal v-if="mixModalActive == true"><mixModal>
+      <mixModal v-if="mixModalActive == true"><mixModal>
     </div>
     <div id="dz-root">
     </div>
   </div>
-  
-
-    
 </template>
 
 <script>
@@ -38,19 +36,21 @@ export default {
       DzPlayer: ['136336110','65938270','3129782'],
       mix: [],
       data: '',
+      offsetWidth: ''
     }
   },
   computed: {
     ...mapGetters(['mixModalActive', 'finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix'])
   },
   mounted () {
+    this.getOffsetWidth()
     DZ.init({
       appId  : '176241',
       channelUrl : 'http://localhost:5000/mix',
       player: {
         container: 'dz-root',
         height:90,
-        width:1350,
+        width: this.offsetWidth,
         playlist: false,
         onload : function(){
           console.log(DZ.player.getCurrentIndex());
@@ -73,6 +73,9 @@ export default {
     deleteMix: async function(mix) {
       var data = MixService.deleteMix(mix);
       this.loadMix();
+    },
+    getOffsetWidth: function() {
+      this.offsetWidth = document.getElementById('mixGlobal').offsetWidth;
     }
   },
   created () {  
@@ -122,6 +125,7 @@ export default {
   float: left;
   margin: 14px;
   margin-bottom: 25px;
+  position: relative;
 }
 
 .singleTrack p {
@@ -137,6 +141,17 @@ export default {
   width: 120px;
   float: left;
   margin-bottom: 15px;
+  position: relative
+}
+
+#imageTrackOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 120px;
+  width: 120px;
+  overflow: hidden;
+  opacity: 0.5;
 }
 
 #albumName {

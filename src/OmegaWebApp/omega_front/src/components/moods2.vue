@@ -3,8 +3,8 @@
     <div class="col-12 moodContainer">
       <div class="currentMood" v-for="mood in moods">
         <div class="topCurrentMood">
-          <img v-bind:src="mood.cover" v-if="mood.cover !== undefined">
-          <!--<img src="../assets/moodNoCover.png" v-else>-->
+          <img v-bind:src="mood.cover" v-if="mood.cover !== ''" id="testt">
+          <img src="../assets/moodNoCover.png" v-else>
           <span id="currentMoodName">{{mood.rowKey}}</span>
           <span v-if="mood.rowKey == 'Dance' || mood.rowKey == 'Energy' || mood.rowKey == 'Lounge' || mood.rowKey == 'Mad'"></span>
           <span id="deleteMood" @click="deleteMood(mood.rowKey)" v-else></span>
@@ -89,7 +89,7 @@
 
 .topCurrentMood img {
   width: 100%;
-  filter: brightness(50%);
+  filter: brightness(80%);
 }
 
 #currentMoodName {
@@ -372,7 +372,7 @@ export default {
       this.sendMoods(data);
     },
     deleteMood: async function(mood) {
-      var data = MoodService.deleteMood(mood);
+      var data = await MoodService.deleteMood(mood);
       this.loadMoods();
     },
     createLocalMood: async function(item) {
