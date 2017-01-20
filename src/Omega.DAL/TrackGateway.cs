@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -60,6 +61,30 @@ namespace Omega.DAL
             TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveOperation );
             Track retrievedUser = (Track) retrievedResult.Result;
             return retrievedUser;
+        }
+
+        public async Task DeleteAllTrackPlaylist(string playlistId)
+        {
+            TableBatchOperation batchOperation = new TableBatchOperation();
+            List<Track> tracks = new List<Track>();
+            TableQuery<Track> query = new TableQuery<Track>()
+                    .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, playlistId));
+
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+            do
+            {
+                var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                tableContinuationToken = queryResponse.ContinuationToken;
+                tracks.AddRange(queryResponse.Results);
+            } while (tableContinuationToken != null);
+
+            foreach (Track track in tracks)
+            {
+                batchOperation.Delete(track);
+            }
+            if (batchOperation.Count != 0)
+                await _tableTrack.ExecuteBatchAsync(batchOperation);
         }
     }
 }

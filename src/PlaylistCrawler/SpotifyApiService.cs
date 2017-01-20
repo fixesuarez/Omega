@@ -109,6 +109,8 @@ namespace PlaylistCrawler
                     JObject allTracksInPlaylistJson = JObject.Parse(allTracksInPlaylistString);
                     JArray allTracksInPlaylistArray = (JArray)allTracksInPlaylistJson["items"];
 
+                    await _trackGateway.DeleteAllTrackPlaylist(playlistId);
+
                     for (int i = 0; i < allTracksInPlaylistArray.Count; i++)
                     {
                         string trackTitle = (string)allTracksInPlaylistJson["items"][i]["track"]["name"];

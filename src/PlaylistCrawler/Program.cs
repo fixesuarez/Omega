@@ -38,6 +38,7 @@ namespace PlaylistCrawler
             for (;;)
             {
                 await UpdateTable();
+                //await _trackGateway.DeleteAllTrackPlaylist("abcde");
             }
         }
 
@@ -50,10 +51,10 @@ namespace PlaylistCrawler
             {
                 await CheckQueue();
                 string guid = tableQueryResult.Results[i].RowKey;
-                //if (!string.IsNullOrEmpty(tableQueryResult.Results[i].DeezerAccessToken))
-                //{
-                //    await _deezerApiService.GetAllDeezerPlaylists(guid);
-                //}
+                if (!string.IsNullOrEmpty(tableQueryResult.Results[i].DeezerAccessToken))
+                {
+                    await _deezerApiService.GetAllDeezerPlaylists(guid);
+                }
                 if (!string.IsNullOrEmpty(tableQueryResult.Results[i].SpotifyRefreshToken))
                 {
                     await _spotifyApiService.GetSpotifyPlaylist(guid);
