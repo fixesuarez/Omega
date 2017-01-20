@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['sendMix', 'checkPlaylist', 'setCurrentPlaylist', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
+    ...mapActions(['sendMix', 'checkPlaylist', 'setCurrentPlaylist','getPseudo', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
@@ -150,11 +150,15 @@ export default {
       this.mix();
       this.localfinalMix = await MixService.mix(this.mixToMix);
       this.sendMix(this.localfinalMix);
-    }
+    },
+    loadPseudo: async function() {
+      var data = await this.requestAsync(() => PseudoService.getPseudo());
+      this.getPseudo(data);
+    },
 
   },
   computed: {
-    ...mapGetters(['playlistHelperModalActive', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'currentEvent', 'currentGroup', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
+    ...mapGetters(['playlistHelperModalActive','pseudo', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'currentEvent', 'currentGroup', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
   },
   created () {
     if(this.playlists.length === 0) {
@@ -165,6 +169,7 @@ export default {
     }
     this.getIdentity(true);
     this.showPlaylistHelperModal(true);
+    this.loadPseudo();
   },
   mounted () {
   },

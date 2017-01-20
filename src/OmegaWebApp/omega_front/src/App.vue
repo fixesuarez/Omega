@@ -70,12 +70,13 @@
   created() {
     AuthService.registerAuthenticatedCallback(this.onAuthenticated);
     this.authVerify();
+    this.loadPseudo();
   },
   beforeDestroy() {
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
+    ...mapActions(['showPlaylistHelperModal','getPseudo','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -95,6 +96,10 @@
       var data = await this.requestAsync(() => MoodService.getMoods());
       this.sendMoods(data);
     },
+    loadPseudo: async function() {
+      var data = await this.requestAsync(() => PseudoService.getPseudo());
+      this.getPseudo(data);
+    },
     startMix: async function() {
       if(this.currentMood != "") {
         this.mix();
@@ -106,7 +111,7 @@
     }
   },
   computed: {
-    ...mapGetters(['active','Pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
+    ...mapGetters(['active','pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
   },
   name: 'app',
   components: {

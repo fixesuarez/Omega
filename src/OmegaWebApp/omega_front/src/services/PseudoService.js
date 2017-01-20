@@ -9,7 +9,7 @@ class PseudoService {
 
     }
     async getPseudo() {
-        return await getAsync(endpoint, 'RetrieveAllMixUser', AuthService.accessToken);
+        return await getAsync(endpoint, 'RetrievePseudo', AuthService.accessToken);
     }
     async SavePseudo(pseudo) {
         return await postAsync(endpoint, 'UpdatePseudo', AuthService.accessToken, pseudo);
