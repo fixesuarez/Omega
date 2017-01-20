@@ -6,16 +6,16 @@
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
          <div class="addMix">
-      <img src="../assets/plus.png" id="plusMood" @click="showMixModal(true)">     
+      <span id="plusMood" @click="showMixModal(true)" v-if="finalMix.length != 0">SAVE</span>     
     </div>
-    <div v-for="mix in allMix" @click="playOldMix(mix)">
-      <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack">
+    <div v-for="mix in allMix">
+    <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack" @click="playOldMix(mix)">
+      <span id="deleteMix" @click="deleteMix(mix.rowKey)"></span>
         <p>{{mix.rowKey}}<br></p>
-      </div>
+      </div>           
     <mixModal v-if="mixModalActive == true"><mixModal>
     </div>
     <div id="dz-root">
-    
     </div>
   </div>
   
@@ -52,7 +52,6 @@ export default {
         height:90,
         width:1350,
         playlist: false,
-        shuffle: true,
         onload : function(){
           console.log(DZ.player.getCurrentIndex());
         }
@@ -63,7 +62,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['setCurrentTrack','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
+    ...mapActions(['setCurrentTrack','deleteMix','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
     },
@@ -71,6 +70,10 @@ export default {
       var data = await this.requestAsync(() => MixService.getMix());
       this.retrieveMix(data);
     },
+    deleteMix: async function(mix) {
+      var data = MixService.deleteMix(mix);
+      this.loadMix();
+    }
   },
   created () {  
     this.loadMix()
@@ -100,6 +103,19 @@ export default {
   display: table;
 }
 
+#deleteMix {
+  padding-left: 10px;
+  top: 5px;
+  padding: 5px;
+  cursor: pointer;
+  right: 5px;
+  color: white;
+  width: 16px;
+  height: 20px;
+  background-image: url("../assets/closedTrash.png");
+  background-size: 16px 20px;
+  transition: all .3s ease;
+}
 .singleTrack {
   height: 140px;
   width: 120px;
