@@ -12,9 +12,8 @@
           <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png"  @click="showPseudoModal(true)" id="appProfile"><span  class="appProfileText">{{this.pseudo}}</span>
-                  <pseudoModal v-if="pseudoModalActive == true"><pseudoModal>      
-  
+          <img src="./assets/profile.png" @click="showPseudoModal(true)" id="appProfile"><span class="appProfileText">{{pseudo}}</span>
+          <pseudoModal v-if="pseudoModalActive == true"><pseudoModal>      
         </div>
       </div>
       <div class="col-12 appControlPanel">
@@ -23,6 +22,7 @@
         <div><router-link to ="/groups"><span><img src="./assets/groupIcon.png"><br>groupes</router-link></span></div>
         <div><router-link to="/moods"><span><img src="./assets/moodIcon.png"><br>ambiances</router-link></span></div>
         <div><router-link to="/mix"><span @click="startMix()"><img src="./assets/MixLogo.png" id="mixImage"><br>mix</router-link></span></div>
+        <button @click="loadPseudo()">pseudo</button>
       </div>
     </div>
     <router-view></router-view>
@@ -66,6 +66,7 @@
         { label: 'valence', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" },
         { label: 'duration_ms', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" }
       ],
+      localPseudo: ''
     }
   },
   created() {
@@ -77,7 +78,7 @@
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal','sendPseudo','getPseudo','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
+    ...mapActions(['showPlaylistHelperModal','sendPseudo','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -89,17 +90,14 @@
     },
     authVerify : function ()  {
       if (AuthService.identity != null) {
-          this.Connected = true;
-          this.getIdentity(this.Connected);
+        this.Connected = true;
+        this.getIdentity(this.Connected);
       }
     },
-    loadMoods: async function() {
-      var data = await this.requestAsync(() => MoodService.getMoods());
-      this.sendMoods(data);
-    },
     loadPseudo: async function() {
-      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());
-      this.sendPseudo(this.pseudo);
+      this.localPseudo = await this.requestAsync(() => PseudoService.getPseudo());
+      console.log(this.localPseudo);
+      this.sendPseudo(this.localPseudo);
     },
     startMix: async function() {
       if(this.currentMood != "") {
@@ -123,6 +121,9 @@
     pseudoModal
   },
   mounted () {
+  },
+  created () {
+    this.loadPseudo()
   }
 }
 </script>

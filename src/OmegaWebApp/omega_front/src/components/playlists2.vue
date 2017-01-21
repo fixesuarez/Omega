@@ -11,12 +11,16 @@
           <span class="imageOverlay">
             {{p.Name}}
           </span>
-          <span v-if="p.provider == 's'" class="sPlaylistBanner">
-            <img src="../assets/spotifyLogo.png">
+          <span class="playlistProvider">
+            <span v-if="p.provider == 's'" class="sPlaylistBanner">
+              <img src="../assets/spotifyWhiteLogo.png">
+            </span>
+            <span v-if="p.provider == 'd'" class="sPlaylistBanner">
+              <img src="../assets/deezerWhiteLogo.png">
+            </span>
           </span>
-          <span v-if="p.provider == 'd'" class="sPlaylistBanner">
-            <img src="../assets/deezerLogo.png">
-          </span>
+          <p>{{p.Name}}</p>
+          <p id="albumName">{{p.Name}}</p>
         </div>
       </div>
     </div>
@@ -185,11 +189,11 @@ export default {
 <style>
 /*Set the element size and position*/
 .playlistGlobal {
-  height: 72vh;
+  height: 76vh;
 }
 
 .playlistContainer {
-  height: 26vh;
+  height: 30vh;
   min-height: 169px;
   background: #0e1014;
 }
@@ -215,8 +219,19 @@ export default {
   color: white;  
   display: inline-block;
   width: 200px;
-  height: 200px;
+  height: 220px;
+  margin-bottom: 10px;
   margin: 10px;
+}
+
+#spanPlaylist p {
+  margin: 0;
+  font-family: 'Montserrat-Ultra-Light';
+  width: 100%;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .playlistImage {
@@ -251,6 +266,14 @@ export default {
   text-overflow: ellipsis;
 }
 
+.playlistProvider {
+  height: 200px;
+  width: 200px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 #checkIcon {
   position: absolute;
   top: 0;
@@ -269,14 +292,16 @@ export default {
 
 .sPlaylistBanner {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
-  height: 50px;
+  height: 20px;
+  padding: 4px;
 }
 
 .sPlaylistBanner img {
-  height: 50px;
-  width: 50px;
+  height: 20px;
+  width: 20px;
+  opacity: 0.8;
 }
 
 .dPlaylistBanner {
