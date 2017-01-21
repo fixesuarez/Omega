@@ -157,12 +157,7 @@ export default {
       this.mix();
       this.localfinalMix = await MixService.mix(this.mixToMix);
       this.sendMix(this.localfinalMix);
-    },
-    loadPseudo: async function() {
-      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());
-      this.sendPseudo(this.pseudo);
-    },
-
+    }
   },
   computed: {
     ...mapGetters(['playlistHelperModalActive','pseudo', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'currentEvent', 'currentGroup', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
@@ -176,7 +171,6 @@ export default {
     }
     this.getIdentity(true);
     this.showPlaylistHelperModal(true);
-    this.loadPseudo();
   },
   mounted () {
   },
