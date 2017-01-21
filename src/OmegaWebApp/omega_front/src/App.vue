@@ -12,7 +12,7 @@
           <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png"  @click="showPseudoModal(true)" id="appProfile"><span  class="appProfileText">{{this.Pseudo}}</span>
+          <img src="./assets/profile.png"  @click="showPseudoModal(true)" id="appProfile"><span  class="appProfileText">{{this.pseudo}}</span>
                   <pseudoModal v-if="pseudoModalActive == true"><pseudoModal>      
   
         </div>

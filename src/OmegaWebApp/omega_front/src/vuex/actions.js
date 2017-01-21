@@ -97,6 +97,11 @@ export const sendGroups = ({commit}, payload) => {
     commit(types.SENDGROUPS, payload)
 }
 
+export const sendPseudo = ({commit}, payload) => {
+  
+    commit(types.SENDPSEUDO, payload)
+}
+
 export const sendCriterias = ({commit}, payload) => {
   
     commit(types.SENDCRITERIAS, payload)
@@ -166,7 +171,6 @@ export const insertPseudo = ({commit}, payload) => {
     
     commit(types.INSERTPSEUDO, payload)
 }
-
 
 export const insertMix = ({commit}, payload) => {
     

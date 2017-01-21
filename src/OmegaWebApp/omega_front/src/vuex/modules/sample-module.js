@@ -83,6 +83,9 @@ const mutations = {
   [types.SENDGROUPS](state, payload) {
     state.groups = payload;
   },
+  [types.SENDPSEUDO](state, payload) {
+    state.pseudo = payload;
+  },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
   },
