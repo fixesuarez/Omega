@@ -176,7 +176,6 @@ export default {
     }
     this.getIdentity(true);
     this.showPlaylistHelperModal(true);
-    this.loadPseudo();
   },
   mounted () {
   },

@@ -40,6 +40,7 @@
   import MixService from './services/MixService'
   import { mapGetters, mapActions } from 'vuex'
   import AuthService from './services/AuthService'
+  import PseudoService from './services/PseudoService'  
   import Vue from 'vue'
   import $ from 'jquery'
 
@@ -76,7 +77,7 @@
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal','getPseudo','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
+    ...mapActions(['showPlaylistHelperModal','sendPseudo','getPseudo','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -97,8 +98,8 @@
       this.sendMoods(data);
     },
     loadPseudo: async function() {
-      var data = await this.requestAsync(() => PseudoService.getPseudo());
-      this.getPseudo(data);
+      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());
+      this.sendPseudo(this.pseudo);
     },
     startMix: async function() {
       if(this.currentMood != "") {
