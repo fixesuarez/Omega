@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using OmegaWebApp.Authentication;
 using OmegaWebApp.Services;
 using Omega.DAL;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,10 +35,23 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet( "RetrievePseudo")]
-        public async Task<string> RetrievePseudo()
+        public async Task<JToken> RetrievePseudo()
         {
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
-            return await _userService.FindUserPseudo( guid );
+            string pseudo =  await _userService.FindUserPseudo( guid );
+            PseudoSender pseudoSender = new PseudoSender( pseudo );
+            string pseudoToSend = JsonConvert.SerializeObject( pseudoSender );
+            JToken pseudoJToken = JToken.Parse( pseudoToSend );
+            return pseudoJToken;
+        }
+
+        class PseudoSender
+        {
+            public string Pseudo { get; set; }
+            internal PseudoSender( string pseudo )
+            {
+                Pseudo = pseudo;
+            }
         }
     }
 }
