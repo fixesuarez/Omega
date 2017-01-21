@@ -106,8 +106,6 @@
         this.mix();
         var mix = await MixService.mix(this.mixToMix);
         this.sendMix(mix);
-      } else {
-        console.log("Mood or playlist is null");
       }
     }
   },
