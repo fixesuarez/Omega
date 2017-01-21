@@ -7,6 +7,7 @@
         <div v-for="p in playlists" @click="selectPlaylist(p), setSPlayer(), setDPlayer()" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
+          <img v-if="p.check == true" src="../assets/checkIcon.png" id="checkIcon">
           <span class="imageOverlay">
             {{p.Name}}
           </span>
@@ -139,6 +140,10 @@ export default {
       this.SDplaylists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
       this.SDplaylists.map(m => { this.$set(m, 'check', true); return m});
       this.sendPlaylists(this.SDplaylists);
+      if(this.playlists[0].provider == 's') 
+        this.setSPlayer()
+      else 
+        this.setDPlayer()
     },
     loadSpotifyPlaylist: async function() {
       var spplaylist = await this.requestAsync(() => SpotifyApiService.getSpotifyPlaylist());
@@ -250,6 +255,16 @@ export default {
   text-align: center;
   text-transform: uppercase;
   text-overflow: ellipsis;
+}
+
+#checkIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+  z-index: 3;
 }
 
 #settingsImage {
