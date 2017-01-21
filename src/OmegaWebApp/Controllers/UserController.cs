@@ -37,12 +37,10 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet( "RetrievePseudo")]
-        public async Task<JToken> RetrievePseudo()
+        public async Task<string> RetrievePseudo()
         {
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
-            string pseudo = await _userService.FindUserPseudo( guid );
-            JToken pseudoJToken = JToken.Parse( pseudo );
-            return pseudoJToken;
+            return await _userService.FindUserPseudo( guid );
         }
     }
 }

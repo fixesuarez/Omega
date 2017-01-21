@@ -92,7 +92,7 @@ namespace Omega.DAL
         public async Task<string> FindUserPseudo( string guid )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, guid );
-            TableResult retrievedResult = await _tableUserIndex.ExecuteAsync( retrieveOperation );
+            TableResult retrievedResult = await _tableUser.ExecuteAsync( retrieveOperation );
             User retrievedUser = (User) retrievedResult.Result;
             if( retrievedUser != null )
                 return retrievedUser.Pseudo;
