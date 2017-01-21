@@ -22,7 +22,6 @@
         <div><router-link to ="/groups"><span><img src="./assets/groupIcon.png"><br>groupes</router-link></span></div>
         <div><router-link to="/moods"><span><img src="./assets/moodIcon.png"><br>ambiances</router-link></span></div>
         <div><router-link to="/mix"><span @click="startMix()"><img src="./assets/MixLogo.png" id="mixImage"><br>mix</router-link></span></div>
-        <button @click="loadPseudo()">pseudo</button>
       </div>
     </div>
     <router-view></router-view>
@@ -65,8 +64,7 @@
         { label: 'tempo', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" },
         { label: 'valence', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" },
         { label: 'duration_ms', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" }
-      ],
-      localPseudo: ''
+      ]
     }
   },
   created() {
@@ -95,9 +93,8 @@
       }
     },
     loadPseudo: async function() {
-      this.localPseudo = await this.requestAsync(() => PseudoService.getPseudo());
-      console.log(this.localPseudo);
-      this.sendPseudo(this.localPseudo);
+      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());
+      this.sendPseudo(pseudo.Pseudo);
     },
     startMix: async function() {
       if(this.currentMood != "") {

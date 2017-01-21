@@ -121,7 +121,6 @@ const mutations = {
     state.mixToInsert= payload;
   },
   [types.SELECTPLAYLIST](state, playlist) {
-    state.currentPlaylist = playlist;
     if(playlist.check = !playlist.check) {
       state.checkedPlaylists.push(playlist)
     } else {

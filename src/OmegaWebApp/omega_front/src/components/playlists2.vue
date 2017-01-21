@@ -4,12 +4,18 @@
       <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
       <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
       <div class="playlistWrapper" id="playlistWrapper">
-        <div v-for="p in playlists" @click="selectPlaylist(p), setSPlayer(), setDPlayer()" id="spanPlaylist">
+        <div v-for="p in playlists" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
           <img v-if="p.check == true" src="../assets/checkIcon.png" id="checkIcon">
           <span class="imageOverlay">
-            {{p.Name}}
+            <div class="selectOverlay" @click="selectPlaylist(p)">
+              <div class="selectOverlayImg" v-if="p.check == false">&nbsp</div>
+              <div class="selectedOverlayImg" v-else>&nbsp</div>
+            </div>
+            <div class="playOverlay" @click="setCurrentPlaylist(p), setSPlayer(), setDPlayer()">
+              <div class="playOverlayImg">&nbsp</div>
+            </div>
           </span>
           <span class="playlistProvider">
             <span v-if="p.provider == 's'" class="sPlaylistBanner">
@@ -256,7 +262,6 @@ export default {
   width: 200px;
   height: 200px;
   left: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
   opacity: 0;
   transition: all .5s ease;
   font-family: 'Montserrat-ultra-light';
@@ -264,6 +269,78 @@ export default {
   text-align: center;
   text-transform: uppercase;
   text-overflow: ellipsis;
+  z-index: 4;
+}
+
+.selectOverlay {
+  background: black;
+  opacity: 0.8;
+  width: 200px;
+  height: 50%;
+  display: table;
+  margin: 0 auto;
+  position: relative;
+}
+
+.selectOverlayImg {
+  height: 50px;
+  width: 50px;
+  background-image: url('../assets/selectIcon.png');
+  position: absolute;
+  top: 25px;
+  left: 75px;
+  margin: 0 auto;
+  background-size: 50px 50px;
+  transition: all .5s ease;
+  cursor: pointer;
+}
+
+.selectOverlayImg:hover {
+  background-image: url('../assets/selectedIcon.png');
+}
+
+.selectedOverlayImg {
+  height: 50px;
+  width: 50px;
+  background-image: url('../assets/selectedIcon.png');
+  position: absolute;
+  top: 25px;
+  left: 75px;
+  margin: 0 auto;
+  background-size: 50px 50px;
+  transition: all .5s ease;
+  cursor: pointer;
+}
+
+.selectedOverlayImg:hover {
+  background-image: url('../assets/selectIcon.png');
+}
+
+.playOverlay {
+  background: #0e1014;
+  opacity: 0.7;
+  width: 100%;
+  height: 50%;
+  display: table;
+  margin: 0 auto;
+  position: relative;
+}
+
+.playOverlayImg {
+  height: 50px;
+  width: 50px;
+  background-image: url('../assets/playIcon.png');
+  position: absolute;
+  top: 25px;
+  left: 75px;
+  margin: 0 auto;
+  background-size: 50px 50px;
+  transition: all .5s ease;
+  cursor: pointer;
+}
+
+.playOverlayImg:hover {
+  background-image: url('../assets/playedIcon.png');
 }
 
 .playlistProvider {
@@ -281,7 +358,7 @@ export default {
   width: 20px;
   height: 20px;
   padding: 3px;
-  z-index: 3;
+  z-index: 5;
 }
 
 #settingsImage {
