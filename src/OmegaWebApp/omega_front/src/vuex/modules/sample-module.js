@@ -5,11 +5,6 @@ const state = {
   facebookConnected: '',
   deezerConnected: '',
   spotifyConnected: '',
-  count: 0,
-  nb: 3,
-  choice: 0,
-  active: 'playlistsTab',
-  text: '',
   finalMix: [],
   allMix: '',
   playlistHelperModalActive: false,
@@ -21,7 +16,6 @@ const state = {
   groups: '',
   pseudo: '',
   moods: '',
-  enabledCriterias: false,
   criterias: '',
   authenticated: false,
   currentMood: '',
@@ -35,6 +29,7 @@ const state = {
   finalPlaylist: [],
   nextTrack: [],
   moodToInsert: '',
+  mixToInsert: '',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
   track: ''
@@ -49,24 +44,9 @@ const mutations = {
     else 
       state.spotifyConnected = true;
   },
-  [types.INCREMENT](state) {
-    state.count++;
-  },
-  [types.DECREMENT](state) {
-    state.count--;
-  },
-  [types.UPDATE](state) {
-    state.count += state.nb;
-  },
-  [types.ADD](state, payload) {
-    state.count += payload.choice ;
-  },
-  [types.MAKEACTIVE](state, payload) {
-    state.active = payload;
-  },
-  [types.ADDTEXT](state, payload) {
-    state.text = payload.text ;
-  },
+
+//MODALS SHOW
+
   [types.SHOWPLAYLISTHELPERMODAL](state, payload) {
     state.playlistHelperModalActive = payload;
   },
@@ -76,12 +56,15 @@ const mutations = {
   [types.SHOWMOODSMODAL](state, payload) {
     state.moodsModalActive = payload;
   },
- [types.SHOWMIXMODAL](state, payload) {
+  [types.SHOWMIXMODAL](state, payload) {
     state.mixModalActive = payload;
   },
   [types.SHOWPSEUDOMODAL](state, payload) {
     state.pseudoModalActive = payload;
   },
+
+//DATA SENDING
+
   [types.SENDMOODS](state, payload) {
     state.moods = payload;
   },
@@ -99,47 +82,6 @@ const mutations = {
   },
   [types.SENDCRITERIAS](state, payload) {
     state.criterias = payload;
-  },
-  [types.ENABLECRITERIAS](state, payload) {
-    state.enabledCriterias = payload;
-  },
-  [types.ADDMOOD](state, payload) {
-    state.moods.push(payload)
-  },
-  [types.AUTHENTICATE](state, payload) {
-    state.authenticated = payload;
-  },
-  [types.SETCURRENTMOOD](state, payload) {
-    state.currentMood = payload;
-    state.currentMood.check = !state.currentMood.check;
-  },
-  [types.SETCURRENTEVENT](state, payload) {
-    state.currentEvent = payload;
-  },
-  [types.SETCURRENTGROUP](state, payload) {
-    state.currentGroup = payload;
-  },
-  [types.SETCURRENTPLAYLIST](state, payload) {
-    state.currentPlaylist= payload;
-  },
-  [types.SETCURRENTTRACK](state, payload) {
-    state.currentTrack = payload;
-  },
-  [types.INSERTMOOD](state, payload) {
-    state.moodToInsert= payload;
-  },
-  [types.INSERTMIX](state, payload) {
-    state.mixToInsert= payload;
-  },
-  [types.SELECTPLAYLIST](state, playlist) {
-    if(playlist.check = !playlist.check) {
-      state.checkedPlaylists.push(playlist)
-    } else {
-      state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(playlist), 1)
-    }
-  },
-  [types.SELECTTRACK](state, payload) {
-    state.currentTrack = payload.deezerId;
   },
   [types.SENDPLAYLISTS](state, payload) {
     payload = payload.map(p => { p.provider = ''; return p })
@@ -160,12 +102,47 @@ const mutations = {
     }
     state.playlists = payload;
     state.currentPlaylist = state.playlists[0];
-    // state.playlists.push.apply(state.playlists, payload);
   },
-  [types.MIX](state, payload) {
-    state.mixToMix.AllPlaylists = state.checkedPlaylists;
-    state.mixToMix.AmbianceName = state.currentMood.rowKey;
+  [types.SENDMIX](state, payload) {
+    state.finalPlaylist = [];
+    state.finalMix = payload;
+    state.currentTrack = state.finalMix[0];
+
+    for(var i=0; i<state.finalMix.length; i++){
+      state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
+    }
+    DZ.player.playTracks(state.finalPlaylist);
   },
+
+//SETTERS
+
+  [types.SETCURRENTMOOD](state, payload) {
+    state.currentMood = payload;
+    state.currentMood.check = !state.currentMood.check;
+  },
+  [types.SETCURRENTEVENT](state, payload) {
+    state.currentEvent = payload;
+  },
+  [types.SETCURRENTGROUP](state, payload) {
+    state.currentGroup = payload;
+  },
+  [types.SETCURRENTPLAYLIST](state, payload) {
+    state.currentPlaylist= payload;
+  },
+  [types.SETCURRENTTRACK](state, payload) {
+    state.currentTrack = payload;
+  },
+
+//INSERTS
+
+  [types.INSERTMOOD](state, payload) {
+    state.moodToInsert= payload;
+  },
+  [types.INSERTMIX](state, payload) {
+    state.mixToInsert = payload;
+  },
+
+//GETTERS 
   [types.GETIDENTITY](state, payload) {
     state.identity = payload;
   },
@@ -175,6 +152,32 @@ const mutations = {
   [types.GETPSEUDO](state, payload) {
     state.pseudo = payload;
   },
+
+//SELECTERS
+
+  [types.SELECTPLAYLIST](state, playlist) {
+    if(playlist.check = !playlist.check) {
+      state.checkedPlaylists.push(playlist)
+    } else {
+      state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(playlist), 1)
+    }
+  },
+  [types.SELECTTRACK](state, payload) {
+    state.currentTrack = payload.deezerId;
+  },
+
+//ACTIONS
+
+  [types.ADDMOOD](state, payload) {
+    state.moods.push(payload)
+  },
+  [types.AUTHENTICATE](state, payload) {
+    state.authenticated = payload;
+  },
+  [types.MIX](state, payload) {
+    state.mixToMix.AllPlaylists = state.checkedPlaylists;
+    state.mixToMix.AmbianceName = state.currentMood.rowKey;
+  },
   [types.PLAYOLDMIX](state, payload) {
     state.finalMix = [];
     var a = state.allMix.indexOf(payload);
@@ -183,19 +186,6 @@ const mutations = {
     }
         state.finalPlaylist = [];
        state.currentTrack = state.finalMix[0];
-
-    for(var i=0; i<state.finalMix.length; i++){
-      state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
-    }
-    DZ.player.playTracks(state.finalPlaylist);
-    //state.finalMix = state.allMix.parsedPlaylist;
-    //state.allMix.parsedPlaylist = state.finalMix;
-    //state.finalMix.push(state.allMix.parsedPlaylist)
-  },
-  [types.SENDMIX](state, payload) {
-    state.finalPlaylist = [];
-    state.finalMix = payload;
-    state.currentTrack = state.finalMix[0];
 
     for(var i=0; i<state.finalMix.length; i++){
       state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
@@ -219,7 +209,6 @@ const mutations = {
       console.log("fini");
        DZ.player.playTracks(state.finalPlaylist);
     });
-
   }
 }
 

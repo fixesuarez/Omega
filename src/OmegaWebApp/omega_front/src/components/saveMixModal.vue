@@ -8,13 +8,10 @@
               <span id="mixTitle">NOUVEAU MIX</span><br>
               <br>
               <span id="smallText">Nom : <input type="text" style="color: white;" v-model="name"><br><span>
-              <br><br>
-    
-              <button @click="saveMix({name, playlist}),showMixModal(false)">Sauvegarder</button>
             </div>
           </div>
-          <div class="modalClose" @click="showMixModal(false)">
-            FERMER <img src="../assets/arrow.png" >
+          <div class="modalClose" @click="saveMix({name, playlist}), showMixModal(false)">
+            <span>SAUVEGARDER</span><img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
@@ -39,7 +36,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showMixModal','requestAsync','insertMix']),
+    ...mapActions(['showMixModal','requestAsync','insertMix', 'retrieveMix']),
 
   /*  loadMoods: async function() {
       var data = await this.requestAsync(() => MoodService.getMoods());
@@ -49,7 +46,7 @@ export default {
       this.mixToSave.name = this.name;
       this.mixToSave.playlist = this.finalMix;
       this.insertMix(this.mixToSave);
-      var result = MixService.SaveMix(this.mixToSave);
+      var result = await MixService.SaveMix(this.mixToSave);
       this.loadMix();
     },
     loadMix: async function() {
@@ -61,7 +58,6 @@ export default {
     ...mapGetters(['finalMix'])
   },
   created () {
-    
   },
 }
 
@@ -97,7 +93,7 @@ export default {
 .mixModal-container {
   margin-bottom: 100px;
   margin-left: 20%;
-  height: 350px;
+  height: 100px;
   width: 300px;
   background-color: #191B27;
   border-radius: 2px;
@@ -118,13 +114,7 @@ export default {
 }
 
 .modalClose {
-  width: 180px;
-  padding: 10px;
-  background: #de002b;
-  color: black;
-  font-family: 'Montserrat-Regular';
-  cursor: pointer;
-  text-transform: uppercase;
+  font-size: 16px;
 }
 
 .modalClose img {

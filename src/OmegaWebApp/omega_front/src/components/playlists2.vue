@@ -62,7 +62,15 @@
               <img v-if="data < 0" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: (data*150)/(-60) +'px'}">
               <img v-if="data == '' || data == null" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
             </span><br>
-            <span id="dataLetter">D E S A I L P</span>
+            <span id="dataLetter">
+              <div id="danceability">D<span id="dOverlay"><span id="dataTitle">Danceability</span><br> définit le caractère dansant des musiques</span></div>
+              <div id="energy">E<span id="eOverlay"><span id="dataTitle">Energy</span><br> définit le caractère energique des musiques</span></div>
+              <div id="speechiness">S<span id="sOverlay"><span id="dataTitle">Speechiness</span><br> définit le taux de paroles des musiques</span></div>
+              <div id="accousticness">A<span id="aOverlay"><span id="dataTitle">Accousticness</span><br> définit le caractère acoustic des musiques</span></div>
+              <div id="instrumentalness">I<span id="iOverlay"><span id="dataTitle">Instrumentalness</span><br> définit le taux d'instrumentale des musiques</span></div>
+              <div id="liveness">L<span id="lOverlay"><span id="dataTitle">Liveness</span><br> définit la présence de live dans les musiques</span></div>
+              <div id="popularity">P<span id="pOverlay"><span id="dataTitle">Popularity</span><br> définit la popularité des musiques</span></div>
+            </span>
           </div>
         </div>
         <div class="pCurrentEvent" v-if="currentEvent !== ''">
