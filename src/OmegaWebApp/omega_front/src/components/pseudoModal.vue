@@ -3,6 +3,7 @@
     <div class="pseudoModal-mask">
       <div class="pseudoModal-wrapper">
         <div class="pseudoModal-container">
+           <span id="closeModal" @click="showPseudoModal(false)">X</span>
           <div class="addPseudoText">
             <div class="addPseudoModal">
               <span id="pseudoTitle">CHANGER VOTRE PSEUDO</span><br>
@@ -101,7 +102,7 @@ export default {
 
 .addPseudoText {
   height: 100%;
-  padding: 20px;
+  padding: 30px;
   width: 100%;
 }
 
@@ -147,4 +148,16 @@ input[type="text"] {
   transform: scale(1.1);
 }
 
+#closeModal {
+  position: absolute;
+  color: white;
+  font-family: 'Montserrat-Ultra-Light';
+  cursor: pointer
+}
+#closePseudoModal {
+  top: 7px;
+  color: white;
+  font-family: 'Montserrat-Ultra-Light';
+  cursor: pointer
+}
 </style>

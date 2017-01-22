@@ -12,7 +12,7 @@
           <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png" @click="showPseudoModal(true)" id="appProfile"><span class="appProfileText">{{pseudo}}</span>
+          <img src="./assets/profile.png" @click="showPseudoModal(true)" id="appProfile"><span class="appProfileText" @click="showPseudoModal(true)">{{pseudo}}</span><span v-if="pseudo == ''" class="appProfileText" @click="showPseudoModal(true)">CREER VOTRE PSEUDO</span>
           <pseudoModal v-if="pseudoModalActive == true"><pseudoModal>      
         </div>
       </div>
@@ -93,7 +93,7 @@
       }
     },
     loadPseudo: async function() {
-      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());
+      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
       this.sendPseudo(pseudo.Pseudo);
     },
     startMix: async function() {
