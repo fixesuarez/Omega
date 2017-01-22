@@ -374,5 +374,21 @@ namespace Omega.DAL
                 await _tableUser.ExecuteAsync(updateOperation);
             }
         }
+
+        public async Task<string> RetrievePseudo(string guid)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>(string.Empty, guid);
+            TableResult retrievedResult = await _tableUser.ExecuteAsync(retrieveOperation);
+            User retrievedUser = (User)retrievedResult.Result;
+
+            if (retrievedUser != null)
+            {
+                return retrievedUser.Pseudo;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

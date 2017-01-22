@@ -5,13 +5,15 @@
         <div class="pseudoModal-container">
           <div class="addPseudoText">
             <div class="addPseudoModal">
-              <span id="pseudoTitle">CHANGER VOTRE PSEUDO</span><br>
+              <span id="pseudoTitle">CREER VOTRE PSEUDO</span><br>              
               <br>
               <span id="smallText">Pseudo : <input type="text" style="color: white;" v-model="pseudo"><br><span>
               <br><br>
+              <span id="pseudotext">ATTENTION : Il ne pourra pas etre modifié !</span><br>              
+              
             </div>
           </div>
-          <div v-if="pseudo != ''" class="modalClose" @click="showPseudoModal(false),savePseudo({pseudo})">
+          <div v-if="pseudo != ''" class="modalClose" @click="showPseudoModal(false),savePseudo({pseudo}),loadPseudo()">
             SAUVEGARDER <img src="../assets/arrow.png" >
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
@@ -28,12 +30,13 @@ import PseudoService from '../services/PseudoService'
 export default {
   data () {
     return {
+      end: false,
       pseudo:'',
       pseudoToSave:''   
     }
   },
   methods: {
-    ...mapActions(['showPseudoModal','requestAsync','insertPseudo']),
+    ...mapActions(['showPseudoModal','requestAsync','insertPseudo','sendPseudo']),
 
   /*  loadMoods: async function() {
       var data = await this.requestAsync(() => MoodService.getMoods());
@@ -43,7 +46,21 @@ export default {
       this.pseudoToSave= this.pseudo;
      // this.insertPseudo(this.pseudoToSave);
       var result = PseudoService.SavePseudo(this.pseudoToSave);
-    }
+      this.end = true;
+      if(this.end == true){
+        var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
+        this.sendPseudo(pseudo.Pseudo);
+        console.log(this.end);   
+      } else {
+        console.log('erreur',this.end);
+      }
+      
+      
+    },
+    loadPseudo: async function() {
+      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
+      this.sendPseudo(pseudo.Pseudo);
+    },
   },
   computed: {
     ...mapGetters(['Pseudo'])
@@ -101,7 +118,7 @@ export default {
 
 .addPseudoText {
   height: 100%;
-  padding: 20px;
+  padding: 30px;
   width: 100%;
 }
 
@@ -122,6 +139,10 @@ export default {
 
 #pseudoTitle {
   font-size: 22px;
+}
+
+#pseudotext {
+  font-size: 15px;
 }
 
 #smallText {
@@ -147,4 +168,16 @@ input[type="text"] {
   transform: scale(1.1);
 }
 
+#closeModal {
+  position: absolute;
+  color: white;
+  font-family: 'Montserrat-Ultra-Light';
+  cursor: pointer
+}
+#closePseudoModal {
+  top: 7px;
+  color: white;
+  font-family: 'Montserrat-Ultra-Light';
+  cursor: pointer
+}
 </style>

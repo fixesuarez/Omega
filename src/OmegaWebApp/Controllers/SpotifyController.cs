@@ -78,6 +78,7 @@ namespace OmegaWebApp.Controllers
         {
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             string accessToken = _userService.GetSpotifyAccessToken( guid ).Result;
+            string pseudo = await _userService.RetrievePseudo(guid);
             
             using( HttpClient client = new HttpClient() )
             {
@@ -107,7 +108,7 @@ namespace OmegaWebApp.Controllers
                         string idPlaylist = (string) playlist["id"];
                         string coverPlaylist = (string) playlist["images"][0]["url"];
                         
-                        Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist, idOwner );
+                        Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist, pseudo );
                         await _playlistService.InsertPlaylist( p );
                         listOfPlaylists.Add( p );                        
                     }

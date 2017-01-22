@@ -78,6 +78,7 @@ namespace OmegaWebApp.Controllers
             {
                 string guid = User.FindFirst( "www.omega.com:guid" ).Value;
                 string accessToken = await _userService.GetDeezerAccessToken( guid );
+                string pseudo = await _userService.RetrievePseudo(guid);
 
                 Uri allPlaylistsUri = new Uri( string.Format(
                 "http://api.deezer.com/user/me/playlists?output=json&access_token={0}",
@@ -110,7 +111,7 @@ namespace OmegaWebApp.Controllers
                         string coverPlaylist = (string) playlist["picture"];
                         string pseudoOwner = (string) playlist["creator"]["name"];
 
-                        Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist, pseudoOwner );
+                        Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist, pseudo );
                         await _playlistService.InsertPlaylist( p );
                         listOfPlaylists.Add( p );
                     }

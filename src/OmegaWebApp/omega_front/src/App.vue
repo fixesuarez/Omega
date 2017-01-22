@@ -6,14 +6,13 @@
           <router-link to="/playlist"><img src="./assets/triangleGrey.png" id="appLogo"></router-link><span class="appTitle"><span id="appRedText">o</span>mega</span>
         </div>
         <div class="col-4 appProviders">
-
           <span @click="relogin('Facebook')">FACEBOOK</span>
           <span @click="relogin('Deezer')" id="appRedText">DEEZER</span>
           <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png" @click="showPseudoModal(true)" id="appProfile"><span class="appProfileText">{{pseudo}}</span>
-          <pseudoModal v-if="pseudoModalActive == true"><pseudoModal>      
+          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">{{pseudo}}</span></span>              
+          <pseudoModal v-if="pseudoModalActive == true && loadPseudoEnd == true && pseudo == ''"><pseudoModal>  
         </div>
       </div>
       <div class="col-12 appControlPanel">
@@ -50,6 +49,7 @@
       active: 'playlistsTab',
       isActive: true,
       true: true,
+      loadPseudoEnd: false,
       Connected: false,
       check: false,
       label: '',
@@ -66,11 +66,6 @@
         { label: 'duration_ms', value: null, image: "http://image.noelshack.com/fichiers/2016/46/1479571997-sans-titre-2.png" }
       ]
     }
-  },
-  created() {
-    AuthService.registerAuthenticatedCallback(this.onAuthenticated);
-    this.authVerify();
-    this.loadPseudo();
   },
   beforeDestroy() {
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
@@ -93,8 +88,10 @@
       }
     },
     loadPseudo: async function() {
-      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());
+
+      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
       this.sendPseudo(pseudo.Pseudo);
+      this.loadPseudoEnd = true;
     },
     startMix: async function() {
       if(this.currentMood != "") {
@@ -105,7 +102,7 @@
     }
   },
   computed: {
-    ...mapGetters(['active','pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
+    ...mapGetters(['facebookConnected', 'deezerConnected', 'spotifyConnected', 'active','pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
   },
   name: 'app',
   components: {
@@ -120,7 +117,9 @@
   mounted () {
   },
   created () {
-    this.loadPseudo()
+    AuthService.registerAuthenticatedCallback(this.onAuthenticated);
+    this.authVerify();
+    this.loadPseudo();
   }
 }
 </script>

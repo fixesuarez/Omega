@@ -15,11 +15,13 @@ namespace PlaylistCrawler
         readonly TrackGateway _trackGateway;
         readonly PlaylistGateway _playlistGateway;
         readonly UserGateway _userGateway;
-        public SpotifyApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway)
+        readonly CleanTrackGateway _cleanTrackGateway;
+        public SpotifyApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway, CleanTrackGateway cleanTrackGateway)
         {
             _trackGateway = trackGateway;
             _playlistGateway = playlistGateway;
             _userGateway = userGateway;
+            _cleanTrackGateway = cleanTrackGateway;
         }
         public async Task<SpotifyToken> TokenRefresh(string guid)
         {
@@ -52,6 +54,7 @@ namespace PlaylistCrawler
         public async Task GetSpotifyPlaylist(string guid)
         {
             string accessToken = TokenRefresh(guid).Result.access_token;
+            string pseudo = await _userGateway.RetrievePseudo(guid);
             if (!string.IsNullOrEmpty(accessToken)) {
             using (HttpClient client = new HttpClient())
             {
@@ -81,7 +84,7 @@ namespace PlaylistCrawler
                             string idPlaylist = (string)playlist["id"];
                             string coverPlaylist = (string)playlist["images"][0]["url"];
 
-                            Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist, idOwner );
+                            Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist, pseudo);
                             await _playlistGateway.InsertPlaylist(p);
                             listOfPlaylists.Add(p);
                         }
@@ -109,6 +112,13 @@ namespace PlaylistCrawler
                     JObject allTracksInPlaylistJson = JObject.Parse(allTracksInPlaylistString);
                     JArray allTracksInPlaylistArray = (JArray)allTracksInPlaylistJson["items"];
 
+                    for (int j = 0; j < allTracksInPlaylistArray.Count; j++)
+                    {
+                        string trackIdTmp = (string)allTracksInPlaylistJson["items"][j]["track"]["id"];
+                        if (await _trackGateway.RetrieveTrack("s", playlistId, trackIdTmp) == null)
+                            await _cleanTrackGateway.InsertTrackQueue("s", trackIdTmp);
+                    }
+
                     await _trackGateway.DeleteAllTrackPlaylist(playlistId);
 
                     for (int i = 0; i < allTracksInPlaylistArray.Count; i++)
@@ -123,6 +133,8 @@ namespace PlaylistCrawler
                         if (await _trackGateway.RetrieveTrack("s", playlistId, trackId) == null)
                             await _trackGateway.InsertTrack("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum);
                         tracksInPlaylist.Add(new Track("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum));
+                        //if (await _cleanTrackGateway.GetSongCleanTrack("s:" + trackId) == null)
+                        //    await _cleanTrackGateway.InsertTrackQueue("s", trackId);
                     }
                     return tracksInPlaylist;
                 }

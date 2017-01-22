@@ -26,7 +26,7 @@
             </span>
           </span>
           <p>{{p.Name}}</p>
-          <p id="albumName">{{p.Name}}</p>
+          <p id="albumName">{{p.Pseudo}}</p>
         </div>
       </div>
     </div>
@@ -87,7 +87,7 @@
       
     </div>
 
-    <PlaylistHelperModal v-if="playlistHelperModalActive == true && playlists.length == 0"></PlaylistHelperModal>
+    <PlaylistHelperModal v-if="playlistHelperModalActive == true && playlists.length == 0 && pseudoModalActive == false"></PlaylistHelperModal>
     <EventModal v-if="eventModalActive == true"></EventModal>
     <MoodsModal v-if="moodsModalActive == true"><MoodsModal>
   </div>
@@ -125,7 +125,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['sendMix', 'checkPlaylist','sendPseudo', 'setCurrentPlaylist','getPseudo', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
+    ...mapActions(['sendMix','pseudoModalActive', 'checkPlaylist','sendPseudo', 'setCurrentPlaylist','getPseudo', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
@@ -180,7 +180,6 @@ export default {
     } else {
     }
     this.getIdentity(true);
-    this.showPlaylistHelperModal(true);
   },
   mounted () {
   },
@@ -275,7 +274,7 @@ export default {
 .selectOverlay {
   background: black;
   opacity: 0.8;
-  width: 200px;
+  width: 100%;
   height: 50%;
   display: table;
   margin: 0 auto;
@@ -344,8 +343,8 @@ export default {
 }
 
 .playlistProvider {
-  height: 200px;
-  width: 200px;
+  height: 100%;
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
@@ -648,7 +647,13 @@ export default {
     width: 180px;
     height: 180px;
   }
-  
+  .playOverlayImg, .selectedOverlayImg {
+    height: 40px;
+    width: 40px;
+    background-size: 40px 40px;
+    left: 70px;
+    top: 20px;
+  }
 }
 
 @media screen and (max-height: 800px) {
@@ -656,12 +661,26 @@ export default {
     width: 160px;
     height: 160px;
   }
+  .playOverlayImg, .selectedOverlayImg {
+    height: 35px;
+    width: 35px;
+    background-size: 35px 35px;
+    left: 63px;
+    top: 22px;
+  }
 }
 
 @media screen and (max-height: 700px) {
   .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 140px;
     height: 140px;
+  }
+  .playOverlayImg, .selectedOverlayImg {
+    height: 30px;
+    width: 30px;
+    background-size: 30px 30px;
+    left: 55px;
+    top: 20px;
   }
 }
 

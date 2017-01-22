@@ -59,7 +59,7 @@
 
 <style>
 .moodsGlobal {
-  height: 72vh;
+  height: 76vh;
   background: #0e1014;
   color: white;
 }

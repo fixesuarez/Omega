@@ -16,7 +16,7 @@ namespace Omega.DAL
 
         CloudBlobClient _blobClient;
         CloudBlobContainer _container;
-        //CloudBlockBlob blockBlob;
+        CloudBlockBlob blockBlob;
 
         public AmbianceGateway(string connectionString)
         {

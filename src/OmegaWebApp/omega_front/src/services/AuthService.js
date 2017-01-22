@@ -22,6 +22,7 @@ class AuthService {
 
     get isConnected() {
         return this.identity != null;
+        
     }
 
     get accessToken() {
@@ -83,6 +84,7 @@ class AuthService {
     }
 
     onAuthenticated = (i) => {
+        debugger;
         this.identity = i;
 
         for(var cb of this.authenticatedCallbacks) {
