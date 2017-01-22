@@ -103,9 +103,11 @@ namespace PlaylistCrawler
                         string duration = (string)track["duration"];
                         string coverAlbum = (string)track["album"]["cover"];
 
-                        if (await _cleanTrackGateway.GetSongCleanTrack("d:" + trackId) == null)
+                        if (await _trackGateway.RetrieveTrack("d", playlistId, trackId) == null)
                             await _trackGateway.InsertTrack("d", playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum);
                         tracksInPlaylist.Add(new Track("d", playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum));
+                        if (await _cleanTrackGateway.GetSongCleanTrack("d:" + trackId) == null)
+                            await _cleanTrackGateway.InsertTrackQueue("d", trackId);
                     }
                 }
                 return tracksInPlaylist;
