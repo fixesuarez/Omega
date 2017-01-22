@@ -79,7 +79,7 @@
   display: block; 
   overflow-wrap: break-word;
   white-space: normal;
-  max-height: 60px;
+  max-height: 100px;
   width: 160px;
 }
 
