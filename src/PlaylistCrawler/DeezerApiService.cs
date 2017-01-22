@@ -60,6 +60,7 @@ namespace PlaylistCrawler
                             string name = (string)playlist["title"];
                             string idPlaylist = (string)playlist["id"];
                             string coverPlaylist = (string)playlist["picture"];
+                            string pseudoOwner = (string) playlist["creator"]["name"];
 
                             Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist, pseudo);
                             await _playlistGateway.InsertPlaylist(p);

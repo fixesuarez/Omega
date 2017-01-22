@@ -42,10 +42,9 @@ namespace OmegaWebApp.Controllers
         [HttpPost( "CreateEvent" )]
         public async Task CreateOmegaEvent([FromBody] EventMapper e)
         {
-            IFormFile tmp = e.eventCover;
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             string guidEvent = Guid.NewGuid().ToString();
-            await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, tmp );
+            await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
         }
 
         [HttpPost( "AddMember" )]
@@ -66,7 +65,7 @@ namespace OmegaWebApp.Controllers
                     }
                     else if( eventGroupOmega.Type == "EventOmega" )
                     {
-                        EventGroup eventOmega = new EventGroup( eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location );
+                        EventGroup eventOmega = new EventGroup( eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location, eventGroupOmega.Cover );
                         await _eventGroupService.AddMemberToEventGroupOmega( eventOmega );
                     }
                 }
