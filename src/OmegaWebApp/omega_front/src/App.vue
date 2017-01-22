@@ -6,7 +6,6 @@
           <router-link to="/playlist"><img src="./assets/triangleGrey.png" id="appLogo"></router-link><span class="appTitle"><span id="appRedText">o</span>mega</span>
         </div>
         <div class="col-4 appProviders">
-
           <span @click="relogin('Facebook')">FACEBOOK</span>
           <span @click="relogin('Deezer')" id="appRedText">DEEZER</span>
           <span @click="relogin('Spotify')">SPOTIFY</span>
@@ -105,7 +104,7 @@
     }
   },
   computed: {
-    ...mapGetters(['active','pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
+    ...mapGetters(['facebookConnected', 'deezerConnected', 'spotifyConnected', 'active','pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
   },
   name: 'app',
   components: {

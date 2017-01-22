@@ -2,9 +2,9 @@
   <div class="global">
     <div class="firstPage">
       <div class="navbar">
-        <a href="" @click="login('Facebook')">FACEBOOK</a>
-        <a href="" id="orangeText" @click="login('Deezer')">DEEZER</a>
-        <a href="" @click="login('Spotify')">SPOTIFY</a>
+        <span @click="login('Facebook')">FACEBOOK</span>
+        <span id="orangeText" @click="login('Deezer')">DEEZER</span>
+        <span @click="login('Spotify')">SPOTIFY</span>
       </div>
       <div class="header">
         <img src="../assets/triangleGrey.png" id="logo"><br>
@@ -28,16 +28,19 @@ import $ from 'jquery'
 export default {
   data() {
       return {
-          endpoint: null
+          endpoint: null,
+          provider: ''
       }
   },
   methods: {
-        ...mapActions(['sendPseudo', 'getIdentity','requestAsync']),
+        ...mapActions(['sendPseudo', 'getIdentity','requestAsync', 'setConnection']),
     login(provider) {
+    this.provider = provider;
     AuthService.login(provider);
     },
     onAuthenticated() {
     this.$router.replace('/playlist');
+    this.setConnection(this.provider);
     },
     Authverif: function() {
       if(this.pseudo != ''){

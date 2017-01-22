@@ -22,6 +22,10 @@ export async function requestAsync({ commit }, action, rethrowError) {
     return await wrapAsyncApiCall(commit, action, rethrowError);
 }
 
+export const setConnection = ({commit}) => {
+    commit(types.SETCONNECTION)
+}
+
 export const increment = ({commit}) => {
     commit(types.INCREMENT)
 }

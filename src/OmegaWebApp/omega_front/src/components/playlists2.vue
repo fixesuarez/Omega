@@ -275,7 +275,7 @@ export default {
 .selectOverlay {
   background: black;
   opacity: 0.8;
-  width: 200px;
+  width: 100%;
   height: 50%;
   display: table;
   margin: 0 auto;
@@ -344,8 +344,8 @@ export default {
 }
 
 .playlistProvider {
-  height: 200px;
-  width: 200px;
+  height: 100%;
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
@@ -648,7 +648,13 @@ export default {
     width: 180px;
     height: 180px;
   }
-  
+  .playOverlayImg, .selectedOverlayImg {
+    height: 40px;
+    width: 40px;
+    background-size: 40px 40px;
+    left: 70px;
+    top: 20px;
+  }
 }
 
 @media screen and (max-height: 800px) {
@@ -656,12 +662,26 @@ export default {
     width: 160px;
     height: 160px;
   }
+  .playOverlayImg, .selectedOverlayImg {
+    height: 35px;
+    width: 35px;
+    background-size: 35px 35px;
+    left: 63px;
+    top: 22px;
+  }
 }
 
 @media screen and (max-height: 700px) {
   .playlistImage, .checkedImage, .imageOverlay, #spanPlaylist {
     width: 140px;
     height: 140px;
+  }
+  .playOverlayImg, .selectedOverlayImg {
+    height: 30px;
+    width: 30px;
+    background-size: 30px 30px;
+    left: 55px;
+    top: 20px;
   }
 }
 

@@ -2,6 +2,9 @@ import * as types from '../mutation-types'
 
 const state = {
   loading: false,
+  facebookConnected: '',
+  deezerConnected: '',
+  spotifyConnected: '',
   count: 0,
   nb: 3,
   choice: 0,
@@ -38,6 +41,14 @@ const state = {
 }
 
 const mutations = {
+  [types.SETCONNECTION](state, payload) {
+    if(payload == 'Facebook')
+      state.facebookConnected = true;
+    else if(payload == 'Deezer')
+      state.deezerConnected = true;
+    else 
+      state.spotifyConnected = true;
+  },
   [types.INCREMENT](state) {
     state.count++;
   },

@@ -1,5 +1,8 @@
 export const isLoading = ({ app }) => app.isLoading
 
+export const facebookConnected = state => state.sampleModule.facebookConnected;
+export const deezerConnected = state => state.sampleModule.deezerConnected;
+export const spotifyConnected = state => state.sampleModule.spotifyConnected;
 export const count = state => state.sampleModule.count;
 export const nb = state => state.sampleModule.nb;
 export const choice = state => state.sampleModule.choice;

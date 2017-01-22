@@ -27,16 +27,17 @@
   padding: 20px;
 }
 
-.navbar a {
+.navbar span {
   margin-left: 30px;
   margin-right: 30px;
   color: white;
   text-decoration: none;
   transition: color .3s;
   font-family: 'montserrat-ultra-light';
+  cursor: pointer;
 }
 
-.navbar a:hover {
+.navbar span:hover {
   color: #f66126
 }
 
