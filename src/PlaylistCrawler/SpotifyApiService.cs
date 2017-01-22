@@ -112,6 +112,13 @@ namespace PlaylistCrawler
                     JObject allTracksInPlaylistJson = JObject.Parse(allTracksInPlaylistString);
                     JArray allTracksInPlaylistArray = (JArray)allTracksInPlaylistJson["items"];
 
+                    for (int j = 0; j < allTracksInPlaylistArray.Count; j++)
+                    {
+                        string trackIdTmp = (string)allTracksInPlaylistJson["items"][j]["track"]["id"];
+                        if (await _trackGateway.RetrieveTrack("s", playlistId, trackIdTmp) == null)
+                            await _cleanTrackGateway.InsertTrackQueue("s", trackIdTmp);
+                    }
+
                     await _trackGateway.DeleteAllTrackPlaylist(playlistId);
 
                     for (int i = 0; i < allTracksInPlaylistArray.Count; i++)
@@ -126,8 +133,8 @@ namespace PlaylistCrawler
                         if (await _trackGateway.RetrieveTrack("s", playlistId, trackId) == null)
                             await _trackGateway.InsertTrack("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum);
                         tracksInPlaylist.Add(new Track("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum));
-                        if (await _cleanTrackGateway.GetSongCleanTrack("s:" + trackId) == null)
-                            await _cleanTrackGateway.InsertTrackQueue("s", trackId);
+                        //if (await _cleanTrackGateway.GetSongCleanTrack("s:" + trackId) == null)
+                        //    await _cleanTrackGateway.InsertTrackQueue("s", trackId);
                     }
                     return tracksInPlaylist;
                 }
