@@ -26,7 +26,7 @@
             </span>
           </span>
           <p>{{p.Name}}</p>
-          <p id="albumName">{{p.Name}}</p>
+          <p id="albumName">{{p.Pseudo}}</p>
         </div>
       </div>
     </div>

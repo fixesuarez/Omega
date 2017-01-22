@@ -34,7 +34,7 @@
 
 <style>
 .eventsGlobal {
-  height: 72vh;
+  height: 76vh;
   background: #0e1014;
   color: white;
   display: inline-block;
@@ -251,6 +251,7 @@ export default {
     },
     getFacebookPlaylists: async function(id) {
       this.facebookPlaylists = await PlaylistApiService.getPlaylistsWithFacebook(id);
+      this.facebookPlaylists.map(m => { this.$set(m, 'check', true); return m});
       this.sendPlaylists(this.facebookPlaylists);
     },
     getRemainingTime: function(month, day) {
