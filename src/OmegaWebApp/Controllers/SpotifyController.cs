@@ -107,7 +107,7 @@ namespace OmegaWebApp.Controllers
                         string idPlaylist = (string) playlist["id"];
                         string coverPlaylist = (string) playlist["images"][0]["url"];
                         
-                        Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist );
+                        Playlist p = new Playlist( idOwner, idPlaylist, await GetAllTracksInPlaylists( requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist ), name, coverPlaylist, idOwner );
                         await _playlistService.InsertPlaylist( p );
                         listOfPlaylists.Add( p );                        
                     }
