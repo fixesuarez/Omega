@@ -13,7 +13,7 @@ const state = {
   finalMix: [],
   allMix: '',
   playlistHelperModalActive: false,
-  pseudoModalActive: false,
+  pseudoModalActive: true,
   mixModalActive: false,  
   eventModalActive: false,
   moodsModalActive: false,

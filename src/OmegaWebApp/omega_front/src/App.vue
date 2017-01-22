@@ -11,8 +11,8 @@
           <span @click="relogin('Spotify')">SPOTIFY</span>
         </div>
         <div class="col-4 appProfile">
-          <img src="./assets/profile.png" @click="showPseudoModal(true)" id="appProfile"><span class="appProfileText" @click="showPseudoModal(true)">{{pseudo}}</span><span v-if="pseudo == ''" class="appProfileText" @click="showPseudoModal(true)">CREER VOTRE PSEUDO</span>
-          <pseudoModal v-if="pseudoModalActive == true"><pseudoModal>      
+          <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">{{pseudo}}</span></span>              
+          <pseudoModal v-if="pseudoModalActive == true && loadPseudoEnd == true && pseudo == ''"><pseudoModal>  
         </div>
       </div>
       <div class="col-12 appControlPanel">
@@ -49,6 +49,7 @@
       active: 'playlistsTab',
       isActive: true,
       true: true,
+      loadPseudoEnd: false,
       Connected: false,
       check: false,
       label: '',
@@ -92,8 +93,10 @@
       }
     },
     loadPseudo: async function() {
+
       var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
       this.sendPseudo(pseudo.Pseudo);
+      this.loadPseudoEnd = true;
     },
     startMix: async function() {
       if(this.currentMood != "") {

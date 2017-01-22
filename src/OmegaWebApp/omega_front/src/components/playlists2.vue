@@ -87,7 +87,7 @@
       
     </div>
 
-    <PlaylistHelperModal v-if="playlistHelperModalActive == true && playlists.length == 0"></PlaylistHelperModal>
+    <PlaylistHelperModal v-if="playlistHelperModalActive == true && playlists.length == 0 && pseudoModalActive == false"></PlaylistHelperModal>
     <EventModal v-if="eventModalActive == true"></EventModal>
     <MoodsModal v-if="moodsModalActive == true"><MoodsModal>
   </div>
@@ -125,7 +125,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['sendMix', 'checkPlaylist','sendPseudo', 'setCurrentPlaylist','getPseudo', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
+    ...mapActions(['sendMix','pseudoModalActive', 'checkPlaylist','sendPseudo', 'setCurrentPlaylist','getPseudo', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
@@ -180,7 +180,6 @@ export default {
     } else {
     }
     this.getIdentity(true);
-    this.showPlaylistHelperModal(true);
   },
   mounted () {
   },
