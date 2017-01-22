@@ -22,6 +22,7 @@ class AuthService {
 
     get isConnected() {
         return this.identity != null;
+        
     }
 
     get accessToken() {

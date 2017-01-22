@@ -20,6 +20,7 @@
 
 <script>
 import AuthService from '../services/AuthService'
+import PseudoService from '../services/PseudoService'
 import { mapGetters, mapActions } from 'vuex'
 import Vue from 'vue'
 import $ from 'jquery'
@@ -31,6 +32,7 @@ export default {
       }
   },
   methods: {
+        ...mapActions(['sendPseudo', 'getIdentity','requestAsync']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -38,22 +40,29 @@ export default {
     this.$router.replace('/playlist');
     },
     Authverif: function() {
-      if(this.identity == true){
-            this.$router.replace('/playlist');
+      if(this.pseudo != ''){
+      this.$router.replace('/playlist');
       }
-    }
+      console.log(this.pseudo)
+    },
+    loadPseudo: async function() {
+      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
+    this.sendPseudo(pseudo.Pseudo);
+    this.Authverif();
+    },
   },
   created() {
     AuthService.registerAuthenticatedCallback(this.onAuthenticated);
-    this.Authverif();
   },
   beforeDestroy() {
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   computed: {
-    ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist'])
-    
+    ...mapGetters(['finalMix', 'identity', 'currentTrack','finalPlaylist','pseudo'])
   },
+  mounted() {
+    this.loadPseudo();
+  }
 }
 
 </script>
