@@ -28,7 +28,7 @@
 
 <style>
 .groupsGlobal {
-  height: 72vh;
+  height: 76vh;
   background: #0e1014;
   color: white;
   display: inline-block;
@@ -206,6 +206,7 @@ export default {
     },
     getFacebookPlaylists: async function(id) {
       this.facebookPlaylists = await PlaylistApiService.getPlaylistsWithFacebook(id);
+      this.facebookPlaylists.map(m => { this.$set(m, 'check', true); return m});
       this.sendPlaylists(this.facebookPlaylists);
     },
     getRemainingTime: function(month, day) {
@@ -216,8 +217,6 @@ export default {
       var hh = today.getHours();
       var m = today.getMinutes();
       var d = new Date(mm, dd, yy);
-      console.log(today);
-
       if (today.getMonth()==11 && today.getDate()>25)
           date.setFullYear(date.getFullYear()+1)
       
@@ -227,9 +226,6 @@ export default {
         var date = new Date(today.getFullYear(), this.localGroups[i].MonthNum, this.localGroups[i].Day)
         this.localGroups[i].timeRemaining = Math.ceil((date.getTime()-today.getTime())/(one_day))
       }
-
-
-
     }
   },
   computed: {

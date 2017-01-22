@@ -66,11 +66,6 @@
       ]
     }
   },
-  created() {
-    AuthService.registerAuthenticatedCallback(this.onAuthenticated);
-    this.authVerify();
-    this.loadPseudo();
-  },
   beforeDestroy() {
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
@@ -119,7 +114,9 @@
   mounted () {
   },
   created () {
-    this.loadPseudo()
+    AuthService.registerAuthenticatedCallback(this.onAuthenticated);
+    this.authVerify();
+    this.loadPseudo();
   }
 }
 </script>

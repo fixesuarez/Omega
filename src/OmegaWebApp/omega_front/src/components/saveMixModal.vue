@@ -50,6 +50,11 @@ export default {
       this.mixToSave.playlist = this.finalMix;
       this.insertMix(this.mixToSave);
       var result = MixService.SaveMix(this.mixToSave);
+      this.loadMix();
+    },
+    loadMix: async function() {
+      var data = await this.requestAsync(() => MixService.getMix());
+      this.retrieveMix(data);
     }
   },
   computed: {

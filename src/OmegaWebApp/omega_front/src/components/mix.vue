@@ -6,15 +6,37 @@
         <img src="../assets/playbutton.gif" v-if="track == currentTrack" id="imageTrackOverlay">
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
       </div>
-      <div class="addMix">
+      <div class="oldMixesContainer">
+        <div class="showMixesButton" @click="show = !show">
+          <img src="../assets/arrowLeft.png" v-if="show == false">
+          <img src="../assets/arrowRight.png" v-if="show == true">
+        </div>
+        <div class="oldMixes" v-bind:class="{oppened: show}">
+          <div v-for="mix in allMix" id="singleMix" @click="playOldMix(mix)">
+            <img v-bind:src="mix.parsedPlaylist[0].cover">
+            <div class="mixOverlay">
+              <span>{{mix.rowKey}}</span>
+            </div>
+            <div class="deleteMix" @click="deleteMix(mix.rowKey)">
+              &nbsp
+            </div>
+          </div>
+        </div>
+      </div>
+      <span id="plusMood" @click="showMixModal(true)" v-if="finalMix.length != 0">SAVE</span>     
+
+      <!--<div class="addMix">
         <span id="plusMood" @click="showMixModal(true)" v-if="finalMix.length != 0">SAVE</span>     
       </div>
       <div v-for="mix in allMix">
         <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack" @click="playOldMix(mix)">
         <span id="deleteMix" @click="deleteMix(mix.rowKey)"></span>
         <p>{{mix.rowKey}}<br></p>
-      </div>           
+      </div>-->
       <mixModal v-if="mixModalActive == true"><mixModal>
+    </div>
+    <div class="saveMix" @click="showMixModal(true)" v-if="finalMix.length != 0">
+      <span>SAUVEGARDER LE MIX</span>
     </div>
     <div id="dz-root">
     </div>
@@ -36,7 +58,8 @@ export default {
       DzPlayer: ['136336110','65938270','3129782'],
       mix: [],
       data: '',
-      offsetWidth: ''
+      offsetWidth: '',
+      show: false
     }
   },
   computed: {
@@ -71,11 +94,11 @@ export default {
       this.retrieveMix(data);
     },
     deleteMix: async function(mix) {
-      var data = MixService.deleteMix(mix);
+      var data = await MixService.deleteMix(mix);
       this.loadMix();
     },
     getOffsetWidth: function() {
-      this.offsetWidth = document.getElementById('mixGlobal').offsetWidth;
+      this.offsetWidth = document.getElementById('mixGlobal').offsetWidth - 7;
     }
   },
   created () {  
@@ -89,7 +112,7 @@ export default {
 
 <style>
 .mixGlobal {
-  height: 72vh;
+  height: 76vh;
   background: #0e1014;
   color: white;
   position: relative;
@@ -106,19 +129,18 @@ export default {
   display: table;
 }
 
-#deleteMix {
-  padding-left: 10px;
-  top: 5px;
-  padding: 5px;
+.deleteMix {
+  width: 14px;
+  height: 17px;
+  top: 3px;
+  right: 3px;
+  position: absolute;
+  background-image: url('../assets/closedTrash.png');
+  background-size: 14px 17px;
+  z-index: 2;
   cursor: pointer;
-  right: 5px;
-  color: white;
-  width: 16px;
-  height: 20px;
-  background-image: url("../assets/closedTrash.png");
-  background-size: 16px 20px;
-  transition: all .3s ease;
 }
+
 .singleTrack {
   height: 140px;
   width: 120px;
@@ -164,7 +186,6 @@ export default {
   bottom: 110px;
   width: 100%;
   height: 10vh;
-  background-color: red;
 }
 
 #nextTrack {
@@ -175,4 +196,83 @@ export default {
   position: absolute;
   z-index: 1;
 }
+
+.oldMixesContainer {
+  position: absolute; 
+  right: 0;
+  font-size: 14px;
+  top: 10vh;
+}
+
+.showMixesButton {
+  float: left;
+  margin-top: 130px;
+}
+
+.showMixesButton img {
+  height: 40px;
+  width: 40px;
+}
+
+.oldMixes {
+  background: #171c27;
+  width: 0px;
+  height: 280px;
+  float: left;
+  transition: all .3 ease;
+  padding: 5px;
+  visibility: hidden;
+  overflow-x: hidden;
+  position: relative;
+  overflow-y: auto;
+}
+
+#singleMix {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.mixOverlay {
+  position: absolute;
+  background: black;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  transition: all .3s ease;
+  font-size: 12px;
+  z-index: 2;
+  padding: 4px;
+}
+
+.saveMix {
+  font-size: 20px;
+  text-align: center;
+}
+
+.saveMix span {
+  cursor: pointer;
+}
+
+.mixOverlay span {
+}
+
+#singleMix:hover .mixOverlay {
+  opacity: 0.7;
+}
+
+.oldMixes img {
+  width: 90px;
+  height: 90px;
+}
+
+.oppened {
+  transition: all .3 ease;
+  width: 100px;
+  visibility: visible;
+}
+
+
 </style>
