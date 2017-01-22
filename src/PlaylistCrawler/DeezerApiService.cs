@@ -14,11 +14,13 @@ namespace PlaylistCrawler
         readonly TrackGateway _trackGateway;
         readonly PlaylistGateway _playlistGateway;
         readonly UserGateway _userGateway;
-        public DeezerApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway)
+        readonly CleanTrackGateway _cleanTrackGateway;
+        public DeezerApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway, CleanTrackGateway cleanTrackGateway)
         {
             _trackGateway = trackGateway;
             _playlistGateway = playlistGateway;
             _userGateway = userGateway;
+            _cleanTrackGateway = cleanTrackGateway;
         }
         public async Task GetAllDeezerPlaylists(string guid)
         {
@@ -101,7 +103,7 @@ namespace PlaylistCrawler
                         string duration = (string)track["duration"];
                         string coverAlbum = (string)track["album"]["cover"];
 
-                        if (await _trackGateway.RetrieveTrack("d", playlistId, trackId) == null)
+                        if (await _cleanTrackGateway.GetSongCleanTrack("d:" + trackId) == null)
                             await _trackGateway.InsertTrack("d", playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum);
                         tracksInPlaylist.Add(new Track("d", playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum));
                     }

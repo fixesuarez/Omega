@@ -15,11 +15,13 @@ namespace PlaylistCrawler
         readonly TrackGateway _trackGateway;
         readonly PlaylistGateway _playlistGateway;
         readonly UserGateway _userGateway;
-        public SpotifyApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway)
+        readonly CleanTrackGateway _cleanTrackGateway;
+        public SpotifyApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway, CleanTrackGateway cleanTrackGateway)
         {
             _trackGateway = trackGateway;
             _playlistGateway = playlistGateway;
             _userGateway = userGateway;
+            _cleanTrackGateway = cleanTrackGateway;
         }
         public async Task<SpotifyToken> TokenRefresh(string guid)
         {
@@ -121,7 +123,7 @@ namespace PlaylistCrawler
                         string duration = (string)allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
                         string coverAlbum = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
 
-                        if (await _trackGateway.RetrieveTrack("s", playlistId, trackId) == null)
+                        if (await _cleanTrackGateway.GetSongCleanTrack("s:" +  trackId) == null)
                             await _trackGateway.InsertTrack("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum);
                         tracksInPlaylist.Add(new Track("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum));
                     }
