@@ -21,6 +21,11 @@ namespace OmegaWebApp.Services
         {
             return await _userGateway.FindUser( guid );
         }
+
+        public async Task<string> RetrievePseudo(string guid)
+        {
+            return await _userGateway.RetrievePseudo(guid);
+        }
         public async Task<UserIndex> FindUserIndex(string provider, string apiId )
         {
             return await _userGateway.FindUserIndex( provider, apiId );

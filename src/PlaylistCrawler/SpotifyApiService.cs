@@ -52,6 +52,7 @@ namespace PlaylistCrawler
         public async Task GetSpotifyPlaylist(string guid)
         {
             string accessToken = TokenRefresh(guid).Result.access_token;
+            string pseudo = await _userGateway.RetrievePseudo(guid);
             if (!string.IsNullOrEmpty(accessToken)) {
             using (HttpClient client = new HttpClient())
             {
@@ -81,7 +82,7 @@ namespace PlaylistCrawler
                             string idPlaylist = (string)playlist["id"];
                             string coverPlaylist = (string)playlist["images"][0]["url"];
 
-                            Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist);
+                            Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist, pseudo);
                             await _playlistGateway.InsertPlaylist(p);
                             listOfPlaylists.Add(p);
                         }

@@ -39,6 +39,7 @@ namespace Omega.DAL
                 Playlist updateEntity = (Playlist)retrievedResult.Result;
                 updateEntity.Cover = p.Cover;
                 updateEntity.Name = p.Name;
+                updateEntity.Pseudo = p.Pseudo;
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
                 await _tablePlaylist.ExecuteAsync(updateOperation);
             }

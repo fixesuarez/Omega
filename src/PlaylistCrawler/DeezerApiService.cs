@@ -25,6 +25,7 @@ namespace PlaylistCrawler
             using (HttpClient client = new HttpClient())
             {
                 string accessToken = await _userGateway.FindDeezerAccessToken(guid);
+                string pseudo = await _userGateway.RetrievePseudo(guid);
 
                 Uri allPlaylistsUri = new Uri(string.Format(
                 "http://api.deezer.com/user/me/playlists?output=json&access_token={0}",
@@ -58,7 +59,7 @@ namespace PlaylistCrawler
                             string idPlaylist = (string)playlist["id"];
                             string coverPlaylist = (string)playlist["picture"];
 
-                            Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist);
+                            Playlist p = new Playlist(idOwner, idPlaylist, await GetAllTracksInPlaylists(requestTracksInPlaylist, accessToken, idOwner, idPlaylist, coverPlaylist), name, coverPlaylist, pseudo);
                             await _playlistGateway.InsertPlaylist(p);
                             listOfPlaylists.Add(p);
                         }
