@@ -22,14 +22,14 @@ namespace Omega.DAL
             Type = "GroupOmega";
             Cover = string.Empty;
         }
-        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location )
+        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location, string cover )
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
             Name = eventName;
             StartTime = startTime;
             Type = "EventOmega";
-            Cover = string.Empty;
+            Cover = cover;
             Location = location;
         }
 

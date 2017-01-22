@@ -46,26 +46,26 @@ namespace Omega.DAL
             _container.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, IFormFile eventImage )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, string eventImage )
         {
-            _blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
+            //_blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
 
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
+            //// full path to file in temp location
+            //var filePath = Path.GetTempFileName();
             
-            if( eventImage.Length > 0 )
-            {
-                using( var stream = new FileStream( filePath, FileMode.Create ) )
-                {
-                    await eventImage.CopyToAsync( stream );
-                }
-            }
-            using( var fileStream = File.OpenRead( filePath ) )
-            {
-                await _blockBlob.UploadFromStreamAsync( fileStream );
-            }
+            //if( eventImage.Length > 0 )
+            //{
+            //    using( var stream = new FileStream( filePath, FileMode.Create ) )
+            //    {
+            //        await eventImage.CopyToAsync( stream );
+            //    }
+            //}
+            //using( var fileStream = File.OpenRead( filePath ) )
+            //{
+            //    await _blockBlob.UploadFromStreamAsync( fileStream );
+            //}
 
-            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location );
+            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location, eventImage );
             eventOmega.Owner = true;
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
