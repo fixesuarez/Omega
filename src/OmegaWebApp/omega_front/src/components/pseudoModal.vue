@@ -5,12 +5,11 @@
         <div class="pseudoModal-container">
           <div class="addPseudoText">
             <div class="addPseudoModal">
-              <span id="pseudoTitle">CREER VOTRE PSEUDO</span><br>              
+              <span id="pseudoTitle">CHOISISSEZ UN PSEUDO</span><br>              
               <br>
               <span id="smallText">Pseudo : <input type="text" style="color: white;" v-model="pseudo"><br><span>
               <br><br>
-              <span id="pseudotext">ATTENTION : Il ne pourra pas etre modifié !</span><br>              
-              
+              <span id="pseudotext" class="redText">Attention, vous ne pourrez plus le modifier</span><br>              
             </div>
           </div>
           <div v-if="pseudo != ''" class="modalClose" @click="showPseudoModal(false),savePseudo({pseudo}),loadPseudo()">
@@ -102,7 +101,7 @@ export default {
 .pseudoModal-container {
   margin-bottom: 100px;
   margin-left: 20%;
-  height: 350px;
+  height: 200px;
   width: 300px;
   background-color: #191B27;
   border-radius: 2px;
@@ -130,6 +129,7 @@ export default {
   font-family: 'Montserrat-Regular';
   cursor: pointer;
   text-transform: uppercase;
+  text-align: left;
 }
 
 .modalClose img {
@@ -138,7 +138,7 @@ export default {
 }
 
 #pseudoTitle {
-  font-size: 22px;
+  font-size: 16px;
 }
 
 #pseudotext {

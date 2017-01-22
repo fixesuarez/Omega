@@ -23,16 +23,6 @@
           </div>
         </div>
       </div>
-      <span id="plusMood" @click="showMixModal(true)" v-if="finalMix.length != 0">SAVE</span>     
-
-      <!--<div class="addMix">
-        <span id="plusMood" @click="showMixModal(true)" v-if="finalMix.length != 0">SAVE</span>     
-      </div>
-      <div v-for="mix in allMix">
-        <img v-bind:src="mix.parsedPlaylist[0].cover" id="imageTrack" @click="playOldMix(mix)">
-        <span id="deleteMix" @click="deleteMix(mix.rowKey)"></span>
-        <p>{{mix.rowKey}}<br></p>
-      </div>-->
       <mixModal v-if="mixModalActive == true"><mixModal>
     </div>
     <div class="saveMix" @click="showMixModal(true)" v-if="finalMix.length != 0">
