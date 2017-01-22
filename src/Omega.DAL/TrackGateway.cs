@@ -38,8 +38,8 @@ namespace Omega.DAL
                 batchOperation.Insert( t );
                 await _tableTrack.ExecuteBatchAsync( batchOperation );
             }
-            CloudQueueMessage message = new CloudQueueMessage( source + ":" + trackId );
-            await _queue.AddMessageAsync( message );
+            //CloudQueueMessage message = new CloudQueueMessage( source + ":" + trackId );
+            //await _queue.AddMessageAsync( message );
         }
         public async Task DeleteTrack( string playlistId, string source, string trackId )
         {

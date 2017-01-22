@@ -18,6 +18,7 @@ namespace PlaylistCrawler
         static SpotifyApiService _spotifyApiService;
         static DeezerApiService _deezerApiService;
         static UserGateway _userGateway;
+        static CleanTrackGateway _cleanTrackGateway;
         public static void Main(string[] args)
         {
             _configuration = new ConfigurationBuilder()
@@ -28,8 +29,9 @@ namespace PlaylistCrawler
             _playlistGateway = new PlaylistGateway(_configuration["data:azure:ConnectionString"]);
             _trackGateway = new TrackGateway(_configuration["data:azure:ConnectionString"]);
             _userGateway = new UserGateway(_configuration["data:azure:ConnectionString"]);
-            _spotifyApiService = new SpotifyApiService(_trackGateway, _playlistGateway, _userGateway);
-            _deezerApiService = new DeezerApiService(_trackGateway, _playlistGateway, _userGateway);
+            _cleanTrackGateway = new CleanTrackGateway(_configuration["data:azure:ConnectionString"]);
+            _spotifyApiService = new SpotifyApiService(_trackGateway, _playlistGateway, _userGateway, _cleanTrackGateway);
+            _deezerApiService = new DeezerApiService(_trackGateway, _playlistGateway, _userGateway, _cleanTrackGateway);
             Crawl().Wait();
         }
 

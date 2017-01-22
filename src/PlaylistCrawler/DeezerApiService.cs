@@ -14,11 +14,13 @@ namespace PlaylistCrawler
         readonly TrackGateway _trackGateway;
         readonly PlaylistGateway _playlistGateway;
         readonly UserGateway _userGateway;
-        public DeezerApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway)
+        readonly CleanTrackGateway _cleanTrackGateway;
+        public DeezerApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway, CleanTrackGateway cleanTrackGateway)
         {
             _trackGateway = trackGateway;
             _playlistGateway = playlistGateway;
             _userGateway = userGateway;
+            _cleanTrackGateway = cleanTrackGateway;
         }
         public async Task GetAllDeezerPlaylists(string guid)
         {
@@ -88,6 +90,14 @@ namespace PlaylistCrawler
                     JObject allTracksInPlaylistJson = JObject.Parse(allTracksInPlaylistString);
                     JArray allTracksInPlaylistArray = (JArray)allTracksInPlaylistJson["data"];
 
+                    for (int j = 0; j < allTracksInPlaylistArray.Count; j++)
+                    {
+                        var trackTmp = allTracksInPlaylistArray[j];
+                        string trackIdTmp = (string)trackTmp["id"];
+                        if (await _trackGateway.RetrieveTrack("d", playlistId, trackIdTmp) == null)
+                            await _cleanTrackGateway.InsertTrackQueue("d", trackIdTmp);
+                    }
+
                     await _trackGateway.DeleteAllTrackPlaylist(playlistId);
 
                     for (int i = 0; i < allTracksInPlaylistArray.Count; i++)
@@ -104,6 +114,8 @@ namespace PlaylistCrawler
                         if (await _trackGateway.RetrieveTrack("d", playlistId, trackId) == null)
                             await _trackGateway.InsertTrack("d", playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum);
                         tracksInPlaylist.Add(new Track("d", playlistId, trackId, trackTitle, albumName, trackRank, duration, coverAlbum));
+                        //if (await _cleanTrackGateway.GetSongCleanTrack("d:" + trackId) == null)
+                        //    await _cleanTrackGateway.InsertTrackQueue("d", trackId);
                     }
                 }
                 return tracksInPlaylist;
