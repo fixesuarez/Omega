@@ -12,6 +12,7 @@ namespace Omega.DAL
 {
     public class EventGroupGateway
     {
+        readonly EventGroupUserGateway _eventGroupUserGateway;
         readonly CloudStorageAccount _storageAccount;
         readonly CloudTableClient _tableClient;
         readonly CloudTable _tableEventGroup;
@@ -21,7 +22,7 @@ namespace Omega.DAL
 
         readonly CloudBlobClient _blobClient;
         readonly CloudBlobContainer _container;
-        CloudBlockBlob _blockBlob;
+        //CloudBlockBlob _blockBlob;
 
         public EventGroupGateway(string connectionString)
         {
@@ -44,6 +45,8 @@ namespace Omega.DAL
             _container = _blobClient.GetContainerReference( "images-eventgroup" );
             // Create the container if it doesn't already exist.
             _container.CreateIfNotExistsAsync().Wait();
+
+            _eventGroupUserGateway = new EventGroupUserGateway(connectionString);
         }
 
         public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, string eventImage )
@@ -69,6 +72,7 @@ namespace Omega.DAL
             eventOmega.Owner = true;
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
+            await _eventGroupUserGateway.InsertEventGroup(eventOmega);
         }
         public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName )
         {
@@ -131,6 +135,7 @@ namespace Omega.DAL
             }
             if( batchOperation.Count != 0)
                 await _tableEventGroup.ExecuteBatchAsync(batchOperation);
+            await _eventGroupUserGateway.InsertBatchEventGroup(eventId, users, type, cover, name, startTime, location);
         }
         public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name)
         {
@@ -157,6 +162,7 @@ namespace Omega.DAL
                     await UpdateEventGroup(eventId, user, type, cover, name);
                 }
             }
+            await _eventGroupUserGateway.InsertBatchEventGroup(eventId, users, type, cover, name);
         }
 
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime, string location)
