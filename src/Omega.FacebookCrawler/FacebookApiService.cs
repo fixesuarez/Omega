@@ -34,7 +34,7 @@ namespace Omega.FacebookCrawler
                 dynamic response = await client.GetTaskAsync("/v2.8/me/groups?fields=id,name,cover,members{id,name,email}");
                 JObject groupsJson = JObject.FromObject(response);
                 JArray groups = (JArray)groupsJson["data"];
-                await _userGateway.UpdateUserGroups(guid, groups);
+                //await _userGateway.UpdateUserGroups(guid, groups);
 
                         foreach (var group in groups)
                         {
@@ -149,7 +149,7 @@ namespace Omega.FacebookCrawler
                             }
                         }
                     }
-                    await _userGateway.UpdateUserEvents(guid, cleanEvents);
+                    //await _userGateway.UpdateUserEvents(guid, cleanEvents);
                 }
             }
         }

@@ -48,6 +48,7 @@ namespace OmegaWebApp
             services.AddTransient( _ => new PlaylistGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient( _ => new AmbianceGateway( Configuration["data:azure:ConnectionString"] ) );
             services.AddTransient( _ => new EventGroupGateway( Configuration["data:azure:ConnectionString"] ) );
+            services.AddTransient( _ => new EventGroupUserGateway( Configuration["data:azure:ConnectionString"] ) );
             services.AddTransient( _ => new CleanTrackGateway( Configuration["data:azure:ConnectionString"] ) );
             services.AddTransient( _ => new TrackGateway( Configuration[ "data:azure:ConnectionString" ] ) );
             services.AddTransient( _ => new MixTableGateway( Configuration["data:azure:ConnectionString"] ) );
