@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,7 @@ namespace Omega.DAL
             eventUser.Type = pEvent.Type;
             eventUser.UserId = pEvent.UserId;
             eventUser.Cover = pEvent.Cover;
+            eventUser.Members = pEvent.Members;
 
             if(await RetrieveGroupEvent(pEvent.PartitionKey, pEvent.RowKey) == null)
             {
@@ -51,7 +53,7 @@ namespace Omega.DAL
             }
         }
 
-        public async Task InsertBatchEventGroup(string eventId, List<User> users, string type, string cover, string name)
+        public async Task InsertBatchEventGroup(string eventId, List<User> users, string type, string cover, string name, List<string> pmembers)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
 
@@ -67,13 +69,13 @@ namespace Omega.DAL
                     eventGroup.Type = type;
                     eventGroup.Cover = cover;
                     eventGroup.Name = name;
-                    //batchOperation.Insert(eventGroup);
+                    eventGroup.Members = JsonConvert.SerializeObject(pmembers);
                     TableOperation insert = TableOperation.Insert(eventGroup);
                     await _tableEventGroup.ExecuteAsync(insert);
                 }
                 else
                 {
-                    await UpdateEventGroup(eventId, user, type, cover, name);
+                    await UpdateEventGroup(eventId, user, type, cover, name, pmembers);
                 }
             }
         }
@@ -95,6 +97,7 @@ namespace Omega.DAL
                     eventGroup.Name = name;
                     eventGroup.StartTime = startTime;
                     eventGroup.Location = location;
+                    eventGroup.Members = JsonConvert.SerializeObject(users);
                     batchOperation.Insert(eventGroup);
                 }
                 else
@@ -127,7 +130,7 @@ namespace Omega.DAL
                 await _tableEventGroup.ExecuteAsync(updateOperation);
             }
         }
-        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name)
+        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, List<string> members)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>(user.RowKey, eventId);
             TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
@@ -140,6 +143,7 @@ namespace Omega.DAL
                 updateEntity.Type = type;
                 updateEntity.Cover = cover;
                 updateEntity.Name = name;
+                updateEntity.Members = JsonConvert.SerializeObject(members);
 
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
 

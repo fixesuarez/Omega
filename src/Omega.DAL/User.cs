@@ -32,6 +32,7 @@ namespace Omega.DAL
         public string GroupsId { get; set; }
 
         public string Pseudo { get; set; }
+        public string FacebookName { get; set; }
 
         public User() {}
     }

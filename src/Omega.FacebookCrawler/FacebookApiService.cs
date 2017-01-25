@@ -50,16 +50,18 @@ namespace Omega.FacebookCrawler
                             {
                                 string mail = (string)member["email"];
                                 string id = (string)member["id"];
+                                string userName = (string)member["name"];
                                 if (mail != null)
                                 {
                                     User u = new User();
                                     u.PartitionKey = string.Empty;
                                     u.RowKey = guid;
                                     u.FacebookId = id;
+                                    u.FacebookName = userName;
                                     groupMembers.Add(u);
                                 }
                             }
-                            await _eventGroupGateway.InsertEventGroup(groupId, groupMembers, "group", groupCover, groupName);
+                            await _eventGroupGateway.InsertEventGroup(groupId, groupMembers, "group", groupCover, groupName, members);
                         }
                     }
                 }
