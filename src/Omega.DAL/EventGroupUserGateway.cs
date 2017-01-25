@@ -154,7 +154,7 @@ namespace Omega.DAL
             return (EventGroupUser)retrievedGroupEvent.Result;
         }
 
-        public async Task<string> GetAllEventsUser(string guid)
+        public async Task<string> GetAllEventsUser(string guid, string type)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             List<EventGroupUser> tracks = new List<EventGroupUser>();
@@ -172,9 +172,16 @@ namespace Omega.DAL
             } while (tableContinuationToken != null);
             foreach(EventGroupUser pEvent in tracks)
             {
-                if(DateTime.Compare(pEvent.StartTime, DateTime.Now) > 0 || DateTime.Compare(pEvent.StartTime, DateTime.Now) == 0)
+                if (pEvent.Type.Contains(type))
                 {
-                    tracksDef.Add(pEvent);
+                    if (pEvent.Type.Contains("event") && (DateTime.Compare(pEvent.StartTime, DateTime.Now) > 0 || DateTime.Compare(pEvent.StartTime, DateTime.Now) == 0))
+                    {
+                        tracksDef.Add(pEvent);
+                    }
+                    else if(pEvent.Type.Contains("group"))
+                    {
+                        tracksDef.Add(pEvent);
+                    }
                 }
             }
             return JsonConvert.SerializeObject(tracksDef);

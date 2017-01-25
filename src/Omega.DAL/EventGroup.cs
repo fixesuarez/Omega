@@ -19,7 +19,7 @@ namespace Omega.DAL
             RowKey = userGuid;
             Name = groupName;
             StartTime = new DateTime(1900, 1, 1);
-            Type = "GroupOmega";
+            Type = "groupOmega";
             Cover = string.Empty;
         }
         public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location, string cover )
@@ -28,7 +28,7 @@ namespace Omega.DAL
             RowKey = userGuid;
             Name = eventName;
             StartTime = startTime;
-            Type = "EventOmega";
+            Type = "eventOmega";
             Cover = cover;
             Location = location;
         }
