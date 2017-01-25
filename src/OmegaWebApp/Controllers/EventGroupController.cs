@@ -29,15 +29,16 @@ namespace OmegaWebApp.Controllers
             string guid = User.FindFirst("www.omega.com:guid").Value;
             //User user = await _userService.FindUser(guid);
             //return user.EventsId;
-            return await _eventGroupService.GetAllUserEvents(guid);
+            return await _eventGroupService.GetAllUserEvents(guid, "event");
         }
 
         [HttpGet("RetrieveUserGroups")]
         public async Task<string> RetrieveUserGroups()
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
-            User user = await _userService.FindUser(guid);
-            return user.GroupsId;
+            //User user = await _userService.FindUser(guid);
+            //return user.GroupsId;
+            return await _eventGroupService.GetAllUserEvents(guid, "group");
         }
 
         [HttpPost( "CreateEvent" )]
