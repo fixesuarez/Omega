@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 mixGlobal" id="mixGlobal"> 
     <div class="trackContainer">
-      <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack()" class="singleTrack">
+      <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" key="track">
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
         <img src="../assets/playbutton.gif" v-if="track == currentTrack" id="imageTrackOverlay">
         <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>

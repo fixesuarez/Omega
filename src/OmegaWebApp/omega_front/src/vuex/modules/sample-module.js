@@ -206,9 +206,24 @@ const mutations = {
     state.finalPlaylist = [];
     Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);   
     DZ.Event.subscribe('track_end', function(evt_name){
-      console.log("fini");
        DZ.player.playTracks(state.finalPlaylist);
     });
+
+    var q = state.finalMix.indexOf(payload);
+    var element = state.finalMix[q];
+    var tmpTrack;
+    state.finalMix.splice(q, 1);
+    // for(var z = 0; z < state.finalMix; z++) {
+    //   if(state.finalMix[z].deezerId = DZ.player.getCurrentTrack.id) {
+    //     tmpTrack = state.finalMix.indefOf(z+1);
+    //     console.log('Trackid'+ tmpTrack);
+    //   }
+    // }
+    var ddd = DZ.player.getCurrentTrack().id;
+    var indexTo = state.finalPlaylist.indexOf(Number(ddd));
+    console.log(indexTo);
+    // console.log(DZ.player.getCurrentIndex());
+    state.finalMix.splice(indexTo+1, 0, payload);
   }
 }
 
