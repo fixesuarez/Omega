@@ -34,7 +34,7 @@ namespace Omega.FacebookCrawler
                 dynamic response = await client.GetTaskAsync("/v2.8/me/groups?fields=id,name,cover,members{id,name,email}");
                 JObject groupsJson = JObject.FromObject(response);
                 JArray groups = (JArray)groupsJson["data"];
-                await _userGateway.UpdateUserGroups(guid, groups);
+                //await _userGateway.UpdateUserGroups(guid, groups);
 
                         foreach (var group in groups)
                         {
@@ -50,16 +50,18 @@ namespace Omega.FacebookCrawler
                             {
                                 string mail = (string)member["email"];
                                 string id = (string)member["id"];
+                                string userName = (string)member["name"];
                                 if (mail != null)
                                 {
                                     User u = new User();
                                     u.PartitionKey = string.Empty;
                                     u.RowKey = guid;
                                     u.FacebookId = id;
+                                    u.FacebookName = userName;
                                     groupMembers.Add(u);
                                 }
                             }
-                            await _eventGroupGateway.InsertEventGroup(groupId, groupMembers, "group", groupCover, groupName);
+                            await _eventGroupGateway.InsertEventGroup(groupId, groupMembers, "group", groupCover, groupName, members);
                         }
                     }
                 }
@@ -149,7 +151,7 @@ namespace Omega.FacebookCrawler
                             }
                         }
                     }
-                    await _userGateway.UpdateUserEvents(guid, cleanEvents);
+                    //await _userGateway.UpdateUserEvents(guid, cleanEvents);
                 }
             }
         }

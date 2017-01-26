@@ -18,10 +18,10 @@
             <span id="daysLeft">{{event.timeRemaining}}</span>
             jours
           </div>
-          <div class="selectEvent" v-if="event.Id !== currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
+          <div class="selectEvent" v-if="event.RowKey !== currentEvent.RowKey" @click="setCurrentEvent(event), getFacebookPlaylists(event.RowKey)">
             SÉLECTIONNER
           </div>
-          <div class="selectEvent selected" v-if="event.Id == currentEvent.Id" @click="setCurrentEvent(event), getFacebookPlaylists(event.Id)">
+          <div class="selectEvent selected" v-if="event.RowKey == currentEvent.RowKey" @click="setCurrentEvent(event), getFacebookPlaylists(event.RowKey)">
             SÉLECTIONNER
           </div>
         </div>
@@ -84,7 +84,7 @@
   display: block; 
   overflow-wrap: break-word;
   white-space: normal;
-  max-height: 60px;
+  max-height: 100px;
   width: 160px;
 }
 

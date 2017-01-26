@@ -3,32 +3,32 @@ using System;
 
 namespace Omega.DAL
 {
-    public class EventGroup : TableEntity
+    public class EventGroupUser : TableEntity
     {
-        public EventGroup(string eventId, string userGuid)
+        public EventGroupUser(string eventId, string userGuid)
         {
-            PartitionKey = eventId;
-            RowKey = userGuid;
+            PartitionKey = userGuid;
+            RowKey = eventId;
             StartTime = new DateTime(1900, 1, 1);
         }
 
-        public EventGroup() { }
-        public EventGroup( string groupGuid, string userGuid, string groupName )
+        public EventGroupUser() { }
+        public EventGroupUser(string groupGuid, string userGuid, string groupName)
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
             Name = groupName;
             StartTime = new DateTime(1900, 1, 1);
-            Type = "groupOmega";
+            Type = "GroupOmega";
             Cover = string.Empty;
         }
-        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location, string cover )
+        public EventGroupUser(string groupGuid, string userGuid, string eventName, DateTime startTime, string location, string cover)
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
             Name = eventName;
             StartTime = startTime;
-            Type = "eventOmega";
+            Type = "EventOmega";
             Cover = cover;
             Location = location;
         }

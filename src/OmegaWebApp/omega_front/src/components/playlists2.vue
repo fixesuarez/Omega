@@ -6,30 +6,30 @@
       <div class="playlistWrapper" id="playlistWrapper">
       <scale-loader class="playlistLoading" v-if="loading == true" :loading="loading"></scale-loader>                
         
-        <div v-for="p in playlists" id="spanPlaylist">
-          <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
-          <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
-          <img v-if="p.check == true" src="../assets/checkIcon.png" id="checkIcon">
-          <span class="imageOverlay">
-            <div class="selectOverlay" @click="selectPlaylist(p)">
-              <div class="selectOverlayImg" v-if="p.check == false">&nbsp</div>
-              <div class="selectedOverlayImg" v-else>&nbsp</div>
-            </div>
-            <div class="playOverlay" @click="setCurrentPlaylist(p), setSPlayer(), setDPlayer()">
-              <div class="playOverlayImg">&nbsp</div>
-            </div>
-          </span>
-          <span class="playlistProvider">
-            <span v-if="p.provider == 's'" class="sPlaylistBanner">
-              <img src="../assets/spotifyWhiteLogo.png">
+            <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
+            <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
+            <img v-if="p.check == true" src="../assets/checkIcon.png" id="checkIcon">
+            <span class="imageOverlay">
+              <div class="selectOverlay" @click="selectPlaylist(p)">
+                <div class="selectOverlayImg" v-if="p.check == false">&nbsp</div>
+                <div class="selectedOverlayImg" v-else>&nbsp</div>
+              </div>
+              <div class="playOverlay" @click="setCurrentPlaylist(p), setSPlayer(), setDPlayer()">
+                <div class="playOverlayImg">&nbsp</div>
+              </div>
             </span>
-            <span v-if="p.provider == 'd'" class="sPlaylistBanner">
-              <img src="../assets/deezerWhiteLogo.png">
+            <span class="playlistProvider">
+              <span v-if="p.provider == 's'" class="sPlaylistBanner">
+                <img src="../assets/spotifyWhiteLogo.png">
+              </span>
+              <span v-if="p.provider == 'd'" class="sPlaylistBanner">
+                <img src="../assets/deezerWhiteLogo.png">
+              </span>
             </span>
-          </span>
-          <p>{{p.Name}}</p>
-          <p id="albumName">{{p.Pseudo}}</p>
-        </div>
+            <p>{{p.Name}}</p>
+            <p id="albumName">{{p.Pseudo}}</p>
+          </div>
+        </transition>
       </div>
     </div>
 
@@ -124,6 +124,7 @@ export default {
     return {
       localfinalMix: '',
       sPlayer: '',
+      visible: true,
       DzPlayer: '',
       sPlaylists: [],
       Connected: false,
@@ -142,6 +143,9 @@ export default {
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
+    },
+    toggle: function() {
+      this.visible = !this.visible;
     },
     setDPlayer: function() {
      var player = 'https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=true&width=350&height=350&color=007FEB&layout=dark&size=medium&type=playlist&id='+ this.currentPlaylist.PlaylistId +'&app_id=176241';
@@ -177,6 +181,11 @@ export default {
       var dzplaylist = await this.requestAsync(() => DeezerApiService.getDeezerPlaylist());
       this.dPlaylists.push(dzplaylist);
     },
+    loadPseudo: async function() {
+      var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
+      this.sendPseudo(pseudo.Pseudo);
+      this.loadPseudoEnd = true;
+    },
     startMix: async function() {
       this.mix();
       this.localfinalMix = await MixService.mix(this.mixToMix);
@@ -191,9 +200,11 @@ export default {
       this.loadPlaylists();
       this.loadSpotifyPlaylist();
       this.loadDeezerPlaylist();
+      this.loadPseudo();
     } else {
     }
     this.getIdentity(true);
+    this.loadPseudo();
   },
   mounted () {
   },

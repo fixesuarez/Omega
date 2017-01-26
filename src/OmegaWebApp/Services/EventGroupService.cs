@@ -10,9 +10,11 @@ namespace OmegaWebApp.Services
     public class EventGroupService
     {
         EventGroupGateway _eventGroupGateway;
-        public EventGroupService(EventGroupGateway eventGroupGateway)
+        EventGroupUserGateway _eventGroupUserGateway;
+        public EventGroupService(EventGroupGateway eventGroupGateway, EventGroupUserGateway eventGroupUserGateway)
         {
             _eventGroupGateway = eventGroupGateway;
+            _eventGroupUserGateway = eventGroupUserGateway;
         }
 
         public async Task<EventGroup> FindEventGroup( string idEventGroup, string userGuid )
@@ -20,7 +22,7 @@ namespace OmegaWebApp.Services
             return await _eventGroupGateway.FindEventGroup( idEventGroup, userGuid );
         }
 
-        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location, IFormFile image )
+        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location, string image )
         {
             await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location, image );
         }
@@ -37,6 +39,11 @@ namespace OmegaWebApp.Services
         public async Task<List<EventGroup>> GetAllMembersFromEventGroup(string idEventGroup )
         {
             return await _eventGroupGateway.RetrieveMembersFromGroupEvent( idEventGroup );
+        }
+
+        public async Task<string> GetAllUserEvents(string guid, string type)
+        {
+            return await _eventGroupUserGateway.GetAllEventsUser(guid, type);
         }
     }
 }

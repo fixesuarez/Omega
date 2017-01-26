@@ -12,7 +12,7 @@
         </div>
         <div class="col-4 appProfile">
           <img src="./assets/profile.png" id="appProfile"><span class="appProfileText">{{pseudo}}</span></span>              
-          <pseudoModal v-if="pseudoModalActive == true && loadPseudoEnd == true && pseudo == ''"><pseudoModal>  
+          <pseudoModal v-if="pseudoModalActive == true && loadPseudoEnd == true && pseudo == null"><pseudoModal>  
         </div>
       </div>
       <div class="col-12 appControlPanel">

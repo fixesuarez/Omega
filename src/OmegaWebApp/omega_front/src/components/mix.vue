@@ -120,12 +120,12 @@ export default {
 }
 
 .trackContainer {
+  position: relative;
   height: 60vh;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding: 100px;
   padding-top: 0px;
   margin: 0 auto;
-  display: table;
 }
 
 

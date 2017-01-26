@@ -7,11 +7,14 @@ using System;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Omega.DAL
 {
     public class EventGroupGateway
     {
+        readonly EventGroupUserGateway _eventGroupUserGateway;
         readonly CloudStorageAccount _storageAccount;
         readonly CloudTableClient _tableClient;
         readonly CloudTable _tableEventGroup;
@@ -21,7 +24,7 @@ namespace Omega.DAL
 
         readonly CloudBlobClient _blobClient;
         readonly CloudBlobContainer _container;
-        CloudBlockBlob _blockBlob;
+        //CloudBlockBlob _blockBlob;
 
         public EventGroupGateway(string connectionString)
         {
@@ -44,31 +47,34 @@ namespace Omega.DAL
             _container = _blobClient.GetContainerReference( "images-eventgroup" );
             // Create the container if it doesn't already exist.
             _container.CreateIfNotExistsAsync().Wait();
+
+            _eventGroupUserGateway = new EventGroupUserGateway(connectionString);
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, IFormFile eventImage )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, string eventImage )
         {
-            _blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
+            //_blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
 
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
+            //// full path to file in temp location
+            //var filePath = Path.GetTempFileName();
             
-            if( eventImage.Length > 0 )
-            {
-                using( var stream = new FileStream( filePath, FileMode.Create ) )
-                {
-                    await eventImage.CopyToAsync( stream );
-                }
-            }
-            using( var fileStream = File.OpenRead( filePath ) )
-            {
-                await _blockBlob.UploadFromStreamAsync( fileStream );
-            }
+            //if( eventImage.Length > 0 )
+            //{
+            //    using( var stream = new FileStream( filePath, FileMode.Create ) )
+            //    {
+            //        await eventImage.CopyToAsync( stream );
+            //    }
+            //}
+            //using( var fileStream = File.OpenRead( filePath ) )
+            //{
+            //    await _blockBlob.UploadFromStreamAsync( fileStream );
+            //}
 
-            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location );
+            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location, eventImage );
             eventOmega.Owner = true;
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
+            await _eventGroupUserGateway.InsertEventGroup(eventOmega);
         }
         public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName )
         {
@@ -131,13 +137,18 @@ namespace Omega.DAL
             }
             if( batchOperation.Count != 0)
                 await _tableEventGroup.ExecuteBatchAsync(batchOperation);
+            await _eventGroupUserGateway.InsertBatchEventGroup(eventId, users, type, cover, name, startTime, location);
         }
-        public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name)
+        public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name, JArray pmembers)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             
             EventGroup eventGroup;
-
+            List<string> members = new List<string>();
+            foreach (var user in pmembers)
+            {
+                members.Add((string)user["name"]);
+            }
             foreach (User user in users)
             {
                 eventGroup = await RetrieveGroupEvent(eventId, user.RowKey);
@@ -148,15 +159,17 @@ namespace Omega.DAL
                     eventGroup.Type = type;
                     eventGroup.Cover = cover;
                     eventGroup.Name = name;
+                    eventGroup.Members = JsonConvert.SerializeObject(members);
                     //batchOperation.Insert(eventGroup);
                     TableOperation insert = TableOperation.Insert(eventGroup);
                     await _tableEventGroup.ExecuteAsync(insert);
                 }
                 else
                 {
-                    await UpdateEventGroup(eventId, user, type, cover, name);
+                    await UpdateEventGroup(eventId, user, type, cover, name, members);
                 }
             }
+            await _eventGroupUserGateway.InsertBatchEventGroup(eventId, users, type, cover, name, members);
         }
 
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime, string location)
@@ -180,7 +193,7 @@ namespace Omega.DAL
                 await _tableEventGroup.ExecuteAsync(updateOperation);
             }
         }
-        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name)
+        public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, List<string> users)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, user.RowKey);
             TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
@@ -193,6 +206,7 @@ namespace Omega.DAL
                 updateEntity.Type = type;
                 updateEntity.Cover = cover;
                 updateEntity.Name = name;
+                updateEntity.Members = JsonConvert.SerializeObject(users);
 
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
 
