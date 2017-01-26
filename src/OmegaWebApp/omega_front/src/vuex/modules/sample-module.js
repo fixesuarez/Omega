@@ -209,21 +209,20 @@ const mutations = {
        DZ.player.playTracks(state.finalPlaylist);
     });
 
-    var q = state.finalMix.indexOf(payload);
-    var element = state.finalMix[q];
-    var tmpTrack;
-    state.finalMix.splice(q, 1);
-    // for(var z = 0; z < state.finalMix; z++) {
-    //   if(state.finalMix[z].deezerId = DZ.player.getCurrentTrack.id) {
-    //     tmpTrack = state.finalMix.indefOf(z+1);
-    //     console.log('Trackid'+ tmpTrack);
-    //   }
-    // }
-    var ddd = DZ.player.getCurrentTrack().id;
-    var indexTo = state.finalPlaylist.indexOf(Number(ddd));
-    console.log(indexTo);
-    // console.log(DZ.player.getCurrentIndex());
-    state.finalMix.splice(indexTo+1, 0, payload);
+    var clickedTrack = payload;
+    var clickedTrackIndex = state.finalMix.indexOf(clickedTrack);
+    if(clickedTrack.deezerId !== DZ.player.getCurrentTrack().id) {
+      state.finalMix.splice(clickedTrackIndex, 1);
+      var playingTrack = DZ.player.getCurrentTrack().id;
+      for(var z = 0; z < state.finalMix.length; z++) {
+        console.log(state.finalMix[z].deezerId + ' = ' + playingTrack)
+        if(state.finalMix[z].deezerId == playingTrack) {
+          var result = state.finalMix.indexOf(state.finalMix[i])+1;
+          console.log(true);
+          state.finalMix.splice(result+1, 0, clickedTrack)
+        }
+      }
+    }
   }
 }
 
