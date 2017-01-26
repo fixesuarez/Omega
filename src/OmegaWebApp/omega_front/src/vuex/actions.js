@@ -171,6 +171,11 @@ export const insertMood = ({commit}, payload) => {
     commit(types.INSERTMOOD, payload)
 }
 
+export const insertEvent = ({commit}, payload) => {
+    
+    commit(types.INSERTEVENT, payload)
+}
+
 export const insertPseudo = ({commit}, payload) => {
     
     commit(types.INSERTPSEUDO, payload)

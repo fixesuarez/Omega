@@ -30,6 +30,7 @@ const state = {
   nextTrack: [],
   moodToInsert: '',
   mixToInsert: '',
+  eventToInsert:'',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
   track: ''
@@ -146,6 +147,9 @@ const mutations = {
   },
   [types.INSERTMIX](state, payload) {
     state.mixToInsert = payload;
+  },
+  [types.INSERTEVENT](state, payload) {
+    state.eventToInsert = payload;
   },
 
 //GETTERS 

@@ -11,7 +11,7 @@
               <div class="newEventInfos">
                 <span id="smallText">Nom : <input type="text" v-model="eventName"><br><span>
                 <form method="post" enctype="multipart/form-data" asp-controller="CreateEvent" asp-action="Index">
-                 <input type="file" name="image" @change="upload">
+                 <input type="file" name="image" @change="onFileChange">
                 </form>
                 <span id="smallText">Lieu : <input type="text" v-model="eventLocation"><br><span>
               </div>
@@ -63,14 +63,14 @@ export default {
       eventToCreate: {
         'cover': null,
         'name': null, 
-        'metadonnees': null
+        'location': null
       },
       event: {'cover': 'http://www.firstredeemer.org/wp-content/uploads/girl-backpack-thinking-sunset-field-fence-.jpg', 'name': 'Heyyy', 'metadonnees': {'Accousticness': '0.45', 'Danceability': '0.22', 'Energy': '0.84', 'Instrumentalness': '0.44', 'Liveness': '0.11', 'Loudness': '-44', 'Mode': '1', 'Popularity': '28'}}
       
     }
   },
   methods: {
-    ...mapActions(['showEventModal', 'sendEvents','setCurrentEvent', 'requestAsync', 'insertEvent']),
+    ...mapActions(['showEventModal', 'sendEvents','insertEvent','setCurrentEvent', 'requestAsync', 'insertEvent']),
 
     upload(e) {
       console.log(e.srcElement.value);
@@ -79,7 +79,26 @@ export default {
         return;
       this.createImage(files[0]);
     },
+
+        onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+        return;
+      this.createImage(files[0]);
+    },
     createImage(file) {
+      var image = new Image();
+      var reader = new FileReader();
+      var vm = this;
+
+      reader.onload = (e) => {
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+
+
+   /* createImage(file) {
       var image = new Image();
       var reader = new FileReader();
       
@@ -87,13 +106,17 @@ export default {
         this.eventCover = e.target.result;
       };
       reader.readAsDataURL(file);
-    },
+    },*/
     loadEvents: async function() {
       var data = await this.requestAsync(() => EventService.getEvents());
       this.sendEvents(data);
     },
     createEvent: async function(event) {
-      var result = FacebookApiService.createEvent(event);
+      this.eventToCreate.cover = this.image;
+      this.eventToCreate.name = this.eventName;
+      this.eventToCreate.location = this.eventLocation;
+      this.insertEvent(this.eventToCreate);
+      var result = FacebookApiService.createEvent(this.eventToCreate);
     },
     createLocalEvent: async function(item) {
       this.eventToCreate.cover = this.eventCover;
