@@ -1,6 +1,7 @@
 <template>
   <div class="col-12 mixGlobal" id="mixGlobal"> 
     <div class="trackContainer">
+      <scale-loader class="mixLoading" v-if="loading == true" :loading="loading"></scale-loader>                
       <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack()" class="singleTrack">
         <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
         <img src="../assets/playbutton.gif" v-if="track == currentTrack" id="imageTrackOverlay">
@@ -38,6 +39,8 @@ import { mapGetters, mapActions } from 'vuex'
 import mixModal from '../components/saveMixModal.vue'
 import MixService from '../services/MixService'
 import AuthService from '../services/AuthService'
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
+
 
 
 import $ from 'jquery'	
@@ -53,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['mixModalActive', 'finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix'])
+    ...mapGetters(['mixModalActive','finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix'])
   },
   mounted () {
     this.getOffsetWidth()
@@ -78,6 +81,7 @@ export default {
     ...mapActions(['setCurrentTrack','deleteMix','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
+
     },
     loadMix: async function() {
       var data = await this.requestAsync(() => MixService.getMix());
@@ -95,7 +99,8 @@ export default {
     this.loadMix()
   },
   components: {
-     mixModal
+     mixModal,
+     ScaleLoader
   }
 }
 </script>
@@ -110,6 +115,10 @@ export default {
   font-size: 10px;
 }
 
+.mixLoading {
+  position: relative;
+}
+
 .trackContainer {
   height: 60vh;
   overflow-y: auto;
@@ -118,6 +127,7 @@ export default {
   margin: 0 auto;
   display: table;
 }
+
 
 .deleteMix {
   width: 14px;

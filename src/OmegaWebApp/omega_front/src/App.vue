@@ -71,7 +71,7 @@
     AuthService.removeAuthenticatedCallback(this.onAuthenticated);
   },
   methods: {
-    ...mapActions(['showPlaylistHelperModal','sendPseudo','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix']),
+    ...mapActions(['showPlaylistHelperModal','sendPseudo','showPseudoModal', 'showEventModal', 'showMoodsModal', 'getIdentity', 'requestAsync', 'sendMoods', 'mix', 'sendMix', 'setLoading']),
     login(provider) {
     AuthService.login(provider);
     },
@@ -96,13 +96,14 @@
     startMix: async function() {
       if(this.currentMood != "") {
         this.mix();
+        this.setLoading(true);
         var mix = await MixService.mix(this.mixToMix);
         this.sendMix(mix);
       }
     }
   },
   computed: {
-    ...mapGetters(['facebookConnected', 'deezerConnected', 'spotifyConnected', 'active','pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix'])
+    ...mapGetters(['facebookConnected', 'deezerConnected', 'spotifyConnected', 'active','pseudo','playlists','pseudoModalActive','currentMood','checkedPlaylists','mixModalActive', 'playlistHelperModalActive', 'moods', 'test', 'enabledCriterias', 'criterias', 'authenticated', 'identity', 'mixToMix','loading'])
   },
   name: 'app',
   components: {

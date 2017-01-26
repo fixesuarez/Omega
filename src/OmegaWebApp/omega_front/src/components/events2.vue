@@ -1,6 +1,7 @@
 <template>
   <div class="col-12 eventsGlobal">
     <div class="eventContainer">
+      <scale-loader class="eventLoading" v-if="loading == true" :loading="loading" style="margin: 20;"></scale-loader>
       <div class="event" v-for="event in events">
         <div id="eventCover">
           <img v-bind:src="event.Cover">
@@ -41,6 +42,10 @@
   white-space: nowrap;
   padding: 20px;
   text-align: center;
+}
+
+.eventLoading {
+  position: relative;
 }
 
 .event {
@@ -169,6 +174,7 @@ import FacebookApiService from '../services/FacebookApiService'
 import PlaylistApiService from '../services/PlaylistApiService'
 import AuthService from '../services/AuthService'
 import addEventModal from '../components/addEventModal.vue'
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
 
 
 export default {
@@ -185,8 +191,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showEventModal', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
+    ...mapActions(['showEventModal','setLoading', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
     loadEvents: async function() {
+      this.setLoading(true);      
       this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
       for(var i = 0; i<this.localEvents.length; i++) {
         this.localEvents[i].Day = this.localEvents[i].StartTime.charAt(8) + this.localEvents[i].StartTime.charAt(9)
@@ -276,13 +283,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentEvent', 'events', 'eventModalActive'])
+    ...mapGetters(['currentEvent','loading', 'events', 'eventModalActive'])
   },  
   created () {
     this.loadEvents()
   },
   components: {
-    addEventModal
+    addEventModal,
+    ScaleLoader
+
   }
 }
 

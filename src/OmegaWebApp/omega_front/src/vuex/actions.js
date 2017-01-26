@@ -205,3 +205,8 @@ export const addNextTrack = ({commit}, payload) => {
     
     commit(types.ADDNEXTTRACK, payload)
 }
+
+export const setLoading = ({commit}, payload) => {
+    
+    commit(types.SETLOADING, payload)
+}

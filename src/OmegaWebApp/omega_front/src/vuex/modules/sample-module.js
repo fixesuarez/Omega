@@ -73,6 +73,7 @@ const mutations = {
   },
   [types.SENDEVENTS](state, payload) {
     state.events = payload;
+    state.loading = false;         
   },
   [types.SENDGROUPS](state, payload) {
     state.groups = payload;
@@ -98,10 +99,11 @@ const mutations = {
         state.checkedPlaylists.push(payload[i])
       } else {
         state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(payload[i]), 1)
-      }
+      } 
     }
     state.playlists = payload;
     state.currentPlaylist = state.playlists[0];
+    state.loading = false;     
   },
   [types.SENDMIX](state, payload) {
     state.finalPlaylist = [];
@@ -111,7 +113,8 @@ const mutations = {
     for(var i=0; i<state.finalMix.length; i++){
       state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
     }
-    DZ.player.playTracks(state.finalPlaylist);
+    DZ.player.playTracks(state.finalPlaylist); 
+    state.loading = false;
   },
 
 //SETTERS
@@ -131,6 +134,9 @@ const mutations = {
   },
   [types.SETCURRENTTRACK](state, payload) {
     state.currentTrack = payload;
+  },
+  [types.SETLOADING](state, payload) {
+    state.loading = payload;
   },
 
 //INSERTS

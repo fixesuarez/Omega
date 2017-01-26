@@ -4,6 +4,8 @@
       <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
       <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
       <div class="playlistWrapper" id="playlistWrapper">
+      <scale-loader class="playlistLoading" v-if="loading == true" :loading="loading"></scale-loader>                
+        
         <div v-for="p in playlists" id="spanPlaylist">
           <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
           <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
@@ -55,6 +57,7 @@
             <span id="deleteMood">X</span>
           </div>
           <div class="pMiddleCurrentMood">
+            
             <span v-for="data in currentMood.metadonnees">
               <img v-if="data < 1 && data > 0" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: 150*data +'px'}">
               <img v-if="data <= 100 && data > 1" src="../assets/bar.png" id="pDataBar" v-bind:style="{height: data*1.5 +'px'}">
@@ -113,6 +116,8 @@ import MoodService from '../services/MoodService'
 import PseudoService from '../services/PseudoService'
 import MixService from '../services/MixService'
 import AuthService from '../services/AuthService'
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
+
 
 export default {
   data () {
@@ -133,7 +138,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['sendMix','pseudoModalActive', 'checkPlaylist','sendPseudo', 'setCurrentPlaylist','getPseudo', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
+    ...mapActions(['sendMix','pseudoModalActive','setLoading', 'checkPlaylist','sendPseudo', 'setCurrentPlaylist','getPseudo', 'selectPlaylist', 'sendPlaylists', 'requestAsync', 'inserteMood', 'mix', 'getIdentity', 'showPlaylistHelperModal']),
     setSPlayer: function() {
       var player = 'https://embed.spotify.com/?uri=spotify:user:'+ this.currentPlaylist.OwnerId +':playlist:'+ this.currentPlaylist.PlaylistId;
       this.sPlayer = player;
@@ -155,6 +160,7 @@ export default {
        })
     },
     loadPlaylists: async function() {
+      this.setLoading(true);      
       this.SDplaylists = await this.requestAsync(() => PlaylistApiService.getPlaylists());
       this.SDplaylists.map(m => { this.$set(m, 'check', true); return m});
       this.sendPlaylists(this.SDplaylists);
@@ -178,7 +184,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['playlistHelperModalActive','pseudo', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'currentEvent', 'currentGroup', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
+    ...mapGetters(['playlistHelperModalActive','pseudo','loading', 'eventModalActive', 'moodsModalActive', 'playlists', 'currentPlaylist', 'currentMood', 'currentEvent', 'currentGroup', 'checkedPlaylists', 'moodToInsert', 'mixToMix', 'identity','finalMix'])
   },
   created () {
     if(this.playlists.length === 0) {
@@ -194,7 +200,8 @@ export default {
   components: {
     PlaylistHelperModal,
     EventModal,
-    MoodsModal
+    MoodsModal,
+    ScaleLoader
   }
 }
 </script>
@@ -223,6 +230,10 @@ export default {
   width: 100%;
   white-space: nowrap;
   overflow-x: auto;
+  position: relative;
+}
+
+.playlistLoading {
   position: relative;
 }
 
