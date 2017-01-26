@@ -207,6 +207,10 @@
   }
 }
 
+.fade-move {
+  transition: transform 10s;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 5.5s, transform 5.5s;
 }

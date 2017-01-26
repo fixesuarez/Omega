@@ -1,11 +1,11 @@
 <template>
   <div class="col-12 mixGlobal" id="mixGlobal"> 
     <div class="trackContainer">
-      <transition-group name="fade">
-      <scale-loader class="mixLoading" v-if="loading == true" :loading="loading"></scale-loader>                
-        <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" key="track">
+      <scale-loader class="mixLoading" v-if="loading == true" :loading="loading"></scale-loader>  
+      <transition-group name="mFade" tag="div">
+        <div v-for="track in finalMix" @click="selectTrack(track), nextTrack(track)" class="singleTrack" v-bind:key="track.trackId">
           <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
-          <img src="../assets/playbutton.gif" v-if="track == currentTrack" id="imageTrackOverlay">
+          <img src="../assets/playbutton.gif" v-if="getPlayingTrack(track.trackId) == true && finalMix !== null" id="imageTrackOverlay">
           <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
         </div>
       </transition-group>
@@ -57,9 +57,6 @@ export default {
       show: false
     }
   },
-  computed: {
-    ...mapGetters(['mixModalActive','finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix'])
-  },
   mounted () {
     this.getOffsetWidth()
     DZ.init({
@@ -71,7 +68,7 @@ export default {
         width: this.offsetWidth,
         playlist: false,
         onload : function(){
-          console.log(DZ.player.getCurrentIndex());
+          var test = "ok";
         }
       }
     }); 
@@ -83,7 +80,6 @@ export default {
     ...mapActions(['setCurrentTrack','deleteMix','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
-
     },
     loadMix: async function() {
       var data = await this.requestAsync(() => MixService.getMix());
@@ -95,10 +91,25 @@ export default {
     },
     getOffsetWidth: function() {
       this.offsetWidth = document.getElementById('mixGlobal').offsetWidth - 7;
+    },
+    getPlayingTrack: function(id) {
+      // DZ.Event.subscribe('')
+      // var playingTrack = DZ.player.getCurrentTrack().id;
+      // var eza = Number(id);
+      // console.log(eza);
+      // if(Number(aze) == id) {
+      //   return true;
+      // }
+    },
+    nextTrack: function(track) {
+      this.addNextTrack(track);
     }
   },
   created () {  
     this.loadMix()
+  },
+  computed: {
+    ...mapGetters(['mixModalActive','finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix', 'toPlayer'])
   },
   components: {
      mixModal,
@@ -274,6 +285,19 @@ export default {
   transition: all .3 ease;
   width: 100px;
   visibility: visible;
+}
+
+.mFade-move {
+  transition: transform 1s;
+}
+
+.mFade-enter-active, .mFade-leave-active {
+  transition: opacity .5s, transform .5s;
+}
+
+.mFade-enter, .mFade-leave-active {
+  opacity: 0;
+  transform: translateY(-200px);
 }
 
 

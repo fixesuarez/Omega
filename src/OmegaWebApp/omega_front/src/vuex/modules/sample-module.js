@@ -27,6 +27,7 @@ const state = {
   checkedPlaylists: [],
   playlists: '',
   finalPlaylist: [],
+  toPlayer: [],
   nextTrack: [],
   moodToInsert: '',
   mixToInsert: '',
@@ -199,36 +200,46 @@ const mutations = {
     DZ.player.playTracks(state.finalPlaylist);
   },
   [types.ADDNEXTTRACK](state, payload) {
-    var a = DZ.player.getCurrentIndex();   
-    state.nextTrack= [];
-    var x = state.finalPlaylist.indexOf(Number(state.currentTrack));
-    state.nextTrack.push(Number(state.currentTrack));
-    for(var i=x+1; i<state.finalPlaylist.length; i++){
-      state.nextTrack.push(state.finalPlaylist[i])
-    }
-    for(var y=0; y<x; y++) {
-      state.nextTrack.push(Number(state.finalPlaylist[y]))
-    }
-    state.finalPlaylist = [];
-    Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);   
-    DZ.Event.subscribe('track_end', function(evt_name){
-       DZ.player.playTracks(state.finalPlaylist);
-    });
+    // var a = DZ.player.getCurrentIndex();   
+    // state.nextTrack= [];
+    // var x = state.finalPlaylist.indexOf(Number(state.currentTrack));
+    // state.nextTrack.push(Number(state.currentTrack));
+    // for(var i=x+1; i<state.finalPlaylist.length; i++){
+    //   state.nextTrack.push(state.finalPlaylist[i])
+    // }
+    // for(var y=0; y<x; y++) {
+    //   state.nextTrack.push(Number(state.finalPlaylist[y]))
+    // }
+    // state.finalPlaylist = [];
+    // Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);   
+    // DZ.Event.subscribe('track_end', function(evt_name){
+    //    DZ.player.playTracks(state.finalPlaylist);
+    // });
 
-    var clickedTrack = payload;
-    var clickedTrackIndex = state.finalMix.indexOf(clickedTrack);
-    if(clickedTrack.deezerId !== DZ.player.getCurrentTrack().id) {
-      state.finalMix.splice(clickedTrackIndex, 1);
+
+    if(payload.deezerId !== DZ.player.getCurrentTrack().id) {
+      state.toPlayer = [];
+      state.finalMix.splice((state.finalMix.indexOf(payload)), 1);
       var playingTrack = DZ.player.getCurrentTrack().id;
       for(var z = 0; z < state.finalMix.length; z++) {
-        console.log(state.finalMix[z].deezerId + ' = ' + playingTrack)
         if(state.finalMix[z].deezerId == playingTrack) {
-          var result = state.finalMix.indexOf(state.finalMix[i])+1;
-          console.log(true);
-          state.finalMix.splice(result+1, 0, clickedTrack)
+          var result = state.finalMix.indexOf(state.finalMix[z]);
+          state.finalMix.splice(result+1, 0, payload)
         }
       }
+      for(var a = 0; a < state.finalMix.length; a++) {
+        state.toPlayer.push(Number(state.finalMix[a].deezerId));
+      }
     }
+    DZ.Event.subscribe('track_end', function(evt_name){
+      DZ.player.playTracks(state.toPlayer);
+      DZ.Event.subscribe('tracklist_changed', function(evt_name) {
+        for(var b = 0; b < state.finalMix.indexOf(payload); b++) {
+          console.log(state.finalMix.indexOf(payload));
+          DZ.player.next();
+        }
+      })
+    });
   }
 }
 
