@@ -40,5 +40,6 @@ namespace Omega.DAL
         public string Cover { get; set; }
         public string Location { get; set; }
         public bool Owner { get; set; }
+        public string Members { get; set; }
     }
 }
