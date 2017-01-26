@@ -5,7 +5,8 @@
       <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
       <div class="playlistWrapper" id="playlistWrapper">
       <scale-loader class="playlistLoading" v-if="loading == true" :loading="loading"></scale-loader>                
-        
+        <transition-group name="fade" appear>
+          <div v-for="p in playlists" id="spanPlaylist" key="p" v-if="visible">
             <img v-if="p.check == false" v-bind:src="p.Cover" class="playlistImage">
             <img v-else="p.check == true" v-bind:src="p.Cover" class="checkedImage">
             <img v-if="p.check == true" src="../assets/checkIcon.png" id="checkIcon">
@@ -101,6 +102,7 @@
     <PlaylistHelperModal v-if="playlistHelperModalActive == true && playlists.length == 0 && pseudoModalActive == false"></PlaylistHelperModal>
     <EventModal v-if="eventModalActive == true"></EventModal>
     <MoodsModal v-if="moodsModalActive == true"><MoodsModal>
+  </div>
   </div>
 </template> 
 
