@@ -96,9 +96,7 @@
           </div>
         </div> 
       </div>
-      
-    </div>
-
+        </div>
     <PlaylistHelperModal v-if="playlistHelperModalActive == true && playlists.length == 0 && pseudoModalActive == false"></PlaylistHelperModal>
     <EventModal v-if="eventModalActive == true"></EventModal>
     <MoodsModal v-if="moodsModalActive == true"><MoodsModal>
