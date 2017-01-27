@@ -3,7 +3,7 @@
     <div class="trackContainer">
       <scale-loader class="mixLoading" v-if="loading == true" :loading="loading"></scale-loader>  
       <transition-group name="mFade" tag="div">
-        <div v-for="track in finalMix" @click="selectTrack(track), nextTrack(track)" class="singleTrack" v-bind:key="track.trackId">
+        <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" v-bind:key="track.trackId">
           <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
           <img src="../assets/playbutton.gif" v-if="getPlayingTrack(track.trackId) == true && finalMix !== null" id="imageTrackOverlay">
           <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
@@ -100,9 +100,6 @@ export default {
       // if(Number(aze) == id) {
       //   return true;
       // }
-    },
-    nextTrack: function(track) {
-      this.addNextTrack(track);
     }
   },
   created () {  

@@ -200,23 +200,6 @@ const mutations = {
     DZ.player.playTracks(state.finalPlaylist);
   },
   [types.ADDNEXTTRACK](state, payload) {
-    // var a = DZ.player.getCurrentIndex();   
-    // state.nextTrack= [];
-    // var x = state.finalPlaylist.indexOf(Number(state.currentTrack));
-    // state.nextTrack.push(Number(state.currentTrack));
-    // for(var i=x+1; i<state.finalPlaylist.length; i++){
-    //   state.nextTrack.push(state.finalPlaylist[i])
-    // }
-    // for(var y=0; y<x; y++) {
-    //   state.nextTrack.push(Number(state.finalPlaylist[y]))
-    // }
-    // state.finalPlaylist = [];
-    // Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);   
-    // DZ.Event.subscribe('track_end', function(evt_name){
-    //    DZ.player.playTracks(state.finalPlaylist);
-    // });
-
-
     if(payload.deezerId !== DZ.player.getCurrentTrack().id) {
       state.toPlayer = [];
       state.finalMix.splice((state.finalMix.indexOf(payload)), 1);
@@ -231,15 +214,8 @@ const mutations = {
         state.toPlayer.push(Number(state.finalMix[a].deezerId));
       }
     }
-    DZ.Event.subscribe('track_end', function(evt_name){
-      DZ.player.playTracks(state.toPlayer);
-      DZ.Event.subscribe('tracklist_changed', function(evt_name) {
-        for(var b = 0; b < state.finalMix.indexOf(payload); b++) {
-          console.log(state.finalMix.indexOf(payload));
-          DZ.player.next();
-        }
-      })
-    });
+
+    DZ.player.changeTrackOrder(state.toPlayer); 
   }
 }
 

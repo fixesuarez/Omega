@@ -433,10 +433,10 @@ export default {
   position: absolute;
   width: 18px;
   opacity: 0.5;
-  z-index: 2;
+  z-index: 5;
   right: 0;  
   margin-right: 10px;
-  margin-top: 4%;
+  top: 35%;
   transition: all .3s ease;
 }
 
@@ -444,10 +444,10 @@ export default {
   position: absolute;
   width: 18px;
   opacity: 0.5;
-  z-index: 2;
+  z-index: 5;
   left: 0;
   margin-left: 10px;
-  margin-top: 4%;
+  top: 35%;
   transition: all .3s ease;
 }
 
