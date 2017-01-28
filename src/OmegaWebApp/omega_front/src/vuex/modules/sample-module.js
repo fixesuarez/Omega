@@ -34,7 +34,8 @@ const state = {
   eventToInsert:'',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
-  track: ''
+  track: '',
+  trackInPlayer: ''
 }
 
 const mutations = {
@@ -174,7 +175,7 @@ const mutations = {
     }
   },
   [types.SELECTTRACK](state, payload) {
-    state.currentTrack = payload.deezerId;
+    // state.currentTrack = DZ.player.getCurrentTrack().id;
   },
 
 //ACTIONS
@@ -190,18 +191,20 @@ const mutations = {
     state.mixToMix.AmbianceName = state.currentMood.rowKey;
   },
   [types.PLAYOLDMIX](state, payload) {
+    state.toPlayer = [];
+    DZ.player.playTracks();
     state.finalMix = [];
     var a = state.allMix.indexOf(payload);
-   for(var i=0; i<state.allMix[a].parsedPlaylist.length; i++){
+    for(var i=0; i<state.allMix[a].parsedPlaylist.length; i++){
       state.finalMix.push(state.allMix[a].parsedPlaylist[i])
     }
-        state.finalPlaylist = [];
-       state.currentTrack = state.finalMix[0];
+    state.currentTrack = state.finalMix[0];
 
     for(var i=0; i<state.finalMix.length; i++){
-      state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
+      state.toPlayer.push(Number(state.finalMix[i].deezerId));
     }
-    DZ.player.playTracks(state.finalPlaylist);
+    DZ.player.playTracks(state.toPlayer);
+    DZ.player.changeTrackOrder(state.toPlayer);
   },
   [types.ADDNEXTTRACK](state, payload) {
     if(payload.deezerId !== DZ.player.getCurrentTrack().id) {
@@ -217,9 +220,8 @@ const mutations = {
       for(var a = 0; a < state.finalMix.length; a++) {
         state.toPlayer.push(Number(state.finalMix[a].deezerId));
       }
+      DZ.player.changeTrackOrder(state.toPlayer);
     }
-
-    DZ.player.changeTrackOrder(state.toPlayer); 
   }
 }
 

@@ -38,6 +38,7 @@ export const nextTrack = state => state.sampleModule.nextTrack;
 export const allMix = state => state.sampleModule.allMix;
 export const pseudo = state => state.sampleModule.pseudo;
 export const loading = state => state.sampleModule.loading;
+export const trackInPlayer = state => state.sampleModule.trackInPlayer;
 
 
 

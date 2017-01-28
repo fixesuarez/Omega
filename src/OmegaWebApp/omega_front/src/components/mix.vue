@@ -5,7 +5,7 @@
       <transition-group name="mFade" tag="div">
         <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" v-bind:key="track.trackId">
           <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
-          <img src="../assets/playbutton.gif" v-if="getPlayingTrack(track.trackId) == true && finalMix !== null" id="imageTrackOverlay">
+          <img src="../assets/playbutton.gif" v-if="track.deezerId == trackInPlayer" id="imageTrackOverlay">{{track.deezerId}} - {{trackInPlayer}}
           <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
         </div>
       </transition-group>
@@ -54,7 +54,8 @@ export default {
       mix: [],
       data: '',
       offsetWidth: '',
-      show: false
+      show: true,
+      playingTrack: ''
     }
   },
   mounted () {
@@ -68,12 +69,15 @@ export default {
         width: this.offsetWidth,
         playlist: false,
         onload : function(){
-          var test = "ok";
+          this.data = 'YES';
         }
       }
     }); 
     DZ.Event.subscribe('current_track', function(track, evt_name){
-	    console.log("Currently playing track", track);
+      // this.playingTrack = DZ.player.getCurrentTrack().id;
+      // this.playingTrack = '"'+ this.playingTrack +'"';
+      // console.log(this.playingTrack);
+      // this.data = 'YES';
     });
   },
   methods: {
@@ -92,21 +96,20 @@ export default {
     getOffsetWidth: function() {
       this.offsetWidth = document.getElementById('mixGlobal').offsetWidth - 7;
     },
-    getPlayingTrack: function(id) {
-      // DZ.Event.subscribe('')
-      // var playingTrack = DZ.player.getCurrentTrack().id;
-      // var eza = Number(id);
-      // console.log(eza);
-      // if(Number(aze) == id) {
-      //   return true;
-      // }
+    getPlayingTrack: function(deezerId) {
+      this.playingTrack = DZ.Event.subscribe('current_track', function(track, evt_name) {
+        this.playingTrack = DZ.player.getCurrentTrack().id;
+        console.log('Current track : '+this.playingTrack+', deezer Id : '+deezerId);
+        return this.playingTrack;
+      })
+      // this.playingTrack = DZ.player.getCurrentSong().id;
     }
   },
   created () {  
     this.loadMix()
   },
   computed: {
-    ...mapGetters(['mixModalActive','finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix', 'toPlayer'])
+    ...mapGetters(['mixModalActive','finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix', 'toPlayer', 'trackInPlayer'])
   },
   components: {
      mixModal,
