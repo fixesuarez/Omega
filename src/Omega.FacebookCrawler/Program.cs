@@ -34,7 +34,14 @@ namespace Omega.FacebookCrawler
         {
             for (;;)
             {
-                await UpdateTable();
+                try
+                {
+                    await UpdateTable();
+                }
+                catch (Exception)
+                {
+                    //need log
+                }
             }
         }
 

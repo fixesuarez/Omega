@@ -22,7 +22,14 @@ namespace Omega.Crawler
         {
             for (;;)
             {
-                await BrowseTrack();
+                try
+                {
+                    await BrowseTrack();
+                }
+                catch (Exception)
+                {
+                    //need log
+                }
             }
         }
 

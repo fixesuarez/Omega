@@ -39,8 +39,14 @@ namespace PlaylistCrawler
         {
             for (;;)
             {
-                await UpdateTable();
-                //await _trackGateway.DeleteAllTrackPlaylist("abcde");
+                try
+                {
+                    await UpdateTable();
+                }
+                catch (Exception)
+                {
+                    //need log
+                }
             }
         }
 
