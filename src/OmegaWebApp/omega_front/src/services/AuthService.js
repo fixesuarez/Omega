@@ -38,9 +38,11 @@ class AuthService {
     }
 
     get boundProviders() {
+
         var identity = this.identity;
 
         return identity ? identity.boundProviders : [];
+        console.log('test',boundProviders);
     }
     
     isBoundToProvider = (expectedProviders) => {
@@ -49,7 +51,6 @@ class AuthService {
         for(var p of expectedProviders) {
             if(this.boundProviders.indexOf(p) > -1) isBound = true;
         }
-
         return isBound;
     }
 
@@ -63,9 +64,8 @@ class AuthService {
     }
 
     login(selectedProvider) {
-        var provider = this.providers[selectedProvider];
-        
-        var popup = window.open(provider.endpoint, "Connexion à Omega", "menubar=no, status=no, scrollbars=no, menubar=no, width=700, height=700");
+         var provider = this.providers[selectedProvider];
+        var popup = window.open(provider.endpoint, "Connexion à Omega", "menubar=no, status=no, scrollbars=no, menubar=no, width=700, height=700"); 
     }
     async relogin(selectedProvider, scopes = null) {
         // We must open the popup window first otherwise it is blocked by  browsers 
@@ -84,9 +84,7 @@ class AuthService {
     }
 
     onAuthenticated = (i) => {
-        debugger;
         this.identity = i;
-
         for(var cb of this.authenticatedCallbacks) {
             cb();
         }

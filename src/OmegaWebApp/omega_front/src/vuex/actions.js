@@ -171,6 +171,11 @@ export const insertMood = ({commit}, payload) => {
     commit(types.INSERTMOOD, payload)
 }
 
+export const insertEvent = ({commit}, payload) => {
+    
+    commit(types.INSERTEVENT, payload)
+}
+
 export const insertPseudo = ({commit}, payload) => {
     
     commit(types.INSERTPSEUDO, payload)
@@ -204,4 +209,9 @@ export const sendMix = ({commit}, payload) => {
 export const addNextTrack = ({commit}, payload) => {
     
     commit(types.ADDNEXTTRACK, payload)
+}
+
+export const setLoading = ({commit}, payload) => {
+    
+    commit(types.SETLOADING, payload)
 }

@@ -29,6 +29,7 @@ export const checkedPlaylists = state => state.sampleModule.checkedPlaylists;
 export const playlists = state => state.sampleModule.playlists;
 export const moodToInsert = state => state.sampleModule.moodToInsert;
 export const mixToInsert = state => state.sampleModule.mixToInsert;
+export const eventToInsert = state => state.sampleModule.eventToInsert;
 export const mixToMix = state => state.sampleModule.mixToMix;
 export const identity = state => state.sampleModule.identity;
 export const finalMix = state => state.sampleModule.finalMix;
@@ -36,5 +37,8 @@ export const finalPlaylist = state => state.sampleModule.finalPlaylist;
 export const nextTrack = state => state.sampleModule.nextTrack;
 export const allMix = state => state.sampleModule.allMix;
 export const pseudo = state => state.sampleModule.pseudo;
+export const loading = state => state.sampleModule.loading;
+export const trackInPlayer = state => state.sampleModule.trackInPlayer;
+
 
 

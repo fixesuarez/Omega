@@ -1,11 +1,14 @@
 <template>
   <div class="col-12 mixGlobal" id="mixGlobal"> 
     <div class="trackContainer">
-      <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" key="track">
-        <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
-        <img src="../assets/playbutton.gif" v-if="track == currentTrack" id="imageTrackOverlay">
-        <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
-      </div>
+      <scale-loader class="mixLoading" v-if="loading == true" :loading="loading"></scale-loader>  
+      <transition-group name="mFade" tag="div">
+        <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" v-bind:key="track.trackId">
+          <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
+          <img src="../assets/playbutton.gif" v-if="track.deezerId == trackInPlayer" id="imageTrackOverlay">{{track.deezerId}} - {{trackInPlayer}}
+          <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
+        </div>
+      </transition-group>
       <div class="oldMixesContainer">
         <div class="showMixesButton" @click="show = !show">
           <img src="../assets/arrowLeft.png" v-if="show == false">
@@ -38,6 +41,8 @@ import { mapGetters, mapActions } from 'vuex'
 import mixModal from '../components/saveMixModal.vue'
 import MixService from '../services/MixService'
 import AuthService from '../services/AuthService'
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
+
 
 
 import $ from 'jquery'	
@@ -49,11 +54,9 @@ export default {
       mix: [],
       data: '',
       offsetWidth: '',
-      show: false
+      show: true,
+      playingTrack: ''
     }
-  },
-  computed: {
-    ...mapGetters(['mixModalActive', 'finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix'])
   },
   mounted () {
     this.getOffsetWidth()
@@ -66,12 +69,15 @@ export default {
         width: this.offsetWidth,
         playlist: false,
         onload : function(){
-          console.log(DZ.player.getCurrentIndex());
+          this.data = 'YES';
         }
       }
     }); 
     DZ.Event.subscribe('current_track', function(track, evt_name){
-	    console.log("Currently playing track", track);
+      // this.playingTrack = DZ.player.getCurrentTrack().id;
+      // this.playingTrack = '"'+ this.playingTrack +'"';
+      // console.log(this.playingTrack);
+      // this.data = 'YES';
     });
   },
   methods: {
@@ -89,13 +95,25 @@ export default {
     },
     getOffsetWidth: function() {
       this.offsetWidth = document.getElementById('mixGlobal').offsetWidth - 7;
+    },
+    getPlayingTrack: function(deezerId) {
+      this.playingTrack = DZ.Event.subscribe('current_track', function(track, evt_name) {
+        this.playingTrack = DZ.player.getCurrentTrack().id;
+        console.log('Current track : '+this.playingTrack+', deezer Id : '+deezerId);
+        return this.playingTrack;
+      })
+      // this.playingTrack = DZ.player.getCurrentSong().id;
     }
   },
   created () {  
     this.loadMix()
   },
+  computed: {
+    ...mapGetters(['mixModalActive','finalMix', 'identity', 'currentTrack','finalPlaylist','loading','allMix', 'toPlayer', 'trackInPlayer'])
+  },
   components: {
-     mixModal
+     mixModal,
+     ScaleLoader
   }
 }
 </script>
@@ -110,6 +128,10 @@ export default {
   font-size: 10px;
 }
 
+.mixLoading {
+  position: relative;
+}
+
 .trackContainer {
   position: relative;
   height: 60vh;
@@ -118,6 +140,7 @@ export default {
   padding-top: 0px;
   margin: 0 auto;
 }
+
 
 .deleteMix {
   width: 14px;
@@ -262,6 +285,19 @@ export default {
   transition: all .3 ease;
   width: 100px;
   visibility: visible;
+}
+
+.mFade-move {
+  transition: transform 1s;
+}
+
+.mFade-enter-active, .mFade-leave-active {
+  transition: opacity .5s, transform .5s;
+}
+
+.mFade-enter, .mFade-leave-active {
+  opacity: 0;
+  transform: translateY(-200px);
 }
 
 

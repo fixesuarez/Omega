@@ -27,12 +27,15 @@ const state = {
   checkedPlaylists: [],
   playlists: '',
   finalPlaylist: [],
+  toPlayer: [],
   nextTrack: [],
   moodToInsert: '',
   mixToInsert: '',
+  eventToInsert:'',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
-  track: ''
+  track: '',
+  trackInPlayer: ''
 }
 
 const mutations = {
@@ -73,6 +76,7 @@ const mutations = {
   },
   [types.SENDEVENTS](state, payload) {
     state.events = payload;
+    state.loading = false;         
   },
   [types.SENDGROUPS](state, payload) {
     state.groups = payload;
@@ -98,10 +102,11 @@ const mutations = {
         state.checkedPlaylists.push(payload[i])
       } else {
         state.checkedPlaylists.splice(state.checkedPlaylists.indexOf(payload[i]), 1)
-      }
+      } 
     }
     state.playlists = payload;
     state.currentPlaylist = state.playlists[0];
+    state.loading = false;     
   },
   [types.SENDMIX](state, payload) {
     state.finalPlaylist = [];
@@ -111,7 +116,8 @@ const mutations = {
     for(var i=0; i<state.finalMix.length; i++){
       state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
     }
-    DZ.player.playTracks(state.finalPlaylist);
+    DZ.player.playTracks(state.finalPlaylist); 
+    state.loading = false;
   },
 
 //SETTERS
@@ -132,6 +138,9 @@ const mutations = {
   [types.SETCURRENTTRACK](state, payload) {
     state.currentTrack = payload;
   },
+  [types.SETLOADING](state, payload) {
+    state.loading = payload;
+  },
 
 //INSERTS
 
@@ -140,6 +149,9 @@ const mutations = {
   },
   [types.INSERTMIX](state, payload) {
     state.mixToInsert = payload;
+  },
+  [types.INSERTEVENT](state, payload) {
+    state.eventToInsert = payload;
   },
 
 //GETTERS 
@@ -163,7 +175,7 @@ const mutations = {
     }
   },
   [types.SELECTTRACK](state, payload) {
-    state.currentTrack = payload.deezerId;
+    // state.currentTrack = DZ.player.getCurrentTrack().id;
   },
 
 //ACTIONS
@@ -179,51 +191,37 @@ const mutations = {
     state.mixToMix.AmbianceName = state.currentMood.rowKey;
   },
   [types.PLAYOLDMIX](state, payload) {
+    state.toPlayer = [];
+    DZ.player.playTracks();
     state.finalMix = [];
     var a = state.allMix.indexOf(payload);
-   for(var i=0; i<state.allMix[a].parsedPlaylist.length; i++){
+    for(var i=0; i<state.allMix[a].parsedPlaylist.length; i++){
       state.finalMix.push(state.allMix[a].parsedPlaylist[i])
     }
-        state.finalPlaylist = [];
-       state.currentTrack = state.finalMix[0];
+    state.currentTrack = state.finalMix[0];
 
     for(var i=0; i<state.finalMix.length; i++){
-      state.finalPlaylist.push(Number(state.finalMix[i].deezerId));
+      state.toPlayer.push(Number(state.finalMix[i].deezerId));
     }
-    DZ.player.playTracks(state.finalPlaylist);
+    DZ.player.playTracks(state.toPlayer);
+    DZ.player.changeTrackOrder(state.toPlayer);
   },
   [types.ADDNEXTTRACK](state, payload) {
-    var a = DZ.player.getCurrentIndex();   
-    state.nextTrack= [];
-    var x = state.finalPlaylist.indexOf(Number(state.currentTrack));
-    state.nextTrack.push(Number(state.currentTrack));
-    for(var i=x+1; i<state.finalPlaylist.length; i++){
-      state.nextTrack.push(state.finalPlaylist[i])
+    if(payload.deezerId !== DZ.player.getCurrentTrack().id) {
+      state.toPlayer = [];
+      state.finalMix.splice((state.finalMix.indexOf(payload)), 1);
+      var playingTrack = DZ.player.getCurrentTrack().id;
+      for(var z = 0; z < state.finalMix.length; z++) {
+        if(state.finalMix[z].deezerId == playingTrack) {
+          var result = state.finalMix.indexOf(state.finalMix[z]);
+          state.finalMix.splice(result+1, 0, payload)
+        }
+      }
+      for(var a = 0; a < state.finalMix.length; a++) {
+        state.toPlayer.push(Number(state.finalMix[a].deezerId));
+      }
+      DZ.player.changeTrackOrder(state.toPlayer);
     }
-    for(var y=0; y<x; y++) {
-      state.nextTrack.push(Number(state.finalPlaylist[y]))
-    }
-    state.finalPlaylist = [];
-    Array.prototype.push.apply(state.finalPlaylist, state.nextTrack);   
-    DZ.Event.subscribe('track_end', function(evt_name){
-       DZ.player.playTracks(state.finalPlaylist);
-    });
-
-    var q = state.finalMix.indexOf(payload);
-    var element = state.finalMix[q];
-    var tmpTrack;
-    state.finalMix.splice(q, 1);
-    // for(var z = 0; z < state.finalMix; z++) {
-    //   if(state.finalMix[z].deezerId = DZ.player.getCurrentTrack.id) {
-    //     tmpTrack = state.finalMix.indefOf(z+1);
-    //     console.log('Trackid'+ tmpTrack);
-    //   }
-    // }
-    var ddd = DZ.player.getCurrentTrack().id;
-    var indexTo = state.finalPlaylist.indexOf(Number(ddd));
-    console.log(indexTo);
-    // console.log(DZ.player.getCurrentIndex());
-    state.finalMix.splice(indexTo+1, 0, payload);
   }
 }
 
