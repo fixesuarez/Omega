@@ -158,7 +158,7 @@ namespace Omega.DAL
             return (EventGroupUser)retrievedGroupEvent.Result;
         }
 
-        public async Task<string> GetAllEventsUser(string guid, string type)
+        public async Task<List<EventGroupUser>> GetAllEventsUser(string guid, string type)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             List<EventGroupUser> tracks = new List<EventGroupUser>();
@@ -188,7 +188,7 @@ namespace Omega.DAL
                     }
                 }
             }
-            return JsonConvert.SerializeObject(tracksDef);
+            return tracksDef;
         }
     }
 }
