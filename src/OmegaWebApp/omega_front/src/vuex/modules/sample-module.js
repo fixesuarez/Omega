@@ -12,6 +12,7 @@ const state = {
   mixModalActive: false,  
   eventModalActive: false,
   moodsModalActive: false,
+  memberModalActive: false,
   events: '',
   groups: '',
   pseudo: '',
@@ -64,6 +65,9 @@ const mutations = {
   },
   [types.SHOWPSEUDOMODAL](state, payload) {
     state.pseudoModalActive = payload;
+  },
+  [types.SHOWMEMBERMODAL](state, payload) {
+    state.memberModalActive = payload;
   },
 
 //DATA SENDING

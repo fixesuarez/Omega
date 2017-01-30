@@ -17,6 +17,8 @@
             <span id="tempsRestant">temps restant</span><br>
             <span id="daysLeft">{{event.timeRemaining}}</span>
             jours
+          <span v-if="event.Type == 'eventOmega'" id="addMember" @click="showMemberModal(true)">Add Member</span>          
+            
           </div>
           <div class="selectEvent" v-if="event.RowKey !== currentEvent.RowKey" @click="setCurrentEvent(event), getFacebookPlaylists(event.RowKey)">
             SÉLECTIONNER
@@ -30,6 +32,7 @@
     <img src="../assets/plus.png" id="plusMood" @click="showEventModal(true)">
 
     <addEventModal v-if="eventModalActive == true"></addEventModal>
+     <addMemberModal v-if="memberModalActive == true"></addMemberModal>
   </div>
 </template>
 
@@ -174,6 +177,7 @@ import FacebookApiService from '../services/FacebookApiService'
 import PlaylistApiService from '../services/PlaylistApiService'
 import AuthService from '../services/AuthService'
 import addEventModal from '../components/addEventModal.vue'
+import addMemberModal from '../components/addMemberModal.vue'
 import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
 
 
@@ -191,7 +195,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showEventModal','setLoading', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
+    ...mapActions(['showEventModal','showMemberModal','setLoading', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
     loadEvents: async function() {
       this.setLoading(true);      
       this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
@@ -283,13 +287,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentEvent','loading', 'events', 'eventModalActive'])
+    ...mapGetters(['currentEvent','loading', 'events', 'eventModalActive','memberModalActive'])
   },  
   created () {
     this.loadEvents()
   },
   components: {
     addEventModal,
+    addMemberModal,
     ScaleLoader
 
   }

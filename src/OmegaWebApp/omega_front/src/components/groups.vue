@@ -10,8 +10,8 @@
           <span id="groupName">{{group.name}}</span>
           <span id="membersLabel">membres du groupe</span>
           <div class="groupMembers">
-            <span v-for="member in group.members.data">
-              {{groups.Members}}<br>
+            <span v-for="member in group.ListMembers">
+              {{member}}<br>
             </span>
           </div>
           <div class="selectGroup" v-if="group.id !== currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">

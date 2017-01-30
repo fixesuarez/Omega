@@ -10,6 +10,7 @@ export const active = state => state.sampleModule.active;
 export const playlistHelperModalActive = state => state.sampleModule.playlistHelperModalActive;
 export const eventModalActive = state => state.sampleModule.eventModalActive;
 export const moodsModalActive = state => state.sampleModule.moodsModalActive;
+export const memberModalActive = state => state.sampleModule.memberModalActive;
 export const mixModalActive = state => state.sampleModule.mixModalActive;
 export const pseudoModalActive = state => state.sampleModule.pseudoModalActive;
 export const moods = state => state.sampleModule.moods;
