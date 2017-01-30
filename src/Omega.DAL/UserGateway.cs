@@ -16,7 +16,7 @@ namespace Omega.DAL
         readonly CloudTable _tableUserIndex;
         readonly CloudTable _tableUser;
         readonly CloudQueueClient _queueClient;
-        readonly CloudTable tablePseudoIndex;
+        readonly CloudTable _tablePseudoIndex;
         readonly CloudQueue _queue;
 
         public UserGateway( string connectionString )
@@ -35,8 +35,8 @@ namespace Omega.DAL
             _tableUserIndex = _tableClient.GetTableReference( "UserIndex" );
             _tableUserIndex.CreateIfNotExistsAsync().Wait();
 
-            tablePseudoIndex = _tableClient.GetTableReference( "PseudoIndex" );
-            tablePseudoIndex.CreateIfNotExistsAsync().Wait();
+            _tablePseudoIndex = _tableClient.GetTableReference( "PseudoIndex" );
+            _tablePseudoIndex.CreateIfNotExistsAsync().Wait();
             _queueClient = _storageAccount.CreateCloudQueueClient();
             _queue = _queueClient.GetQueueReference("queue");
             _queue.CreateIfNotExistsAsync().Wait();
@@ -85,7 +85,7 @@ namespace Omega.DAL
         public async Task<PseudoIndex> FindPseudoIndex( string pseudo )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, pseudo );
-            TableResult retrievedResult = await _tableUserIndex.ExecuteAsync( retrieveOperation );
+            TableResult retrievedResult = await _tablePseudoIndex.ExecuteAsync( retrieveOperation );
             return (PseudoIndex) retrievedResult.Result;
         }
 
@@ -196,13 +196,13 @@ namespace Omega.DAL
                 if( retrievedUser.Pseudo != null && retrievedUser.Pseudo != string.Empty )
                 {
                     TableOperation retrievePseudoIndexOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, retrievedUser.Pseudo );
-                    TableResult retrievedPseudoIndex = await tablePseudoIndex.ExecuteAsync( retrievePseudoIndexOperation );
+                    TableResult retrievedPseudoIndex = await _tablePseudoIndex.ExecuteAsync( retrievePseudoIndexOperation );
                     PseudoIndex deleteEntity = (PseudoIndex) retrievedPseudoIndex.Result;
 
                     if( deleteEntity != null )
                     {
                         TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
-                        await tablePseudoIndex.ExecuteAsync( deleteOperation );
+                        await _tablePseudoIndex.ExecuteAsync( deleteOperation );
                     }
                 }
                 retrievedUser.Pseudo = u.Pseudo;
@@ -211,7 +211,7 @@ namespace Omega.DAL
 
                 PseudoIndex pseudoIndex = new PseudoIndex( u.Pseudo, u.Guid );
                 TableOperation insertOperation = TableOperation.Insert( pseudoIndex );
-                await tablePseudoIndex.ExecuteAsync( insertOperation );
+                await _tablePseudoIndex.ExecuteAsync( insertOperation );
             }
         }
 

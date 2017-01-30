@@ -53,6 +53,13 @@ namespace Omega.DAL
             }
         }
 
+        public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
+        {
+            eventGroupOmega.Owner = false;
+            TableOperation insertEventGroupOmegaOperation = TableOperation.Insert( eventGroupOmega );
+            await _tableEventGroup.ExecuteAsync( insertEventGroupOmegaOperation );
+        }
+
         public async Task InsertBatchEventGroup(string eventId, List<User> users, string type, string cover, string name, List<string> pmembers)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();

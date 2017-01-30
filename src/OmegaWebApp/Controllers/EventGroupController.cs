@@ -52,28 +52,37 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpPost( "AddMember" )]
-        public async Task AddMemberToOmegaEventGroup( string eventGroupId, string pseudo )
+        public async Task AddMemberToOmegaEventGroup( [FromBody]MemberAdded memberAdded )
         {
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             User user = await _userService.FindUser( guid );
-            EventGroup eventGroupOmega = await _eventGroupService.FindEventGroup( eventGroupId, guid );
-            if( eventGroupOmega.Owner )
+            if( !string.IsNullOrWhiteSpace( memberAdded.eventId ) && !string.IsNullOrWhiteSpace( memberAdded.pseudo ) )
             {
-                PseudoIndex pseudoIndex = await _userService.FindPseudoIndex( pseudo );
-                if( pseudoIndex != null )
+                EventGroup eventGroupOmega = await _eventGroupService.FindEventGroup( memberAdded.eventId, guid );
+                if( eventGroupOmega.Owner )
                 {
-                    if( eventGroupOmega.Type == "GroupOmega" )
+                    PseudoIndex pseudoIndex = await _userService.FindPseudoIndex( memberAdded.pseudo);
+                    if( pseudoIndex != null )
                     {
-                        EventGroup groupOmega = new EventGroup( eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name );
-                        await _eventGroupService.AddMemberToEventGroupOmega( groupOmega );
-                    }
-                    else if( eventGroupOmega.Type == "EventOmega" )
-                    {
-                        EventGroup eventOmega = new EventGroup( eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location, eventGroupOmega.Cover );
-                        await _eventGroupService.AddMemberToEventGroupOmega( eventOmega );
+                        if( eventGroupOmega.Type == "groupOmega" )
+                        {
+                            EventGroup groupOmega = new EventGroup( memberAdded.eventId, pseudoIndex.Guid, eventGroupOmega.Name );
+                            await _eventGroupService.AddMemberToEventGroupOmega( groupOmega );
+                        }
+                        else if( eventGroupOmega.Type == "eventOmega" )
+                        {
+                            EventGroup eventOmega = new EventGroup( memberAdded.eventId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location, eventGroupOmega.Cover );
+                            await _eventGroupService.AddMemberToEventGroupOmega( eventOmega );
+                        }
                     }
                 }
             }
+        }
+
+        public class MemberAdded
+        {
+            public string eventId { get; set; }
+            public string pseudo { get; set; }
         }
     }
 }

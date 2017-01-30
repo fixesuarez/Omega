@@ -89,6 +89,7 @@ namespace Omega.DAL
             eventGroupOmega.Owner = false;
             TableOperation insertEventGroupOmegaOperation = TableOperation.Insert( eventGroupOmega );
             await _tableEventGroup.ExecuteAsync( insertEventGroupOmegaOperation );
+            await _eventGroupUserGateway.AddMemberToEventGroupOmega( eventGroupOmega );
         }
 
         public async Task<EventGroup> FindEventGroup( string idEventGroup, string guidUser )
