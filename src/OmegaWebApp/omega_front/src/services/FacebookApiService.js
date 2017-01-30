@@ -17,6 +17,9 @@ class FacebookApiService {
     async createEvent(event) {
         return await postAsync(endpoint, 'CreateEvent', AuthService.accessToken, event);
     }
+    async AddMember(member) {
+        return await postAsync(endpoint, 'AddMember', AuthService.accessToken, member);
+    }
 }
 
 export default new FacebookApiService()

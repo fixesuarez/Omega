@@ -5,15 +5,15 @@
         <div class="memberModal-container">
           <div class="addMemberText">
             <div class="addMemberModal">
-              <span id="memberTitle">AJOUTER UN MEMBRE</span><br>              
+              <span id="memberTitle">AJOUTER UN MEMBRE</span><br>
               <br>
-              <span id="smallText">Pseudo : <input type="text" style="color: white;" v-model="member"><br><span>
+              <span id="smallText">Pseudo : <input type="text" style="color: white;" v-model="pseudo"><br><span>
               <br><br>
              <!-- <span id="membertext" class="redText">Attention, vous ne pourrez plus le modifier</span><br>      -->        
             </div>
           </div>
-          <div v-if="member != ''" class="modalClose" @click="showMemberModal(false),saveMember({member}),loadMember()">
-            SAUVEGARDER <img src="../assets/arrow.png" >
+          <div v-if="pseudo != ''" class="modalClose" @click="showMemberModal(false),addMember({pseudo,eventId})">
+            AJOUTER <img src="../assets/arrow.png" >
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
@@ -29,17 +29,25 @@ import FacebookApiService from '../services/FacebookApiService'
 export default {
   data () {
     return {
-      end: false,
-      member:'',
-      memberToAdd:''   
+      pseudo:'',
+      eventId: '',
+      memberToAdd: {
+        'pseudo': null,
+        'eventId': null
+      },  
     }
   },
   methods: {
     ...mapActions(['showMemberModal','requestAsync','insertMember','sendMember']),
-
+    addMember: async function(item) {
+        this.memberToAdd.pseudo = this.pseudo;
+        this.memberToAdd.eventId = this.currentEvent.RowKey;
+        this.insertMember(this.memberToAdd);
+        var result = await FacebookApiService.AddMember(this.memberToAdd);
+    }
   },
   computed: {
-    ...mapGetters(['Member'])
+    ...mapGetters(['Member','events','currentEvent'])
   },
   created () {
     

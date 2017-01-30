@@ -32,6 +32,8 @@ const state = {
   nextTrack: [],
   moodToInsert: '',
   mixToInsert: '',
+  memberToInsert: '',
+  member: '',
   eventToInsert:'',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
@@ -77,6 +79,9 @@ const mutations = {
   },
   [types.SENDMIX](state, payload) {
     state.mix = payload;
+  },
+  [types.SENDMEMBER](state, payload) {
+    state.member = payload;
   },
   [types.SENDEVENTS](state, payload) {
     state.events = payload;
@@ -156,6 +161,9 @@ const mutations = {
   },
   [types.INSERTMIX](state, payload) {
     state.mixToInsert = payload;
+  },
+  [types.INSERTMEMBER](state, payload) {
+    state.memberToInsert = payload;
   },
   [types.INSERTEVENT](state, payload) {
     state.eventToInsert = payload;

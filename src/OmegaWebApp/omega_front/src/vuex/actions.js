@@ -170,6 +170,11 @@ export const sendPlaylists = ({commit}, payload) => {
     commit(types.SENDPLAYLISTS, payload)
 }
 
+export const sendMember = ({commit}, payload) => {
+  
+    commit(types.SENDMEMBER, payload)
+}
+
 export const insertMood = ({commit}, payload) => {
     
     commit(types.INSERTMOOD, payload)
@@ -188,6 +193,11 @@ export const insertPseudo = ({commit}, payload) => {
 export const insertMix = ({commit}, payload) => {
     
     commit(types.INSERTMIX, payload)
+}
+
+export const insertMember = ({commit}, payload) => {
+    
+    commit(types.INSERTMEMBER, payload)
 }
 
 export const mix = ({commit}, payload) => {

@@ -30,6 +30,8 @@ export const checkedPlaylists = state => state.sampleModule.checkedPlaylists;
 export const playlists = state => state.sampleModule.playlists;
 export const moodToInsert = state => state.sampleModule.moodToInsert;
 export const mixToInsert = state => state.sampleModule.mixToInsert;
+export const memberToInsert = state => state.sampleModule.memberToInsert;
+export const member = state => state.sampleModule.member;
 export const eventToInsert = state => state.sampleModule.eventToInsert;
 export const mixToMix = state => state.sampleModule.mixToMix;
 export const identity = state => state.sampleModule.identity;
