@@ -8,6 +8,7 @@ using OmegaWebApp.Mappers;
 using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
+using System.Collections.Generic;
 
 namespace OmegaWebApp.Controllers
 {
@@ -24,7 +25,7 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet("RetrieveUserEvents")]
-        public async Task<string> RetrieveUserEvents()
+        public async Task<List<EventGroupUser>> RetrieveUserEvents()
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
             //User user = await _userService.FindUser(guid);
@@ -33,7 +34,7 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet("RetrieveUserGroups")]
-        public async Task<string> RetrieveUserGroups()
+        public async Task<List<EventGroupUser>> RetrieveUserGroups()
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
             //User user = await _userService.FindUser(guid);
