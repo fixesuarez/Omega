@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
+using System.Collections.Generic;
 
 namespace Omega.DAL
 {
@@ -41,5 +42,6 @@ namespace Omega.DAL
         public string Location { get; set; }
         public bool Owner { get; set; }
         public string Members { get; set; }
+        public List<string> ListMembers { get; set; }
     }
 }

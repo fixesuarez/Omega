@@ -41,7 +41,7 @@ namespace OmegaWebApp.Services
             return await _eventGroupGateway.RetrieveMembersFromGroupEvent( idEventGroup );
         }
 
-        public async Task<List<EventGroupUser>> GetAllUserEvents(string guid, string type)
+        public async Task<string> GetAllUserEvents(string guid, string type)
         {
             return await _eventGroupUserGateway.GetAllEventsUser(guid, type);
         }

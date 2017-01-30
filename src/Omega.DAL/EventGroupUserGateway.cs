@@ -158,7 +158,7 @@ namespace Omega.DAL
             return (EventGroupUser)retrievedGroupEvent.Result;
         }
 
-        public async Task<List<EventGroupUser>> GetAllEventsUser(string guid, string type)
+        public async Task<string> GetAllEventsUser(string guid, string type)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             List<EventGroupUser> tracks = new List<EventGroupUser>();
@@ -179,16 +179,18 @@ namespace Omega.DAL
                 if (pEvent.Type.Contains(type))
                 {
                     if (pEvent.Type.Contains("event") && (DateTime.Compare(pEvent.StartTime, DateTime.Now) > 0 || DateTime.Compare(pEvent.StartTime, DateTime.Now) == 0))
-                    {
+                    {                      
                         tracksDef.Add(pEvent);
                     }
                     else if(pEvent.Type.Contains("group"))
                     {
+                        if(pEvent.Members != null)
+                            pEvent.ListMembers = JsonConvert.DeserializeObject<List<string>>(pEvent.Members);
                         tracksDef.Add(pEvent);
                     }
                 }
             }
-            return tracksDef;
+            return JsonConvert.SerializeObject(tracksDef);
         }
     }
 }

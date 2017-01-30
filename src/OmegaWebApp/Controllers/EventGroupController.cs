@@ -25,7 +25,7 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet("RetrieveUserEvents")]
-        public async Task<List<EventGroupUser>> RetrieveUserEvents()
+        public async Task<string> RetrieveUserEvents()
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
             //User user = await _userService.FindUser(guid);
@@ -34,7 +34,7 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpGet("RetrieveUserGroups")]
-        public async Task<List<EventGroupUser>> RetrieveUserGroups()
+        public async Task<string> RetrieveUserGroups()
         {
             string guid = User.FindFirst("www.omega.com:guid").Value;
             //User user = await _userService.FindUser(guid);
