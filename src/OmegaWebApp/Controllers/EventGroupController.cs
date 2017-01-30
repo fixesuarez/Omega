@@ -51,6 +51,16 @@ namespace OmegaWebApp.Controllers
             await _eventGroupService.CreateOmegaEvent(guidEvent, guid, e.name, DateTime.Now.AddDays(3), e.location, e.cover);
         }
 
+        [HttpPost("CreateGroup")]
+        public async Task CreateOmegaGroup([FromBody] EventMapper e)
+        {
+            string guid = User.FindFirst("www.omega.com:guid").Value;
+            string guidEvent = Guid.NewGuid().ToString();
+            //await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
+            string ownerPseudo = await _userService.RetrievePseudo(guid);
+            await _eventGroupService.CreateOmegaGroup(guidEvent, guid, e.name, ownerPseudo);
+        }
+
         [HttpPost( "AddMember" )]
         public async Task AddMemberToOmegaEventGroup( [FromBody]MemberAdded memberAdded )
         {
