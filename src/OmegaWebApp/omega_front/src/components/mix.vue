@@ -5,7 +5,7 @@
       <transition-group name="mFade" tag="div">
         <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" v-bind:key="track.trackId">
           <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
-          <img src="../assets/playbutton.gif" v-if="track.deezerId == trackInPlayer" id="imageTrackOverlay">{{track.deezerId}} - {{trackInPlayer}}
+          <img src="../assets/playbutton.gif" v-if="track.deezerId == playingTrack" id="imageTrackOverlay">
           <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
         </div>
       </transition-group>
@@ -59,6 +59,7 @@ export default {
     }
   },
   mounted () {
+    var me = this;
     this.getOffsetWidth()
     DZ.init({
       appId  : '176241',
@@ -69,19 +70,17 @@ export default {
         width: this.offsetWidth,
         playlist: false,
         onload : function(){
-          this.data = 'YES';
+          me.playingTrack = DZ.player.getCurrentTrack().id;
         }
       }
     }); 
     DZ.Event.subscribe('current_track', function(track, evt_name){
-      // this.playingTrack = DZ.player.getCurrentTrack().id;
-      // this.playingTrack = '"'+ this.playingTrack +'"';
-      // console.log(this.playingTrack);
-      // this.data = 'YES';
+      me.playingTrack = DZ.player.getCurrentTrack().id;
+      me.setPlayingTrack(me.playingTrack);
     });
   },
   methods: {
-    ...mapActions(['setCurrentTrack','deleteMix','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync']),
+    ...mapActions(['setCurrentTrack','deleteMix','playOldMix', 'selectTrack','retrieveMix','mixToMix','sendMix','mix','addNextTrack','showMixModal','requestAsync', 'setPlayingTrack']),
     setDeezerPlayer: function() {
       DZ.player.playTracks(this.finalPlaylist);
     },
@@ -102,7 +101,8 @@ export default {
         console.log('Current track : '+this.playingTrack+', deezer Id : '+deezerId);
         return this.playingTrack;
       })
-      // this.playingTrack = DZ.player.getCurrentSong().id;
+      // this.playingTrack = DZ.player.getCurrentTrack().id;
+      // console.log(this.playingTrack);
     }
   },
   created () {  

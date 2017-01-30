@@ -141,6 +141,9 @@ const mutations = {
   [types.SETLOADING](state, payload) {
     state.loading = payload;
   },
+  [types.SETPLAYINGTRACK](state, payload) {
+    state.trackInPlayer = payload;
+  },
 
 //INSERTS
 
@@ -222,6 +225,13 @@ const mutations = {
       }
       DZ.player.changeTrackOrder(state.toPlayer);
     }
+
+    // DZ.Event.subscribe('current_track', function(track, evt_name){
+    //   var playingTrack = DZ.player.getCurrentTrack().id;
+    //   playingTrack = '"'+ playingTrack +'"';
+    //   console.log(playingTrack);
+    //   state.trackInPlayer = playingTrack;
+    // });
   }
 }
 

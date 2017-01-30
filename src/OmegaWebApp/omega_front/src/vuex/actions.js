@@ -215,3 +215,8 @@ export const setLoading = ({commit}, payload) => {
     
     commit(types.SETLOADING, payload)
 }
+
+export const setPlayingTrack = ({commit}, payload) => {
+    
+    commit(types.SETPLAYINGTRACK, payload)
+}
