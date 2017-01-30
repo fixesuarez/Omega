@@ -1,11 +1,11 @@
 <template>
   <div class="col-12 mixGlobal" id="mixGlobal"> 
     <div class="trackContainer">
-      <scale-loader class="mixLoading" v-if="loading == true" :loading="loading"></scale-loader>  
+      <scale-loader class="mixLoading" v-if="loading == true" :loading="loading"></scale-loader>
       <transition-group name="mFade" tag="div">
         <div v-for="track in finalMix" @click="selectTrack(track), addNextTrack(track)" class="singleTrack" v-bind:key="track.trackId">
           <img v-if="track.deezerId !== null" v-bind:src="track.cover" id="imageTrack">
-          <img src="../assets/playbutton.gif" v-if="track.deezerId == playingTrack" id="imageTrackOverlay">
+          <scale-loader v-if="track.deezerId == playingTrack" id="imageTrackOverlay" :color="color"></scale-loader>
           <p>{{track.title}}<br><span id="albumName">{{track.albumName}}</span></p>
         </div>
       </transition-group>
@@ -41,7 +41,7 @@ import { mapGetters, mapActions } from 'vuex'
 import mixModal from '../components/saveMixModal.vue'
 import MixService from '../services/MixService'
 import AuthService from '../services/AuthService'
-import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
+import ScaleLoader from 'vue-spinner/src/GridLoader.vue'
 
 
 
@@ -181,12 +181,9 @@ export default {
 
 #imageTrackOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 120px;
-  width: 120px;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
-  opacity: 0.5;
 }
 
 #albumName {

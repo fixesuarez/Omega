@@ -6,6 +6,7 @@ using OmegaWebApp.Services;
 using Omega.DAL;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -43,6 +44,14 @@ namespace OmegaWebApp.Controllers
             string pseudoToSend = JsonConvert.SerializeObject( pseudoSender );
             JToken pseudoJToken = JToken.Parse( pseudoToSend );
             return pseudoJToken;
+        }
+        [HttpGet( "RetrieveAllPseudos" )]
+        public async Task<JToken> RetrieveAllPseudo()
+        {
+            List<PseudoIndex> allPseudos = await _userService.FindAllPseudos();
+            string allPseudosStringified = JsonConvert.SerializeObject( allPseudos );
+            JToken allPseudoJToken = JToken.Parse( allPseudosStringified );
+            return allPseudoJToken;
         }
 
         class PseudoSender
