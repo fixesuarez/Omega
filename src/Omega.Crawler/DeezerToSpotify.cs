@@ -48,7 +48,7 @@ namespace Omega.Crawler
                     string rssId = (string)rss["tracks"]["items"][0]["id"];
                     return rssId;
                 }
-            } catch(WebException e)
+            } catch(WebException)
             {
                 return "";
             }

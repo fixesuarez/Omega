@@ -53,10 +53,19 @@ namespace Omega.DAL
             }
         }
 
-        public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
+        public async Task AddMemberToEventGroupOmega( EventGroup pEvent)
         {
-            eventGroupOmega.Owner = false;
-            TableOperation insertEventGroupOmegaOperation = TableOperation.Insert( eventGroupOmega );
+            pEvent.Owner = false;
+            EventGroupUser eventUser = new EventGroupUser(pEvent.PartitionKey, pEvent.RowKey);
+            eventUser.StartTime = pEvent.StartTime;
+            eventUser.Owner = pEvent.Owner;
+            eventUser.Location = pEvent.Location;
+            eventUser.Name = pEvent.Name;
+            eventUser.Type = pEvent.Type;
+            eventUser.UserId = pEvent.UserId;
+            eventUser.Cover = pEvent.Cover;
+            eventUser.Members = pEvent.Members;
+            TableOperation insertEventGroupOmegaOperation = TableOperation.Insert(eventUser);
             await _tableEventGroup.ExecuteAsync( insertEventGroupOmegaOperation );
         }
 
