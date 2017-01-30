@@ -3,7 +3,7 @@ using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,7 +16,7 @@ namespace Omega.DAL
         readonly CloudTable _tableUserIndex;
         readonly CloudTable _tableUser;
         readonly CloudQueueClient _queueClient;
-        readonly CloudTable tablePseudoIndex;
+        readonly CloudTable _tablePseudoIndex;
         readonly CloudQueue _queue;
 
         public UserGateway( string connectionString )
@@ -30,15 +30,15 @@ namespace Omega.DAL
             // Create the CloudTables objects that represent the different tables.
             _tableUser = _tableClient.GetTableReference( "User" );
             // Create the table if it doesn't exist.
-            _tableUser.CreateIfNotExistsAsync().Wait() ;
+            _tableUser.CreateIfNotExistsAsync().Wait();
 
             _tableUserIndex = _tableClient.GetTableReference( "UserIndex" );
             _tableUserIndex.CreateIfNotExistsAsync().Wait();
 
-            tablePseudoIndex = _tableClient.GetTableReference( "PseudoIndex" );
-            tablePseudoIndex.CreateIfNotExistsAsync().Wait();
+            _tablePseudoIndex = _tableClient.GetTableReference( "PseudoIndex" );
+            _tablePseudoIndex.CreateIfNotExistsAsync().Wait();
             _queueClient = _storageAccount.CreateCloudQueueClient();
-            _queue = _queueClient.GetQueueReference("queue");
+            _queue = _queueClient.GetQueueReference( "queue" );
             _queue.CreateIfNotExistsAsync().Wait();
         }
 
@@ -80,13 +80,32 @@ namespace Omega.DAL
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<User>( string.Empty, guid );
             TableResult retrievedResult = await _tableUser.ExecuteAsync( retrieveOperation );
-            return (User)retrievedResult.Result;
+            return (User) retrievedResult.Result;
         }
         public async Task<PseudoIndex> FindPseudoIndex( string pseudo )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, pseudo );
-            TableResult retrievedResult = await _tableUserIndex.ExecuteAsync( retrieveOperation );
+            TableResult retrievedResult = await _tablePseudoIndex.ExecuteAsync( retrieveOperation );
             return (PseudoIndex) retrievedResult.Result;
+        }
+
+        public async Task<List<PseudoIndex>> FindAllPseudos()
+        {
+            List<PseudoIndex> allPseudos = new List<PseudoIndex>();
+            TableQuery<PseudoIndex> query = new TableQuery<PseudoIndex>()
+                .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, string.Empty ) );
+
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+
+            do
+            {
+                var queryResponse = await _tablePseudoIndex.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                tableContinuationToken = queryResponse.ContinuationToken;
+                allPseudos.AddRange( queryResponse.Results );
+            } while( tableContinuationToken != null );
+
+            return allPseudos;
         }
 
         public async Task<string> FindUserPseudo( string guid )
@@ -196,13 +215,13 @@ namespace Omega.DAL
                 if( retrievedUser.Pseudo != null && retrievedUser.Pseudo != string.Empty )
                 {
                     TableOperation retrievePseudoIndexOperation = TableOperation.Retrieve<PseudoIndex>( string.Empty, retrievedUser.Pseudo );
-                    TableResult retrievedPseudoIndex = await tablePseudoIndex.ExecuteAsync( retrievePseudoIndexOperation );
+                    TableResult retrievedPseudoIndex = await _tablePseudoIndex.ExecuteAsync( retrievePseudoIndexOperation );
                     PseudoIndex deleteEntity = (PseudoIndex) retrievedPseudoIndex.Result;
 
                     if( deleteEntity != null )
                     {
                         TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
-                        await tablePseudoIndex.ExecuteAsync( deleteOperation );
+                        await _tablePseudoIndex.ExecuteAsync( deleteOperation );
                     }
                 }
                 retrievedUser.Pseudo = u.Pseudo;
@@ -211,7 +230,7 @@ namespace Omega.DAL
 
                 PseudoIndex pseudoIndex = new PseudoIndex( u.Pseudo, u.Guid );
                 TableOperation insertOperation = TableOperation.Insert( pseudoIndex );
-                await tablePseudoIndex.ExecuteAsync( insertOperation );
+                await _tablePseudoIndex.ExecuteAsync( insertOperation );
             }
         }
 

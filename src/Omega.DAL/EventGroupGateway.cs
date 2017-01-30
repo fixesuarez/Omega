@@ -76,12 +76,17 @@ namespace Omega.DAL
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
             await _eventGroupUserGateway.InsertEventGroup(eventOmega);
         }
-        public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName )
+        public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName, string ownerPseudo )
         {
+            List<string> members = new List<string>();
+            if(ownerPseudo != null)
+                members.Add(ownerPseudo);
             EventGroup groupOmega = new EventGroup( groupGuid, userGuid, groupName );
             groupOmega.Owner = true;
+            groupOmega.Members = JsonConvert.SerializeObject(members);
             TableOperation insertGroupOmegaOperation = TableOperation.Insert( groupOmega );
             await _tableEventGroup.ExecuteAsync( insertGroupOmegaOperation );
+            await _eventGroupUserGateway.InsertEventGroup(groupOmega);
         }
 
         public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
@@ -89,6 +94,7 @@ namespace Omega.DAL
             eventGroupOmega.Owner = false;
             TableOperation insertEventGroupOmegaOperation = TableOperation.Insert( eventGroupOmega );
             await _tableEventGroup.ExecuteAsync( insertEventGroupOmegaOperation );
+            await _eventGroupUserGateway.AddMemberToEventGroupOmega( eventGroupOmega );
         }
 
         public async Task<EventGroup> FindEventGroup( string idEventGroup, string guidUser )

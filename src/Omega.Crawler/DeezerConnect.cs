@@ -29,7 +29,7 @@ namespace Omega.Crawler
                     track.Title = (string)rss["title"];
                     return track;
                 }
-            } catch(Exception e)
+            } catch(Exception)
             {
                 return null;
             }
