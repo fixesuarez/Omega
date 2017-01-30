@@ -58,10 +58,12 @@ namespace OmegaWebApp.Services
         public async Task UpdateSpotifyUser(User spotifyUser )
         {
             await _userGateway.UpdateSpotifyUser( spotifyUser );
+            await _userGateway.InsertQueue(spotifyUser.RowKey);
         }
         public async Task UpdateDeezerUser( User deezerUser )
         {
             await _userGateway.UpdateDeezerUser( deezerUser );
+            await _userGateway.InsertQueue(deezerUser.RowKey);
         }
         public async Task UpdateFacebookUser(User facebookUser)
         {
