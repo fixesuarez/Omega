@@ -48,7 +48,7 @@ namespace OmegaWebApp.Controllers
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             string guidEvent = Guid.NewGuid().ToString();
             //await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
-            await _eventGroupService.CreateOmegaEvent(guidEvent, guid, e.eventName, DateTime.Now.AddDays(3), e.eventLocation, e.cover);
+            await _eventGroupService.CreateOmegaEvent(guidEvent, guid, e.name, DateTime.Now.AddDays(3), e.location, e.cover);
         }
 
         [HttpPost( "AddMember" )]
