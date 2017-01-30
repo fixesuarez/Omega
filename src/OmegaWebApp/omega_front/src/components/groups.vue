@@ -7,7 +7,7 @@
           <img src="../assets/groupNoCover.png" v-if="group.cover == undefined">
         </div>
         <div class="groupInfo">
-          <span id="groupName">{{group.name}}</span>
+          <span id="groupName">{{group.Name}}</span>
           <span id="membersLabel">membres du groupe</span>
           <div class="groupMembers">
             <span v-for="member in group.ListMembers">

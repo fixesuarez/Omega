@@ -10,10 +10,9 @@
               <br>
               <div class="newEventInfos">
                 <span id="smallText">Nom : <input type="text" v-model="eventName"><br><span>
-                <form method="post" enctype="multipart/form-data" asp-controller="CreateEvent" asp-action="Index">
-                 <input type="file" name="image" @change="onFileChange">
-                </form>
+                <input v-bind:ref="avatar" type="file" name="avatar" id="inputFile" @change="upload">
                 <span id="smallText">Lieu : <input type="text" v-model="eventLocation"><br><span>
+                <input type="date" v-model="eventStartTime" min="2017-01-31">
               </div>
               <div class="newEvent">
                 <div class="newEventCover">
@@ -25,7 +24,7 @@
                 </div>
               </div>
 
-              <button @click="createEvent({eventName, eventCover, eventLocation, eventStartTime})">Créer</button>
+              <button @click="createEvent()">Créer</button>
             </div>
           </div>
           <div class="modalClose" @click="showEventModal(false)">
@@ -41,10 +40,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import FacebookApiService from '../services/FacebookApiService'
+import $ from 'jquery'
 
 export default {
   data () {
     return {
+      formData: new FormData,
+      avatar: '',
       eventName: 'Nom',
       eventCover: 'Image',
       eventLocation: 'Lieu',
@@ -71,52 +73,37 @@ export default {
   },
   methods: {
     ...mapActions(['showEventModal', 'sendEvents','insertEvent','setCurrentEvent', 'requestAsync', 'insertEvent']),
-
-    upload(e) {
-      console.log(e.srcElement.value);
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length)
-        return;
-      this.createImage(files[0]);
-    },
-
-        onFileChange(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length)
-        return;
-      this.createImage(files[0]);
-    },
-    createImage(file) {
-      var image = new Image();
-      var reader = new FileReader();
-      var vm = this;
-
-      reader.onload = (e) => {
-        vm.image = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-
-
-   /* createImage(file) {
-      var image = new Image();
-      var reader = new FileReader();
+    upload: function(e) {
+      var fichierSelectionne = document.getElementById('inputFile').files[0];
+      console.log(fichierSelectionne);
+      var data = new FormData();
+      this.formData.append('cover', fichierSelectionne);
       
-      reader.onload = (e) => {
-        this.eventCover = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },*/
+      // data.append('name', eventName);
+      // data.append('location', eventLocation);
+      // data.append('starttime', eventStartTime);
+      // $.ajax({
+      //   url: '/api/EventGroup/CreateEvent',
+      //   data: data,
+      //   processData: false,
+      //   contentType: false,
+      //   type: 'POST',
+      //   success: function(data){
+      //     alert(data);
+      //   }
+      // });
+      
+    },
     loadEvents: async function() {
       var data = await this.requestAsync(() => EventService.getEvents());
       this.sendEvents(data);
     },
     createEvent: async function(event) {
-      this.eventToCreate.cover = this.image;
-      this.eventToCreate.name = this.eventName;
-      this.eventToCreate.location = this.eventLocation;
-      this.insertEvent(this.eventToCreate);
-      var result = FacebookApiService.createEvent(this.eventToCreate);
+      this.formData.append('name', this.eventName);
+      this.formData.append('location', this.eventLocation);
+      this.formData.append('starttime', this.eventStartTime);
+      this.insertEvent(this.formData);
+      var result = FacebookApiService.createEvent(this.formData);
     },
     createLocalEvent: async function(item) {
       this.eventToCreate.cover = this.eventCover;
