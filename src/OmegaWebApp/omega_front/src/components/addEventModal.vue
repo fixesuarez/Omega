@@ -63,7 +63,7 @@ export default {
       metadonnees: {'Danceability': null, 'Energy': null, 'Speechiness': null, 'Accousticness': null, 'Instrumentalness': null, 'Liveness': null, 'Popularity': null},
       data: '',
       eventToCreate: {
-        'cover': null,
+        'startTime': null,
         'name': null, 
         'location': null
       },
@@ -76,34 +76,20 @@ export default {
     upload: function(e) {
       var fichierSelectionne = document.getElementById('inputFile').files[0];
       console.log(fichierSelectionne);
-      var data = new FormData();
-      this.formData.append('cover', fichierSelectionne);
-      
-      // data.append('name', eventName);
-      // data.append('location', eventLocation);
-      // data.append('starttime', eventStartTime);
-      // $.ajax({
-      //   url: '/api/EventGroup/CreateEvent',
-      //   data: data,
-      //   processData: false,
-      //   contentType: false,
-      //   type: 'POST',
-      //   success: function(data){
-      //     alert(data);
-      //   }
-      // });
-      
+      this.formData.append('files', fichierSelectionne);
     },
     loadEvents: async function() {
       var data = await this.requestAsync(() => EventService.getEvents());
       this.sendEvents(data);
     },
     createEvent: async function(event) {
-      this.formData.append('name', this.eventName);
-      this.formData.append('location', this.eventLocation);
-      this.formData.append('starttime', this.eventStartTime);
+      this.eventToCreate.name = this.eventName;
+      this.eventToCreate.location = this.eventLocation;
+      this.eventToCreate.startTime = this.eventStartTime;
       this.insertEvent(this.formData);
-      var result = FacebookApiService.createEvent(this.formData);
+      var result = await FacebookApiService.createEvent(this.eventToCreate);
+      var result2 = await FacebookApiService.uploadEventCover(this.formData);
+      var data = await this.requestAsync(() => EventService.getEvents());
     },
     createLocalEvent: async function(item) {
       this.eventToCreate.cover = this.eventCover;
