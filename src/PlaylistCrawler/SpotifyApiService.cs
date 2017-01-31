@@ -34,7 +34,7 @@ namespace PlaylistCrawler
             using (HttpClient client = new HttpClient())
             {
                 HttpRequestHeaders headers = client.DefaultRequestHeaders;
-                headers.Add("Authorization", string.Format("Basic {0}", "NTJiZDZhOGQ2MzM5NDY0MDg4ZGYwNjY3OWZjNGM5NmE6MjBjMDU0MTBkOWFlNDQ5YzhkNTdkZWMwNmI2YmExMGU="));
+                headers.Add("Authorization", string.Format("Basic {0}", "MTQxY2NkYTBmMmQ3NDI2YTgzMzlmODk3ZDg5ZDYzNGI6Yzg4YWZjNWRkOTUyNDZjODkwNzAyMTAyMGJiODRjYjE="));
                 HttpResponseMessage message = await client.PostAsync(url, new StringContent(postString, Encoding.UTF8, "application/x-www-form-urlencoded"));
 
                 using (Stream responseStream = await message.Content.ReadAsStreamAsync())
