@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace OmegaWebApp.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+    //[Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class EventGroupController : Controller
     {
         UserService _userService;
@@ -43,12 +43,18 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpPost( "CreateEvent" )]
-        public async Task CreateOmegaEvent([FromBody] EventMapper e)
+        public async Task CreateOmegaEvent( [FromBody] EventMapper eventCreated )
         {
-            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
-            string guidEvent = Guid.NewGuid().ToString();
-            //await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
-            await _eventGroupService.CreateOmegaEvent(guidEvent, guid, e.name, DateTime.Now.AddDays(3), e.location, e.cover);
+            //string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+            //string guidEvent = Guid.NewGuid().ToString();
+            ////await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
+            //await _eventGroupService.CreateOmegaEvent(guidEvent, guid, e.name, DateTime.Now.AddDays(3), e.location, e.eventCover);
+        }
+
+        [HttpPost( "Upload" )]
+        public async Task UploadEventCover( IList<IFormFile> files )
+        {
+
         }
 
         [HttpPost("CreateGroup")]

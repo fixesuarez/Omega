@@ -43,7 +43,7 @@ namespace Omega.DAL
             eventUser.Name = pEvent.Name;
             eventUser.Type = pEvent.Type;
             eventUser.UserId = pEvent.UserId;
-            eventUser.Cover = pEvent.Cover;
+            //eventUser.Cover = pEvent.Cover;
             eventUser.Members = pEvent.Members;
 
             if(await RetrieveGroupEvent(pEvent.PartitionKey, pEvent.RowKey) == null)
@@ -63,7 +63,7 @@ namespace Omega.DAL
             eventUser.Name = pEvent.Name;
             eventUser.Type = pEvent.Type;
             eventUser.UserId = pEvent.UserId;
-            eventUser.Cover = pEvent.Cover;
+            //eventUser.Cover = pEvent.Cover;
             eventUser.Members = pEvent.Members;
             TableOperation insertEventGroupOmegaOperation = TableOperation.Insert(eventUser);
             await _tableEventGroup.ExecuteAsync( insertEventGroupOmegaOperation );

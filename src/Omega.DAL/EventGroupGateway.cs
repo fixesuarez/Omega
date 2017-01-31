@@ -51,7 +51,7 @@ namespace Omega.DAL
             _eventGroupUserGateway = new EventGroupUserGateway(connectionString);
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, string eventImage )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, IFormFile eventImage )
         {
             //_blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
 
@@ -130,7 +130,7 @@ namespace Omega.DAL
                     eventGroup = new EventGroup( eventId, user.RowKey );
                     eventGroup.UserId = user.FacebookId;
                     eventGroup.Type = type;
-                    eventGroup.Cover = cover;
+                    //eventGroup.Cover = cover;
                     eventGroup.Name = name;
                     eventGroup.StartTime = startTime;
                     eventGroup.Location = location;
@@ -163,7 +163,7 @@ namespace Omega.DAL
                     eventGroup = new EventGroup(eventId, user.RowKey);
                     eventGroup.UserId = user.FacebookId;
                     eventGroup.Type = type;
-                    eventGroup.Cover = cover;
+                    //eventGroup.Cover = cover;
                     eventGroup.Name = name;
                     eventGroup.Members = JsonConvert.SerializeObject(members);
                     //batchOperation.Insert(eventGroup);
@@ -189,7 +189,7 @@ namespace Omega.DAL
                 EventGroup track = new EventGroup(eventId, user.RowKey);
                 updateEntity.UserId = user.FacebookId;
                 updateEntity.Type = type;
-                updateEntity.Cover = cover;
+                //updateEntity.Cover = cover;
                 updateEntity.Name = name;
                 updateEntity.StartTime = startTime;
                 updateEntity.Location = location;
@@ -210,7 +210,7 @@ namespace Omega.DAL
                 EventGroup track = new EventGroup(eventId, user.RowKey);
                 updateEntity.UserId = user.FacebookId;
                 updateEntity.Type = type;
-                updateEntity.Cover = cover;
+                //updateEntity.Cover = cover;
                 updateEntity.Name = name;
                 updateEntity.Members = JsonConvert.SerializeObject(users);
 

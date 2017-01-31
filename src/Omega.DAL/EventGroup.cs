@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Collections.Generic;
 
@@ -21,9 +22,9 @@ namespace Omega.DAL
             Name = groupName;
             StartTime = new DateTime(1900, 1, 1);
             Type = "groupOmega";
-            Cover = string.Empty;
+            //Cover = string.Empty;
         }
-        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location, string cover )
+        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location, IFormFile cover )
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
@@ -38,7 +39,7 @@ namespace Omega.DAL
         public DateTime StartTime { get; set; }
         public string UserId { get; set; }
         public string Type { get; set; }
-        public string Cover { get; set; }
+        public IFormFile Cover { get; set; }
         public string Location { get; set; }
         public bool Owner { get; set; }
         public string Members { get; set; }
