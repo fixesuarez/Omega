@@ -64,6 +64,18 @@ namespace OmegaWebApp.Controllers
             return eToJson;
         }
 
+        [HttpPost( "DeleteEventGroup" )]
+        public async Task DeleteOmegaEventGroup( [FromBody]string guidEventGroup )
+        {
+            string userGuid = User.FindFirst( "www.omega.com:guid" ).Value;
+            bool userIsEventGroupOwner = await _eventGroupService.IsUserEventGroupOwner( guidEventGroup, userGuid );
+            if( userIsEventGroupOwner )
+            {
+                await _eventGroupService.DeleteEventGroupOmega( guidEventGroup, userGuid );
+                await _eventGroupService.DeleteEventGroupUserOmega( userGuid, guidEventGroup );
+            }
+        }
+
         [HttpPost( "UploadEventGroupCover/{EventGroupGuid}/{EventName}" )]
         public async Task UploadEventGroupCover( IList<IFormFile> files, string EventGroupGuid, string EventName )
         {

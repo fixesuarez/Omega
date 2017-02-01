@@ -53,7 +53,7 @@ namespace Omega.DAL
             }
         }
 
-        public async Task DeleteEventGroup( string userGuid, string eventGroupGuid )
+        public async Task DeleteEventGroupUserOmega( string userGuid, string eventGroupGuid )
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>( userGuid, eventGroupGuid );
             TableResult retrievedResult = await _tableEventGroupUser.ExecuteAsync( retrieveOperation );
