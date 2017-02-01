@@ -10,7 +10,7 @@
           <span id="groupName">{{group.Name}}</span>
           <span id="membersLabel">membres du groupe</span>
           <div class="groupMembers">
-            <span v-if="group.Type == 'groupOmega' && group.Owner == true" id="addMember" @click="showMemberModal(true),setCurrentGroup(group)">Add Member</span>
+            <span v-if="group.Type == 'groupOmega' && group.Owner == true" id="addMember" @click="showMemberModal(true),sendIdToAddMember(group.RowKey)">Add Member</span>
             <span v-for="member in group.ListMembers">
               {{member}}<br>
             </span>
@@ -208,7 +208,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['requestAsync', 'setCurrentGroup', 'sendPlaylists', 'sendGroups','showGroupModal','showMemberModal']),
+    ...mapActions(['requestAsync', 'setCurrentGroup','sendIdToAddMember', 'sendPlaylists', 'sendGroups','showGroupModal','showMemberModal']),
     loadGroups: async function() {
       this.localGroups = await this.requestAsync(() => FacebookApiService.getFacebookGroups());
       this.sendGroups(this.localGroups);
@@ -238,7 +238,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentGroup', 'groups','groupModalActive','memberModalActive'])
+    ...mapGetters(['currentGroup', 'groups','groupModalActive','memberModalActive','idToAddMember'])
   },  
   created () {
     this.loadGroups()
