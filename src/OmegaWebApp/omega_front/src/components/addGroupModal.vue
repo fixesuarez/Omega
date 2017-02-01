@@ -6,7 +6,7 @@
         <div class="groupModal-container">
           <div class="addGroupText">
             <div class="addGroupModal">
-              <span id="groupTitle">CRÉER UN évènement OMEGA</span><br>
+              <span id="groupTitle">CRÉER UN GROUPE OMEGA</span><br>
               <br>
               <div class="newGroupInfos">
                 <span id="smallText">Nom : <input type="text" v-model="groupName"><br><span>
@@ -65,7 +65,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showGroupModal', 'sendGroups','setCurrentGroup', 'requestAsync', 'insertGroup']),
+    ...mapActions(['showGroupModal','sendIdToAddMember', 'sendGroups','setCurrentGroup', 'requestAsync', 'insertGroup']),
     upload: function(e) {
       var fichierSelectionne = document.getElementById('inputFile').files[0];
       console.log(fichierSelectionne);
@@ -79,7 +79,7 @@ export default {
       this.groupToCreate.name = this.groupName;
       this.insertGroup(this.formData);
       var result = await FacebookApiService.createGroup(this.groupToCreate.name);
-      var result2 = await FacebookApiService.uploadGroupCover(this.formData, result.groupGuid, result.groupName);
+      var result2 = await FacebookApiService.uploadGroupCover(this.formData, result.EventGroupGuid, result.EventGroupName);
       var data = await this.requestAsync(() => GroupService.getGroups());
     },
     createLocalGroup: async function(item) {
@@ -133,7 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['groups', 'currentGroup'])
+    ...mapGetters(['groups', 'currentGroup','idToAddMember'])
   },
   created () {
     this.loadGroups()

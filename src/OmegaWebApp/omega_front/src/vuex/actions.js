@@ -231,6 +231,11 @@ export const sendMix = ({commit}, payload) => {
     commit(types.SENDMIX, payload)
 }
 
+export const sendIdToAddMember = ({commit}, payload) => {
+    
+    commit(types.SENDIDTOADDMEMBER, payload)
+}
+
 export const addNextTrack = ({commit}, payload) => {
     
     commit(types.ADDNEXTTRACK, payload)

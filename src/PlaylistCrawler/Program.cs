@@ -84,7 +84,7 @@ namespace PlaylistCrawler
                 }
                 if (!string.IsNullOrEmpty(user.SpotifyRefreshToken))
                 {
-                    await _spotifyApiService.GetSpotifyPlaylist(user.Guid);
+                        await _spotifyApiService.GetSpotifyPlaylist(user.Guid);
                 }
                 Console.WriteLine("Queue checked");
                 await Task.Delay(1500);

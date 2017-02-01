@@ -95,7 +95,7 @@ namespace PlaylistCrawler
                     {
                         var trackTmp = allTracksInPlaylistArray[j];
                         string trackIdTmp = (string)trackTmp["id"];
-                        if (await _trackGateway.RetrieveTrack("d", playlistId, trackIdTmp) == null)
+                        if (await _trackGateway.RetrieveTrack("d", playlistId, trackIdTmp) == null && !string.IsNullOrEmpty(trackIdTmp) && !string.IsNullOrEmpty(playlistId))
                             await _cleanTrackGateway.InsertTrackQueue("d", trackIdTmp);
                     }
 

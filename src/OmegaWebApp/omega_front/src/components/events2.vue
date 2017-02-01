@@ -14,7 +14,7 @@
           <div class="divMoreButton" v-if="event.Type == 'eventOmega' && event.Owner == true">
             <img src="../assets/more.png" id="moreButton">
             <div id="settingsDiv">
-              <span id="addMembers" @click="showMemberModal(true)">Ajouter des membres</span><br>
+              <span id="addMembers" @click="showMemberModal(true),sendIdToAddMember(event.RowKey)">Ajouter des membres</span><br>
               <span id="delete" @click="">Supprimer</span>
             </div>
           </div>
@@ -271,7 +271,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showEventModal','showMemberModal','setLoading', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
+    ...mapActions(['showEventModal','showMemberModal','sendIdToAddMember','setLoading', 'requestAsync', 'setCurrentEvent', 'sendPlaylists', 'sendEvents']),
     loadEvents: async function() {
       this.setLoading(true);      
       this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
@@ -371,7 +371,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentEvent','loading', 'events', 'eventModalActive','memberModalActive'])
+    ...mapGetters(['currentEvent','idToAddMember','loading', 'events', 'eventModalActive','memberModalActive'])
   },  
   created () {
     this.loadEvents()
