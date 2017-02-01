@@ -75,9 +75,9 @@ namespace OmegaWebApp.Controllers
         {
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             User user = await _userService.FindUser( guid );
-            if( !string.IsNullOrWhiteSpace( memberAdded.eventId ) && !string.IsNullOrWhiteSpace( memberAdded.pseudo ) )
+            if( !string.IsNullOrWhiteSpace( memberAdded.eventGroupId ) && !string.IsNullOrWhiteSpace( memberAdded.pseudo ) )
             {
-                EventGroup eventGroupOmega = await _eventGroupService.FindEventGroup( memberAdded.eventId, guid );
+                EventGroup eventGroupOmega = await _eventGroupService.FindEventGroup( memberAdded.eventGroupId, guid );
                 if( eventGroupOmega.Owner )
                 {
                     PseudoIndex pseudoIndex = await _userService.FindPseudoIndex( memberAdded.pseudo);
@@ -85,12 +85,12 @@ namespace OmegaWebApp.Controllers
                     {
                         if( eventGroupOmega.Type == "groupOmega" )
                         {
-                            EventGroup groupOmega = new EventGroup( memberAdded.eventId, pseudoIndex.Guid, eventGroupOmega.Name );
+                            EventGroup groupOmega = new EventGroup( memberAdded.eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name );
                             await _eventGroupService.AddMemberToEventGroupOmega( groupOmega );
                         }
                         else if( eventGroupOmega.Type == "eventOmega" )
                         {
-                            EventGroup eventOmega = new EventGroup( memberAdded.eventId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location );
+                            EventGroup eventOmega = new EventGroup( memberAdded.eventGroupId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location );
                             await _eventGroupService.AddMemberToEventGroupOmega( eventOmega );
                         }
                     }
@@ -100,7 +100,7 @@ namespace OmegaWebApp.Controllers
 
         public class MemberAdded
         {
-            public string eventId { get; set; }
+            public string eventGroupId { get; set; }
             public string pseudo { get; set; }
         }
 

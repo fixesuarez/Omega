@@ -12,7 +12,7 @@ namespace Omega.DAL
     {
         readonly CloudStorageAccount _storageAccount;
         readonly CloudTableClient _tableClient;
-        readonly CloudTable _tableEventGroup;
+        readonly CloudTable _tableEventGroupUser;
 
         readonly CloudBlobClient _blobClient;
         readonly CloudBlobContainer _container;
@@ -21,8 +21,8 @@ namespace Omega.DAL
             //EventGroupTable
             _storageAccount = CloudStorageAccount.Parse(connectionString);
             _tableClient = _storageAccount.CreateCloudTableClient();
-            _tableEventGroup = _tableClient.GetTableReference("EventGroupUser");
-            _tableEventGroup.CreateIfNotExistsAsync().Wait();
+            _tableEventGroupUser = _tableClient.GetTableReference("EventGroupUser");
+            _tableEventGroupUser.CreateIfNotExistsAsync().Wait();
 
             // Create the blob client.
             _blobClient = _storageAccount.CreateCloudBlobClient();
@@ -49,7 +49,20 @@ namespace Omega.DAL
             if(await RetrieveGroupEvent(pEvent.PartitionKey, pEvent.RowKey) == null)
             {
                 TableOperation insert = TableOperation.Insert(eventUser);
-                await _tableEventGroup.ExecuteAsync(insert);
+                await _tableEventGroupUser.ExecuteAsync(insert);
+            }
+        }
+
+        public async Task DeleteEventGroup( string userGuid, string eventGroupGuid )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>( userGuid, eventGroupGuid );
+            TableResult retrievedResult = await _tableEventGroupUser.ExecuteAsync( retrieveOperation );
+            EventGroupUser deleteEntity = (EventGroupUser) retrievedResult.Result;
+
+            if( deleteEntity != null && deleteEntity.Owner )
+            {
+                TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
+                await _tableEventGroupUser.ExecuteAsync( deleteOperation );
             }
         }
 
@@ -66,7 +79,7 @@ namespace Omega.DAL
             eventUser.Cover = pEvent.Cover;
             eventUser.Members = pEvent.Members;
             TableOperation insertEventGroupOmegaOperation = TableOperation.Insert(eventUser);
-            await _tableEventGroup.ExecuteAsync( insertEventGroupOmegaOperation );
+            await _tableEventGroupUser.ExecuteAsync( insertEventGroupOmegaOperation );
         }
 
         public async Task InsertBatchEventGroup(string eventId, List<User> users, string type, string cover, string name, List<string> pmembers)
@@ -87,7 +100,7 @@ namespace Omega.DAL
                     eventGroup.Name = name;
                     eventGroup.Members = JsonConvert.SerializeObject(pmembers);
                     TableOperation insert = TableOperation.Insert(eventGroup);
-                    await _tableEventGroup.ExecuteAsync(insert);
+                    await _tableEventGroupUser.ExecuteAsync(insert);
                 }
                 else
                 {
@@ -95,7 +108,6 @@ namespace Omega.DAL
                 }
             }
         }
-
         public async Task InsertBatchEventGroup(string eventId, List<User> users, string type, string cover, string name, DateTime startTime, string location)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
@@ -122,13 +134,13 @@ namespace Omega.DAL
                 }
             }
             if (batchOperation.Count != 0)
-                await _tableEventGroup.ExecuteBatchAsync(batchOperation);
+                await _tableEventGroupUser.ExecuteBatchAsync(batchOperation);
         }
 
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, DateTime startTime, string location)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>(user.RowKey, eventId);
-            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
+            TableResult retrievedResult = await _tableEventGroupUser.ExecuteAsync(retrieveOperation);
             EventGroupUser updateEntity = (EventGroupUser)retrievedResult.Result;
 
             if (updateEntity != null)
@@ -143,13 +155,13 @@ namespace Omega.DAL
 
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
 
-                await _tableEventGroup.ExecuteAsync(updateOperation);
+                await _tableEventGroupUser.ExecuteAsync(updateOperation);
             }
         }
         public async Task UpdateEventGroup(string eventId, User user, string type, string cover, string name, List<string> members)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>(user.RowKey, eventId);
-            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
+            TableResult retrievedResult = await _tableEventGroupUser.ExecuteAsync(retrieveOperation);
             EventGroupUser updateEntity = (EventGroupUser)retrievedResult.Result;
 
             if (updateEntity != null)
@@ -163,14 +175,14 @@ namespace Omega.DAL
 
                 TableOperation updateOperation = TableOperation.Replace(updateEntity);
 
-                await _tableEventGroup.ExecuteAsync(updateOperation);
+                await _tableEventGroupUser.ExecuteAsync(updateOperation);
             }
         }
 
         public async Task<EventGroupUser> RetrieveGroupEvent(string eventGroupId, string guid)
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>(guid, eventGroupId);
-            TableResult retrievedGroupEvent = await _tableEventGroup.ExecuteAsync(retrieveOperation);
+            TableResult retrievedGroupEvent = await _tableEventGroupUser.ExecuteAsync(retrieveOperation);
             return (EventGroupUser)retrievedGroupEvent.Result;
         }
 
@@ -186,7 +198,7 @@ namespace Omega.DAL
             TableContinuationToken tableContinuationToken = null;
             do
             {
-                var queryResponse = await _tableEventGroup.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                var queryResponse = await _tableEventGroupUser.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
                 tableContinuationToken = queryResponse.ContinuationToken;
                 tracks.AddRange(queryResponse.Results);
             } while (tableContinuationToken != null);
@@ -204,6 +216,19 @@ namespace Omega.DAL
                             pEvent.ListMembers = JsonConvert.DeserializeObject<List<string>>(pEvent.Members);
                         tracksDef.Add(pEvent);
                     }
+                    else if( pEvent.Type == "groupOmega" )
+                    {
+                        if( pEvent.Members != null )
+                            pEvent.ListMembers = JsonConvert.DeserializeObject<List<string>>( pEvent.Members );
+
+                        string eventGuid = pEvent.RowKey;
+                        string eventName = pEvent.Name;
+                        CloudBlobContainer container = _blobClient.GetContainerReference( "images-eventgroup" );
+                        CloudBlockBlob blockBlob = container.GetBlockBlobReference( eventGuid + ":" + eventName );
+                        pEvent.Cover = blockBlob.StorageUri.PrimaryUri.AbsoluteUri;
+
+                        tracksDef.Add( pEvent );
+                    }
                     else if( pEvent.Type == "eventOmega" && ( DateTime.Compare( pEvent.StartTime, DateTime.Now ) > 0 || DateTime.Compare( pEvent.StartTime, DateTime.Now ) == 0 ) )
                     {
                         string eventGuid = pEvent.RowKey;
@@ -211,7 +236,7 @@ namespace Omega.DAL
                         CloudBlobContainer container = _blobClient.GetContainerReference( "images-eventgroup" );
                         CloudBlockBlob blockBlob = container.GetBlockBlobReference( eventGuid + ":" + eventName );
                         pEvent.Cover = blockBlob.StorageUri.PrimaryUri.AbsoluteUri;
-                        //pEvent.Cover = blockBlob.StorageUri.ToString();
+
                         tracksDef.Add( pEvent );
                     }
                 }

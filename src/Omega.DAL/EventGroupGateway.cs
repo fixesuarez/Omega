@@ -72,6 +72,17 @@ namespace Omega.DAL
             await _eventGroupUserGateway.InsertEventGroup(groupOmega);
         }
 
+        public async Task<bool> IsUserEventGroupOwner( string eventGroupId, string userGuid )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventGroupId, userGuid );
+            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync( retrieveOperation );
+            EventGroup retrievedEventGroup = (EventGroup) retrievedResult.Result;
+            if( retrievedEventGroup != null )
+                return retrievedEventGroup.Owner;
+            else
+                return false;
+        }
+
         public async Task UploadEventGroupCover( IFormFile eventGroupCover, string eventGroupGuid, string eventGroupName )
         {
             _blockBlob = _container.GetBlockBlobReference( eventGroupGuid + ":" + eventGroupName );
@@ -108,15 +119,24 @@ namespace Omega.DAL
 
         public async Task DeleteEventGroupOmega(string eventId, string userGuid )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventId, userGuid );
-            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync( retrieveOperation );
-            EventGroup deleteEntity = (EventGroup) retrievedResult.Result;
-            
-            if( deleteEntity != null && deleteEntity.Owner )
+            List<EventGroup> eventGroups = new List<EventGroup>();
+            TableQuery<EventGroup> query = new TableQuery<EventGroup>().
+                Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, eventId ) );
+            query.TakeCount = 1000;
+            TableContinuationToken tableContinuationToken = null;
+            do
             {
-                TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
-                await _tableEventGroup.ExecuteAsync( deleteOperation );
+                var queryResponse = await _tableEventGroup.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
+                tableContinuationToken = queryResponse.ContinuationToken;
+                eventGroups.AddRange( queryResponse.Results );
+            } while( tableContinuationToken != null );
+
+            TableBatchOperation batchOperation = new TableBatchOperation();
+            foreach( EventGroup eventGroup in eventGroups )
+            {
+                batchOperation.Delete( eventGroup );
             }
+            await _tableEventGroup.ExecuteBatchAsync( batchOperation );
         }
 
         public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name, DateTime startTime, string location)

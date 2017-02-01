@@ -26,15 +26,26 @@ namespace OmegaWebApp.Services
         {
             await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location );
         }
-        public async Task UploadEventGroupCover( IFormFile eventGroupCover, string eventGroupGuid, string eventGroupName )
-        {
-            await _eventGroupGateway.UploadEventGroupCover( eventGroupCover, eventGroupGuid, eventGroupName );
-        }
         public async Task CreateOmegaGroup( string groupGuid, string userGuid, string groupName, string ownerPseudo )
         {
             await _eventGroupGateway.CreateGroupOmega( groupGuid, userGuid, groupName, ownerPseudo );
         }
-        
+
+        public async Task DeleteEventGroupOmega( string eventGroupId, string userGuid )
+        {
+            await _eventGroupGateway.DeleteEventGroupOmega( eventGroupId, userGuid );
+        }
+
+        public async Task UploadEventGroupCover( IFormFile eventGroupCover, string eventGroupGuid, string eventGroupName )
+        {
+            await _eventGroupGateway.UploadEventGroupCover( eventGroupCover, eventGroupGuid, eventGroupName );
+        }
+
+        public async Task<bool> IsUserEventGroupOwner( string eventGroupId, string userGuid )
+        {
+            return await _eventGroupGateway.IsUserEventGroupOwner( eventGroupId, userGuid );
+        }
+
         public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
         {
             await _eventGroupGateway.AddMemberToEventGroupOmega( eventGroupOmega );
