@@ -2,10 +2,8 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -30,6 +28,8 @@ namespace Omega.DAL
             _blobClient = _storageAccount.CreateCloudBlobClient();
             // Retrieve reference to a previously created container.
             _container = _blobClient.GetContainerReference("images-eventgroup");
+            _container.SetPermissionsAsync( new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob } );
+
             // Create the container if it doesn't already exist.
             _container.CreateIfNotExistsAsync().Wait();
         }
@@ -194,15 +194,24 @@ namespace Omega.DAL
             {
                 if (pEvent.Type.Contains(type))
                 {
-                    if (pEvent.Type.Contains("event") && (DateTime.Compare(pEvent.StartTime, DateTime.Now) > 0 || DateTime.Compare(pEvent.StartTime, DateTime.Now) == 0))
+                    if (pEvent.Type == "event" && (DateTime.Compare(pEvent.StartTime, DateTime.Now) > 0 || DateTime.Compare(pEvent.StartTime, DateTime.Now) == 0))
                     {                      
                         tracksDef.Add(pEvent);
                     }
-                    else if(pEvent.Type.Contains("group"))
+                    else if(pEvent.Type == "group" )
                     {
                         if(pEvent.Members != null)
                             pEvent.ListMembers = JsonConvert.DeserializeObject<List<string>>(pEvent.Members);
                         tracksDef.Add(pEvent);
+                    }
+                    else if( pEvent.Type == "eventOmega" && ( DateTime.Compare( pEvent.StartTime, DateTime.Now ) > 0 || DateTime.Compare( pEvent.StartTime, DateTime.Now ) == 0 ) )
+                    {
+                        string eventGuid = pEvent.RowKey;
+                        string eventName = pEvent.Name;
+                        CloudBlobContainer container = _blobClient.GetContainerReference( "mycontainer" );
+                        CloudBlockBlob blockBlob = container.GetBlockBlobReference( eventGuid + ":" + eventName );
+                        pEvent.Cover = blockBlob.StorageUri.ToString();
+                        tracksDef.Add( pEvent );
                     }
                 }
             }

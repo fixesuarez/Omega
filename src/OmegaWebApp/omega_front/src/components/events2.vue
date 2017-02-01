@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div><br>
     <img src="../assets/plus.png" id="plusMood" @click="showEventModal(true)">
 
     <addEventModal v-if="eventModalActive == true"></addEventModal>
@@ -49,6 +49,16 @@
 
 .eventLoading {
   position: relative;
+}
+
+.eventContainer {
+  padding-left: 40px;
+  height: 400px;
+  width: 100%;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: center;
+  overflow-x: auto;
 }
 
 .event {
@@ -167,6 +177,10 @@
   font-size: 26px;
   margin-left: 20px;
   color: black;
+}
+
+#plusMood {
+
 }
 
 </style>

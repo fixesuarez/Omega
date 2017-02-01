@@ -1,4 +1,5 @@
 import { getAsync, postAsync } from '../helpers/apiHelper'
+import { uploadAsync } from '../helpers/uploadHelper'
 import AuthService from './AuthService'
 
 const endpoint = "/api/EventGroup";
@@ -16,6 +17,9 @@ class FacebookApiService {
     }
     async createEvent(event) {
         return await postAsync(endpoint, 'CreateEvent', AuthService.accessToken, event);
+    }
+    async uploadEventCover(cover, eventGuid, eventName) {
+        return await uploadAsync(endpoint, 'UploadEventCover/'+eventGuid+'/'+eventName, AuthService.accessToken, cover);
     }
     async AddMember(member) {
         return await postAsync(endpoint, 'AddMember', AuthService.accessToken, member);

@@ -26,6 +26,11 @@ namespace OmegaWebApp.Services
         {
             return await _userGateway.RetrievePseudo(guid);
         }
+        public async Task<List<PseudoIndex>> FindAllPseudos()
+        {
+            return await _userGateway.FindAllPseudos();
+        }
+
         public async Task<UserIndex> FindUserIndex(string provider, string apiId )
         {
             return await _userGateway.FindUserIndex( provider, apiId );
@@ -58,10 +63,12 @@ namespace OmegaWebApp.Services
         public async Task UpdateSpotifyUser(User spotifyUser )
         {
             await _userGateway.UpdateSpotifyUser( spotifyUser );
+            await _userGateway.InsertQueue(spotifyUser.RowKey);
         }
         public async Task UpdateDeezerUser( User deezerUser )
         {
             await _userGateway.UpdateDeezerUser( deezerUser );
+            await _userGateway.InsertQueue(deezerUser.RowKey);
         }
         public async Task UpdateFacebookUser(User facebookUser)
         {
