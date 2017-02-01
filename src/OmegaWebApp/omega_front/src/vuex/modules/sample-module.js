@@ -34,6 +34,7 @@ const state = {
   moodToInsert: '',
   mixToInsert: '',
   memberToInsert: '',
+  idToAddMember:'',
   member: '',
   eventToInsert:'',
   groupToInsert:'',
@@ -87,6 +88,9 @@ const mutations = {
   },
   [types.SENDMEMBER](state, payload) {
     state.member = payload;
+  },
+  [types.SENDIDTOADDMEMBER](state, payload) {
+    state.idToAddMember = payload;
   },
   [types.SENDEVENTS](state, payload) {
     state.events = payload;

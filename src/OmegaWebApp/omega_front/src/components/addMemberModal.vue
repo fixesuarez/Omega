@@ -33,7 +33,7 @@ export default {
       eventId: '',
       memberToAdd: {
         'pseudo': null,
-        'eventId': null
+        'EventGroupId': null
       },  
     }
   },
@@ -41,13 +41,13 @@ export default {
     ...mapActions(['showMemberModal','requestAsync','insertMember','sendMember']),
     addMember: async function(item) {
         this.memberToAdd.pseudo = this.pseudo;
-        this.memberToAdd.eventId = this.currentEvent.RowKey;
+        this.memberToAdd.EventGroupId = this.idToAddMember;
         this.insertMember(this.memberToAdd);
         var result = await FacebookApiService.AddMember(this.memberToAdd);
     }
   },
   computed: {
-    ...mapGetters(['Member','events','currentEvent'])
+    ...mapGetters(['Member','events','currentEvent','idToAddMember'])
   },
   created () {
     
