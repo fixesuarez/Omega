@@ -14,7 +14,7 @@
                 <span id="smallText">Lieu : <input type="text" v-model="eventLocation"><br><span>
                 <input type="date" v-model="eventStartTime" min="2017-01-31">
               </div>
-              <div class="newEvent">
+              <!--<div class="newEvent">
                 <div class="newEventCover">
                   <img :src="eventCover">
                 </div>
@@ -22,7 +22,7 @@
                   <span id="newEventName">{{eventName}}</span>
                   <span id="newEventLocation">{{eventLocation}}</span>
                 </div>
-              </div>
+              </div>-->
 
               <button @click="createEvent()">Créer</button>
             </div>

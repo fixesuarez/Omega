@@ -11,11 +11,12 @@
           <img v-bind:src="event.Cover">
         </div>
         <div class="eventInfo">
-          <div class="divMoreButton" v-if="event.Type == 'eventOmega' && event.Owner == true">
+          <div class="divMoreButton" v-if="event.Type == 'eventOmega'">
             <img src="../assets/more.png" id="moreButton">
             <div id="settingsDiv">
               <span id="addMembers" @click="showMemberModal(true), sendIdToAddMember(event.RowKey)">Ajouter des membres</span><br>
-              <span id="delete" @click="deleteEvent(event.RowKey)">Supprimer</span>
+              <span id="delete" @click="deleteEvent(event.RowKey)" v-if="event.Owner == true">Supprimer le groupe</span>
+              <span id="delete" @click="deleteEvent(event.RowKey)" v-else>Quitter le groupe</span>
             </div>
           </div>
           <span id="eventName">{{event.Name}}</span>

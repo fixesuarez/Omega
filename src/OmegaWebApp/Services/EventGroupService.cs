@@ -47,7 +47,7 @@ namespace OmegaWebApp.Services
 
         public async Task DeleteOneEventGroupUserOmega(string eventGroupId, string userGuid)
         {
-            await _eventGroupGateway.DeleteOneEventGroupOmega(eventGroupId, userGuid);
+            await _eventGroupUserGateway.DeleteOneEventGroupOmega(eventGroupId, userGuid);
         }
         public async Task UploadEventGroupCover( IFormFile eventGroupCover, string eventGroupGuid, string eventGroupName )
         {

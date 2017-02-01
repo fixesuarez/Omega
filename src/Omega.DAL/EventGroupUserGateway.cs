@@ -70,7 +70,7 @@ namespace Omega.DAL
         {
             TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>(userGuid, eventId);
             TableResult retrievedResult = await _tableEventGroupUser.ExecuteAsync(retrieveOperation);
-            Ambiance deleteEntity = (Ambiance)retrievedResult.Result;
+            EventGroupUser deleteEntity = (EventGroupUser)retrievedResult.Result;
             if (deleteEntity != null)
             {
                 TableOperation deleteOperation = TableOperation.Delete(deleteEntity);

@@ -77,7 +77,7 @@ namespace OmegaWebApp.Controllers
             else if(!userIsEventGroupOwner)
             {
                 await _eventGroupService.DeleteOneEventGroupOmega(guidEventGroup, userGuid);
-                await _eventGroupService.DeleteOneEventGroupUserOmega(userGuid, guidEventGroup);
+                await _eventGroupService.DeleteOneEventGroupUserOmega(guidEventGroup, userGuid);
             }
         }
 
