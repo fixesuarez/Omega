@@ -60,6 +60,12 @@ export const showEventModal = ({commit}, payload) => {
   
     commit(types.SHOWEVENTMODAL, payload)
 }
+
+export const showGroupModal = ({commit}, payload) => {
+  
+    commit(types.SHOWGROUPMODAL, payload)
+}
+
 export const showMemberModal = ({commit}, payload) => {
   
     commit(types.SHOWMEMBERMODAL, payload)
@@ -183,6 +189,11 @@ export const insertMood = ({commit}, payload) => {
 export const insertEvent = ({commit}, payload) => {
     
     commit(types.INSERTEVENT, payload)
+}
+
+export const insertGroup = ({commit}, payload) => {
+    
+    commit(types.INSERTGROUP, payload)
 }
 
 export const insertPseudo = ({commit}, payload) => {

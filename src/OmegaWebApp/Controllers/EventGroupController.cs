@@ -46,26 +46,28 @@ namespace OmegaWebApp.Controllers
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             string guidEvent = Guid.NewGuid().ToString();
             await _eventGroupService.CreateOmegaEvent( guidEvent, guid, eventCreated.Name, eventCreated.StartTime, eventCreated.Location );
-            EventToSend e = new EventToSend( guidEvent, eventCreated.Name );
+            EventGroupToSend e = new EventGroupToSend( guidEvent, eventCreated.Name );
+            string eToString = JsonConvert.SerializeObject( e );
+            JToken eToJson = JToken.Parse( eToString );
+            return eToJson;
+        }
+        [HttpPost( "CreateGroup" )]
+        public async Task<JToken> CreateOmegaGroup( [FromBody]string omegaGroupName )
+        {
+            string guid = User.FindFirst( "www.omega.com:guid" ).Value;
+            string guidGroup = Guid.NewGuid().ToString();
+            string ownerPseudo = await _userService.RetrievePseudo( guid );
+            await _eventGroupService.CreateOmegaGroup( guidGroup, guid, omegaGroupName, ownerPseudo );
+            EventGroupToSend e = new EventGroupToSend( guidGroup, omegaGroupName );
             string eToString = JsonConvert.SerializeObject( e );
             JToken eToJson = JToken.Parse( eToString );
             return eToJson;
         }
 
-        [HttpPost( "UploadEventCover/{EventGuid}/{EventName}" )]
-        public async Task UploadEventCover( IList<IFormFile> files, string EventGuid, string EventName )
+        [HttpPost( "UploadEventGroupCover/{EventGroupGuid}/{EventName}" )]
+        public async Task UploadEventGroupCover( IList<IFormFile> files, string EventGroupGuid, string EventName )
         {
-            await _eventGroupService.UploadEventCover( files[0], EventGuid, EventName );
-        }
-
-        [HttpPost("CreateGroup")]
-        public async Task CreateOmegaGroup([FromBody] EventMapper e)
-        {
-            string guid = User.FindFirst("www.omega.com:guid").Value;
-            string guidEvent = Guid.NewGuid().ToString();
-            //await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
-            string ownerPseudo = await _userService.RetrievePseudo(guid);
-            await _eventGroupService.CreateOmegaGroup(guidEvent, guid, e.Name, ownerPseudo);
+            await _eventGroupService.UploadEventGroupCover( files[0], EventGroupGuid, EventName );
         }
 
         [HttpPost( "AddMember" )]
@@ -109,15 +111,15 @@ namespace OmegaWebApp.Controllers
             public DateTime StartTime { get; set; }
         }
 
-        public class EventToSend
+        public class EventGroupToSend
         {
-            public string EventGuid { get; set; }
-            public string EventName { get; set; }
-            public EventToSend() { }
-            public EventToSend( string eventGuid, string eventName )
+            public string EventGroupGuid { get; set; }
+            public string EventGroupName { get; set; }
+            public EventGroupToSend() { }
+            public EventGroupToSend( string eventGroupGuid, string eventGroupName )
             {
-                EventGuid = eventGuid;
-                EventName = eventName;
+                EventGroupGuid = eventGroupGuid;
+                EventGroupName = eventGroupName;
             }
         }
     }

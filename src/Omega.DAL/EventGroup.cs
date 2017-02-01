@@ -20,7 +20,6 @@ namespace Omega.DAL
             Name = groupName;
             StartTime = new DateTime(1900, 1, 1);
             Type = "groupOmega";
-            //Cover = string.Empty;
         }
         public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location )
         {

@@ -10,6 +10,7 @@
           <span id="groupName">{{group.Name}}</span>
           <span id="membersLabel">membres du groupe</span>
           <div class="groupMembers">
+            <span v-if="group.Type == 'groupOmega' && group.Owner == true" id="addMember" @click="showMemberModal(true),setCurrentGroup(group)">Add Member</span>
             <span v-for="member in group.ListMembers">
               {{member}}<br>
             </span>
@@ -23,6 +24,13 @@
         </div>
       </div>
     </div>
+    <br>
+    <img src="../assets/plus.png" id="plusMood" @click="showGroupModal(true)">
+
+        <addGroupModal v-if="groupModalActive == true"></addGroupModal>
+        <addMemberModal v-if="memberModalActive == true"></addMemberModal>
+
+
   </div>
 </template>
 
@@ -188,7 +196,8 @@ import { mapGetters, mapActions } from 'vuex'
 import FacebookApiService from '../services/FacebookApiService'
 import PlaylistApiService from '../services/PlaylistApiService'
 import AuthService from '../services/AuthService'
-
+import addGroupModal from '../components/addGroupModal.vue'
+import addMemberModal from '../components/addMemberModal.vue'
 
 export default {
   data () {
@@ -199,7 +208,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['requestAsync', 'setCurrentGroup', 'sendPlaylists', 'sendGroups']),
+    ...mapActions(['requestAsync', 'setCurrentGroup', 'sendPlaylists', 'sendGroups','showGroupModal','showMemberModal']),
     loadGroups: async function() {
       this.localGroups = await this.requestAsync(() => FacebookApiService.getFacebookGroups());
       this.sendGroups(this.localGroups);
@@ -229,11 +238,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentGroup', 'groups'])
+    ...mapGetters(['currentGroup', 'groups','groupModalActive','memberModalActive'])
   },  
   created () {
     this.loadGroups()
-  }
+  },
+  components: {
+      addGroupModal,
+      addMemberModal
+    }
 }
 
 </script>
