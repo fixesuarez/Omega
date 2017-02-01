@@ -74,6 +74,11 @@ namespace OmegaWebApp.Controllers
                 await _eventGroupService.DeleteEventGroupOmega( guidEventGroup, userGuid );
                 await _eventGroupService.DeleteEventGroupUserOmega( userGuid, guidEventGroup );
             }
+            else if(!userIsEventGroupOwner)
+            {
+                await _eventGroupService.DeleteOneEventGroupOmega(guidEventGroup, userGuid);
+                await _eventGroupService.DeleteOneEventGroupUserOmega(userGuid, guidEventGroup);
+            }
         }
 
         [HttpPost( "UploadEventGroupCover/{EventGroupGuid}/{EventName}" )]

@@ -66,6 +66,18 @@ namespace Omega.DAL
             }
         }
 
+        public async Task DeleteOneEventGroupOmega(string eventId, string userGuid)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroupUser>(userGuid, eventId);
+            TableResult retrievedResult = await _tableEventGroupUser.ExecuteAsync(retrieveOperation);
+            Ambiance deleteEntity = (Ambiance)retrievedResult.Result;
+            if (deleteEntity != null)
+            {
+                TableOperation deleteOperation = TableOperation.Delete(deleteEntity);
+                await _tableEventGroupUser.ExecuteAsync(deleteOperation);
+            }
+        }
+
         public async Task AddMemberToEventGroupOmega( EventGroup pEvent)
         {
             pEvent.Owner = false;

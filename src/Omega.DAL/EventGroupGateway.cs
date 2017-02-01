@@ -139,6 +139,18 @@ namespace Omega.DAL
             await _tableEventGroup.ExecuteBatchAsync( batchOperation );
         }
 
+        public async Task DeleteOneEventGroupOmega(string eventId, string userGuid)
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>(eventId, userGuid);
+            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync(retrieveOperation);
+            Ambiance deleteEntity = (Ambiance)retrievedResult.Result;
+            if (deleteEntity != null)
+            {
+                TableOperation deleteOperation = TableOperation.Delete(deleteEntity);
+                await _tableEventGroup.ExecuteAsync(deleteOperation);
+            }
+        }
+
         public async Task InsertEventGroup(string eventId, List<User> users, string type, string cover, string name, DateTime startTime, string location)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
