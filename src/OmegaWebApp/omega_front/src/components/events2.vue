@@ -15,7 +15,7 @@
             <img src="../assets/more.png" id="moreButton">
             <div id="settingsDiv">
               <span id="addMembers" @click="showMemberModal(true)">Ajouter des membres</span><br>
-              <span id="delete" @click="">Supprimer</span>
+              <span id="delete" @click="deleteEvent(event.RowKey)">Supprimer</span>
             </div>
           </div>
           <span id="eventName">{{event.Name}}</span>
@@ -41,7 +41,7 @@
     <img src="../assets/plus.png" id="plusMood" @click="showEventModal(true)">
 
     <addEventModal v-if="eventModalActive == true"></addEventModal>
-     <addMemberModal v-if="memberModalActive == true"></addMemberModal>
+    <addMemberModal v-if="memberModalActive == true"></addMemberModal>
   </div>
 </template>
 
@@ -368,6 +368,9 @@ export default {
     scrollLeft: function() {
       var scroll = document.getElementById('spanEvent').offsetWidth;
       document.getElementById('eventContainer').scrollLeft -= scroll + 300;
+    },
+    deleteEvent: function(id) {
+      var result = await FacebookApiService.deleteEvent(id)
     }
   },
   computed: {
