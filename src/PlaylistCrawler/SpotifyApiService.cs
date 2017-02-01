@@ -7,6 +7,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Omega.DAL;
+using System;
 
 namespace PlaylistCrawler
 {
@@ -115,7 +116,7 @@ namespace PlaylistCrawler
                     for (int j = 0; j < allTracksInPlaylistArray.Count; j++)
                     {
                         string trackIdTmp = (string)allTracksInPlaylistJson["items"][j]["track"]["id"];
-                        if (await _trackGateway.RetrieveTrack("s", playlistId, trackIdTmp) == null)
+                        if (await _trackGateway.RetrieveTrack("s", playlistId, trackIdTmp) == null && !string.IsNullOrEmpty(trackIdTmp) && !string.IsNullOrEmpty(playlistId))
                             await _cleanTrackGateway.InsertTrackQueue("s", trackIdTmp);
                     }
 
@@ -128,13 +129,19 @@ namespace PlaylistCrawler
                         string albumName = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["name"];
                         string trackPopularity = (string)allTracksInPlaylistJson["items"][i]["track"]["popularity"];
                         string duration = (string)allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
-                        string coverAlbum = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
+                        string coverAlbum = null;
+                        try
+                        {
+                            coverAlbum = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
+                        }
+                        catch (Exception)
+                        {
+
+                        }   
 
                         if (await _trackGateway.RetrieveTrack("s", playlistId, trackId) == null)
                             await _trackGateway.InsertTrack("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum);
                         tracksInPlaylist.Add(new Track("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum));
-                        //if (await _cleanTrackGateway.GetSongCleanTrack("s:" + trackId) == null)
-                        //    await _cleanTrackGateway.InsertTrackQueue("s", trackId);
                     }
                     return tracksInPlaylist;
                 }
