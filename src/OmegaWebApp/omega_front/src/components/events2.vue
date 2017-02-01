@@ -14,8 +14,7 @@
           <div class="divMoreButton" v-if="event.Type == 'eventOmega' && event.Owner == true">
             <img src="../assets/more.png" id="moreButton">
             <div id="settingsDiv">
-              <span id="addMembers" @click="showMemberModal(true),sendIdToAddMember(event.RowKey)">Ajouter des membres</span><br>
-              <span id="addMembers" @click="showMemberModal(true)">Ajouter des membres</span><br>
+              <span id="addMembers" @click="showMemberModal(true), sendIdToAddMember(event.RowKey)">Ajouter des membres</span><br>
               <span id="delete" @click="deleteEvent(event.RowKey)">Supprimer</span>
             </div>
           </div>
@@ -370,7 +369,7 @@ export default {
       var scroll = document.getElementById('spanEvent').offsetWidth;
       document.getElementById('eventContainer').scrollLeft -= scroll + 300;
     },
-    deleteEvent: function(id) {
+    deleteEvent: async function(id) {
       var result = await FacebookApiService.deleteEvent(id)
     }
   },
