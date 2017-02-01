@@ -191,6 +191,11 @@ export const insertEvent = ({commit}, payload) => {
     commit(types.INSERTEVENT, payload)
 }
 
+export const insertGroup = ({commit}, payload) => {
+    
+    commit(types.INSERTGROUP, payload)
+}
+
 export const insertPseudo = ({commit}, payload) => {
     
     commit(types.INSERTPSEUDO, payload)
