@@ -11,6 +11,13 @@
           <img v-bind:src="event.Cover">
         </div>
         <div class="eventInfo">
+          <div class="divMoreButton" v-if="event.Type == 'eventOmega' && event.Owner == true">
+            <img src="../assets/more.png" id="moreButton">
+            <div id="settingsDiv">
+              <span id="addMembers" @click="showMemberModal(true)">Ajouter des membres</span><br>
+              <span id="delete" @click="">Supprimer</span>
+            </div>
+          </div>
           <span id="eventName">{{event.Name}}</span>
           <span id="eventLocation">{{event.Location}}</span>
           <div class="eventDateTime">
@@ -21,8 +28,6 @@
             <span id="tempsRestant">temps restant</span><br>
             <span id="daysLeft">{{event.timeRemaining}}</span>
             jours
-          <span v-if="event.Type == 'eventOmega' && event.Owner == true" id="addMember" @click="showMemberModal(true),setCurrentEvent(event)">Add Member</span>          
-            
           </div>
           <div class="selectEvent" v-if="event.RowKey !== currentEvent.RowKey" @click="setCurrentEvent(event), getFacebookPlaylists(event.RowKey)">
             SÉLECTIONNER
@@ -140,6 +145,44 @@
   font-size: 14px;
   font-family: 'Montserrat-Ultra-Light';
   text-transform: uppercase;
+}
+
+#moreButton {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  width: 20px;
+  height: 5px;
+}
+
+#settingsDiv {
+  visibility: hidden;
+  background: #0e1014;
+  top:10px;
+  right: 10px;
+  position: absolute;
+  font-family: 'Montserrat-ultra-light';
+  font-size: 12px;
+  color: white;
+  z-index: 5;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 150px;
+}
+
+#settingsDiv span {
+  width: 150px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.divMoreButton:hover > #settingsDiv {
+  visibility: visible;
+}
+
+#addMembers:hover, #delete:hover {
+  color: #de002b;
 }
 
 .selectEvent {
