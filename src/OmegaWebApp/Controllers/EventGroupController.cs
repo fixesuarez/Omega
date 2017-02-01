@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using OmegaWebApp.Authentication;
+﻿using Microsoft.AspNetCore.Mvc;
 using Omega.DAL;
 using System.Threading.Tasks;
 using OmegaWebApp.Services;
-using OmegaWebApp.Mappers;
 using System;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace OmegaWebApp.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
+    //[Authorize(ActiveAuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class EventGroupController : Controller
     {
         UserService _userService;
@@ -43,12 +41,21 @@ namespace OmegaWebApp.Controllers
         }
 
         [HttpPost( "CreateEvent" )]
-        public async Task CreateOmegaEvent([FromBody] EventMapper e)
+        public async Task<JToken> CreateOmegaEvent( [FromBody] EventMapper eventCreated )
         {
             string guid = User.FindFirst( "www.omega.com:guid" ).Value;
             string guidEvent = Guid.NewGuid().ToString();
-            //await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
-            await _eventGroupService.CreateOmegaEvent(guidEvent, guid, e.name, DateTime.Now.AddDays(3), e.location, e.cover);
+            await _eventGroupService.CreateOmegaEvent( guidEvent, guid, eventCreated.Name, eventCreated.StartTime, eventCreated.Location );
+            EventToSend e = new EventToSend( guidEvent, eventCreated.Name );
+            string eToString = JsonConvert.SerializeObject( e );
+            JToken eToJson = JToken.Parse( eToString );
+            return eToJson;
+        }
+
+        [HttpPost( "UploadEventCover/{EventGuid}/{EventName}" )]
+        public async Task UploadEventCover( IList<IFormFile> files, string EventGuid, string EventName )
+        {
+            await _eventGroupService.UploadEventCover( files[0], EventGuid, EventName );
         }
 
         [HttpPost("CreateGroup")]
@@ -58,7 +65,7 @@ namespace OmegaWebApp.Controllers
             string guidEvent = Guid.NewGuid().ToString();
             //await _eventGroupService.CreateOmegaEvent( guidEvent, guid, e.eventName, new DateTime( 2000, 1, 1 ), e.eventLocation, e.cover );
             string ownerPseudo = await _userService.RetrievePseudo(guid);
-            await _eventGroupService.CreateOmegaGroup(guidEvent, guid, e.name, ownerPseudo);
+            await _eventGroupService.CreateOmegaGroup(guidEvent, guid, e.Name, ownerPseudo);
         }
 
         [HttpPost( "AddMember" )]
@@ -81,7 +88,7 @@ namespace OmegaWebApp.Controllers
                         }
                         else if( eventGroupOmega.Type == "eventOmega" )
                         {
-                            EventGroup eventOmega = new EventGroup( memberAdded.eventId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location, eventGroupOmega.Cover );
+                            EventGroup eventOmega = new EventGroup( memberAdded.eventId, pseudoIndex.Guid, eventGroupOmega.Name, eventGroupOmega.StartTime, eventGroupOmega.Location );
                             await _eventGroupService.AddMemberToEventGroupOmega( eventOmega );
                         }
                     }
@@ -93,6 +100,25 @@ namespace OmegaWebApp.Controllers
         {
             public string eventId { get; set; }
             public string pseudo { get; set; }
+        }
+
+        public class EventMapper
+        {
+            public string Location { get; set; }
+            public string Name { get; set; }
+            public DateTime StartTime { get; set; }
+        }
+
+        public class EventToSend
+        {
+            public string EventGuid { get; set; }
+            public string EventName { get; set; }
+            public EventToSend() { }
+            public EventToSend( string eventGuid, string eventName )
+            {
+                EventGuid = eventGuid;
+                EventName = eventName;
+            }
         }
     }
 }

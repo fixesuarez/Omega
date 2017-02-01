@@ -22,9 +22,13 @@ namespace OmegaWebApp.Services
             return await _eventGroupGateway.FindEventGroup( idEventGroup, userGuid );
         }
 
-        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location, string image )
+        public async Task CreateOmegaEvent( string guidEvent, string userGuid, string eventName, DateTime starTime, string location )
         {
-            await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location, image );
+            await _eventGroupGateway.CreateEventOmega( guidEvent, userGuid, eventName, starTime, location );
+        }
+        public async Task UploadEventCover( IFormFile eventCover, string eventGuid, string eventName )
+        {
+            await _eventGroupGateway.UploadEventCover( eventCover, eventGuid, eventName );
         }
         public async Task CreateOmegaGroup( string groupGuid, string userGuid, string groupName, string ownerPseudo )
         {

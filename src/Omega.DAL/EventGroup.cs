@@ -1,6 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
-using System.Collections.Generic;
 
 namespace Omega.DAL
 {
@@ -21,16 +20,15 @@ namespace Omega.DAL
             Name = groupName;
             StartTime = new DateTime(1900, 1, 1);
             Type = "groupOmega";
-            Cover = string.Empty;
+            //Cover = string.Empty;
         }
-        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location, string cover )
+        public EventGroup( string groupGuid, string userGuid, string eventName, DateTime startTime, string location )
         {
             PartitionKey = groupGuid;
             RowKey = userGuid;
             Name = eventName;
             StartTime = startTime;
             Type = "eventOmega";
-            Cover = cover;
             Location = location;
         }
 

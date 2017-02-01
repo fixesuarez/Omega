@@ -24,7 +24,7 @@ namespace Omega.DAL
 
         readonly CloudBlobClient _blobClient;
         readonly CloudBlobContainer _container;
-        //CloudBlockBlob _blockBlob;
+        CloudBlockBlob _blockBlob;
 
         public EventGroupGateway(string connectionString)
         {
@@ -51,30 +51,32 @@ namespace Omega.DAL
             _eventGroupUserGateway = new EventGroupUserGateway(connectionString);
         }
 
-        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location, string eventImage )
+        public async Task CreateEventOmega( string eventGuid, string userGuid, string eventName, DateTime startTime, string location )
         {
-            //_blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
-
-            //// full path to file in temp location
-            //var filePath = Path.GetTempFileName();
-            
-            //if( eventImage.Length > 0 )
-            //{
-            //    using( var stream = new FileStream( filePath, FileMode.Create ) )
-            //    {
-            //        await eventImage.CopyToAsync( stream );
-            //    }
-            //}
-            //using( var fileStream = File.OpenRead( filePath ) )
-            //{
-            //    await _blockBlob.UploadFromStreamAsync( fileStream );
-            //}
-
-            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location, eventImage );
+            EventGroup eventOmega = new EventGroup( eventGuid, userGuid, eventName, startTime, location );
             eventOmega.Owner = true;
             TableOperation insertEventOmegaOperation = TableOperation.Insert( eventOmega );
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
             await _eventGroupUserGateway.InsertEventGroup(eventOmega);
+        }
+        public async Task UploadEventCover( IFormFile eventCover, string eventGuid, string eventName )
+        {
+            _blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
+
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+
+            if( eventCover.Length > 0 )
+            {
+                using( var stream = new FileStream( filePath, FileMode.Create ) )
+                {
+                    await eventCover.CopyToAsync( stream );
+                }
+            }
+            using( var fileStream = File.OpenRead( filePath ) )
+            {
+                await _blockBlob.UploadFromStreamAsync( fileStream );
+            }
         }
         public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName, string ownerPseudo )
         {
@@ -166,7 +168,7 @@ namespace Omega.DAL
                     eventGroup.Cover = cover;
                     eventGroup.Name = name;
                     eventGroup.Members = JsonConvert.SerializeObject(members);
-                    //batchOperation.Insert(eventGroup);
+                    batchOperation.Insert(eventGroup);
                     TableOperation insert = TableOperation.Insert(eventGroup);
                     await _tableEventGroup.ExecuteAsync(insert);
                 }

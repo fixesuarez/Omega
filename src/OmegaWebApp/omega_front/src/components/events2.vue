@@ -19,7 +19,7 @@
             <span id="tempsRestant">temps restant</span><br>
             <span id="daysLeft">{{event.timeRemaining}}</span>
             jours
-          <span v-if="event.Type == 'eventOmega'" id="addMember" @click="showMemberModal(true),setCurrentEvent(event)">Add Member</span>          
+          <span v-if="event.Type == 'eventOmega' && event.Owner == true" id="addMember" @click="showMemberModal(true),setCurrentEvent(event)">Add Member</span>          
             
           </div>
           <div class="selectEvent" v-if="event.RowKey !== currentEvent.RowKey" @click="setCurrentEvent(event), getFacebookPlaylists(event.RowKey)">
