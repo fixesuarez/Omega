@@ -35,7 +35,6 @@ namespace OmegaWebApp.Services
         {
             await _eventGroupGateway.DeleteEventGroupOmega( eventGroupId, userGuid );
         }
-
         public async Task DeleteOneEventGroupOmega(string eventGroupId, string userGuid)
         {
             await _eventGroupGateway.DeleteOneEventGroupOmega(eventGroupId, userGuid);
@@ -44,11 +43,15 @@ namespace OmegaWebApp.Services
         {
             await _eventGroupUserGateway.DeleteEventGroupUserOmega( userGuid, eventGroupGuid );
         }
-
         public async Task DeleteOneEventGroupUserOmega(string eventGroupId, string userGuid)
         {
             await _eventGroupUserGateway.DeleteOneEventGroupOmega(eventGroupId, userGuid);
         }
+        public async Task DeleteBlobEventGroupCover(string eventGroupId, string eventName )
+        {
+            await _eventGroupGateway.DeleteBlobEventGroupCover( eventGroupId, eventName );
+        }
+
         public async Task UploadEventGroupCover( IFormFile eventGroupCover, string eventGroupGuid, string eventGroupName )
         {
             await _eventGroupGateway.UploadEventGroupCover( eventGroupCover, eventGroupGuid, eventGroupName );
@@ -58,7 +61,10 @@ namespace OmegaWebApp.Services
         {
             return await _eventGroupGateway.IsUserEventGroupOwner( eventGroupId, userGuid );
         }
-
+        public async Task<string> GetEventGroupName( string eventGroupId, string userGuid )
+        {
+            return await _eventGroupGateway.GetEventGroupName( eventGroupId, userGuid );
+        }
         public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
         {
             await _eventGroupGateway.AddMemberToEventGroupOmega( eventGroupOmega );

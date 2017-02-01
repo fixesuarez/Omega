@@ -82,6 +82,16 @@ namespace Omega.DAL
             else
                 return false;
         }
+        public async Task<string> GetEventGroupName( string eventGroupId, string userGuid )
+        {
+            TableOperation retrieveOperation = TableOperation.Retrieve<EventGroup>( eventGroupId, userGuid );
+            TableResult retrievedResult = await _tableEventGroup.ExecuteAsync( retrieveOperation );
+            EventGroup retrievedEventGroup = (EventGroup) retrievedResult.Result;
+            if( retrievedEventGroup != null )
+                return retrievedEventGroup.Name;
+            else
+                return string.Empty;
+        }
 
         public async Task UploadEventGroupCover( IFormFile eventGroupCover, string eventGroupGuid, string eventGroupName )
         {
@@ -100,6 +110,11 @@ namespace Omega.DAL
                     await _blockBlob.UploadFromStreamAsync( fileStream );
                 }
             }
+        }
+        public async Task DeleteBlobEventGroupCover( string eventGroupId, string eventGroupName )
+        {
+            CloudBlockBlob blockBlob = _container.GetBlockBlobReference( eventGroupId + ":" + eventGroupName );
+            await blockBlob.DeleteAsync();
         }
 
         public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )

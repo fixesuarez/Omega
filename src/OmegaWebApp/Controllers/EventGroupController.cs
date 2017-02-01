@@ -71,8 +71,10 @@ namespace OmegaWebApp.Controllers
             bool userIsEventGroupOwner = await _eventGroupService.IsUserEventGroupOwner( guidEventGroup, userGuid );
             if( userIsEventGroupOwner )
             {
+                string eventGroupName = await _eventGroupService.GetEventGroupName( guidEventGroup, userGuid );
                 await _eventGroupService.DeleteEventGroupOmega( guidEventGroup, userGuid );
                 await _eventGroupService.DeleteEventGroupUserOmega( userGuid, guidEventGroup );
+                await _eventGroupService.DeleteBlobEventGroupCover( guidEventGroup, eventGroupName );
             }
             else if(!userIsEventGroupOwner)
             {
