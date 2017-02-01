@@ -208,9 +208,10 @@ namespace Omega.DAL
                     {
                         string eventGuid = pEvent.RowKey;
                         string eventName = pEvent.Name;
-                        CloudBlobContainer container = _blobClient.GetContainerReference( "mycontainer" );
+                        CloudBlobContainer container = _blobClient.GetContainerReference( "images-eventgroup" );
                         CloudBlockBlob blockBlob = container.GetBlockBlobReference( eventGuid + ":" + eventName );
-                        pEvent.Cover = blockBlob.StorageUri.ToString();
+                        pEvent.Cover = blockBlob.StorageUri.PrimaryUri.AbsoluteUri;
+                        //pEvent.Cover = blockBlob.StorageUri.ToString();
                         tracksDef.Add( pEvent );
                     }
                 }

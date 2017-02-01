@@ -59,25 +59,6 @@ namespace Omega.DAL
             await _tableEventGroup.ExecuteAsync( insertEventOmegaOperation );
             await _eventGroupUserGateway.InsertEventGroup(eventOmega);
         }
-        public async Task UploadEventCover( IFormFile eventCover, string eventGuid, string eventName )
-        {
-            _blockBlob = _container.GetBlockBlobReference( eventGuid + ":" + eventName );
-
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
-
-            if( eventCover.Length > 0 )
-            {
-                using( var stream = new FileStream( filePath, FileMode.Create ) )
-                {
-                    await eventCover.CopyToAsync( stream );
-                }
-            }
-            using( var fileStream = File.OpenRead( filePath ) )
-            {
-                await _blockBlob.UploadFromStreamAsync( fileStream );
-            }
-        }
         public async Task CreateGroupOmega( string groupGuid, string userGuid, string groupName, string ownerPseudo )
         {
             List<string> members = new List<string>();
@@ -89,6 +70,25 @@ namespace Omega.DAL
             TableOperation insertGroupOmegaOperation = TableOperation.Insert( groupOmega );
             await _tableEventGroup.ExecuteAsync( insertGroupOmegaOperation );
             await _eventGroupUserGateway.InsertEventGroup(groupOmega);
+        }
+
+        public async Task UploadEventGroupCover( IFormFile eventGroupCover, string eventGroupGuid, string eventGroupName )
+        {
+            _blockBlob = _container.GetBlockBlobReference( eventGroupGuid + ":" + eventGroupName );
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+
+            if( eventGroupCover.Length > 0 )
+            {
+                using( var stream = new FileStream( filePath, FileMode.Create ) )
+                {
+                    await eventGroupCover.CopyToAsync( stream );
+                }
+                using( var fileStream = File.OpenRead( filePath ) )
+                {
+                    await _blockBlob.UploadFromStreamAsync( fileStream );
+                }
+            }
         }
 
         public async Task AddMemberToEventGroupOmega( EventGroup eventGroupOmega )
