@@ -18,6 +18,9 @@ class FacebookApiService {
     async createEvent(event) {
         return await postAsync(endpoint, 'CreateEvent', AuthService.accessToken, event);
     }
+    async createGroup(group) {
+        return await postAsync(endpoint, 'CreateGroup', AuthService.accessToken, group);
+    }
     async uploadEventCover(cover, eventGuid, eventName) {
         return await uploadAsync(endpoint, 'UploadEventCover/'+eventGuid+'/'+eventName, AuthService.accessToken, cover);
     }
