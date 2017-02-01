@@ -1,10 +1,12 @@
 <template>
   <div class="col-12 eventsGlobal">
-    <div class="eventContainer">
+    <div class="eventContainer" id="eventContainer">
       <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
       <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
-      <scale-loader class="eventLoading" v-if="loading == true" :loading="loading" style="margin: 20;"></scale-loader>
-      <div class="event" v-for="event in events">
+      <div class="loadingScreen" v-if="loading == true">
+        <scale-loader class="eventLoading" :loading="loading" style="margin: 20;"></scale-loader>
+      </div>
+      <div class="event" v-for="event in events" id="spanEvent">
         <div id="eventCover">
           <img v-bind:src="event.Cover">
         </div>
@@ -50,7 +52,9 @@
 }
 
 .eventLoading {
-  position: relative;
+  position: absolute;
+  left: 47%;
+  top: 45%;
 }
 
 .eventContainer {
@@ -77,6 +81,10 @@
   width: 150px;  
   overflow: hidden;
   float: left;
+}
+
+#eventCover img {
+  height: 300px;
 }
 
 .eventInfo {
@@ -182,6 +190,16 @@
 
 #plusMood {
 
+}
+
+.loadingScreen {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: black;
+  opacity: 0.6;
 }
 
 </style>
@@ -299,6 +317,14 @@ export default {
         var date = new Date(today.getFullYear(), this.localEvents[i].MonthNum, this.localEvents[i].Day)
         this.localEvents[i].timeRemaining = Math.ceil((date.getTime()-today.getTime())/(one_day))
       }
+    },
+    scrollRight: function() {
+      var scroll = document.getElementById('spanEvent').offsetWidth;
+      document.getElementById('eventContainer').scrollLeft += scroll + 300;
+    },
+    scrollLeft: function() {
+      var scroll = document.getElementById('spanEvent').offsetWidth;
+      document.getElementById('eventContainer').scrollLeft -= scroll + 300;
     }
   },
   computed: {
