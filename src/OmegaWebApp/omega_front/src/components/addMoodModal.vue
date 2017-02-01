@@ -78,33 +78,33 @@ export default {
       this.moodToCreate.cover = this.moodCover;
       this.moodToCreate.name = this.moodName;
       if(this.moodCriterias[0].value == null) {
-        this.metadonnees.Accousticness = this.moodCriterias[0].value;
+        this.metadonnees.Danceability = this.moodCriterias[0].value;
       } else {
-        this.metadonnees.Accousticness = this.moodCriterias[0].value/100;
+        this.metadonnees.Danceability = this.moodCriterias[0].value/100;
       }
 
       if(this.moodCriterias[1].value == null) {
-        this.metadonnees.Danceability = this.moodCriterias[1].value;
+        this.metadonnees.Energy = this.moodCriterias[1].value;
       } else {
-        this.metadonnees.Danceability = this.moodCriterias[1].value/100;
+        this.metadonnees.Energy = this.moodCriterias[1].value/100;
       }
 
       if(this.moodCriterias[2].value == null) {
-        this.metadonnees.Energy = this.moodCriterias[2].value;
+        this.metadonnees.Speechiness = this.moodCriterias[2].value;
       } else {
-        this.metadonnees.Energy = this.moodCriterias[2].value/100;
+        this.metadonnees.Speechiness = this.moodCriterias[2].value/100;
       }
 
       if(this.moodCriterias[3].value == null) {
-        this.metadonnees.Instrumentalness = this.moodCriterias[3].value;
+        this.metadonnees.Accousticness = this.moodCriterias[3].value;
       } else {
-        this.metadonnees.Instrumentalness = this.moodCriterias[3].value/100;
+        this.metadonnees.Accousticness = this.moodCriterias[3].value/100;
       }
 
       if(this.moodCriterias[4].value == null) {
-        this.metadonnees.Speechiness = this.moodCriterias[4].value;
+        this.metadonnees.Instrumentalness = this.moodCriterias[4].value;
       } else {
-        this.metadonnees.Speechiness = this.moodCriterias[4].value/100;
+        this.metadonnees.Instrumentalness = this.moodCriterias[4].value/100;
       }
 
       if(this.moodCriterias[5].value == null) {

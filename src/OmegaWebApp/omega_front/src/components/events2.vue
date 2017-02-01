@@ -1,6 +1,8 @@
 <template>
   <div class="col-12 eventsGlobal">
     <div class="eventContainer">
+      <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
+      <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
       <scale-loader class="eventLoading" v-if="loading == true" :loading="loading" style="margin: 20;"></scale-loader>
       <div class="event" v-for="event in events">
         <div id="eventCover">
@@ -43,7 +45,7 @@
   color: white;
   display: inline-block;
   white-space: nowrap;
-  padding: 20px;
+  padding: 40px;
   text-align: center;
 }
 
@@ -52,7 +54,6 @@
 }
 
 .eventContainer {
-  padding-left: 40px;
   height: 400px;
   width: 100%;
   white-space: nowrap;

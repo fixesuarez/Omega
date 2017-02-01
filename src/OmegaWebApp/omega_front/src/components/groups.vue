@@ -3,8 +3,8 @@
     <div class="groupContainer">
       <div class="group" v-for="group in groups">
         <div id="groupCover">
-          <img v-bind:src="group.cover.source" v-if="group.cover !== undefined">
-          <img src="../assets/groupNoCover.png" v-if="group.cover == undefined">
+          <img v-bind:src="group.Cover" v-if="group.Cover !== undefined">
+          <img src="../assets/groupNoCover.png" v-if="group.Cover == undefined">
         </div>
         <div class="groupInfo">
           <span id="groupName">{{group.Name}}</span>
