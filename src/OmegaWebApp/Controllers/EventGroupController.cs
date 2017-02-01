@@ -64,7 +64,7 @@ namespace OmegaWebApp.Controllers
             return eToJson;
         }
 
-        [HttpPost( "UploadEventCover/{EventGroupGuid}/{EventName}" )]
+        [HttpPost( "UploadEventGroupCover/{EventGroupGuid}/{EventName}" )]
         public async Task UploadEventGroupCover( IList<IFormFile> files, string EventGroupGuid, string EventName )
         {
             await _eventGroupService.UploadEventGroupCover( files[0], EventGroupGuid, EventName );
