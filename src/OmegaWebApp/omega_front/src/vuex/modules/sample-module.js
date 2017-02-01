@@ -11,6 +11,7 @@ const state = {
   pseudoModalActive: true,
   mixModalActive: false,  
   eventModalActive: false,
+  groupModalActive: false,  
   moodsModalActive: false,
   memberModalActive: false,
   events: '',
@@ -35,6 +36,7 @@ const state = {
   memberToInsert: '',
   member: '',
   eventToInsert:'',
+  groupToInsert:'',
   mixToMix: {AmbianceName: '', AllPlaylists: ''},
   identity: false,
   track: '',
@@ -58,6 +60,9 @@ const mutations = {
   },
   [types.SHOWEVENTMODAL](state, payload) {
     state.eventModalActive = payload;
+  },
+  [types.SHOWGROUPMODAL](state, payload) {
+    state.groupModalActive = payload;
   },
   [types.SHOWMOODSMODAL](state, payload) {
     state.moodsModalActive = payload;
@@ -167,6 +172,9 @@ const mutations = {
   },
   [types.INSERTEVENT](state, payload) {
     state.eventToInsert = payload;
+  },
+  [types.INSERTGROUP](state, payload) {
+    state.groupToInsert = payload;
   },
 
 //GETTERS 

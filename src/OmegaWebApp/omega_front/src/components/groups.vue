@@ -23,6 +23,11 @@
         </div>
       </div>
     </div>
+    <br>
+    <img src="../assets/plus.png" id="plusMood" @click="showGroupModal(true)">
+
+        <addGroupModal v-if="groupModalActive == true"></addGroupModal>
+
   </div>
 </template>
 
@@ -188,6 +193,8 @@ import { mapGetters, mapActions } from 'vuex'
 import FacebookApiService from '../services/FacebookApiService'
 import PlaylistApiService from '../services/PlaylistApiService'
 import AuthService from '../services/AuthService'
+import addGroupModal from '../components/addGroupModal.vue'
+
 
 
 export default {
@@ -199,7 +206,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['requestAsync', 'setCurrentGroup', 'sendPlaylists', 'sendGroups']),
+    ...mapActions(['requestAsync', 'setCurrentGroup', 'sendPlaylists', 'sendGroups','showGroupModal']),
     loadGroups: async function() {
       this.localGroups = await this.requestAsync(() => FacebookApiService.getFacebookGroups());
       this.sendGroups(this.localGroups);
@@ -229,11 +236,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentGroup', 'groups'])
+    ...mapGetters(['currentGroup', 'groups','groupModalActive'])
   },  
   created () {
     this.loadGroups()
-  }
+  },
+  components: {
+      addGroupModal
+
+
+    }
 }
 
 </script>
