@@ -22,7 +22,7 @@ class FacebookApiService {
         return await postAsync(endpoint, 'CreateGroup', AuthService.accessToken, group);
     }
     async uploadEventCover(cover, eventGuid, eventName) {
-        return await uploadAsync(endpoint, 'UploadEventCover/'+eventGuid+'/'+eventName, AuthService.accessToken, cover);
+        return await uploadAsync(endpoint, 'UploadEventGroupCover/'+eventGuid+'/'+eventName, AuthService.accessToken, cover);
     }
     async AddMember(member) {
         return await postAsync(endpoint, 'AddMember', AuthService.accessToken, member);
