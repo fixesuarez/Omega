@@ -13,7 +13,8 @@
           <span v-for="data in mood.metadonnees">
             <img v-if="data < 1 && data > 0" src="../assets/bar.png" id="dataBar" v-bind:style="{height: 150*data +'px'}">
             <img v-if="data <= 100 && data > 1" src="../assets/bar.png" id="dataBar" v-bind:style="{height: data*1.5 +'px'}">
-            <img v-if="data == 1 || data == 0 && data != ''" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*75)+75 +'px'}">
+            <img v-if="data == 1 && data !== ''" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*75)+75 +'px'}">
+            <img v-if="data == 0 && data !== ''" src="../assets/bar.png" id="dataBar" v-bind:style="{height: 1 +'px'}">
             <img v-if="data < 0" src="../assets/bar.png" id="dataBar" v-bind:style="{height: (data*150)/(-60) +'px'}">
             <img v-if="data == '' || data == null" src="../assets/bar.png" id="dataBar" v-bind:style="{height: '150px', filter: 'grayscale(100%)', opacity: '0.99'}">
           </span><br>
@@ -58,6 +59,11 @@
 
 
 <style>
+
+body {
+  overflow: hidden;
+}
+
 .moodsGlobal {
   height: 76vh;
   background: #0e1014;
@@ -71,7 +77,6 @@
   display: inline-block;
   text-align: center;
   overflow-x: auto;
-  float: left;
 }
 
 .currentMood {

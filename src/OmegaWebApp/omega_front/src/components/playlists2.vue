@@ -227,6 +227,8 @@ export default {
   height: 30vh;
   min-height: 169px;
   background: #0e1014;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 .playlistNavbar {
