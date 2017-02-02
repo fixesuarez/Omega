@@ -81,6 +81,7 @@ export default {
       var result = await FacebookApiService.createGroup(this.groupToCreate.name);
       var result2 = await FacebookApiService.uploadGroupCover(this.formData, result.EventGroupGuid, result.EventGroupName);
       var data = await this.requestAsync(() => GroupService.getGroups());
+      this.sendGroups(data);
     },
     createLocalGroup: async function(item) {
       this.groupToCreate.cover = this.groupCover;

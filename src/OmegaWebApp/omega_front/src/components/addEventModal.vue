@@ -89,6 +89,7 @@ export default {
       var result = await FacebookApiService.createEvent(this.eventToCreate);
       var result2 = await FacebookApiService.uploadEventCover(this.formData, result.EventGroupGuid, result.EventGroupName);
       var data = await this.requestAsync(() => EventService.getEvents());
+      this.sendEvents(data);
     },
     createLocalEvent: async function(item) {
       this.eventToCreate.cover = this.eventCover;
