@@ -4,7 +4,7 @@
       <img src="../assets/rightButton.png" class="rightScroll" @click="scrollRight">
       <img src="../assets/leftButton.png" class="leftScroll" @click="scrollLeft">
       <div class="loadingScreen" v-if="loading == true">
-        <scale-loader class="eventLoading" :loading="loading" style="margin: 20;"></scale-loader>
+        <scale-loader class="eventLoading"></scale-loader>
       </div>
       <div class="event" v-for="event in events" id="spanEvent">
         <div id="eventCover">
@@ -15,8 +15,8 @@
             <img src="../assets/more.png" id="moreButton">
             <div id="settingsDiv">
               <span id="addMembers" @click="showMemberModal(true), sendIdToAddMember(event.RowKey)">Ajouter des membres</span><br>
-              <span id="delete" @click="deleteEvent(event.RowKey)" v-if="event.Owner == true">Supprimer le groupe</span>
-              <span id="delete" @click="deleteEvent(event.RowKey)" v-else>Quitter le groupe</span>
+              <span id="delete" @click="deleteEvent(event.RowKey)" v-if="event.Owner == true">Supprimer l'évènement</span>
+              <span id="delete" @click="deleteEvent(event.RowKey)" v-else>Quitter le évènement</span>
             </div>
           </div>
           <span id="eventName">{{event.Name}}</span>
@@ -372,6 +372,8 @@ export default {
     },
     deleteEvent: async function(id) {
       var result = await FacebookApiService.deleteEvent(id)
+      this.localEvents = await this.requestAsync(() => FacebookApiService.getFacebookEvents());
+      this.sendEvents(this.localEvents);
     }
   },
   computed: {

@@ -4,9 +4,17 @@
       <div class="group" v-for="group in groups">
         <div id="groupCover">
           <img v-bind:src="group.Cover" v-if="group.Cover !== undefined">
-          <img src="../assets/groupNoCover.png" v-if="group.Cover == undefined">
+          <img src="../assets/groupNoCover.png" v-if="group.Cover == undefined" id="noCover">
         </div>
         <div class="groupInfo">
+          <div class="divMoreButtonG" v-if="group.Type == 'groupOmega'">
+            <img src="../assets/more.png" id="moreButton">
+            <div id="settingsDivG">
+              <span id="addMembers" @click="showMemberModal(true), sendIdToAddMember(group.RowKey)">Ajouter des membres</span><br>
+              <span id="delete" @click="deleteGroup(group.RowKey)" v-if="group.Owner == true">Supprimer le groupe</span>
+              <span id="delete" @click="deleteGroup(group.RowKey)" v-else>Quitter le groupe</span>
+            </div>
+          </div>
           <span id="groupName">{{group.Name}}</span>
           <span id="membersLabel">membres du groupe</span>
           <div class="groupMembers">
@@ -27,10 +35,8 @@
     <br>
     <img src="../assets/plus.png" id="plusMood" @click="showGroupModal(true)">
 
-        <addGroupModal v-if="groupModalActive == true"></addGroupModal>
-        <addMemberModal v-if="memberModalActive == true"></addMemberModal>
-
-
+    <addGroupModal v-if="groupModalActive == true"></addGroupModal>
+    <addMemberModal v-if="memberModalActive == true"></addMemberModal>
   </div>
 </template>
 
@@ -43,6 +49,15 @@
   white-space: nowrap;
   padding: 20px;
   text-align: center;
+}
+
+.groupContainer {
+  height: 400px;
+  width: 100%;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: center;
+  overflow-x: auto;
 }
 
 .group {
@@ -64,6 +79,10 @@
 
 #groupCover img {
   height: 100%;
+}
+
+#noCover {
+  float: left;
 }
 
 .groupInfo {
@@ -100,6 +119,46 @@
   color: #FCB42A;
   width: 150px;
 }
+
+.divMoreButtonG {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  width: 20px;
+  height: 5px;
+}
+
+#settingsDivG {
+  visibility: hidden;
+  background: #0e1014;
+  top:10px;
+  right: 10px;
+  position: absolute;
+  font-family: 'Montserrat-ultra-light';
+  font-size: 12px;
+  color: white;
+  z-index: 5;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 150px;
+}
+
+#settingsDivG span {
+  width: 150px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.divMoreButtonG:hover > #settingsDivG {
+  visibility: visible;
+}
+
+#addMembers:hover, #delete:hover {
+  color: #de002b;
+}
+
+
 
 .groupDateTime {
   position: absolute;
@@ -235,6 +294,11 @@ export default {
         var date = new Date(today.getFullYear(), this.localGroups[i].MonthNum, this.localGroups[i].Day)
         this.localGroups[i].timeRemaining = Math.ceil((date.getTime()-today.getTime())/(one_day))
       }
+    },
+    deleteGroup: async function(id) {
+      var result = await FacebookApiService.deleteEvent(id)
+      this.localGroups = await this.requestAsync(() => FacebookApiService.getFacebookGroups());
+      this.sendGroups(this.localGroups);
     }
   },
   computed: {

@@ -4,15 +4,16 @@
     <div class="eventModal-mask">
       <div class="eventModal-wrapper">
         <div class="eventModal-container">
+          <span id="closeModal" @click="showEventModal(false)">X</span>
           <div class="addEventText">
             <div class="addEventModal">
-              <span id="eventTitle">CRÉER UN évènement OMEGA</span><br>
+              <span id="eventTitle">créer un évènement omega</span><br>
               <br>
               <div class="newEventInfos">
                 <span id="smallText">Nom : <input type="text" v-model="eventName"><br><span>
-                <input v-bind:ref="avatar" type="file" name="avatar" id="inputFile" @change="upload">
+                <span id="smallText">Image :<input v-bind:ref="avatar" type="file" name="avatar" id="inputFile" @change="upload"></span><br>
                 <span id="smallText">Lieu : <input type="text" v-model="eventLocation"><br><span>
-                <input type="date" v-model="eventStartTime" min="2017-01-31">
+                <span id="smallText">Date :<input type="date" v-model="eventStartTime" min="2017-01-31"></span>
               </div>
               <!--<div class="newEvent">
                 <div class="newEventCover">
@@ -23,12 +24,10 @@
                   <span id="newEventLocation">{{eventLocation}}</span>
                 </div>
               </div>-->
-
-              <button @click="createEvent()">Créer</button>
             </div>
           </div>
-          <div class="modalClose" @click="showEventModal(false)">
-            FERMER <img src="../assets/arrow.png">
+          <div class="eventModalClose" @click="showEventModal(false), createEvent()" v-if="eventStartTime !== null">
+            CRÉER <img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
@@ -145,7 +144,6 @@ export default {
     ...mapGetters(['events', 'currentEvent'])
   },
   created () {
-    this.loadEvents()
   },
 }
 
@@ -178,10 +176,12 @@ export default {
   display: table-cell;
 }
 
+.newEventInfos {
+  text-align: left;
+}
+
 .eventModal-container {
-  margin-bottom: 100px;
-  margin-left: 20%;
-  height: 450px;
+  height: 200px;
   width: 400px;
   background-color: #191B27;
   border-radius: 2px;
@@ -195,6 +195,12 @@ export default {
 }
 
 .allCriterias {
+}
+
+#closeModal {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 
 #criteriaValue {
@@ -231,8 +237,8 @@ export default {
   text-align: left;
 }
 
-.modalClose {
-  width: 180px;
+.eventModalClose {
+  width: 120px;
   padding: 10px;
   background: #de002b;
   color: black;
@@ -241,13 +247,14 @@ export default {
   text-transform: uppercase;
 }
 
-.modalClose img {
+.eventModalClose img {
   margin-left: 6px;
   width: 25px;
 }
 
 #eventTitle {
   font-size: 22px;
+  text-transform: uppercase;
 }
 
 #smallText {

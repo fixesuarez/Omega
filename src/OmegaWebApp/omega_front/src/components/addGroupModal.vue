@@ -4,28 +4,28 @@
     <div class="groupModal-mask">
       <div class="groupModal-wrapper">
         <div class="groupModal-container">
+          <span id="closeModal" @click="showGroupModal(false)">X</span>
           <div class="addGroupText">
             <div class="addGroupModal">
               <span id="groupTitle">CRÉER UN GROUPE OMEGA</span><br>
               <br>
               <div class="newGroupInfos">
                 <span id="smallText">Nom : <input type="text" v-model="groupName"><br><span>
-                <input v-bind:ref="avatar" type="file" name="avatar" id="inputFile" @change="upload">
+                <span id="smallText">Image : <input v-bind:ref="avatar" type="file" name="avatar" id="inputFile" @change="upload"></span>
               </div>
-              <div class="newGroup">
+              <!--<div class="newGroup">
                 <div class="newGroupCover">
                   <img :src="groupCover">
                 </div>
                 <div class="newGroupInfo">
                   <span id="newGroupName">{{groupName}}</span>
                 </div>
-              </div>
-
-              <button @click="createGroup()">Créer</button>
+              </div>-->
+              <!--<button @click="createGroup()">Créer</button>-->
             </div>
           </div>
-          <div class="modalClose" @click="showGroupModal(false)">
-            FERMER <img src="../assets/arrow.png">
+          <div class="groupModalClose" @click="showGroupModal(false), createGroup()">
+            CRÉER <img src="../assets/arrow.png">
           </div>
           <!--<button class="modal-default-button" @click="showModal(false)">ok</button>-->
         </div>
@@ -136,7 +136,6 @@ export default {
     ...mapGetters(['groups', 'currentGroup','idToAddMember'])
   },
   created () {
-    this.loadGroups()
   },
 }
 
@@ -170,9 +169,7 @@ export default {
 }
 
 .groupModal-container {
-  margin-bottom: 100px;
-  margin-left: 20%;
-  height: 450px;
+  height: 150px;
   width: 400px;
   background-color: #191B27;
   border-radius: 2px;
@@ -222,8 +219,8 @@ export default {
   text-align: left;
 }
 
-.modalClose {
-  width: 180px;
+.groupModalClose {
+  width: 120px;
   padding: 10px;
   background: #de002b;
   color: black;
@@ -232,7 +229,7 @@ export default {
   text-transform: uppercase;
 }
 
-.modalClose img {
+.groupModalClose img {
   margin-left: 6px;
   width: 25px;
 }
