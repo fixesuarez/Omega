@@ -23,10 +23,10 @@
               {{member}}<br>
             </span>
           </div>
-          <div class="selectGroup" v-if="group.id !== currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
+          <div class="selectGroup" v-if="group.RowKey !== currentGroup.RowKey" @click="setCurrentGroup(group), getFacebookPlaylists(group.RowKey)">
             SÉLECTIONNER
           </div>
-          <div class="selectGroup selected" v-if="group.id == currentGroup.id" @click="setCurrentGroup(group), getFacebookPlaylists(group.id)">
+          <div class="selectGroup selected" v-if="group.RowKey == currentGroup.RowKey" @click="setCurrentGroup(group), getFacebookPlaylists(group.RowKey)">
             SÉLECTIONNER
           </div>
         </div>
