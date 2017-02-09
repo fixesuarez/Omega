@@ -17,7 +17,6 @@ export async function uploadAsync(endpoint, id, token, data) {
             Authorization: `Bearer ${token}`
         },
         success: function(data){
-          alert(data);
         }
       });
 }
