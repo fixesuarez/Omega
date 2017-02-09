@@ -19,8 +19,8 @@
         <div><router-link to="/playlist"><span @click="showPlaylistHelperModal(true)"><img src="./assets/playlistsIcon.png"><br>playlists</span></router-link></div>
         <div><router-link to ="/events"><span><img src="./assets/eventIcon.png"><br>évènements</router-link></span></div>
         <div><router-link to ="/groups"><span><img src="./assets/groupIcon.png"><br>groupes</router-link></span></div>
-        <div><router-link to="/moods"><span><img src="./assets/moodIcon.png"><br>ambiances</router-link></span></div>
-        <div><router-link to="/mix"><span @click="startMix()"><img src="./assets/MixLogo.png" id="mixImage"><br>mix</router-link></span></div>
+        <div><router-link to="/moods"><span><img src="./assets/moodIcon.png" v-if="currentMood !== ''"><img src="./assets/moodOff.png" v-if="currentMood == ''"><br>ambiances</router-link></span></div>
+        <div><router-link to="/mix"><span @click="startMix()"><img src="./assets/MixLogo.png" id="mixImage" v-if="currentMood == ''"><img src="./assets/triangleGrey.png" v-if="currentMood !== ''"><br>mix</router-link></span></div>
       </div>
     </div>
     <router-view></router-view>
@@ -88,7 +88,6 @@
       }
     },
     loadPseudo: async function() {
-
       var pseudo = await this.requestAsync(() => PseudoService.getPseudo());   
       this.sendPseudo(pseudo.Pseudo);
       this.loadPseudoEnd = true;
