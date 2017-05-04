@@ -123,16 +123,23 @@ namespace PlaylistCrawler
 
                     await _trackGateway.DeleteAllTrackPlaylist(playlistId);
 
+                    string trackTitle = null;
+                    string trackId = null;
+                    string albumName = null;
+                    string trackPopularity = null;
+                    string duration = null;
+                    string coverAlbum = null;
+
                     for (int i = 0; i < allTracksInPlaylistArray.Count; i++)
                     {
                         try
                         {
-                            string trackTitle = (string)allTracksInPlaylistJson["items"][i]["track"]["name"];
-                            string trackId = (string)allTracksInPlaylistJson["items"][i]["track"]["id"];
-                            string albumName = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["name"];
-                            string trackPopularity = (string)allTracksInPlaylistJson["items"][i]["track"]["popularity"];
-                            string duration = (string)allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
-                            string coverAlbum = null;                       
+                            trackTitle      = (string)allTracksInPlaylistJson["items"][i]["track"]["name"];
+                            trackId         = (string)allTracksInPlaylistJson["items"][i]["track"]["id"];
+                            albumName       = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["name"];
+                            trackPopularity = (string)allTracksInPlaylistJson["items"][i]["track"]["popularity"];
+                            duration        = (string)allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
+                            coverAlbum      = null;                       
                             coverAlbum = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
                         }
                         catch (Exception)
