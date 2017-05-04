@@ -1,0 +1,229 @@
+.col-1 {width: 8.33%;}
+.col-1-5 {width: 12.66%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-7-5 {width: 62.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-9.5 {width: 79%;}
+.col-10 {width: 83.33%;}
+.col-10-5 {width: 87.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 5px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #666666;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #333;
+}
+::-webkit-scrollbar-track {
+  background: black;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+  background: black;
+}
+::-webkit-scrollbar-track:active {
+  background: black;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+  
+
+.navbarContainer {
+  height: 24vh;
+  min-height: 182px;
+  background: #0e1014;
+}
+
+.appNavbar {
+  padding: 15px;
+  background: #0e1014;
+  margin: auto;
+}
+
+#appLogo {
+  width: 30px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.appTitle {
+  font-family: 'beat';
+  color: #b3b4b6;
+  font-size: 20px;
+}
+
+#appRedText {
+  color: #de002b;
+}
+
+#appRedText:hover {
+  color: white;
+}
+
+.appLogoDiv {
+}
+
+.appProviders {
+  margin-top: 5px;
+  font-family: 'montserrat-ultra-light';
+  text-align: center;
+}
+
+.appProviders span {
+  transition: color .5s, font-size .5s;  
+}
+
+.appProviders span:hover {
+  color: #de002b;
+}
+
+.appProviders span {
+  padding-left: 5%;
+  padding-right: 5%;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.appProfile {
+  width: 200px;
+  text-align: right;
+}
+
+#appProfile {
+  width: 25px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+}
+
+.appProfileText {
+  margin-left: 8px;
+  margin-top: 42px;
+  font-family: 'montserrat-ultra-light';
+  color: #b3b4b6;
+}
+
+.appControlPanel {
+  margin: 0 auto;
+  margin-top: 50px;
+  background: #0e1014;
+  font-family: 'montserrat-ultra-light';
+  text-align: center;
+  transition: padding-top 0.8s;
+  display: table;
+}
+
+.appControlPanel div {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.appControlPanel img {
+  width: 40px;
+  height: 40px;
+  transition: width 0.5s;
+}
+
+.appControlPanel span {
+  color: #b3b4b6;
+  text-decoration: none;
+  transition: color 0.5s, font-size .5s;
+  cursor: pointer;
+}
+
+.appControlPanel a {
+  color: #b3b4b6;
+  text-decoration: none;
+  transition: color 0.5s, font-size .5s;
+  cursor: pointer;
+}
+
+#mixImage {
+}
+
+.appControlPanel span:hover {
+  color: #de002b;
+}
+
+@media screen and (max-width: 1130px)
+{
+  .appControlPanel img {
+    width: 35px;
+    height: 35px;
+  }
+  .appControlPanel {
+    margin-top: 45px;
+  }
+  .appControlPanel a {
+    font-size: 12px;
+  }
+
+  .appProviders a {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-height: 900px) {
+  .appControlPanel {
+    margin-top: 40px;
+  }
+  .appControlPanel img{
+    height: 35px;
+    width: 35px;
+  }
+}
+
+@media screen and (max-height: 800px) {
+  .appControlPanel {
+    margin-top: 35px;
+  }
+  .appControlPanel img{
+    height: 30px;
+    width: 30px;
+  }
+}
+
+.fade-move {
+  transition: transform 10s;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 5.5s, transform 5.5s;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+  transform: translateY(-200px);
+}
+
+.bounce-enter-active, .fade-leave-active {
+  animation: bounce-in .5s;
+}
+
+.bounce-enter, .fade-leave-active {
+  animation: bounce-out .5s;
+}

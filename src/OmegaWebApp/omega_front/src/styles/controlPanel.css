@@ -1,0 +1,241 @@
+* {
+    box-sizing: border-box;
+}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"] {
+    float: left;
+}
+
+@font-face {
+    font-family: 'beat';
+    src:url('../assets/beat.otf');
+}
+
+html, body{
+  height:100%;
+  margin: 0px;
+}
+
+body {
+  min-height: 100%;
+}
+
+.leftContent {
+  width: 250px; 
+  min-height: 100vh;
+  background-color: #171717;
+  float: left;
+  color: #e7e7e7;
+  font-family: 'beat';
+  position: relative;
+  z-index: 2;
+}
+
+.redLine {
+  width: 2px;
+  min-height: 100vh;
+  float: left;
+  background-color: #de002b;
+  box-shadow: 1px 0px 8px 1px black;
+}
+
+.logo {
+  margin-top: 35px; 
+}
+
+#imgLogo {
+  width: 100px;
+  height: 100px;
+  display: block;
+  margin: auto;
+}
+
+.profile {
+  margin: auto;
+  margin-top: 30px;
+  text-align: center;
+  font-size: 12px;
+}
+
+#imgProfile {
+  width: 30px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+#redText {
+  color: #de002b;
+}
+
+.playlistTab {
+  width: 100%;
+}
+
+nav{
+	display:inline-block;
+  text-align: center;
+	background-color:#171717;
+  margin-top: 30px;
+}
+
+nav a{
+	display:inline-block;
+	padding: 15px;
+  color: #e7e7e7;
+	font-size:16px;
+	text-decoration:none !important;
+  width: 250px;
+	background-color:transparent;
+  -webkit-transition:background-color 0.6s, color 1s;
+	-moz-transition:background-color 0.6s, color 1s;
+	transition:background-color 0.6s, color 1s;
+}
+
+nav.playlistsTab .playlistsTab,
+nav.evenementsTab .evenementsTab,
+nav.groupesTab .groupesTab,
+nav.ambiancesTab .ambiancesTab{
+	background-color:#de002b;
+  color: #171717;
+}
+
+.players {
+  margin-top: 30px;
+  opacity: 1;
+}
+
+.controlMoods {
+  text-align: center;
+  margin: auto;
+  margin-top: 20px;
+  height: 80px;
+}
+
+.controlMood {
+  float: left;
+  position: relative;
+}
+
+.controlMoodLabel {
+  opacity: 1;
+  margin-top: 10px;
+}
+
+.controlMoodOverlay {
+  width: 60px;
+  height: 60px;
+  left: 2px;
+  top: 2px;
+  z-index: 2;
+  overflow: hidden;
+  position: absolute;
+  background: black;
+  opacity: 0;
+  visibility: hidden;
+  padding-top: 10px;
+  cursor: pointer;
+  -webkit-transition:opacity 0.5s;
+	-moz-transition: opacity 0.5s;
+	transition: opacity 0.5s;
+}
+
+.controlMoodOverlay span {
+  color: white;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.controlMood:hover .controlMoodOverlay {
+  opacity: 0.8;
+  visibility: visible;
+}
+
+.moodImage {
+  width: 58px;
+  margin-left: 2px;
+  border-radius: 2px;
+  text-align: center;
+  opacity: 0.2;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.checkedImage {
+}
+
+.controlMoods img {
+  width: 60px;
+  height: 60px;
+  margin-left: 2px;
+  border-radius: 2px;
+  float: left;
+  margin-top: 2px;
+}
+
+.criterias {
+  margin-top: 30px;
+}
+
+.criterias img {
+  margin-right: 20px;
+  position: relative;
+  top: 10px;
+}
+
+.criteriaValue {
+  position: absolute;
+  float: right;
+  margin-top: 14px;
+  margin-left: 10px;
+}
+
+.criteriasWrapper {
+}
+
+input[type="range"]{
+  -webkit-appearance:none;
+  width:200px;
+  height:6x;
+  background: #171717;
+  background-position:center;
+  background-repeat:no-repeat;
+  margin: auto;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:10px;
+  height:6px;
+  background: red;
+  position:relative;
+  z-index:3;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover{
+  -webkit-appearance:none;
+  width:10px;
+  height:6px;
+  background: #de002b;
+  position:relative;
+  z-index:3;
+  cursor: pointer;
+}
+
+/* Lorsque l'on modifie le state, le CSS ne suit pas directement, un changement est necéssaire pour effectuer les changements, + impossible de recupérer un state du store en local ?? + impossible d'effectuer un mapping sur certaines fonctions dans les mutations, sans raison apparente */
+
+

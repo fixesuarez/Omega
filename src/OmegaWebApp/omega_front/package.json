@@ -1,0 +1,35 @@
+{
+  "name": "omega_front",
+  "description": "A Vue.js project",
+  "author": "omega",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.13.0",
+    "bootstrap": "^3.3.7",
+    "jump.js": "https://github.com/brhue/jump.js/tarball/a656f73f10abc53b1cd1edf041248231b741e233",
+    "vue": "^2.0.1",
+    "vue-resource": "^1.0.3",
+    "vue-router": "^2.0.1",
+    "vue-scrollspy": "^0.1.3",
+    "vue-spinner": "^1.0.2",
+    "vueboot": "^0.4.5",
+    "vuex": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.7",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-2": "^6.13.0",
+    "cross-env": "^3.0.0",
+    "css-loader": "^0.25.0",
+    "file-loader": "^0.9.0",
+    "url-loader": "^0.5.7",
+    "vue-loader": "^9.7.0",
+    "webpack": "^2.1.0-beta.25",
+    "webpack-dev-server": "^2.1.0-beta.0"
+  }
+}
