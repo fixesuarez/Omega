@@ -5,10 +5,7 @@
   },
 
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.1.0"
-    },
+    "Microsoft.NETCore.App": "1.1.1",
     "Omega.DAL": {
       "target": "project"
     }
@@ -21,5 +18,9 @@
         "portable-net451+win8"
       ]
     }
+  },
+
+  "runtimes": {
+    "win10-x64": {}
   }
 }
