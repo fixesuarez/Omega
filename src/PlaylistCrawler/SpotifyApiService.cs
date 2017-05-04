@@ -17,6 +17,7 @@ namespace PlaylistCrawler
         readonly PlaylistGateway _playlistGateway;
         readonly UserGateway _userGateway;
         readonly CleanTrackGateway _cleanTrackGateway;
+
         public SpotifyApiService(TrackGateway trackGateway, PlaylistGateway playlistGateway, UserGateway userGateway, CleanTrackGateway cleanTrackGateway)
         {
             _trackGateway = trackGateway;
@@ -124,24 +125,31 @@ namespace PlaylistCrawler
 
                     for (int i = 0; i < allTracksInPlaylistArray.Count; i++)
                     {
-                        string trackTitle = (string)allTracksInPlaylistJson["items"][i]["track"]["name"];
-                        string trackId = (string)allTracksInPlaylistJson["items"][i]["track"]["id"];
-                        string albumName = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["name"];
-                        string trackPopularity = (string)allTracksInPlaylistJson["items"][i]["track"]["popularity"];
-                        string duration = (string)allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
-                        string coverAlbum = null;
                         try
                         {
+                            string trackTitle = (string)allTracksInPlaylistJson["items"][i]["track"]["name"];
+                            string trackId = (string)allTracksInPlaylistJson["items"][i]["track"]["id"];
+                            string albumName = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["name"];
+                            string trackPopularity = (string)allTracksInPlaylistJson["items"][i]["track"]["popularity"];
+                            string duration = (string)allTracksInPlaylistJson["items"][i]["track"]["duration_ms"];
+                            string coverAlbum = null;                       
                             coverAlbum = (string)allTracksInPlaylistJson["items"][i]["track"]["album"]["images"][0]["url"];
                         }
                         catch (Exception)
                         {
 
-                        }   
+                        }
 
-                        if (await _trackGateway.RetrieveTrack("s", playlistId, trackId) == null)
-                            await _trackGateway.InsertTrack("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum);
-                        tracksInPlaylist.Add(new Track("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum));
+                        try
+                        {
+                            if (await _trackGateway.RetrieveTrack("s", playlistId, trackId) == null)
+                                await _trackGateway.InsertTrack("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum);
+                            tracksInPlaylist.Add(new Track("s", playlistId, trackId, trackTitle, albumName, trackPopularity, duration, coverAlbum));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
                     return tracksInPlaylist;
                 }
