@@ -106,6 +106,12 @@ namespace Omega.DAL
                 foreach (Track track in tracks)
                 {
                     batchOperation.Delete(track);
+                    if(batchOperation.Count >= 50)
+                    {
+                        await _tableTrack.ExecuteBatchAsync(batchOperation);
+                        batchOperation.Clear();
+                    }
+
                 }
                 if (batchOperation.Count != 0)
                     await _tableTrack.ExecuteBatchAsync(batchOperation);

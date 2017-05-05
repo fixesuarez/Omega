@@ -155,7 +155,7 @@ namespace PlaylistCrawler
                         }
                         catch (Exception)
                         {
-
+                            Console.WriteLine("error during spotify Tracks");
                         }
                     }
                     return tracksInPlaylist;

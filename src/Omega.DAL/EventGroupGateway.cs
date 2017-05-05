@@ -150,6 +150,11 @@ namespace Omega.DAL
             foreach( EventGroup eventGroup in eventGroups )
             {
                 batchOperation.Delete( eventGroup );
+                if (batchOperation.Count >= 50)
+                {
+                    await _tableEventGroup.ExecuteBatchAsync(batchOperation);
+                    batchOperation.Clear();
+                }
             }
             await _tableEventGroup.ExecuteBatchAsync( batchOperation );
         }
