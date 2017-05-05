@@ -32,7 +32,7 @@
               <span @click="makeActive('playlistsTab')"><router-link to="/playlists" class="playlistsTab">playlists</router-link></span>
               <span @click="makeActive('evenementsTab')"><router-link to="/events" class="evenementsTab" >evenements</router-link></span>
               <span @click="makeActive('groupesTab')"><router-link to="/groups" class="groupesTab" >groupes</router-link></span>
-              <span @click="sendCriterias(criterias)"><span><span @click="showModal(true)"><router-link to="" class="ambiancesTab" id="redText">ambiances</router-link></span></span></span>
+              <span @click="sendCriterias(criterias)"><span @click="showModal(true)"><router-link to="" class="ambiancesTab" id="redText">ambiances</router-link></span></span>
             </nav>
           </div>
           <div class="col-12">
@@ -62,7 +62,7 @@
                     </div>
                 </div>
               </span>
-              <span @click="showModal(true)"><img src="http://image.noelshack.com/fichiers/2016/46/1479417772-pluslogo.png">   
+              <span @click="showModal(true)"><img src="http://image.noelshack.com/fichiers/2016/46/1479417772-pluslogo.png"></span>
             </div>
           </div>
         </div>
