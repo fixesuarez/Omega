@@ -1,12 +1,8 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Omega.Crawler;
+﻿using System.Threading.Tasks;
 
 namespace Omega.Crawler.Tests
 {
-    [TestFixture]
+    //[TestFixture]
     public class TestClass
     {
         //[Test]
@@ -176,20 +172,20 @@ namespace Omega.Crawler.Tests
         //    Console.WriteLine(t);
         //}
 
-        [Test]
-        public async Task GetSong()
-        {
-            GetATrack gt = new GetATrack();
+        //[Test]
+        //public async Task GetSong()
+        //{
+        //    GetATrack gt = new GetATrack();
 
-            Track t = await gt.GetTrackSpotify("06AKEBrKUckW0KREUWRnvT");
-            string[] expected = new string[] { t.Artist };
-            string[] actual = new string[] { "Johan Liljedahl" };
-            Assert.That(expected, Is.EqualTo(actual));
-        }
+        //    Track t = await gt.GetTrackSpotify("06AKEBrKUckW0KREUWRnvT");
+        //    string[] expected = new string[] { t.Artist };
+        //    string[] actual = new string[] { "Johan Liljedahl" };
+        //    Assert.That(expected, Is.EqualTo(actual));
+        //}
 
-        [Test]
-        public void ShouldPass()
-        {
-        }
+        //[Test]
+        //public void ShouldPass()
+        //{
+        //}
     }
 }

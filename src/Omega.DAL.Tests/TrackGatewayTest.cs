@@ -1,9 +1,7 @@
-﻿using NUnit.Framework;
-using System.Threading.Tasks;
-
+﻿
 namespace Omega.DAL.Tests
 {
-    [TestFixture]
+    //[TestFixture]
     public class TrackGatewayTest
     {
         //TrackGateway _trackGateway;

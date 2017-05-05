@@ -1,10 +1,7 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
+﻿
 namespace Omega.DAL.Tests
 {
-    [TestFixture]
+    //[TestFixture]
     public class PlaylistGatewayTest
     {
         //PlaylistGateway _playlistGateway;

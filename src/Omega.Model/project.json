@@ -20,5 +20,8 @@
         "portable-net452+win8"
       ]
     }
+  },
+  "runtimes": {
+    "win10-x64": {}
   }
 }

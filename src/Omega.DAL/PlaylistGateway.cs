@@ -25,87 +25,110 @@ namespace Omega.DAL
 
         public async Task InsertPlaylist( Playlist p )
         {
-            TableOperation retrievePlaylistOperation = TableOperation.Retrieve<Playlist>( p.PartitionKey, p.RowKey );
+            try
+            {
+                TableOperation retrievePlaylistOperation = TableOperation.Retrieve<Playlist>(p.PartitionKey, p.RowKey);
 
-            TableResult retrievedResult = await _tablePlaylist.ExecuteAsync( retrievePlaylistOperation );
-            if( retrievedResult.Result == null )
-            {
-                TableBatchOperation batchOperation = new TableBatchOperation();
-                batchOperation.Insert( p );
-                await _tablePlaylist.ExecuteBatchAsync( batchOperation );
+                TableResult retrievedResult = await _tablePlaylist.ExecuteAsync(retrievePlaylistOperation);
+                if (retrievedResult.Result == null)
+                {
+                    TableBatchOperation batchOperation = new TableBatchOperation();
+                    batchOperation.Insert(p);
+                    await _tablePlaylist.ExecuteBatchAsync(batchOperation);
+                }
+                else if (retrievedResult.Result != null)
+                {
+                    Playlist updateEntity = (Playlist)retrievedResult.Result;
+                    updateEntity.Cover = p.Cover;
+                    updateEntity.Name = p.Name;
+                    updateEntity.Pseudo = p.Pseudo;
+                    TableOperation updateOperation = TableOperation.Replace(updateEntity);
+                    await _tablePlaylist.ExecuteAsync(updateOperation);
+                }
             }
-            else if(retrievedResult.Result != null)
+            catch(Exception e)
             {
-                Playlist updateEntity = (Playlist)retrievedResult.Result;
-                updateEntity.Cover = p.Cover;
-                updateEntity.Name = p.Name;
-                updateEntity.Pseudo = p.Pseudo;
-                TableOperation updateOperation = TableOperation.Replace(updateEntity);
-                await _tablePlaylist.ExecuteAsync(updateOperation);
+                Console.WriteLine(e);
             }
         }
         
         public async Task<List<Playlist>> RetrieveAllPlaylistsFromUser( string spotifyId, string deezerId )
         {
-            List<Playlist> playlists = new List<Playlist>();
-            if( spotifyId != null )
+            try
             {
-                var cond = TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, spotifyId );
-                TableQuery<Playlist> query = new TableQuery<Playlist>();
-                query = query.Where( cond );
-
-                query.TakeCount = 1000;
-                TableContinuationToken tableContinuationToken = null;
-                do
+                List<Playlist> playlists = new List<Playlist>();
+                if (spotifyId != null)
                 {
-                    var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
-                    tableContinuationToken = queryResponse.ContinuationToken;
-                    playlists.AddRange( queryResponse.Results );
-                } while( tableContinuationToken != null );
-            }
-            if( deezerId != null )
-            {
-                TableQuery<Playlist> query = new TableQuery<Playlist>()
-                    .Where( TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, deezerId ) );
+                    var cond = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, spotifyId);
+                    TableQuery<Playlist> query = new TableQuery<Playlist>();
+                    query = query.Where(cond);
 
-                query.TakeCount = 1000;
-                TableContinuationToken tableContinuationToken = null;
-                do
+                    query.TakeCount = 1000;
+                    TableContinuationToken tableContinuationToken = null;
+                    do
+                    {
+                        var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                        tableContinuationToken = queryResponse.ContinuationToken;
+                        playlists.AddRange(queryResponse.Results);
+                    } while (tableContinuationToken != null);
+                }
+                if (deezerId != null)
                 {
-                    var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
-                    tableContinuationToken = queryResponse.ContinuationToken;
-                    playlists.AddRange( queryResponse.Results );
-                } while( tableContinuationToken != null );
+                    TableQuery<Playlist> query = new TableQuery<Playlist>()
+                        .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, deezerId));
+
+                    query.TakeCount = 1000;
+                    TableContinuationToken tableContinuationToken = null;
+                    do
+                    {
+                        var queryResponse = await _tablePlaylist.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                        tableContinuationToken = queryResponse.ContinuationToken;
+                        playlists.AddRange(queryResponse.Results);
+                    } while (tableContinuationToken != null);
+                }
+                foreach (Playlist p in playlists)
+                {
+                    p.Tracks = await RetrieveTracksFromPlaylists(p);
+                }
+                return playlists;
             }
-            foreach( Playlist p in playlists )
+            catch(Exception e)
             {
-                p.Tracks = await RetrieveTracksFromPlaylists( p );
+                Console.WriteLine(e);
+                return null;
             }
-            return playlists;
         }
 
         public async Task<List<Track>> RetrieveTracksFromPlaylists( Playlist p )
         {
-            List<Track> tracks = new List<Track>();
             try
             {
-                var cond = TableQuery.GenerateFilterCondition( "PartitionKey", QueryComparisons.Equal, p.PlaylistId );
-                TableQuery<Track> query = new TableQuery<Track>()
-                        .Where( cond );
-
-                query.TakeCount = 1000;
-                TableContinuationToken tableContinuationToken = null;
-                do
+                List<Track> tracks = new List<Track>();
+                try
                 {
-                    var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync( query, tableContinuationToken );
-                    tableContinuationToken = queryResponse.ContinuationToken;
-                    tracks.AddRange( queryResponse.Results );
-                } while( tableContinuationToken != null );
-                return tracks;
+                    var cond = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, p.PlaylistId);
+                    TableQuery<Track> query = new TableQuery<Track>()
+                            .Where(cond);
+
+                    query.TakeCount = 1000;
+                    TableContinuationToken tableContinuationToken = null;
+                    do
+                    {
+                        var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                        tableContinuationToken = queryResponse.ContinuationToken;
+                        tracks.AddRange(queryResponse.Results);
+                    } while (tableContinuationToken != null);
+                    return tracks;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-            catch( Exception ex )
+            catch(Exception e)
             {
-                throw ex;
+                Console.WriteLine(e);
+                return null;
             }
         }
     }

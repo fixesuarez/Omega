@@ -21,5 +21,8 @@
       "dependencies": {
       }
     }
+  },
+  "runtimes": {
+    "win10-x64": {}
   }
 }

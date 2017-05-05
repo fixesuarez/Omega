@@ -23,5 +23,8 @@
         "System.IO.Compression.FileSystem": "4.0.0.0"
       }
     }
+  },
+  "runtimes": {
+    "win10-x64": {}
   }
 }

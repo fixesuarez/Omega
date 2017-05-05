@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
+using System;
 using System.Threading.Tasks;
 
 namespace Omega.DAL
@@ -32,22 +33,37 @@ namespace Omega.DAL
 
         public async Task<CleanTrack> GetSongCleanTrack(string trackIdSource)
         {
-            CleanTrack ct = new CleanTrack();
+            try
+            {
+                CleanTrack ct = new CleanTrack();
 
-            TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>(string.Empty, trackIdSource);
+                TableOperation retrieveOperation = TableOperation.Retrieve<CleanTrack>(string.Empty, trackIdSource);
 
-            TableResult retrievedResult = await _table.ExecuteAsync(retrieveOperation);
+                TableResult retrievedResult = await _table.ExecuteAsync(retrieveOperation);
 
-            if (retrievedResult.Result != null)
-                ct = (CleanTrack)retrievedResult.Result;
+                if (retrievedResult.Result != null)
+                    ct = (CleanTrack)retrievedResult.Result;
 
-            return ct;
+                return ct;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         public async Task InsertTrackQueue(string source, string trackId)
         {
-            CloudQueueMessage message = new CloudQueueMessage(source + ":" + trackId);
-            await _queue.AddMessageAsync(message);
+            try
+            {
+                CloudQueueMessage message = new CloudQueueMessage(source + ":" + trackId);
+                await _queue.AddMessageAsync(message);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

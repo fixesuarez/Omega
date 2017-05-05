@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,64 +28,92 @@ namespace Omega.DAL
 
         public async Task InsertTrack( string source, string playlistId, string trackId, string title, string albumName, string popularity, string duration, string cover )
         {
-            TableOperation retrieveTrackOperation = TableOperation.Retrieve<Track>( playlistId, source + ":" + playlistId + ":" + trackId );
-
-            TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveTrackOperation );
-            Track retrievedTrack = (Track) retrievedResult.Result;
-            if( retrievedTrack == null )
+            try
             {
-                TableBatchOperation batchOperation = new TableBatchOperation();
-                Track t = new Track( source, playlistId, trackId, title, albumName, popularity, duration, cover );
-                batchOperation.Insert( t );
-                await _tableTrack.ExecuteBatchAsync( batchOperation );
+                TableOperation retrieveTrackOperation = TableOperation.Retrieve<Track>(playlistId, source + ":" + playlistId + ":" + trackId);
+
+                TableResult retrievedResult = await _tableTrack.ExecuteAsync(retrieveTrackOperation);
+                Track retrievedTrack = (Track)retrievedResult.Result;
+                if (retrievedTrack == null)
+                {
+                    TableBatchOperation batchOperation = new TableBatchOperation();
+                    Track t = new Track(source, playlistId, trackId, title, albumName, popularity, duration, cover);
+                    batchOperation.Insert(t);
+                    await _tableTrack.ExecuteBatchAsync(batchOperation);
+                }
             }
-            //CloudQueueMessage message = new CloudQueueMessage( source + ":" + trackId );
-            //await _queue.AddMessageAsync( message );
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
         public async Task DeleteTrack( string playlistId, string source, string trackId )
         {
-            TableOperation retrieveOperation = TableOperation.Retrieve<Track>( playlistId, string.Format("{0}:{1}:{2}", source, playlistId, trackId ) );
-            TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveOperation );
-            Track deleteEntity = (Track) retrievedResult.Result;
-
-            if( deleteEntity != null )
+            try
             {
-                TableOperation deleteOperation = TableOperation.Delete( deleteEntity );
-                await _tableTrack.ExecuteAsync( deleteOperation );
+                TableOperation retrieveOperation = TableOperation.Retrieve<Track>(playlistId, string.Format("{0}:{1}:{2}", source, playlistId, trackId));
+                TableResult retrievedResult = await _tableTrack.ExecuteAsync(retrieveOperation);
+                Track deleteEntity = (Track)retrievedResult.Result;
+
+                if (deleteEntity != null)
+                {
+                    TableOperation deleteOperation = TableOperation.Delete(deleteEntity);
+                    await _tableTrack.ExecuteAsync(deleteOperation);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 
         public async Task<Track> RetrieveTrack( string source, string idPlaylist, string idTrack )
         {
-            string rowKey = source + ":" + idPlaylist + ":" + idTrack;
-            TableOperation retrieveOperation = TableOperation.Retrieve<Track>( idPlaylist, rowKey );
-            TableResult retrievedResult = await _tableTrack.ExecuteAsync( retrieveOperation );
-            Track retrievedUser = (Track) retrievedResult.Result;
-            return retrievedUser;
+            try
+            {
+                string rowKey = source + ":" + idPlaylist + ":" + idTrack;
+                TableOperation retrieveOperation = TableOperation.Retrieve<Track>(idPlaylist, rowKey);
+                TableResult retrievedResult = await _tableTrack.ExecuteAsync(retrieveOperation);
+                Track retrievedUser = (Track)retrievedResult.Result;
+                return retrievedUser;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            
         }
 
         public async Task DeleteAllTrackPlaylist(string playlistId)
         {
-            TableBatchOperation batchOperation = new TableBatchOperation();
-            List<Track> tracks = new List<Track>();
-            TableQuery<Track> query = new TableQuery<Track>()
-                    .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, playlistId));
-
-            query.TakeCount = 1000;
-            TableContinuationToken tableContinuationToken = null;
-            do
+            try
             {
-                var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
-                tableContinuationToken = queryResponse.ContinuationToken;
-                tracks.AddRange(queryResponse.Results);
-            } while (tableContinuationToken != null);
+                TableBatchOperation batchOperation = new TableBatchOperation();
+                List<Track> tracks = new List<Track>();
+                TableQuery<Track> query = new TableQuery<Track>()
+                        .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, playlistId));
 
-            foreach (Track track in tracks)
-            {
-                batchOperation.Delete(track);
+                query.TakeCount = 1000;
+                TableContinuationToken tableContinuationToken = null;
+                do
+                {
+                    var queryResponse = await _tableTrack.ExecuteQuerySegmentedAsync(query, tableContinuationToken);
+                    tableContinuationToken = queryResponse.ContinuationToken;
+                    tracks.AddRange(queryResponse.Results);
+                } while (tableContinuationToken != null);
+
+                foreach (Track track in tracks)
+                {
+                    batchOperation.Delete(track);
+                }
+                if (batchOperation.Count != 0)
+                    await _tableTrack.ExecuteBatchAsync(batchOperation);
             }
-            if (batchOperation.Count != 0)
-                await _tableTrack.ExecuteBatchAsync(batchOperation);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }           
         }
     }
 }
