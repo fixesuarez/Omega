@@ -43,9 +43,9 @@ namespace PlaylistCrawler
                 {
                     await UpdateTable();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    //need log
+                    Console.WriteLine(e.ToString());
                 }
             }
         }
@@ -55,17 +55,40 @@ namespace PlaylistCrawler
             TableQuerySegment<User> tableQueryResult;
             tableQueryResult = await _userGateway.TableQueryResult();
             await CheckQueue();
+            string guid = null;
             for (int i = 0; i < tableQueryResult.Results.Count; i++)
             {
-                await CheckQueue();
-                string guid = tableQueryResult.Results[i].RowKey;
+                try
+                {
+                    await CheckQueue();
+                    guid = tableQueryResult.Results[i].RowKey;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                
                 if (!string.IsNullOrEmpty(tableQueryResult.Results[i].DeezerAccessToken))
                 {
-                    await _deezerApiService.GetAllDeezerPlaylists(guid);
+                    try
+                    {
+                        await _deezerApiService.GetAllDeezerPlaylists(guid);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
                 }
                 if (!string.IsNullOrEmpty(tableQueryResult.Results[i].SpotifyRefreshToken))
                 {
-                    await _spotifyApiService.GetSpotifyPlaylist(guid);
+                    try
+                    {
+                        await _spotifyApiService.GetSpotifyPlaylist(guid);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
                 }
                 await Task.Delay(1500);
                 Console.WriteLine("Table checked");
@@ -77,16 +100,23 @@ namespace PlaylistCrawler
             CloudQueueMessage message;
             while ((message = await _userGateway.GetQueuMessage()) != null)
             {
-                User user = await _userGateway.FindUser(message.AsString);
-                if (!string.IsNullOrEmpty(user.DeezerAccessToken))
+                try
                 {
-                    await _deezerApiService.GetAllDeezerPlaylists(user.Guid);
-                }
-                if (!string.IsNullOrEmpty(user.SpotifyRefreshToken))
-                {
+                    User user = await _userGateway.FindUser(message.AsString);
+                    if (!string.IsNullOrEmpty(user.DeezerAccessToken))
+                    {
+                        await _deezerApiService.GetAllDeezerPlaylists(user.Guid);
+                    }
+                    if (!string.IsNullOrEmpty(user.SpotifyRefreshToken))
+                    {
                         await _spotifyApiService.GetSpotifyPlaylist(user.Guid);
+                    }
+                    Console.WriteLine("Queue checked");
                 }
-                Console.WriteLine("Queue checked");
+                catch (Exception)
+                {
+                    Console.WriteLine("User do not exist");
+                }
                 await Task.Delay(1500);
                 await _userGateway.DeleteMessageQueue(message);
             }
